@@ -10,7 +10,7 @@
 - [x] pr-002 — ESLint, Prettier, Stylelint.
 - [x] pr-003 — Структура папок по Atomic Design.
 - [x] pr-004 — Управление состоянием (Zustand / Redux Toolkit).
-- [ ] pr-005 — Axios / TanStack Query (React Query) с interceptors.
+- [x] pr-005 — Axios / TanStack Query (React Query) с interceptors.
 - [ ] pr-006 — Базовый UI-кит: кнопки, инпуты, текстовые поля.
 - [ ] pr-007 — UI-кит: карточки, модальные окна, скелетоны загрузки.
 - [ ] pr-008 — UI-кит: таблицы, пагинация, выпадающие списки.
