@@ -1,6 +1,14 @@
 import '@testing-library/jest-dom/vitest'
 import { cleanup } from '@testing-library/react'
-import { afterEach } from 'vitest'
+import { afterAll, afterEach, beforeAll } from 'vitest'
+import { server } from './server'
 
-// Без глобального afterEach Testing Library сама не очищает DOM между тестами
-afterEach(() => cleanup())
+beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
+
+afterEach(() => {
+  // Без глобального afterEach Testing Library сама не очищает DOM между тестами
+  cleanup()
+  server.resetHandlers()
+})
+
+afterAll(() => server.close())

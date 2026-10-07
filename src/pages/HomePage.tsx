@@ -1,4 +1,5 @@
 import { Logo } from '@/components/atoms/Logo'
+import { ApiStatus } from '@/components/organisms/ApiStatus'
 import { CenteredTemplate } from '@/components/templates/CenteredTemplate'
 
 export function HomePage() {
@@ -10,6 +11,7 @@ export function HomePage() {
         Мониторинг здоровья виноградников Молдовы: диагностика болезней по фото
         листьев, спутниковые индексы и прогноз риска заражения.
       </p>
+      <ApiStatus />
     </CenteredTemplate>
   )
 }
