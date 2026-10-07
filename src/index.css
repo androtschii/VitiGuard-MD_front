@@ -1,1 +1,6 @@
 @import 'tailwindcss';
+
+/* Страница под модальным окном не прокручивается */
+html:has(dialog[open]) {
+  overflow: hidden;
+}
