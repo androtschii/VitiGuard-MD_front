@@ -1,0 +1,19 @@
+type LogoProps = {
+  className?: string
+}
+
+export function Logo({ className }: LogoProps) {
+  return (
+    <svg viewBox="0 0 32 32" aria-hidden="true" className={className}>
+      <path d="M16 7c1-3 4-5 8-5-1 3-4 5-8 5Z" fill="#15803d" />
+      <g fill="#6d28d9">
+        <circle cx="9.5" cy="11.5" r="3.5" />
+        <circle cx="16" cy="11.5" r="3.5" />
+        <circle cx="22.5" cy="11.5" r="3.5" />
+        <circle cx="12.75" cy="17.5" r="3.5" />
+        <circle cx="19.25" cy="17.5" r="3.5" />
+        <circle cx="16" cy="23.5" r="3.5" />
+      </g>
+    </svg>
+  )
+}

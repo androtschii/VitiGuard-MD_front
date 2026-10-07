@@ -1,11 +1,15 @@
-export default function App() {
+import { Logo } from '@/components/atoms/Logo'
+import { CenteredTemplate } from '@/components/templates/CenteredTemplate'
+
+export function HomePage() {
   return (
-    <main className="flex min-h-svh flex-col items-center justify-center gap-3 bg-stone-50 p-6 text-center">
+    <CenteredTemplate>
+      <Logo className="size-16" />
       <h1 className="text-4xl font-semibold text-emerald-800">VitiGuard MD</h1>
       <p className="max-w-md text-stone-600">
         Мониторинг здоровья виноградников Молдовы: диагностика болезней по фото
         листьев, спутниковые индексы и прогноз риска заражения.
       </p>
-    </main>
+    </CenteredTemplate>
   )
 }
