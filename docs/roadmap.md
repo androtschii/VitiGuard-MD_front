@@ -8,7 +8,7 @@
 
 - [x] pr-001 — Инициализация Next.js / React + TypeScript + Tailwind CSS.
 - [x] pr-002 — ESLint, Prettier, Stylelint.
-- [ ] pr-003 — Структура папок по Atomic Design.
+- [x] pr-003 — Структура папок по Atomic Design.
 - [ ] pr-004 — Управление состоянием (Zustand / Redux Toolkit).
 - [ ] pr-005 — Axios / TanStack Query (React Query) с interceptors.
 - [ ] pr-006 — Базовый UI-кит: кнопки, инпуты, текстовые поля.
