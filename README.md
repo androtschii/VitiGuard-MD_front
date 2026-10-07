@@ -25,9 +25,14 @@ npm run dev
 
 ```bash
 npm run typecheck
+npm run lint
+npm run lint:css
+npm run format:check
 npm test
 npm run build
 ```
+
+Автоформатирование: `npm run format`.
 
 ## Документация
 
