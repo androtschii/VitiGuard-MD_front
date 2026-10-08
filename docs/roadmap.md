@@ -17,7 +17,7 @@
 - [x] pr-009 — Layout-компоненты: Header, Sidebar, Footer.
 - [x] pr-010 — Страница 404 и Error Boundary.
 - [x] pr-011 — Форма входа (React Hook Form + Zod).
-- [ ] pr-012 — Форма регистрации с выбором роли.
+- [x] pr-012 — Форма регистрации с выбором роли.
 - [ ] pr-013 — Страница восстановления пароля.
 - [ ] pr-014 — Хранение JWT-токенов (Secure Cookie / LocalStorage).
 - [ ] pr-015 — Защищённые маршруты (Protected Routes).

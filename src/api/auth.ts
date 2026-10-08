@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import type { LoginValues } from '@/schemas/auth'
+import type { LoginValues, RegisterValues } from '@/schemas/auth'
 import { api } from './client'
 
 export type TokenPair = {
@@ -15,4 +15,27 @@ export async function login(values: LoginValues) {
 
 export function useLogin() {
   return useMutation({ mutationFn: login })
+}
+
+export type RegisteredUser = {
+  id: string
+  email: string
+  full_name: string | null
+  role: 'user' | 'agronomist'
+}
+
+// Подтверждение пароля нужно только форме, серверу его не отправляем
+export async function register(values: RegisterValues) {
+  const { fullName, email, password, role } = values
+  const { data } = await api.post<RegisteredUser>('/auth/register', {
+    email,
+    password,
+    full_name: fullName,
+    role,
+  })
+  return data
+}
+
+export function useRegister() {
+  return useMutation({ mutationFn: register })
 }

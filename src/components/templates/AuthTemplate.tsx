@@ -4,9 +4,10 @@ import { Logo } from '@/components/atoms/Logo'
 type AuthTemplateProps = {
   title: string
   children: ReactNode
+  footer?: ReactNode
 }
 
-export function AuthTemplate({ title, children }: AuthTemplateProps) {
+export function AuthTemplate({ title, children, footer }: AuthTemplateProps) {
   return (
     <main className="flex min-h-svh flex-col items-center justify-center gap-6 bg-stone-50 p-6">
       <div className="flex flex-col items-center gap-2">
@@ -17,6 +18,7 @@ export function AuthTemplate({ title, children }: AuthTemplateProps) {
         <h1 className="mb-5 text-xl font-semibold text-stone-900">{title}</h1>
         {children}
       </div>
+      {footer && <p className="text-sm text-stone-600">{footer}</p>}
     </main>
   )
 }
