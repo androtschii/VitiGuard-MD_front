@@ -1,5 +1,6 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, screen } from '@testing-library/react'
 import { beforeEach, describe, expect, it } from 'vitest'
+import { renderWithRouter } from '@/test/render'
 import { useUiStore } from '@/store/ui'
 import { Sidebar } from './Sidebar'
 
@@ -14,7 +15,7 @@ describe('Sidebar', () => {
   })
 
   it('выводит навигацию и отмечает текущую страницу', () => {
-    render(<Sidebar items={items} />)
+    renderWithRouter(<Sidebar items={items} />)
 
     expect(
       screen.getByRole('navigation', { name: 'Основная навигация' }),
@@ -29,7 +30,7 @@ describe('Sidebar', () => {
   })
 
   it('закрытая на телефоне панель скрыта и без затемнения', () => {
-    render(<Sidebar items={items} />)
+    renderWithRouter(<Sidebar items={items} />)
 
     expect(document.getElementById('sidebar')).toHaveClass('hidden')
     expect(
@@ -39,7 +40,7 @@ describe('Sidebar', () => {
 
   it('открытая панель показывается поверх страницы', () => {
     useUiStore.setState({ isSidebarOpen: true })
-    render(<Sidebar items={items} />)
+    renderWithRouter(<Sidebar items={items} />)
 
     expect(document.getElementById('sidebar')).toHaveClass('fixed')
     expect(document.getElementById('sidebar')).not.toHaveClass('hidden')
@@ -58,7 +59,7 @@ describe('Sidebar', () => {
     ],
   ])('закрывается: %s', (_, act) => {
     useUiStore.setState({ isSidebarOpen: true })
-    render(<Sidebar items={items} />)
+    renderWithRouter(<Sidebar items={items} />)
 
     act()
 

@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { Link } from 'react-router'
 import { cn } from '@/lib/cn'
 import { useUiStore } from '@/store/ui'
 
@@ -50,8 +51,8 @@ export function Sidebar({ items }: SidebarProps) {
           <ul className="flex flex-col gap-1">
             {items.map((item) => (
               <li key={item.href}>
-                <a
-                  href={item.href}
+                <Link
+                  to={item.href}
                   aria-current={item.current ? 'page' : undefined}
                   onClick={closeSidebar}
                   className={cn(
@@ -62,7 +63,7 @@ export function Sidebar({ items }: SidebarProps) {
                   )}
                 >
                   {item.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
