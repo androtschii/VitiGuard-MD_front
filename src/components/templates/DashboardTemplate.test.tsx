@@ -1,10 +1,11 @@
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
+import { renderWithRouter } from '@/test/render'
 import { DashboardTemplate } from './DashboardTemplate'
 
 describe('DashboardTemplate', () => {
   it('собирает шапку, навигацию, содержимое и подвал', () => {
-    render(
+    renderWithRouter(
       <DashboardTemplate navItems={[{ label: 'Участки', href: '/vineyards' }]}>
         Содержимое страницы
       </DashboardTemplate>,
@@ -17,7 +18,7 @@ describe('DashboardTemplate', () => {
   })
 
   it('даёт ссылку для перехода к основному содержимому', () => {
-    render(<DashboardTemplate navItems={[]}>Текст</DashboardTemplate>)
+    renderWithRouter(<DashboardTemplate navItems={[]}>Текст</DashboardTemplate>)
 
     expect(
       screen.getByRole('link', { name: 'Перейти к содержимому' }),

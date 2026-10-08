@@ -1,5 +1,6 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, screen } from '@testing-library/react'
 import { beforeEach, describe, expect, it } from 'vitest'
+import { renderWithRouter } from '@/test/render'
 import { useUiStore } from '@/store/ui'
 import { Header } from './Header'
 
@@ -9,7 +10,7 @@ describe('Header', () => {
   })
 
   it('содержит ссылку на главную с названием проекта', () => {
-    render(<Header />)
+    renderWithRouter(<Header />)
 
     expect(screen.getByRole('link', { name: 'VitiGuard MD' })).toHaveAttribute(
       'href',
@@ -18,7 +19,7 @@ describe('Header', () => {
   })
 
   it('кнопка меню переключает боковую панель и сообщает её состояние', () => {
-    render(<Header />)
+    renderWithRouter(<Header />)
     const button = screen.getByRole('button', { name: 'Меню' })
     expect(button).toHaveAttribute('aria-expanded', 'false')
 
@@ -29,7 +30,7 @@ describe('Header', () => {
   })
 
   it('показывает переданные действия', () => {
-    render(<Header actions={<button>Выйти</button>} />)
+    renderWithRouter(<Header actions={<button>Выйти</button>} />)
 
     expect(screen.getByRole('button', { name: 'Выйти' })).toBeInTheDocument()
   })

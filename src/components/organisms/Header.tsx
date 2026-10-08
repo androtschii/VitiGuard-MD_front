@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { Link } from 'react-router'
 import { Button } from '@/components/atoms/Button'
 import { Logo } from '@/components/atoms/Logo'
 import { useUiStore } from '@/store/ui'
@@ -24,13 +25,13 @@ export function Header({ actions }: HeaderProps) {
       >
         ☰
       </Button>
-      <a
-        href="/"
+      <Link
+        to="/"
         className="flex items-center gap-2 font-semibold text-emerald-800"
       >
         <Logo className="size-7" />
         VitiGuard MD
-      </a>
+      </Link>
       {actions && (
         <div className="ml-auto flex items-center gap-2">{actions}</div>
       )}
