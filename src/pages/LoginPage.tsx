@@ -3,13 +3,28 @@ import { useLogin } from '@/api/auth'
 import { LoginForm } from '@/components/organisms/LoginForm'
 import { AuthTemplate } from '@/components/templates/AuthTemplate'
 
-type LoginLocationState = { registered?: boolean } | null
+type LoginLocationState = {
+  registered?: boolean
+  passwordReset?: boolean
+} | null
+
+function getNotice(state: LoginLocationState) {
+  if (state?.registered) {
+    return 'Аккаунт создан. Войдите, используя email и пароль.'
+  }
+  if (state?.passwordReset) {
+    return 'Пароль изменён. Войдите с новым паролем.'
+  }
+  return null
+}
+
+const linkClass = 'font-medium text-emerald-800 underline'
 
 export function LoginPage() {
   const navigate = useNavigate()
   const location = useLocation()
   const { mutateAsync } = useLogin()
-  const state = location.state as LoginLocationState
+  const notice = getNotice(location.state as LoginLocationState)
 
   return (
     <AuthTemplate
@@ -17,21 +32,18 @@ export function LoginPage() {
       footer={
         <>
           Нет аккаунта?{' '}
-          <Link
-            to="/register"
-            className="font-medium text-emerald-800 underline"
-          >
+          <Link to="/register" className={linkClass}>
             Зарегистрироваться
           </Link>
         </>
       }
     >
-      {state?.registered && (
+      {notice && (
         <p
           role="status"
           className="mb-4 rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-800"
         >
-          Аккаунт создан. Войдите, используя email и пароль.
+          {notice}
         </p>
       )}
       <LoginForm
@@ -41,6 +53,11 @@ export function LoginPage() {
           await navigate('/', { replace: true })
         }}
       />
+      <p className="mt-4 text-center text-sm">
+        <Link to="/forgot-password" className={linkClass}>
+          Забыли пароль?
+        </Link>
+      </p>
     </AuthTemplate>
   )
 }
