@@ -1,5 +1,6 @@
 import type { RouteObject } from 'react-router'
 import { HomePage } from '@/pages/HomePage'
+import { LoginPage } from '@/pages/LoginPage'
 import { NotFoundPage } from '@/pages/NotFoundPage'
 import { RouteErrorPage } from '@/pages/RouteErrorPage'
 
@@ -10,6 +11,7 @@ export const routes: RouteObject[] = [
     errorElement: <RouteErrorPage />,
     children: [
       { path: '/', element: <HomePage /> },
+      { path: '/login', element: <LoginPage /> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },

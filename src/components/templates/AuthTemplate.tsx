@@ -1,0 +1,22 @@
+import type { ReactNode } from 'react'
+import { Logo } from '@/components/atoms/Logo'
+
+type AuthTemplateProps = {
+  title: string
+  children: ReactNode
+}
+
+export function AuthTemplate({ title, children }: AuthTemplateProps) {
+  return (
+    <main className="flex min-h-svh flex-col items-center justify-center gap-6 bg-stone-50 p-6">
+      <div className="flex flex-col items-center gap-2">
+        <Logo className="size-12" />
+        <p className="font-semibold text-emerald-800">VitiGuard MD</p>
+      </div>
+      <div className="w-full max-w-sm rounded-lg border border-stone-200 bg-white p-6 shadow-sm">
+        <h1 className="mb-5 text-xl font-semibold text-stone-900">{title}</h1>
+        {children}
+      </div>
+    </main>
+  )
+}
