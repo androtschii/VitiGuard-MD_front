@@ -1,11 +1,13 @@
 import { screen } from '@testing-library/react'
 import { createMemoryRouter, RouterProvider } from 'react-router'
 import { describe, expect, it, vi } from 'vitest'
+import { useSessionStore } from '@/store/session'
 import { renderWithQueryClient } from '@/test/render'
 import { routes } from './routes'
 
 describe('routes', () => {
-  it('на главном адресе показывает главную страницу', () => {
+  it('на главном адресе вошедшему показывает главную страницу', () => {
+    useSessionStore.getState().setAccessToken('token')
     const router = createMemoryRouter(routes, { initialEntries: ['/'] })
     renderWithQueryClient(<RouterProvider router={router} />)
 

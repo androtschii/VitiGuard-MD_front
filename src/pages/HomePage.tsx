@@ -1,8 +1,12 @@
+import { useLogout } from '@/api/auth'
+import { Button } from '@/components/atoms/Button'
 import { Logo } from '@/components/atoms/Logo'
 import { ApiStatus } from '@/components/organisms/ApiStatus'
 import { CenteredTemplate } from '@/components/templates/CenteredTemplate'
 
 export function HomePage() {
+  const { mutate: logout, isPending } = useLogout()
+
   return (
     <CenteredTemplate>
       <Logo className="size-16" />
@@ -12,6 +16,13 @@ export function HomePage() {
         листьев, спутниковые индексы и прогноз риска заражения.
       </p>
       <ApiStatus />
+      <Button
+        variant="secondary"
+        isLoading={isPending}
+        onClick={() => logout()}
+      >
+        Выйти
+      </Button>
     </CenteredTemplate>
   )
 }

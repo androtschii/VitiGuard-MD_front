@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from 'react-router'
+import { Link, useLocation } from 'react-router'
 import { useLogin } from '@/api/auth'
 import { LoginForm } from '@/components/organisms/LoginForm'
 import { AuthTemplate } from '@/components/templates/AuthTemplate'
@@ -21,7 +21,6 @@ function getNotice(state: LoginLocationState) {
 const linkClass = 'font-medium text-emerald-800 underline'
 
 export function LoginPage() {
-  const navigate = useNavigate()
   const location = useLocation()
   const { mutateAsync } = useLogin()
   const notice = getNotice(location.state as LoginLocationState)
@@ -48,9 +47,8 @@ export function LoginPage() {
       )}
       <LoginForm
         onSubmit={async (values) => {
-          // Токены сохранит модуль авторизации (pr-014)
+          // После входа GuestRoute сам перенаправит на нужную страницу
           await mutateAsync(values)
-          await navigate('/', { replace: true })
         }}
       />
       <p className="mt-4 text-center text-sm">

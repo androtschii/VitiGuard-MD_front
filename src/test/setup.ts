@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom/vitest'
 import { cleanup } from '@testing-library/react'
-import { afterAll, afterEach, beforeAll } from 'vitest'
+import { afterAll, afterEach, beforeAll, beforeEach } from 'vitest'
+import { useSessionStore } from '@/store/session'
 import { server } from './server'
 
 // В jsdom нет showModal() и close() у <dialog>, а в браузерах они есть давно
@@ -17,6 +18,11 @@ if (typeof HTMLDialogElement.prototype.showModal !== 'function') {
 }
 
 beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
+
+// По умолчанию в тестах пользователь не вошёл; тесты сессии задают своё состояние
+beforeEach(() => {
+  useSessionStore.getState().clear()
+})
 
 afterEach(() => {
   // Без глобального afterEach Testing Library сама не очищает DOM между тестами
