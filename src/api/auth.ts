@@ -1,5 +1,9 @@
 import { useMutation } from '@tanstack/react-query'
-import type { LoginValues, RegisterValues } from '@/schemas/auth'
+import type {
+  ForgotPasswordValues,
+  LoginValues,
+  RegisterValues,
+} from '@/schemas/auth'
 import { api } from './client'
 
 export type TokenPair = {
@@ -38,4 +42,31 @@ export async function register(values: RegisterValues) {
 
 export function useRegister() {
   return useMutation({ mutationFn: register })
+}
+
+export async function requestPasswordReset(values: ForgotPasswordValues) {
+  await api.post('/auth/password-reset', values)
+}
+
+export function useRequestPasswordReset() {
+  return useMutation({ mutationFn: requestPasswordReset })
+}
+
+type ConfirmPasswordReset = {
+  token: string
+  password: string
+}
+
+export async function confirmPasswordReset({
+  token,
+  password,
+}: ConfirmPasswordReset) {
+  await api.post('/auth/password-reset/confirm', {
+    token,
+    new_password: password,
+  })
+}
+
+export function useConfirmPasswordReset() {
+  return useMutation({ mutationFn: confirmPasswordReset })
 }
