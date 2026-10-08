@@ -4,21 +4,45 @@ import type {
   LoginValues,
   RegisterValues,
 } from '@/schemas/auth'
+import { useSessionStore } from '@/store/session'
 import { api } from './client'
 
-export type TokenPair = {
+// Refresh-токен в ответе не приходит: сервер кладёт его в HttpOnly-cookie
+export type AccessToken = {
   access_token: string
-  refresh_token: string
   token_type: 'bearer'
 }
 
 export async function login(values: LoginValues) {
-  const { data } = await api.post<TokenPair>('/auth/login', values)
+  const { data } = await api.post<AccessToken>('/auth/login', values)
   return data
 }
 
 export function useLogin() {
-  return useMutation({ mutationFn: login })
+  return useMutation({
+    mutationFn: login,
+    onSuccess: ({ access_token }) =>
+      useSessionStore.getState().setAccessToken(access_token),
+  })
+}
+
+// Новый access-токен по refresh-cookie; тело запроса пустое
+export async function refreshAccessToken() {
+  const { data } = await api.post<AccessToken>('/auth/refresh')
+  return data
+}
+
+export async function logout() {
+  await api.post('/auth/logout')
+}
+
+export function useLogout() {
+  return useMutation({
+    mutationFn: logout,
+    // Сессия на устройстве заканчивается, даже если сервер не ответил: токен
+    // в памяти нельзя оставлять, а cookie по таймеру перестанет действовать
+    onSettled: () => useSessionStore.getState().clear(),
+  })
 }
 
 export type RegisteredUser = {

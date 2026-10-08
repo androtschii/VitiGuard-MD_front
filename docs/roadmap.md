@@ -19,7 +19,7 @@
 - [x] pr-011 — Форма входа (React Hook Form + Zod).
 - [x] pr-012 — Форма регистрации с выбором роли.
 - [x] pr-013 — Страница восстановления пароля.
-- [ ] pr-014 — Хранение JWT-токенов (Secure Cookie / LocalStorage).
+- [x] pr-014 — Хранение JWT-токенов (Secure Cookie / LocalStorage).
 - [ ] pr-015 — Защищённые маршруты (Protected Routes).
 - [ ] pr-016 — Переключатель языков RU, RO, EN (i18next).
 - [ ] pr-017 — Тёмная и светлая тема.
