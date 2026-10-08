@@ -17,4 +17,16 @@ export const tokens: TokenPair = {
 export const handlers = [
   http.get('/api/v1/info', () => HttpResponse.json(apiInfo)),
   http.post('/api/v1/auth/login', () => HttpResponse.json(tokens)),
+  http.post('/api/v1/auth/register', async ({ request }) => {
+    const body = (await request.json()) as Record<string, string>
+    return HttpResponse.json(
+      {
+        id: 'user-1',
+        email: body.email,
+        full_name: body.full_name,
+        role: body.role,
+      },
+      { status: 201 },
+    )
+  }),
 ]
