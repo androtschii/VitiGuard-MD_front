@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/atoms/Button'
 import { getPageItems } from '@/lib/pagination'
 
@@ -8,17 +9,18 @@ type PaginationProps = {
 }
 
 export function Pagination({ page, pageCount, onPageChange }: PaginationProps) {
+  const { t } = useTranslation()
   if (pageCount <= 1) return null
 
   return (
-    <nav aria-label="Страницы" className="flex items-center gap-1">
+    <nav aria-label={t('pagination.label')} className="flex items-center gap-1">
       <Button
         variant="ghost"
         size="sm"
         disabled={page <= 1}
         onClick={() => onPageChange(page - 1)}
       >
-        Назад
+        {t('pagination.previous')}
       </Button>
       {getPageItems(page, pageCount).map((item, index) =>
         item === 'ellipsis' ? (
@@ -34,7 +36,7 @@ export function Pagination({ page, pageCount, onPageChange }: PaginationProps) {
             key={item}
             variant={item === page ? 'primary' : 'ghost'}
             size="sm"
-            aria-label={`Страница ${item}`}
+            aria-label={t('pagination.page', { page: item })}
             aria-current={item === page ? 'page' : undefined}
             onClick={() => onPageChange(item)}
             className="min-w-8 px-2"
@@ -49,7 +51,7 @@ export function Pagination({ page, pageCount, onPageChange }: PaginationProps) {
         disabled={page >= pageCount}
         onClick={() => onPageChange(page + 1)}
       >
-        Вперёд
+        {t('pagination.next')}
       </Button>
     </nav>
   )

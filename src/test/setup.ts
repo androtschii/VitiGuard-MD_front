@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom/vitest'
 import { cleanup } from '@testing-library/react'
 import { afterAll, afterEach, beforeAll, beforeEach } from 'vitest'
+import i18n from '@/i18n'
 import { useSessionStore } from '@/store/session'
 import { server } from './server'
 
@@ -20,8 +21,11 @@ if (typeof HTMLDialogElement.prototype.showModal !== 'function') {
 beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
 
 // По умолчанию в тестах пользователь не вошёл; тесты сессии задают своё состояние
-beforeEach(() => {
+beforeEach(async () => {
   useSessionStore.getState().clear()
+  // Тексты в тестах проверяются по-русски, независимо от языка окружения
+  localStorage.clear()
+  await i18n.changeLanguage('ru')
 })
 
 afterEach(() => {

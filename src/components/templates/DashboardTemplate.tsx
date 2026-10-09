@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { ReactNode } from 'react'
 import { Footer } from '@/components/organisms/Footer'
 import { Header } from '@/components/organisms/Header'
@@ -14,13 +15,14 @@ export function DashboardTemplate({
   headerActions,
   children,
 }: DashboardTemplateProps) {
+  const { t } = useTranslation()
   return (
     <div className="flex min-h-svh flex-col bg-stone-50">
       <a
         href="#content"
         className="sr-only focus:not-sr-only focus:absolute focus:z-30 focus:m-2 focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:text-sm"
       >
-        Перейти к содержимому
+        {t('common.skipToContent')}
       </a>
       <Header actions={headerActions} />
       <div className="relative flex flex-1">

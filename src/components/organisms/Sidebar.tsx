@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useEffect } from 'react'
 import { Link } from 'react-router'
 import { cn } from '@/lib/cn'
@@ -17,6 +18,7 @@ type SidebarProps = {
 // экране (lg) — постоянная колонка. Закрытая панель на телефоне скрыта
 // целиком, поэтому её ссылки не попадают в порядок табуляции
 export function Sidebar({ items }: SidebarProps) {
+  const { t } = useTranslation()
   const isOpen = useUiStore((state) => state.isSidebarOpen)
   const closeSidebar = useUiStore((state) => state.closeSidebar)
 
@@ -34,7 +36,7 @@ export function Sidebar({ items }: SidebarProps) {
       {isOpen && (
         <button
           type="button"
-          aria-label="Закрыть меню"
+          aria-label={t('common.closeMenu')}
           tabIndex={-1}
           onClick={closeSidebar}
           className="fixed inset-0 z-10 bg-stone-900/50 lg:hidden"
@@ -47,7 +49,7 @@ export function Sidebar({ items }: SidebarProps) {
           isOpen ? 'fixed inset-y-0 left-0 flex flex-col' : 'hidden',
         )}
       >
-        <nav aria-label="Основная навигация" className="p-3">
+        <nav aria-label={t('common.mainNavigation')} className="p-3">
           <ul className="flex flex-col gap-1">
             {items.map((item) => (
               <li key={item.href}>

@@ -1,3 +1,5 @@
+import { LanguageSwitcher } from '@/components/molecules/LanguageSwitcher'
+import { useTranslation } from 'react-i18next'
 import type { ReactNode } from 'react'
 import { Link } from 'react-router'
 import { Button } from '@/components/atoms/Button'
@@ -9,6 +11,7 @@ type HeaderProps = {
 }
 
 export function Header({ actions }: HeaderProps) {
+  const { t } = useTranslation()
   const isSidebarOpen = useUiStore((state) => state.isSidebarOpen)
   const toggleSidebar = useUiStore((state) => state.toggleSidebar)
 
@@ -17,7 +20,7 @@ export function Header({ actions }: HeaderProps) {
       <Button
         variant="ghost"
         size="sm"
-        aria-label="Меню"
+        aria-label={t('common.menu')}
         aria-expanded={isSidebarOpen}
         aria-controls="sidebar"
         onClick={toggleSidebar}
@@ -32,9 +35,10 @@ export function Header({ actions }: HeaderProps) {
         <Logo className="size-7" />
         VitiGuard MD
       </Link>
-      {actions && (
-        <div className="ml-auto flex items-center gap-2">{actions}</div>
-      )}
+      <div className="ml-auto flex items-center gap-2">
+        <LanguageSwitcher />
+        {actions}
+      </div>
     </header>
   )
 }

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { ApiError } from '@/api/client'
@@ -15,9 +16,8 @@ type RegisterFormProps = {
   onSubmit: (values: RegisterValues) => Promise<void>
 }
 
-const EMAIL_TAKEN = 'Пользователь с таким email уже зарегистрирован'
-
 export function RegisterForm({ onSubmit }: RegisterFormProps) {
+  const { t } = useTranslation()
   const {
     register,
     handleSubmit,
@@ -34,13 +34,13 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
     } catch (error) {
       if (error instanceof ApiError && error.status === 409) {
         // Конфликт значит одно: email занят, поэтому ошибка относится к полю
-        setError('email', { message: EMAIL_TAKEN })
+        setError('email', { message: t('auth.register.emailTaken') })
       } else {
         setError('root', {
           message:
             error instanceof ApiError
               ? error.message
-              : 'Не удалось зарегистрироваться',
+              : t('auth.register.failed'),
         })
       }
     }
@@ -52,12 +52,16 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
       noValidate
       className="flex flex-col gap-4"
     >
-      <Field label="Имя" error={errors.fullName?.message} required>
+      <Field
+        label={t('auth.fullName')}
+        error={errors.fullName?.message}
+        required
+      >
         {(control) => (
           <Input autoComplete="name" {...control} {...register('fullName')} />
         )}
       </Field>
-      <Field label="Email" error={errors.email?.message} required>
+      <Field label={t('auth.email')} error={errors.email?.message} required>
         {(control) => (
           <Input
             type="email"
@@ -68,8 +72,8 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
         )}
       </Field>
       <Field
-        label="Пароль"
-        hint="Не короче 8 символов, с буквами и цифрами"
+        label={t('auth.password')}
+        hint={t('auth.passwordHint')}
         error={errors.password?.message}
         required
       >
@@ -83,7 +87,7 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
         )}
       </Field>
       <Field
-        label="Повторите пароль"
+        label={t('auth.confirmPassword')}
         error={errors.confirmPassword?.message}
         required
       >
@@ -96,12 +100,12 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
           />
         )}
       </Field>
-      <Field label="Роль" error={errors.role?.message} required>
+      <Field label={t('auth.role')} error={errors.role?.message} required>
         {(control) => (
           <Select {...control} {...register('role')}>
             {registrationRoles.map((role) => (
               <option key={role.value} value={role.value}>
-                {role.label}
+                {t(`auth.roles.${role.value}`)}
               </option>
             ))}
           </Select>
@@ -113,7 +117,7 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
         </p>
       )}
       <Button type="submit" isLoading={isSubmitting}>
-        Зарегистрироваться
+        {t('auth.register.submit')}
       </Button>
     </form>
   )

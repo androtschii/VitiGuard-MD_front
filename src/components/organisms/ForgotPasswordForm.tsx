@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { ApiError } from '@/api/client'
@@ -11,6 +12,7 @@ type ForgotPasswordFormProps = {
 }
 
 export function ForgotPasswordForm({ onSubmit }: ForgotPasswordFormProps) {
+  const { t } = useTranslation()
   const {
     register,
     handleSubmit,
@@ -26,9 +28,7 @@ export function ForgotPasswordForm({ onSubmit }: ForgotPasswordFormProps) {
     } catch (error) {
       setError('root', {
         message:
-          error instanceof ApiError
-            ? error.message
-            : 'Не удалось отправить письмо',
+          error instanceof ApiError ? error.message : t('auth.forgot.failed'),
       })
     }
   })
@@ -39,11 +39,8 @@ export function ForgotPasswordForm({ onSubmit }: ForgotPasswordFormProps) {
       noValidate
       className="flex flex-col gap-4"
     >
-      <p className="text-sm text-stone-600">
-        Укажите email, с которым вы регистрировались: мы отправим на него ссылку
-        для создания нового пароля.
-      </p>
-      <Field label="Email" error={errors.email?.message} required>
+      <p className="text-sm text-stone-600">{t('auth.forgot.intro')}</p>
+      <Field label={t('auth.email')} error={errors.email?.message} required>
         {(control) => (
           <Input
             type="email"
@@ -59,7 +56,7 @@ export function ForgotPasswordForm({ onSubmit }: ForgotPasswordFormProps) {
         </p>
       )}
       <Button type="submit" isLoading={isSubmitting}>
-        Отправить ссылку
+        {t('auth.forgot.submit')}
       </Button>
     </form>
   )

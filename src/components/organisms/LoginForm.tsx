@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { ApiError } from '@/api/client'
@@ -11,6 +12,7 @@ type LoginFormProps = {
 }
 
 export function LoginForm({ onSubmit }: LoginFormProps) {
+  const { t } = useTranslation()
   const {
     register,
     handleSubmit,
@@ -24,7 +26,8 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
     } catch (error) {
       // Текст ошибки сервера («Неверный email или пароль») показываем как есть
       setError('root', {
-        message: error instanceof ApiError ? error.message : 'Не удалось войти',
+        message:
+          error instanceof ApiError ? error.message : t('auth.login.failed'),
       })
     }
   })
@@ -36,7 +39,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
       noValidate
       className="flex flex-col gap-4"
     >
-      <Field label="Email" error={errors.email?.message} required>
+      <Field label={t('auth.email')} error={errors.email?.message} required>
         {(control) => (
           <Input
             type="email"
@@ -46,7 +49,11 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
           />
         )}
       </Field>
-      <Field label="Пароль" error={errors.password?.message} required>
+      <Field
+        label={t('auth.password')}
+        error={errors.password?.message}
+        required
+      >
         {(control) => (
           <Input
             type="password"
@@ -62,7 +69,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
         </p>
       )}
       <Button type="submit" isLoading={isSubmitting}>
-        Войти
+        {t('auth.login.submit')}
       </Button>
     </form>
   )

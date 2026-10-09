@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useId, type ReactNode } from 'react'
 
 export type FieldControlProps = {
@@ -16,7 +17,10 @@ type FieldProps = {
 }
 
 export function Field({ label, hint, error, required, children }: FieldProps) {
+  const { t } = useTranslation()
   const id = useId()
+  // Ошибки валидации приходят ключами перевода, ошибки сервера — готовым текстом
+  const message = error?.startsWith('validation.') ? t(error) : error
   const hintId = `${id}-hint`
   const errorId = `${id}-error`
   const describedBy =
@@ -44,7 +48,7 @@ export function Field({ label, hint, error, required, children }: FieldProps) {
       )}
       {error && (
         <p id={errorId} role="alert" className="text-xs text-red-700">
-          {error}
+          {message}
         </p>
       )}
     </div>

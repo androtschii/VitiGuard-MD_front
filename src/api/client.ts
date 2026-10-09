@@ -1,3 +1,4 @@
+import i18n from '@/i18n'
 import axios, { isAxiosError } from 'axios'
 
 export class ApiError extends Error {
@@ -75,13 +76,13 @@ function getRetryableConfig(error: unknown) {
 
 function toApiError(error: unknown): ApiError {
   if (!isAxiosError<{ detail?: unknown }>(error) || !error.response) {
-    return new ApiError('Сервер недоступен', null)
+    return new ApiError(i18n.t('api.serverUnavailable'), null)
   }
   const { status, data } = error.response
   // FastAPI возвращает текст ошибки в поле detail
   const message =
     typeof data?.detail === 'string'
       ? data.detail
-      : `Ошибка сервера (${status})`
+      : i18n.t('api.serverError', { status })
   return new ApiError(message, status)
 }

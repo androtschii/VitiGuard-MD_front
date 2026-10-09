@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Link, useLocation } from 'react-router'
 import { useLogin } from '@/api/auth'
 import { LoginForm } from '@/components/organisms/LoginForm'
@@ -10,10 +11,10 @@ type LoginLocationState = {
 
 function getNotice(state: LoginLocationState) {
   if (state?.registered) {
-    return 'Аккаунт создан. Войдите, используя email и пароль.'
+    return 'auth.login.accountCreated' as const
   }
   if (state?.passwordReset) {
-    return 'Пароль изменён. Войдите с новым паролем.'
+    return 'auth.login.passwordChanged' as const
   }
   return null
 }
@@ -21,18 +22,19 @@ function getNotice(state: LoginLocationState) {
 const linkClass = 'font-medium text-emerald-800 underline'
 
 export function LoginPage() {
+  const { t } = useTranslation()
   const location = useLocation()
   const { mutateAsync } = useLogin()
   const notice = getNotice(location.state as LoginLocationState)
 
   return (
     <AuthTemplate
-      title="Вход"
+      title={t('auth.login.title')}
       footer={
         <>
-          Нет аккаунта?{' '}
+          {t('auth.login.noAccount')}{' '}
           <Link to="/register" className={linkClass}>
-            Зарегистрироваться
+            {t('auth.login.register')}
           </Link>
         </>
       }
@@ -42,7 +44,7 @@ export function LoginPage() {
           role="status"
           className="mb-4 rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-800"
         >
-          {notice}
+          {t(notice)}
         </p>
       )}
       <LoginForm
@@ -53,7 +55,7 @@ export function LoginPage() {
       />
       <p className="mt-4 text-center text-sm">
         <Link to="/forgot-password" className={linkClass}>
-          Забыли пароль?
+          {t('auth.login.forgotPassword')}
         </Link>
       </p>
     </AuthTemplate>

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useEffect, useId, useRef, type ReactNode } from 'react'
 import { Button } from '@/components/atoms/Button'
 
@@ -20,6 +21,7 @@ export function Modal({
   footer,
   children,
 }: ModalProps) {
+  const { t } = useTranslation()
   const dialogRef = useRef<HTMLDialogElement>(null)
   const titleId = useId()
   const descriptionId = useId()
@@ -61,7 +63,7 @@ export function Modal({
           <Button
             variant="ghost"
             size="sm"
-            aria-label="Закрыть"
+            aria-label={t('common.close')}
             onClick={onClose}
             className="-mt-1 -mr-2 text-lg"
           >

@@ -1,3 +1,4 @@
+import { Trans, useTranslation } from 'react-i18next'
 import { Link, useNavigate, useSearchParams } from 'react-router'
 import { useConfirmPasswordReset } from '@/api/auth'
 import { ResetPasswordForm } from '@/components/organisms/ResetPasswordForm'
@@ -8,20 +9,23 @@ export function ResetPasswordPage() {
   const navigate = useNavigate()
   const { mutateAsync } = useConfirmPasswordReset()
   const token = searchParams.get('token')
+  const { t } = useTranslation()
 
   if (!token) {
     return (
-      <AuthTemplate title="Ссылка недействительна">
+      <AuthTemplate title={t('auth.reset.invalidTitle')}>
         <p className="text-sm text-stone-700">
-          В адресе нет ключа для смены пароля. Откройте ссылку из письма целиком
-          или{' '}
-          <Link
-            to="/forgot-password"
-            className="font-medium text-emerald-800 underline"
-          >
-            запросите новую
-          </Link>
-          .
+          <Trans
+            i18nKey="auth.reset.invalidText"
+            components={{
+              request: (
+                <Link
+                  to="/forgot-password"
+                  className="font-medium text-emerald-800 underline"
+                />
+              ),
+            }}
+          />
         </p>
       </AuthTemplate>
     )
@@ -29,13 +33,13 @@ export function ResetPasswordPage() {
 
   return (
     <AuthTemplate
-      title="Новый пароль"
+      title={t('auth.reset.title')}
       footer={
         <Link
           to="/forgot-password"
           className="font-medium text-emerald-800 underline"
         >
-          Запросить новую ссылку
+          {t('auth.reset.requestNew')}
         </Link>
       }
     >

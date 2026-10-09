@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { ReactNode } from 'react'
 import { Skeleton } from '@/components/atoms/Skeleton'
 import { cn } from '@/lib/cn'
@@ -26,8 +27,9 @@ export function DataTable<Row>({
   rows,
   getRowKey,
   isLoading = false,
-  emptyMessage = 'Нет данных',
+  emptyMessage,
 }: DataTableProps<Row>) {
+  const { t } = useTranslation()
   const alignment = (align: Column<Row>['align']) =>
     align === 'right' ? 'text-right' : 'text-left'
 
@@ -69,7 +71,7 @@ export function DataTable<Row>({
                 colSpan={columns.length}
                 className="px-4 py-8 text-center text-stone-500"
               >
-                {emptyMessage}
+                {emptyMessage ?? t('common.noData')}
               </td>
             </tr>
           ) : (
@@ -93,7 +95,7 @@ export function DataTable<Row>({
       </table>
       {isLoading && (
         <p role="status" className="sr-only">
-          Загрузка…
+          {t('common.loading')}
         </p>
       )}
     </div>
