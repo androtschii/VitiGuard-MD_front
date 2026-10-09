@@ -1,5 +1,72 @@
 @import 'tailwindcss';
 
+/* Тёмная тема включается классом на <html>, а не только настройкой системы:
+   пользователь может выбрать её вручную */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Компоненты используют смысловые цвета (фон, текст, линии), а не оттенки
+   палитры: тема меняет значения переменных, разметка остаётся прежней */
+:root {
+  color-scheme: light;
+
+  --canvas: var(--color-stone-50);
+  --surface: var(--color-white);
+  --muted: var(--color-stone-100);
+  --muted-strong: var(--color-stone-200);
+  --ink: var(--color-stone-900);
+  --ink-soft: var(--color-stone-700);
+  --ink-muted: var(--color-stone-600);
+  --ink-subtle: var(--color-stone-500);
+  --ink-faint: var(--color-stone-400);
+  --line: var(--color-stone-200);
+  --line-strong: var(--color-stone-300);
+  --accent: var(--color-emerald-800);
+  --accent-soft: var(--color-emerald-50);
+  --danger: var(--color-red-700);
+}
+
+/* Оттенки подобраны так, чтобы контраст текста не падал ниже 4.5:1 (WCAG AA) */
+:root.dark {
+  color-scheme: dark;
+
+  --canvas: var(--color-stone-950);
+  --surface: var(--color-stone-900);
+  --muted: var(--color-stone-800);
+  --muted-strong: var(--color-stone-700);
+  --ink: var(--color-stone-100);
+  --ink-soft: var(--color-stone-300);
+  --ink-muted: var(--color-stone-400);
+  --ink-subtle: var(--color-stone-400);
+  --ink-faint: var(--color-stone-500);
+  --line: var(--color-stone-800);
+  --line-strong: var(--color-stone-700);
+  --accent: var(--color-emerald-400);
+  --accent-soft: var(--color-emerald-950);
+  --danger: var(--color-red-400);
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-muted: var(--muted);
+  --color-muted-strong: var(--muted-strong);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-subtle: var(--ink-subtle);
+  --color-ink-faint: var(--ink-faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-danger: var(--danger);
+}
+
+body {
+  background-color: var(--canvas);
+  color: var(--ink);
+}
+
 /* Страница под модальным окном не прокручивается */
 html:has(dialog[open]) {
   overflow: hidden;

@@ -14,14 +14,14 @@ export function ResetPasswordPage() {
   if (!token) {
     return (
       <AuthTemplate title={t('auth.reset.invalidTitle')}>
-        <p className="text-sm text-stone-700">
+        <p className="text-sm text-ink-soft">
           <Trans
             i18nKey="auth.reset.invalidText"
             components={{
               request: (
                 <Link
                   to="/forgot-password"
-                  className="font-medium text-emerald-800 underline"
+                  className="font-medium text-accent underline"
                 />
               ),
             }}
@@ -37,7 +37,7 @@ export function ResetPasswordPage() {
       footer={
         <Link
           to="/forgot-password"
-          className="font-medium text-emerald-800 underline"
+          className="font-medium text-accent underline"
         >
           {t('auth.reset.requestNew')}
         </Link>

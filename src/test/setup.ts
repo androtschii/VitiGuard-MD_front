@@ -3,6 +3,7 @@ import { cleanup } from '@testing-library/react'
 import { afterAll, afterEach, beforeAll, beforeEach } from 'vitest'
 import i18n from '@/i18n'
 import { useSessionStore } from '@/store/session'
+import { useThemeStore } from '@/theme'
 import { server } from './server'
 
 // В jsdom нет showModal() и close() у <dialog>, а в браузерах они есть давно
@@ -26,6 +27,8 @@ beforeEach(async () => {
   // Тексты в тестах проверяются по-русски, независимо от языка окружения
   localStorage.clear()
   await i18n.changeLanguage('ru')
+  useThemeStore.setState({ theme: 'system' })
+  document.documentElement.classList.remove('dark')
 })
 
 afterEach(() => {

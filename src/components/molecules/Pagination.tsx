@@ -27,7 +27,7 @@ export function Pagination({ page, pageCount, onPageChange }: PaginationProps) {
           <span
             key={`ellipsis-${index}`}
             aria-hidden="true"
-            className="px-1 text-stone-400"
+            className="px-1 text-ink-faint"
           >
             …
           </span>

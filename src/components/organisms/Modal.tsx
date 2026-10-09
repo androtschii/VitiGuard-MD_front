@@ -46,16 +46,16 @@ export function Modal({
         // Клик по самому <dialog> — это клик по фону вокруг содержимого
         if (event.target === event.currentTarget) onClose()
       }}
-      className="m-auto w-full max-w-lg rounded-lg bg-white p-0 shadow-xl backdrop:bg-stone-900/50"
+      className="m-auto w-full max-w-lg rounded-lg bg-surface p-0 shadow-xl backdrop:bg-stone-900/50"
     >
       <div className="flex flex-col gap-4 p-6">
         <header className="flex items-start justify-between gap-4">
           <div>
-            <h2 id={titleId} className="text-lg font-semibold text-stone-900">
+            <h2 id={titleId} className="text-lg font-semibold text-ink">
               {title}
             </h2>
             {description && (
-              <p id={descriptionId} className="mt-1 text-sm text-stone-500">
+              <p id={descriptionId} className="mt-1 text-sm text-ink-subtle">
                 {description}
               </p>
             )}

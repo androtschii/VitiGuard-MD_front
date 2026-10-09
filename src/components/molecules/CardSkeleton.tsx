@@ -13,7 +13,7 @@ export function CardSkeleton({ lines = 3, className }: CardSkeletonProps) {
     <div
       role="status"
       className={cn(
-        'rounded-lg border border-stone-200 bg-white p-5 shadow-sm',
+        'rounded-lg border border-line bg-surface p-5 shadow-sm',
         className,
       )}
     >

@@ -45,7 +45,7 @@ export function Sidebar({ items }: SidebarProps) {
       <aside
         id="sidebar"
         className={cn(
-          'z-20 w-64 shrink-0 border-r border-stone-200 bg-white lg:static lg:flex lg:flex-col',
+          'z-20 w-64 shrink-0 border-r border-line bg-surface lg:static lg:flex lg:flex-col',
           isOpen ? 'fixed inset-y-0 left-0 flex flex-col' : 'hidden',
         )}
       >
@@ -60,8 +60,8 @@ export function Sidebar({ items }: SidebarProps) {
                   className={cn(
                     'block rounded-md px-3 py-2 text-sm font-medium',
                     item.current
-                      ? 'bg-emerald-50 text-emerald-800'
-                      : 'text-stone-700 hover:bg-stone-100',
+                      ? 'bg-accent-soft text-accent'
+                      : 'text-ink-soft hover:bg-muted',
                   )}
                 >
                   {item.label}

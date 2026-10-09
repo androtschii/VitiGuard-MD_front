@@ -39,7 +39,7 @@ export function ForgotPasswordForm({ onSubmit }: ForgotPasswordFormProps) {
       noValidate
       className="flex flex-col gap-4"
     >
-      <p className="text-sm text-stone-600">{t('auth.forgot.intro')}</p>
+      <p className="text-sm text-ink-muted">{t('auth.forgot.intro')}</p>
       <Field label={t('auth.email')} error={errors.email?.message} required>
         {(control) => (
           <Input
@@ -51,7 +51,7 @@ export function ForgotPasswordForm({ onSubmit }: ForgotPasswordFormProps) {
         )}
       </Field>
       {errors.root && (
-        <p role="alert" className="text-sm text-red-700">
+        <p role="alert" className="text-sm text-danger">
           {errors.root.message}
         </p>
       )}

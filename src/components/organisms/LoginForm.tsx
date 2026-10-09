@@ -64,7 +64,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
         )}
       </Field>
       {errors.root && (
-        <p role="alert" className="text-sm text-red-700">
+        <p role="alert" className="text-sm text-danger">
           {errors.root.message}
         </p>
       )}
