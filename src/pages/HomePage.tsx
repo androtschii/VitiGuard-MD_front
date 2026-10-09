@@ -1,13 +1,12 @@
 import { useTranslation } from 'react-i18next'
-import { useLogout } from '@/api/auth'
-import { Button } from '@/components/atoms/Button'
+import { Link } from 'react-router'
 import { Logo } from '@/components/atoms/Logo'
 import { ApiStatus } from '@/components/organisms/ApiStatus'
+import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { CenteredTemplate } from '@/components/templates/CenteredTemplate'
 
 export function HomePage() {
   const { t } = useTranslation()
-  const { mutate: logout, isPending } = useLogout()
 
   return (
     <CenteredTemplate>
@@ -15,13 +14,15 @@ export function HomePage() {
       <h1 className="text-4xl font-semibold text-accent">VitiGuard MD</h1>
       <p className="max-w-md text-ink-muted">{t('home.description')}</p>
       <ApiStatus />
-      <Button
-        variant="secondary"
-        isLoading={isPending}
-        onClick={() => logout()}
-      >
-        {t('common.logout')}
-      </Button>
+      <div className="flex gap-3">
+        <Link
+          to="/map"
+          className="inline-flex h-8 items-center rounded-md bg-emerald-700 px-3 text-sm font-medium text-white hover:bg-emerald-800"
+        >
+          {t('home.openMap')}
+        </Link>
+        <LogoutButton />
+      </div>
     </CenteredTemplate>
   )
 }

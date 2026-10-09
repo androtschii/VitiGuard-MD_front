@@ -17,6 +17,10 @@ export default defineConfig({
       '/api': 'http://127.0.0.1:8000',
     },
   },
+  // Фоновый поток MapLibre импортирует общий модуль, поэтому собирается как ES-модуль
+  worker: {
+    format: 'es',
+  },
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
