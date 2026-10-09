@@ -65,4 +65,13 @@ describe('Sidebar', () => {
 
     expect(useUiStore.getState().isSidebarOpen).toBe(false)
   })
+
+  it('другие клавиши панель не закрывают', () => {
+    useUiStore.setState({ isSidebarOpen: true })
+    renderWithRouter(<Sidebar items={items} />)
+
+    fireEvent.keyDown(document, { key: 'Enter' })
+
+    expect(useUiStore.getState().isSidebarOpen).toBe(true)
+  })
 })

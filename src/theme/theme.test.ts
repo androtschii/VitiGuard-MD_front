@@ -30,6 +30,7 @@ const isDark = () => document.documentElement.classList.contains('dark')
 
 afterEach(() => {
   vi.unstubAllGlobals()
+  vi.restoreAllMocks()
 })
 
 describe('тема', () => {
@@ -41,6 +42,24 @@ describe('тема', () => {
     localStorage.setItem(THEME_STORAGE_KEY, 'sepia')
 
     expect(readStoredTheme()).toBe('system')
+  })
+
+  it('без доступа к хранилищу следует за системой', () => {
+    vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+      throw new Error('SecurityError')
+    })
+
+    expect(readStoredTheme()).toBe('system')
+  })
+
+  it('выбор применяется, даже если сохранить его нельзя', () => {
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new Error('QuotaExceededError')
+    })
+
+    useThemeStore.getState().setTheme('dark')
+
+    expect(isDark()).toBe(true)
   })
 
   it('в режиме системы берёт тёмную тему из настроек ОС', () => {

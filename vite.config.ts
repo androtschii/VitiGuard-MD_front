@@ -20,5 +20,25 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
+    coverage: {
+      provider: 'v8',
+      include: ['src/**/*.{ts,tsx}'],
+      // Точка входа только монтирует приложение, а test — вспомогательный код тестов
+      exclude: ['src/main.tsx', 'src/test/**', 'src/**/*.test.{ts,tsx}'],
+      reporter: ['text-summary', 'html'],
+      thresholds: {
+        statements: 95,
+        branches: 90,
+        functions: 95,
+        lines: 95,
+        // Базовые UI-компоненты переиспользуются везде, для них планка выше
+        'src/components/**': {
+          statements: 100,
+          branches: 95,
+          functions: 100,
+          lines: 100,
+        },
+      },
+    },
   },
 })
