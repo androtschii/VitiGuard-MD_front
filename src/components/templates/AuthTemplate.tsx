@@ -1,3 +1,4 @@
+import { LanguageSwitcher } from '@/components/molecules/LanguageSwitcher'
 import type { ReactNode } from 'react'
 import { Logo } from '@/components/atoms/Logo'
 
@@ -9,7 +10,10 @@ type AuthTemplateProps = {
 
 export function AuthTemplate({ title, children, footer }: AuthTemplateProps) {
   return (
-    <main className="flex min-h-svh flex-col items-center justify-center gap-6 bg-stone-50 p-6">
+    <main className="relative flex min-h-svh flex-col items-center justify-center gap-6 bg-stone-50 p-6">
+      <div className="absolute top-4 right-4">
+        <LanguageSwitcher />
+      </div>
       <div className="flex flex-col items-center gap-2">
         <Logo className="size-12" />
         <p className="font-semibold text-emerald-800">VitiGuard MD</p>

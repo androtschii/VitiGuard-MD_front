@@ -9,8 +9,8 @@ describe('forgotPasswordSchema', () => {
   })
 
   it.each([
-    ['', 'Введите email'],
-    ['grower', 'Введите корректный email'],
+    ['', 'validation.emailRequired'],
+    ['grower', 'validation.emailInvalid'],
   ])('отклоняет email %j', (email, message) => {
     expect(
       forgotPasswordSchema.safeParse({ email }).error?.issues[0]?.message,
@@ -29,18 +29,18 @@ describe('resetPasswordSchema', () => {
   })
 
   it.each([
-    [{ password: 'abc1', confirmPassword: 'abc1' }, 'Не короче 8 символов'],
+    [{ password: 'abc1', confirmPassword: 'abc1' }, 'validation.passwordMin'],
     [
       { password: '12345678', confirmPassword: '12345678' },
-      'Добавьте хотя бы одну букву',
+      'validation.passwordLetter',
     ],
     [
       { password: 'abcdefgh', confirmPassword: 'abcdefgh' },
-      'Добавьте хотя бы одну цифру',
+      'validation.passwordDigit',
     ],
     [
       { password: 'secret123', confirmPassword: 'secret124' },
-      'Пароли не совпадают',
+      'validation.passwordsMismatch',
     ],
   ])('отклоняет %j', (values, message) => {
     expect(

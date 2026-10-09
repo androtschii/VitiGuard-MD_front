@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Skeleton } from '@/components/atoms/Skeleton'
 import { cn } from '@/lib/cn'
 
@@ -7,6 +8,7 @@ type CardSkeletonProps = {
 }
 
 export function CardSkeleton({ lines = 3, className }: CardSkeletonProps) {
+  const { t } = useTranslation()
   return (
     <div
       role="status"
@@ -15,7 +17,7 @@ export function CardSkeleton({ lines = 3, className }: CardSkeletonProps) {
         className,
       )}
     >
-      <span className="sr-only">Загрузка…</span>
+      <span className="sr-only">{t('common.loading')}</span>
       <Skeleton className="mb-4 h-5 w-1/3" />
       <div className="flex flex-col gap-2">
         {Array.from({ length: lines }, (_, index) => (

@@ -31,19 +31,19 @@ describe('registerSchema', () => {
   })
 
   it.each([
-    [{ fullName: 'А' }, 'Введите имя'],
-    [{ email: 'grower' }, 'Введите корректный email'],
-    [{ password: 'abc1', confirmPassword: 'abc1' }, 'Не короче 8 символов'],
+    [{ fullName: 'А' }, 'validation.nameRequired'],
+    [{ email: 'grower' }, 'validation.emailInvalid'],
+    [{ password: 'abc1', confirmPassword: 'abc1' }, 'validation.passwordMin'],
     [
       { password: '12345678', confirmPassword: '12345678' },
-      'Добавьте хотя бы одну букву',
+      'validation.passwordLetter',
     ],
     [
       { password: 'abcdefgh', confirmPassword: 'abcdefgh' },
-      'Добавьте хотя бы одну цифру',
+      'validation.passwordDigit',
     ],
-    [{ confirmPassword: 'secret124' }, 'Пароли не совпадают'],
-    [{ confirmPassword: '' }, 'Повторите пароль'],
+    [{ confirmPassword: 'secret124' }, 'validation.passwordsMismatch'],
+    [{ confirmPassword: '' }, 'validation.confirmRequired'],
   ])('отклоняет %j', (overrides, message) => {
     expect(firstMessage(overrides)).toBe(message)
   })

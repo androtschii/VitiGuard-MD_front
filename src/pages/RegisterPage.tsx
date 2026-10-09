@@ -1,20 +1,22 @@
+import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router'
 import { useRegister } from '@/api/auth'
 import { RegisterForm } from '@/components/organisms/RegisterForm'
 import { AuthTemplate } from '@/components/templates/AuthTemplate'
 
 export function RegisterPage() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { mutateAsync } = useRegister()
 
   return (
     <AuthTemplate
-      title="Регистрация"
+      title={t('auth.register.title')}
       footer={
         <>
-          Уже есть аккаунт?{' '}
+          {t('auth.register.haveAccount')}{' '}
           <Link to="/login" className="font-medium text-emerald-800 underline">
-            Войти
+            {t('auth.register.login')}
           </Link>
         </>
       }

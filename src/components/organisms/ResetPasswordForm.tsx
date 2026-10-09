@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { ApiError } from '@/api/client'
@@ -11,6 +12,7 @@ type ResetPasswordFormProps = {
 }
 
 export function ResetPasswordForm({ onSubmit }: ResetPasswordFormProps) {
+  const { t } = useTranslation()
   const {
     register,
     handleSubmit,
@@ -26,9 +28,7 @@ export function ResetPasswordForm({ onSubmit }: ResetPasswordFormProps) {
     } catch (error) {
       setError('root', {
         message:
-          error instanceof ApiError
-            ? error.message
-            : 'Не удалось изменить пароль',
+          error instanceof ApiError ? error.message : t('auth.reset.failed'),
       })
     }
   })
@@ -40,8 +40,8 @@ export function ResetPasswordForm({ onSubmit }: ResetPasswordFormProps) {
       className="flex flex-col gap-4"
     >
       <Field
-        label="Новый пароль"
-        hint="Не короче 8 символов, с буквами и цифрами"
+        label={t('auth.newPassword')}
+        hint={t('auth.passwordHint')}
         error={errors.password?.message}
         required
       >
@@ -55,7 +55,7 @@ export function ResetPasswordForm({ onSubmit }: ResetPasswordFormProps) {
         )}
       </Field>
       <Field
-        label="Повторите пароль"
+        label={t('auth.confirmPassword')}
         error={errors.confirmPassword?.message}
         required
       >
@@ -74,7 +74,7 @@ export function ResetPasswordForm({ onSubmit }: ResetPasswordFormProps) {
         </p>
       )}
       <Button type="submit" isLoading={isSubmitting}>
-        Сохранить пароль
+        {t('auth.reset.submit')}
       </Button>
     </form>
   )

@@ -12,10 +12,10 @@ describe('loginSchema', () => {
   })
 
   it.each([
-    ['', 'Введите email'],
-    ['   ', 'Введите email'],
-    ['grower', 'Введите корректный email'],
-    ['grower@', 'Введите корректный email'],
+    ['', 'validation.emailRequired'],
+    ['   ', 'validation.emailRequired'],
+    ['grower', 'validation.emailInvalid'],
+    ['grower@', 'validation.emailInvalid'],
   ])('отклоняет email %j', (email, message) => {
     const result = loginSchema.safeParse({ email, password: 'secret' })
 
@@ -26,7 +26,7 @@ describe('loginSchema', () => {
     expect(
       loginSchema.safeParse({ email: 'a@b.md', password: '' }).error?.issues[0]
         ?.message,
-    ).toBe('Введите пароль')
+    ).toBe('validation.passwordRequired')
     expect(
       loginSchema.safeParse({ email: 'a@b.md', password: '1' }).success,
     ).toBe(true)
