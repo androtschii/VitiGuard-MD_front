@@ -18,6 +18,22 @@ export const en: Messages = {
     light: 'Light',
     dark: 'Dark',
   },
+  nav: {
+    home: 'Home',
+    map: 'Map',
+  },
+  map: {
+    title: 'Vineyard map',
+    label: "Map of Moldova's vineyards",
+    zoomIn: 'Zoom in',
+    zoomOut: 'Zoom out',
+    resetBearing: 'Reset bearing to north',
+    fullscreenEnter: 'Enter fullscreen',
+    fullscreenExit: 'Exit fullscreen',
+    attribution: 'Map data sources',
+    unsupported:
+      'Your browser cannot display the map: WebGL support is required. Update your browser or enable hardware acceleration in its settings.',
+  },
   pagination: {
     label: 'Pages',
     previous: 'Previous',
@@ -37,6 +53,7 @@ export const en: Messages = {
   home: {
     description:
       'Vineyard health monitoring for Moldova: disease diagnosis from leaf photos, satellite indices and infection risk forecasts.',
+    openMap: 'Open map',
   },
   errorPage: {
     title: 'Something went wrong',

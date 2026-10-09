@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/vitest'
 import { cleanup } from '@testing-library/react'
-import { afterAll, afterEach, beforeAll, beforeEach } from 'vitest'
+import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest'
 import i18n from '@/i18n'
 import { useSessionStore } from '@/store/session'
 import { useThemeStore } from '@/theme'
@@ -19,6 +19,11 @@ if (typeof HTMLDialogElement.prototype.showModal !== 'function') {
   })
 }
 
+// В jsdom нет WebGL: MapLibre заменён заглушкой, а холст не даёт контекст.
+// Тесты карты включают «WebGL» сами через spyOn на getContext
+vi.mock('maplibre-gl', () => import('./maplibre'))
+HTMLCanvasElement.prototype.getContext = () => null
+
 beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
 
 // По умолчанию в тестах пользователь не вошёл; тесты сессии задают своё состояние
@@ -34,6 +39,7 @@ beforeEach(async () => {
 afterEach(() => {
   // Без глобального afterEach Testing Library сама не очищает DOM между тестами
   cleanup()
+  vi.restoreAllMocks()
   server.resetHandlers()
 })
 

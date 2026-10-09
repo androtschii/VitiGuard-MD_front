@@ -45,4 +45,14 @@ describe('routes', () => {
       screen.getByRole('heading', { name: 'Что-то пошло не так' }),
     ).toBeInTheDocument()
   })
+
+  it('карта загружается отдельно и открывается вошедшему', async () => {
+    useSessionStore.getState().setAccessToken('token')
+    const router = createMemoryRouter(routes, { initialEntries: ['/map'] })
+    renderWithQueryClient(<RouterProvider router={router} />)
+
+    expect(
+      await screen.findByRole('heading', { name: 'Карта виноградников' }),
+    ).toBeInTheDocument()
+  })
 })

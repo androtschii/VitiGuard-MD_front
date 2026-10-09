@@ -1,5 +1,6 @@
 import type { RouteObject } from 'react-router'
 import { GuestRoute, ProtectedRoute } from '@/app/guards'
+import { LoadingScreen } from '@/components/templates/LoadingScreen'
 import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage'
 import { HomePage } from '@/pages/HomePage'
 import { LoginPage } from '@/pages/LoginPage'
@@ -13,11 +14,23 @@ import { RouteErrorPage } from '@/pages/RouteErrorPage'
 export const routes: RouteObject[] = [
   {
     errorElement: <RouteErrorPage />,
+    // Пока при первом открытии загружается код страницы (например, карты)
+    hydrateFallbackElement: <LoadingScreen />,
     children: [
       // Только для вошедших: новые страницы кабинета добавляются сюда
       {
         element: <ProtectedRoute />,
-        children: [{ path: '/', element: <HomePage /> }],
+        children: [
+          { path: '/', element: <HomePage /> },
+          // MapLibre весит больше всего остального приложения, поэтому код
+          // карты загружается отдельно, только когда пользователь её открыл
+          {
+            path: '/map',
+            lazy: async () => ({
+              Component: (await import('@/pages/MapPage')).MapPage,
+            }),
+          },
+        ],
       },
       // Только для гостей
       {

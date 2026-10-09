@@ -18,6 +18,22 @@ export const ro: Messages = {
     light: 'Luminoasă',
     dark: 'Întunecată',
   },
+  nav: {
+    home: 'Acasă',
+    map: 'Harta',
+  },
+  map: {
+    title: 'Harta viilor',
+    label: 'Harta viilor din Moldova',
+    zoomIn: 'Apropie',
+    zoomOut: 'Depărtează',
+    resetBearing: 'Orientează spre nord',
+    fullscreenEnter: 'Ecran complet',
+    fullscreenExit: 'Ieși din ecran complet',
+    attribution: 'Sursele datelor hărții',
+    unsupported:
+      'Browserul nu poate afișa harta: este nevoie de suport WebGL. Actualizați browserul sau activați accelerarea hardware în setările lui.',
+  },
   pagination: {
     label: 'Pagini',
     previous: 'Înapoi',
@@ -37,6 +53,7 @@ export const ro: Messages = {
   home: {
     description:
       'Monitorizarea sănătății viilor din Moldova: diagnosticarea bolilor după fotografiile frunzelor, indici satelitari și prognoza riscului de infecție.',
+    openMap: 'Deschide harta',
   },
   errorPage: {
     title: 'Ceva nu a mers bine',
