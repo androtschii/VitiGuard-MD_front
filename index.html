@@ -9,6 +9,17 @@
       content="Мониторинг здоровья виноградников Молдовы"
     />
     <title>VitiGuard MD</title>
+    <!-- Тема ставится до отрисовки, иначе тёмная тема мигнёт светлой при загрузке -->
+    <script>
+      try {
+        const theme = localStorage.getItem('vitiguard.theme')
+        const dark =
+          theme === 'dark' ||
+          (theme !== 'light' &&
+            matchMedia('(prefers-color-scheme: dark)').matches)
+        document.documentElement.classList.toggle('dark', dark)
+      } catch {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

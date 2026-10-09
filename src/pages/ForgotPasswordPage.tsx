@@ -11,7 +11,7 @@ export function ForgotPasswordPage() {
   const { t } = useTranslation()
 
   const backToLogin = (
-    <Link to="/login" className="font-medium text-emerald-800 underline">
+    <Link to="/login" className="font-medium text-accent underline">
       {t('auth.forgot.backToLogin')}
     </Link>
   )
@@ -28,7 +28,7 @@ export function ForgotPasswordPage() {
       ) : (
         // Текст не подтверждает, что такой аккаунт есть: сервер отвечает одинаково
         // в любом случае, иначе по форме можно было бы узнавать зарегистрированные email
-        <p role="status" className="text-sm text-stone-700">
+        <p role="status" className="text-sm text-ink-soft">
           <Trans
             i18nKey="auth.forgot.sent"
             values={{ email: sentTo }}

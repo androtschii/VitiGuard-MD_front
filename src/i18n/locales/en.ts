@@ -12,6 +12,12 @@ export const en: Messages = {
     logout: 'Log out',
     language: 'Language',
   },
+  theme: {
+    label: 'Theme',
+    system: 'System',
+    light: 'Light',
+    dark: 'Dark',
+  },
   pagination: {
     label: 'Pages',
     previous: 'Previous',

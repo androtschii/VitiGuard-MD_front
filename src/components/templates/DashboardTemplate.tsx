@@ -17,10 +17,10 @@ export function DashboardTemplate({
 }: DashboardTemplateProps) {
   const { t } = useTranslation()
   return (
-    <div className="flex min-h-svh flex-col bg-stone-50">
+    <div className="flex min-h-svh flex-col bg-canvas">
       <a
         href="#content"
-        className="sr-only focus:not-sr-only focus:absolute focus:z-30 focus:m-2 focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:text-sm"
+        className="sr-only focus:not-sr-only focus:absolute focus:z-30 focus:m-2 focus:rounded-md focus:bg-surface focus:px-3 focus:py-2 focus:text-sm"
       >
         {t('common.skipToContent')}
       </a>

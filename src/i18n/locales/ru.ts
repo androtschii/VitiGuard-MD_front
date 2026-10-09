@@ -10,6 +10,12 @@ export const ru = {
     logout: 'Выйти',
     language: 'Язык',
   },
+  theme: {
+    label: 'Тема',
+    system: 'Как в системе',
+    light: 'Светлая',
+    dark: 'Тёмная',
+  },
   pagination: {
     label: 'Страницы',
     previous: 'Назад',

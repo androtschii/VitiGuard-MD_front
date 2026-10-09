@@ -35,13 +35,13 @@ export function DataTable<Row>({
 
   return (
     // Узкий экран прокручивает таблицу по горизонтали, а не ломает вёрстку
-    <div className="overflow-x-auto rounded-lg border border-stone-200 bg-white">
+    <div className="overflow-x-auto rounded-lg border border-line bg-surface">
       <table
         aria-busy={isLoading || undefined}
         className="w-full border-collapse text-sm"
       >
         <caption className="sr-only">{caption}</caption>
-        <thead className="bg-stone-50 text-xs text-stone-600 uppercase">
+        <thead className="bg-canvas text-xs text-ink-muted uppercase">
           <tr>
             {columns.map((column) => (
               <th
@@ -54,7 +54,7 @@ export function DataTable<Row>({
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-stone-100">
+        <tbody className="divide-y divide-line">
           {isLoading ? (
             Array.from({ length: SKELETON_ROWS }, (_, index) => (
               <tr key={index} aria-hidden="true">
@@ -69,19 +69,19 @@ export function DataTable<Row>({
             <tr>
               <td
                 colSpan={columns.length}
-                className="px-4 py-8 text-center text-stone-500"
+                className="px-4 py-8 text-center text-ink-subtle"
               >
                 {emptyMessage ?? t('common.noData')}
               </td>
             </tr>
           ) : (
             rows.map((row) => (
-              <tr key={getRowKey(row)} className="hover:bg-stone-50">
+              <tr key={getRowKey(row)} className="hover:bg-canvas">
                 {columns.map((column) => (
                   <td
                     key={column.key}
                     className={cn(
-                      'px-4 py-3 text-stone-800',
+                      'px-4 py-3 text-ink',
                       alignment(column.align),
                     )}
                   >

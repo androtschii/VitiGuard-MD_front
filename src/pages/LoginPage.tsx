@@ -19,7 +19,7 @@ function getNotice(state: LoginLocationState) {
   return null
 }
 
-const linkClass = 'font-medium text-emerald-800 underline'
+const linkClass = 'font-medium text-accent underline'
 
 export function LoginPage() {
   const { t } = useTranslation()
@@ -42,7 +42,7 @@ export function LoginPage() {
       {notice && (
         <p
           role="status"
-          className="mb-4 rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-800"
+          className="mb-4 rounded-md bg-accent-soft px-3 py-2 text-sm text-accent"
         >
           {t(notice)}
         </p>

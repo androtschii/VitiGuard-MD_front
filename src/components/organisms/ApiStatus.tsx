@@ -7,20 +7,20 @@ export function ApiStatus() {
 
   if (isPending) {
     return (
-      <p role="status" className="text-sm text-stone-500">
+      <p role="status" className="text-sm text-ink-subtle">
         {t('api.connecting')}
       </p>
     )
   }
   if (isError) {
     return (
-      <p role="status" className="text-sm text-red-700">
+      <p role="status" className="text-sm text-danger">
         {t('api.unavailable')}
       </p>
     )
   }
   return (
-    <p role="status" className="text-sm text-stone-500">
+    <p role="status" className="text-sm text-ink-subtle">
       {t('api.status', {
         version: data.version,
         environment: data.environment,

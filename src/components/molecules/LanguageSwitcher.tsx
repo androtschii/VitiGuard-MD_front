@@ -16,7 +16,7 @@ export function LanguageSwitcher() {
         id={id}
         value={current}
         onChange={(event) => void i18n.changeLanguage(event.target.value)}
-        className="rounded-md border border-stone-300 bg-white px-2 py-1 text-sm text-stone-800"
+        className="rounded-md border border-line-strong bg-surface px-2 py-1 text-sm text-ink"
       >
         {LANGUAGES.map((language) => (
           // Название языка — на самом языке: так его найдёт тот, кто не читает текущий

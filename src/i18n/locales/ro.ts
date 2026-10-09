@@ -12,6 +12,12 @@ export const ro: Messages = {
     logout: 'Ieșire',
     language: 'Limba',
   },
+  theme: {
+    label: 'Tema',
+    system: 'Ca în sistem',
+    light: 'Luminoasă',
+    dark: 'Întunecată',
+  },
   pagination: {
     label: 'Pagini',
     previous: 'Înapoi',
