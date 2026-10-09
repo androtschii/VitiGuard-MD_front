@@ -43,4 +43,14 @@ describe('Pagination', () => {
 
     expect(container).toBeEmptyDOMElement()
   })
+
+  it('пропуски в длинном списке страниц скрыты от дикторов', () => {
+    const { container } = render(
+      <Pagination page={5} pageCount={10} onPageChange={vi.fn()} />,
+    )
+
+    const gaps = container.querySelectorAll('span[aria-hidden="true"]')
+    expect(gaps).toHaveLength(2)
+    expect(gaps[0]).toHaveTextContent('…')
+  })
 })

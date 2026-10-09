@@ -68,4 +68,10 @@ describe('DataTable', () => {
     expect(screen.getByRole('status')).toHaveTextContent('Загрузка…')
     expect(screen.queryByText('Криково')).not.toBeInTheDocument()
   })
+
+  it('без своего сообщения пишет, что данных нет', () => {
+    renderTable({ rows: [] })
+
+    expect(screen.getByText('Нет данных')).toBeInTheDocument()
+  })
 })
