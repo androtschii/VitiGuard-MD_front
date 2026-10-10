@@ -88,10 +88,10 @@ describe('MapView', () => {
     render(<MapView />)
 
     const style = createdMaps()[0]?.options.style as {
-      layers: { id: string; layout: { visibility: string } }[]
+      layers: { id: string; layout?: { visibility?: string } }[]
     }
     const visible = style.layers
-      .filter((layer) => layer.layout.visibility === 'visible')
+      .filter((layer) => layer.layout?.visibility === 'visible')
       .map((layer) => layer.id)
     expect(visible).toEqual(['satellite', 'hybrid-roads', 'hybrid-places'])
   })

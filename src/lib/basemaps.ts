@@ -3,6 +3,7 @@ import type {
   SourceSpecification,
   StyleSpecification,
 } from 'maplibre-gl'
+import { boundariesSource, boundaryLayers, glyphsUrl } from '@/lib/boundaries'
 
 export const BASEMAPS = ['scheme', 'satellite', 'hybrid'] as const
 
@@ -81,12 +82,17 @@ export function buildStyle(basemap: Basemap): StyleSpecification {
   const visibility = Object.fromEntries(basemapVisibility(basemap))
   return {
     version: 8,
-    sources,
-    layers: layers.map((layer): LayerSpecification => ({
-      id: layer.id,
-      type: 'raster',
-      source: layer.source,
-      layout: { visibility: visibility[layer.id] },
-    })),
+    glyphs: glyphsUrl(),
+    sources: { ...sources, boundaries: boundariesSource() },
+    // Границы и подписи районов — над любой подложкой
+    layers: [
+      ...layers.map((layer): LayerSpecification => ({
+        id: layer.id,
+        type: 'raster',
+        source: layer.source,
+        layout: { visibility: visibility[layer.id] },
+      })),
+      ...boundaryLayers,
+    ],
   }
 }

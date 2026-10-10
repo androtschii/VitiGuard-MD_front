@@ -1,3 +1,6 @@
 dist
 coverage
 package-lock.json
+
+# Данные карты: минифицированный GeoJSON, форматирование раздуло бы его вдвое
+public/geo

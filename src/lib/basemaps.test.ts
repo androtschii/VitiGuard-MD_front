@@ -15,7 +15,7 @@ describe('подложки', () => {
     expect(visible(basemap)).toEqual(layers)
   })
 
-  it('стиль содержит все подложки, видимость — по выбранной', () => {
+  it('стиль содержит все подложки и границы над ними, видимость — по выбранной', () => {
     const style = buildStyle('satellite')
 
     expect(style.layers.map((layer) => layer.id)).toEqual([
@@ -23,6 +23,9 @@ describe('подложки', () => {
       'satellite',
       'hybrid-roads',
       'hybrid-places',
+      'district-borders',
+      'country-border',
+      'district-labels',
     ])
     expect(style.layers[0]?.layout).toEqual({ visibility: 'none' })
     expect(style.layers[1]?.layout).toEqual({ visibility: 'visible' })
