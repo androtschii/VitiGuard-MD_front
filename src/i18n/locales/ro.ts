@@ -40,6 +40,15 @@ export const ro: Messages = {
       hybrid: 'Hibrid',
     },
   },
+  draw: {
+    start: 'Desenați parcela',
+    hint: 'Marcați colțurile parcelei cu clicuri pe hartă. Pentru a termina, faceți clic pe primul punct sau apăsați Enter; Esc anulează desenarea.',
+    cancel: 'Anulează',
+    area: 'Suprafața: {{area}} ha',
+    editHint:
+      'Trageți punctele pentru a corecta conturul; punctele albe de pe laturi adaugă colțuri noi.',
+    remove: 'Șterge conturul',
+  },
   pagination: {
     label: 'Pagini',
     previous: 'Înapoi',

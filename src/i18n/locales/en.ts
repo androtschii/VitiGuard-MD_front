@@ -40,6 +40,15 @@ export const en: Messages = {
       hybrid: 'Hybrid',
     },
   },
+  draw: {
+    start: 'Draw a parcel',
+    hint: 'Click on the map to mark the corners of the parcel. To finish, click the first point or press Enter; Esc cancels drawing.',
+    cancel: 'Cancel',
+    area: 'Area: {{area}} ha',
+    editHint:
+      'Drag points to adjust the outline; white points on the edges add new corners.',
+    remove: 'Remove outline',
+  },
   pagination: {
     label: 'Pages',
     previous: 'Previous',

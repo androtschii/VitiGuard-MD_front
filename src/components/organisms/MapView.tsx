@@ -7,7 +7,7 @@ import {
 } from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BasemapSwitcher } from '@/components/molecules/BasemapSwitcher'
 import { basemapVisibility, buildStyle } from '@/lib/basemaps'
@@ -19,6 +19,7 @@ import {
   MOLDOVA_MAX_BOUNDS,
   supportsWebGL,
 } from '@/lib/map'
+import { MapContext } from '@/lib/mapContext'
 import { useMapStore } from '@/store/map'
 
 // MapLibre ищет файл фонового потока рядом со своим кодом, а Vite складывает
@@ -27,14 +28,17 @@ setWorkerUrl(workerUrl)
 
 type MapViewProps = {
   className?: string
+  // Элементы поверх карты (рисование, слои); получают карту через useMap
+  children?: ReactNode
 }
 
-export function MapView({ className }: MapViewProps) {
+export function MapView({ className, children }: MapViewProps) {
   const { t, i18n } = useTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
   // Без WebGL MapLibre не создаёт карту: вместо пустого блока — объяснение
   const [isSupported] = useState(supportsWebGL)
   const mapRef = useRef<Map | null>(null)
+  const [loadedMap, setLoadedMap] = useState<Map | null>(null)
   const basemap = useMapStore((state) => state.basemap)
   const setBasemap = useMapStore((state) => state.setBasemap)
   // Подложка нужна при создании карты, но её смена не должна карту пересоздавать
@@ -72,9 +76,11 @@ export function MapView({ className }: MapViewProps) {
     map.addControl(new ScaleControl({ unit: 'metric' }), 'bottom-left')
 
     mapRef.current = map
+    map.on('load', () => setLoadedMap(map))
 
     return () => {
       mapRef.current = null
+      setLoadedMap(null)
       map.remove()
     }
   }, [isSupported, t, i18n.resolvedLanguage])
@@ -121,6 +127,7 @@ export function MapView({ className }: MapViewProps) {
         onChange={setBasemap}
         className="absolute top-2.5 left-2.5"
       />
+      <MapContext value={loadedMap}>{children}</MapContext>
     </div>
   )
 }
