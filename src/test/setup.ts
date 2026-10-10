@@ -2,6 +2,7 @@ import '@testing-library/jest-dom/vitest'
 import { cleanup } from '@testing-library/react'
 import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest'
 import i18n from '@/i18n'
+import { useMapStore } from '@/store/map'
 import { useSessionStore } from '@/store/session'
 import { useThemeStore } from '@/theme'
 import { server } from './server'
@@ -33,6 +34,7 @@ beforeEach(async () => {
   localStorage.clear()
   await i18n.changeLanguage('ru')
   useThemeStore.setState({ theme: 'system' })
+  useMapStore.setState({ basemap: 'scheme' })
   document.documentElement.classList.remove('dark')
 })
 

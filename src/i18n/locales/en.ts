@@ -33,6 +33,12 @@ export const en: Messages = {
     attribution: 'Map data sources',
     unsupported:
       'Your browser cannot display the map: WebGL support is required. Update your browser or enable hardware acceleration in its settings.',
+    basemap: {
+      label: 'Base map',
+      scheme: 'Map',
+      satellite: 'Satellite',
+      hybrid: 'Hybrid',
+    },
   },
   pagination: {
     label: 'Pages',

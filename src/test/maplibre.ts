@@ -7,6 +7,9 @@ export const Map = vi.fn(
     options: unknown
     addControl = vi.fn()
     remove = vi.fn()
+    setLayoutProperty = vi.fn()
+    isStyleLoaded = vi.fn(() => true)
+    once = vi.fn()
 
     constructor(options: unknown) {
       this.options = options
