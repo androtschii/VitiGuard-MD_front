@@ -5,6 +5,7 @@ import { act } from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import i18n from '@/i18n'
 import { MOLDOVA_BOUNDS } from '@/lib/map'
+import { useMap } from '@/lib/mapContext'
 import { useMapStore } from '@/store/map'
 import { MapView } from './MapView'
 
@@ -15,6 +16,7 @@ type FakeMap = {
   setLayoutProperty: ReturnType<typeof vi.fn>
   isStyleLoaded: ReturnType<typeof vi.fn>
   once: ReturnType<typeof vi.fn>
+  on: ReturnType<typeof vi.fn>
 }
 
 const createdMaps = () => vi.mocked(Map).mock.instances as unknown as FakeMap[]
@@ -133,5 +135,25 @@ describe('MapView', () => {
       'visibility',
       'visible',
     )
+  })
+
+  it('передаёт карту вложенным элементам только после загрузки стиля', () => {
+    function Probe() {
+      return <p>{useMap() ? 'карта готова' : 'ждём карту'}</p>
+    }
+    render(
+      <MapView>
+        <Probe />
+      </MapView>,
+    )
+    expect(screen.getByText('ждём карту')).toBeInTheDocument()
+
+    const [map] = createdMaps()
+    const onLoad = map?.on.mock.calls.find(
+      ([event]) => event === 'load',
+    )?.[1] as (() => void) | undefined
+    act(() => onLoad?.())
+
+    expect(screen.getByText('карта готова')).toBeInTheDocument()
   })
 })
