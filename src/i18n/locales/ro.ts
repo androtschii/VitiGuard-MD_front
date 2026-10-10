@@ -33,6 +33,12 @@ export const ro: Messages = {
     attribution: 'Sursele datelor hărții',
     unsupported:
       'Browserul nu poate afișa harta: este nevoie de suport WebGL. Actualizați browserul sau activați accelerarea hardware în setările lui.',
+    basemap: {
+      label: 'Fundal',
+      scheme: 'Schemă',
+      satellite: 'Satelit',
+      hybrid: 'Hibrid',
+    },
   },
   pagination: {
     label: 'Pagini',

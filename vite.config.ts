@@ -24,6 +24,9 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
+    // Формы проверяются набором текста через user-event: под нагрузкой (покрытие,
+    // медленная машина CI) пять секунд по умолчанию иногда не хватает
+    testTimeout: 15_000,
     coverage: {
       provider: 'v8',
       include: ['src/**/*.{ts,tsx}'],

@@ -9,15 +9,17 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { BasemapSwitcher } from '@/components/molecules/BasemapSwitcher'
+import { basemapVisibility, buildStyle } from '@/lib/basemaps'
 import { cn } from '@/lib/cn'
 import {
   MAX_ZOOM,
   MIN_ZOOM,
   MOLDOVA_BOUNDS,
   MOLDOVA_MAX_BOUNDS,
-  baseStyle,
   supportsWebGL,
 } from '@/lib/map'
+import { useMapStore } from '@/store/map'
 
 // MapLibre ищет файл фонового потока рядом со своим кодом, а Vite складывает
 // сборку в другое место: адрес собранного потока передаётся явно
@@ -32,6 +34,11 @@ export function MapView({ className }: MapViewProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   // Без WebGL MapLibre не создаёт карту: вместо пустого блока — объяснение
   const [isSupported] = useState(supportsWebGL)
+  const mapRef = useRef<Map | null>(null)
+  const basemap = useMapStore((state) => state.basemap)
+  const setBasemap = useMapStore((state) => state.setBasemap)
+  // Подложка нужна при создании карты, но её смена не должна карту пересоздавать
+  const basemapRef = useRef(basemap)
 
   // Карта пересоздаётся при смене языка: подписи кнопок MapLibre задаются
   // только при создании. Язык меняют редко, а вид карты восстанавливается
@@ -42,7 +49,7 @@ export function MapView({ className }: MapViewProps) {
 
     const map = new Map({
       container,
-      style: baseStyle,
+      style: buildStyle(basemapRef.current),
       bounds: MOLDOVA_BOUNDS,
       fitBoundsOptions: { padding: 16 },
       minZoom: MIN_ZOOM,
@@ -64,8 +71,28 @@ export function MapView({ className }: MapViewProps) {
     map.addControl(new FullscreenControl())
     map.addControl(new ScaleControl({ unit: 'metric' }), 'bottom-left')
 
-    return () => map.remove()
+    mapRef.current = map
+
+    return () => {
+      mapRef.current = null
+      map.remove()
+    }
   }, [isSupported, t, i18n.resolvedLanguage])
+
+  useEffect(() => {
+    basemapRef.current = basemap
+    const map = mapRef.current
+    if (!map) return
+
+    const apply = () => {
+      for (const [layerId, visibility] of basemapVisibility(basemap)) {
+        map.setLayoutProperty(layerId, 'visibility', visibility)
+      }
+    }
+    // Стиль загружается не мгновенно: выбор, сделанный раньше, применится после
+    if (map.isStyleLoaded()) apply()
+    else map.once('style.load', apply)
+  }, [basemap])
 
   if (!isSupported) {
     return (
@@ -83,8 +110,17 @@ export function MapView({ className }: MapViewProps) {
 
   return (
     <div
-      ref={containerRef}
-      className={cn('overflow-hidden rounded-lg border border-line', className)}
-    />
+      className={cn(
+        'relative overflow-hidden rounded-lg border border-line',
+        className,
+      )}
+    >
+      <div ref={containerRef} className="size-full" />
+      <BasemapSwitcher
+        value={basemap}
+        onChange={setBasemap}
+        className="absolute top-2.5 left-2.5"
+      />
+    </div>
   )
 }
