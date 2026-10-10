@@ -51,8 +51,14 @@ describe('routes', () => {
     const router = createMemoryRouter(routes, { initialEntries: ['/map'] })
     renderWithQueryClient(<RouterProvider router={router} />)
 
+    // Первый импорт страницы карты под нагрузкой покрытия бывает дольше секунды,
+    // которую findBy ждёт по умолчанию
     expect(
-      await screen.findByRole('heading', { name: 'Карта виноградников' }),
+      await screen.findByRole(
+        'heading',
+        { name: 'Карта виноградников' },
+        { timeout: 5000 },
+      ),
     ).toBeInTheDocument()
   })
 })
