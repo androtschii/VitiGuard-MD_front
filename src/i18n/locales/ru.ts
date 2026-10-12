@@ -57,6 +57,13 @@ export const ru = {
     area: 'Площадь: {{area}} га',
     addedOn: 'Добавлен {{date}}',
   },
+  search: {
+    label: 'Поиск участка или координат',
+    placeholder: 'Название или 47.14, 28.86',
+    point: 'Перейти к точке {{lat}}, {{lon}}',
+    nothing: 'Ничего не найдено',
+    hectares: 'га',
+  },
   pagination: {
     label: 'Страницы',
     previous: 'Назад',

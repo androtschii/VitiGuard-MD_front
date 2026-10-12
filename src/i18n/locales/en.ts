@@ -59,6 +59,13 @@ export const en: Messages = {
     area: 'Area: {{area}} ha',
     addedOn: 'Added on {{date}}',
   },
+  search: {
+    label: 'Search for a parcel or coordinates',
+    placeholder: 'Name or 47.14, 28.86',
+    point: 'Go to point {{lat}}, {{lon}}',
+    nothing: 'Nothing found',
+    hectares: 'ha',
+  },
   pagination: {
     label: 'Pages',
     previous: 'Previous',
