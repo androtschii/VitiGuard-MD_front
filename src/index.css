@@ -67,6 +67,30 @@ body {
   color: var(--ink);
 }
 
+/* Попапы MapLibre в цветах темы: по умолчанию они всегда белые. Стили карты
+   загружаются позже этого файла, поэтому селекторы на уровень точнее */
+.maplibregl-map .maplibregl-popup-content {
+  background-color: var(--surface);
+  color: var(--ink);
+  border-radius: 0.5rem;
+}
+
+.maplibregl-map .maplibregl-popup-anchor-top .maplibregl-popup-tip {
+  border-bottom-color: var(--surface);
+}
+
+.maplibregl-map .maplibregl-popup-anchor-bottom .maplibregl-popup-tip {
+  border-top-color: var(--surface);
+}
+
+.maplibregl-map .maplibregl-popup-anchor-left .maplibregl-popup-tip {
+  border-right-color: var(--surface);
+}
+
+.maplibregl-map .maplibregl-popup-anchor-right .maplibregl-popup-tip {
+  border-left-color: var(--surface);
+}
+
 /* Страница под модальным окном не прокручивается */
 html:has(dialog[open]) {
   overflow: hidden;

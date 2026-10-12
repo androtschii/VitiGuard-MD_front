@@ -56,6 +56,8 @@ export const ro: Messages = {
     create: 'Salvează parcela',
     created: 'Parcela „{{name}}” a fost salvată',
     saveFailed: 'Parcela nu a putut fi salvată',
+    area: 'Suprafața: {{area}} ha',
+    addedOn: 'Adăugată la {{date}}',
   },
   pagination: {
     label: 'Pagini',

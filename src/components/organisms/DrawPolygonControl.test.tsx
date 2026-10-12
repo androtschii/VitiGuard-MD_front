@@ -9,6 +9,7 @@ import {
 } from 'terra-draw'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { MapContext } from '@/lib/mapContext'
+import { useMapStore } from '@/store/map'
 import { lastDraw, parcel } from '@/test/terraDraw'
 import { DrawPolygonControl } from './DrawPolygonControl'
 
@@ -187,11 +188,26 @@ describe('DrawPolygonControl', () => {
     expect(screen.queryByText(/Площадь/)).not.toBeInTheDocument()
   })
 
+  it('на время рисования и правки отключает выбор участков', async () => {
+    renderControl()
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Нарисовать участок' }),
+    )
+    expect(useMapStore.getState().isDrawing).toBe(true)
+
+    await userEvent.click(screen.getByRole('button', { name: 'Отменить' }))
+    expect(useMapStore.getState().isDrawing).toBe(false)
+  })
+
   it('останавливает рисование при уходе со страницы', () => {
     const { unmount } = renderControl()
+
+    useMapStore.setState({ isDrawing: true })
 
     unmount()
 
     expect(lastDraw().stop).toHaveBeenCalledOnce()
+    expect(useMapStore.getState().isDrawing).toBe(false)
   })
 })

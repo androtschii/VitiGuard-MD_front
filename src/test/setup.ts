@@ -36,7 +36,7 @@ beforeEach(async () => {
   localStorage.clear()
   await i18n.changeLanguage('ru')
   useThemeStore.setState({ theme: 'system' })
-  useMapStore.setState({ basemap: 'scheme' })
+  useMapStore.setState({ basemap: 'scheme', isDrawing: false })
   document.documentElement.classList.remove('dark')
 })
 

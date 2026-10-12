@@ -17,6 +17,9 @@ export const Map = vi.fn(
     removeSource = vi.fn()
     fitBounds = vi.fn()
     getSource = vi.fn(() => ({ setData: vi.fn() }))
+    off = vi.fn()
+    canvas = { style: { cursor: '' } }
+    getCanvas = vi.fn(() => this.canvas)
 
     constructor(options: unknown) {
       this.options = options
@@ -28,3 +31,47 @@ export const NavigationControl = vi.fn(class {})
 export const FullscreenControl = vi.fn(class {})
 export const ScaleControl = vi.fn(class {})
 export const setWorkerUrl = vi.fn()
+
+// Попап: методы возвращают сам попап, как в MapLibre, чтобы работали цепочки
+export const Popup = vi.fn(
+  class {
+    options: unknown
+    lngLat: unknown = null
+    text = ''
+    content: HTMLElement | null = null
+    isOpen = false
+    listeners: Record<string, () => void> = {}
+
+    constructor(options: unknown) {
+      this.options = options
+    }
+
+    setLngLat = vi.fn((lngLat: unknown) => {
+      this.lngLat = lngLat
+      return this
+    })
+    setText = vi.fn((text: string) => {
+      this.text = text
+      return this
+    })
+    setDOMContent = vi.fn((content: HTMLElement) => {
+      this.content = content
+      return this
+    })
+    // Как MapLibre: содержимое попапа попадает в документ, пока попап открыт
+    addTo = vi.fn(() => {
+      this.isOpen = true
+      if (this.content) document.body.append(this.content)
+      return this
+    })
+    remove = vi.fn(() => {
+      this.isOpen = false
+      this.content?.remove()
+      return this
+    })
+    on = vi.fn((event: string, listener: () => void) => {
+      this.listeners[event] = listener
+      return this
+    })
+  },
+)

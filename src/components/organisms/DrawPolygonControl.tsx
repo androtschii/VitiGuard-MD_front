@@ -13,6 +13,7 @@ import { Button } from '@/components/atoms/Button'
 import { cn } from '@/lib/cn'
 import { polygonAreaSquareMeters, squareMetersToHectares } from '@/lib/geo'
 import { useMap } from '@/lib/mapContext'
+import { useMapStore } from '@/store/map'
 
 type DrawState = 'idle' | 'drawing' | 'drawn'
 
@@ -52,6 +53,7 @@ export function DrawPolygonControl({
   const featureIdRef = useRef<string | number | null>(null)
   const onChangeRef = useRef(onChange)
   const [state, setState] = useState<DrawState>('idle')
+  const setDrawing = useMapStore((store) => store.setDrawing)
   const [areaHa, setAreaHa] = useState<number | null>(null)
   const [polygon, setPolygon] = useState<Polygon | null>(null)
   const [clearRequests, setClearRequests] = useState(0)
@@ -136,6 +138,7 @@ export function DrawPolygonControl({
       drawRef.current = null
       featureIdRef.current = null
       draw.stop()
+      useMapStore.getState().setDrawing(false)
     }
   }, [map])
 
@@ -155,6 +158,7 @@ export function DrawPolygonControl({
   const startDrawing = () => {
     drawRef.current?.setMode('polygon')
     setState('drawing')
+    setDrawing(true)
   }
 
   // Сброс передаётся наружу (в renderDrawn), поэтому сам он рефов не читает:
@@ -163,6 +167,7 @@ export function DrawPolygonControl({
     setAreaHa(null)
     setPolygon(null)
     setState('idle')
+    setDrawing(false)
     setClearRequests((count) => count + 1)
     onChange?.(null)
   }
