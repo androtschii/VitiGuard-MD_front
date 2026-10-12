@@ -1,5 +1,5 @@
 import type { Polygon } from 'geojson'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   TerraDraw,
@@ -16,8 +16,18 @@ import { useMap } from '@/lib/mapContext'
 
 type DrawState = 'idle' | 'drawing' | 'drawn'
 
+export type DrawnPolygon = {
+  polygon: Polygon
+  areaHa: number
+  // Убирает контур с карты и возвращает панель к кнопке «Нарисовать участок»
+  reset: () => void
+}
+
 type DrawPolygonControlProps = {
   onChange?: (polygon: Polygon | null) => void
+  // Что показать под готовым контуром вместо площади и кнопки удаления,
+  // например форму сохранения участка
+  renderDrawn?: (drawn: DrawnPolygon) => ReactNode
   className?: string
 }
 
@@ -33,6 +43,7 @@ function isPolygon(
 
 export function DrawPolygonControl({
   onChange,
+  renderDrawn,
   className,
 }: DrawPolygonControlProps) {
   const { t, i18n } = useTranslation()
@@ -42,6 +53,8 @@ export function DrawPolygonControl({
   const onChangeRef = useRef(onChange)
   const [state, setState] = useState<DrawState>('idle')
   const [areaHa, setAreaHa] = useState<number | null>(null)
+  const [polygon, setPolygon] = useState<Polygon | null>(null)
+  const [clearRequests, setClearRequests] = useState(0)
 
   useEffect(() => {
     onChangeRef.current = onChange
@@ -99,6 +112,7 @@ export function DrawPolygonControl({
       setAreaHa(
         squareMetersToHectares(polygonAreaSquareMeters(feature.geometry)),
       )
+      setPolygon(feature.geometry)
       onChangeRef.current?.(feature.geometry)
     }
 
@@ -125,6 +139,17 @@ export function DrawPolygonControl({
     }
   }, [map])
 
+  useEffect(() => {
+    if (clearRequests === 0) return
+    // Сначала забываем контур: перед удалением Terra Draw снимает с него
+    // выделение и сообщает об этом как об изменении, а изменения забытого
+    // контура не должны снова передаваться наружу
+    featureIdRef.current = null
+    const draw = drawRef.current
+    draw?.clear()
+    draw?.setMode('static')
+  }, [clearRequests])
+
   if (!map) return null
 
   const startDrawing = () => {
@@ -132,14 +157,14 @@ export function DrawPolygonControl({
     setState('drawing')
   }
 
+  // Сброс передаётся наружу (в renderDrawn), поэтому сам он рефов не читает:
+  // очистку карты выполняет эффект по счётчику запросов
   const reset = () => {
-    const draw = drawRef.current
-    draw?.clear()
-    draw?.setMode('static')
-    featureIdRef.current = null
     setAreaHa(null)
+    setPolygon(null)
     setState('idle')
-    onChangeRef.current?.(null)
+    setClearRequests((count) => count + 1)
+    onChange?.(null)
   }
 
   const area =
@@ -169,7 +194,12 @@ export function DrawPolygonControl({
           </Button>
         </>
       )}
-      {state === 'drawn' && (
+      {state === 'drawn' &&
+        renderDrawn &&
+        polygon &&
+        areaHa !== null &&
+        renderDrawn({ polygon, areaHa, reset })}
+      {state === 'drawn' && !renderDrawn && (
         <>
           {/* Площадь пересчитывается при правке контура — озвучиваем изменения */}
           <p aria-live="polite" className="font-medium text-ink">

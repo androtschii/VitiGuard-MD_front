@@ -1,4 +1,4 @@
-import { act, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { Map } from 'maplibre-gl'
 import type { ReactNode } from 'react'
@@ -9,61 +9,8 @@ import {
 } from 'terra-draw'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { MapContext } from '@/lib/mapContext'
+import { lastDraw, parcel } from '@/test/terraDraw'
 import { DrawPolygonControl } from './DrawPolygonControl'
-
-type Listener = (...args: unknown[]) => void
-
-// Заглушка Terra Draw: запоминает режимы и подписки, а «нарисованные» фигуры
-// тест кладёт в features сам
-class FakeDraw {
-  listeners: Record<string, Listener> = {}
-  features: Record<string, unknown> = {}
-  mode = 'static'
-  start = vi.fn()
-  stop = vi.fn()
-  clear = vi.fn()
-  selectFeature = vi.fn()
-  setMode = vi.fn((mode: string) => {
-    this.mode = mode
-  })
-  on = vi.fn((event: string, listener: Listener) => {
-    this.listeners[event] = listener
-  })
-  getSnapshotFeature = vi.fn((id: string) => this.features[id])
-
-  emit(event: string, ...args: unknown[]) {
-    act(() => this.listeners[event]?.(...args))
-  }
-}
-
-vi.mock('terra-draw', () => ({
-  TerraDraw: vi.fn(function () {
-    return new FakeDraw()
-  }),
-  TerraDrawPolygonMode: vi.fn(class {}),
-  TerraDrawSelectMode: vi.fn(class {}),
-  ValidateNotSelfIntersecting: vi.fn(() => ({ valid: true })),
-}))
-vi.mock('terra-draw-maplibre-gl-adapter', () => ({
-  TerraDrawMapLibreGLAdapter: vi.fn(class {}),
-}))
-
-const parcel = {
-  type: 'Feature',
-  properties: {},
-  geometry: {
-    type: 'Polygon',
-    coordinates: [
-      [
-        [28.8, 47.0],
-        [28.81, 47.0],
-        [28.81, 47.01],
-        [28.8, 47.01],
-        [28.8, 47.0],
-      ],
-    ],
-  },
-}
 
 const fakeMap = {} as Map
 
@@ -76,9 +23,6 @@ function renderControl(
   )
   return render(<DrawPolygonControl {...props} />, { wrapper })
 }
-
-const lastDraw = () =>
-  vi.mocked(TerraDraw).mock.results.at(-1)?.value as FakeDraw
 
 describe('DrawPolygonControl', () => {
   beforeEach(() => {
@@ -219,6 +163,28 @@ describe('DrawPolygonControl', () => {
 
     expect(result).toEqual({ valid: false, reason: 'self-intersecting' })
     expect(ValidateNotSelfIntersecting).toHaveBeenCalledWith(parcel)
+  })
+
+  it('изменения, которые Terra Draw присылает при удалении, контур не возвращают', async () => {
+    const onChange = vi.fn()
+    renderControl(fakeMap, { onChange })
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Нарисовать участок' }),
+    )
+    const draw = lastDraw()
+    draw.features.parcel = parcel
+    draw.emit('finish', 'parcel')
+    // Как настоящий Terra Draw: перед удалением снимает выделение — это «update»
+    draw.clear.mockImplementation(() =>
+      draw.listeners.change?.(['parcel'], 'update'),
+    )
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Удалить контур' }),
+    )
+
+    expect(onChange).toHaveBeenLastCalledWith(null)
+    expect(screen.queryByText(/Площадь/)).not.toBeInTheDocument()
   })
 
   it('останавливает рисование при уходе со страницы', () => {

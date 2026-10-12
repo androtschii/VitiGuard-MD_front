@@ -47,6 +47,14 @@ export const ru = {
       'Перетаскивайте точки, чтобы поправить контур; белые точки на сторонах добавляют новые углы.',
     remove: 'Удалить контур',
   },
+  vineyard: {
+    formLabel: 'Новый участок',
+    name: 'Название участка',
+    namePlaceholder: 'Например, Криково, северный склон',
+    create: 'Сохранить участок',
+    created: 'Участок «{{name}}» сохранён',
+    saveFailed: 'Не удалось сохранить участок',
+  },
   pagination: {
     label: 'Страницы',
     previous: 'Назад',
@@ -138,6 +146,8 @@ export const ru = {
     passwordsMismatch: 'Пароли не совпадают',
     confirmRequired: 'Повторите пароль',
     nameRequired: 'Введите имя',
+    vineyardNameRequired: 'Введите название участка',
+    vineyardNameMax: 'Не длиннее 255 символов',
   },
 }
 

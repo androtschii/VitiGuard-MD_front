@@ -49,6 +49,14 @@ export const ro: Messages = {
       'Trageți punctele pentru a corecta conturul; punctele albe de pe laturi adaugă colțuri noi.',
     remove: 'Șterge conturul',
   },
+  vineyard: {
+    formLabel: 'Parcelă nouă',
+    name: 'Denumirea parcelei',
+    namePlaceholder: 'De exemplu, Cricova, versantul de nord',
+    create: 'Salvează parcela',
+    created: 'Parcela „{{name}}” a fost salvată',
+    saveFailed: 'Parcela nu a putut fi salvată',
+  },
   pagination: {
     label: 'Pagini',
     previous: 'Înapoi',
@@ -142,5 +150,7 @@ export const ro: Messages = {
     passwordsMismatch: 'Parolele nu coincid',
     confirmRequired: 'Repetați parola',
     nameRequired: 'Introduceți numele',
+    vineyardNameRequired: 'Introduceți denumirea parcelei',
+    vineyardNameMax: 'Cel mult 255 de caractere',
   },
 }

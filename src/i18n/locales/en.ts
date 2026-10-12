@@ -49,6 +49,14 @@ export const en: Messages = {
       'Drag points to adjust the outline; white points on the edges add new corners.',
     remove: 'Remove outline',
   },
+  vineyard: {
+    formLabel: 'New parcel',
+    name: 'Parcel name',
+    namePlaceholder: 'For example, Cricova, north slope',
+    create: 'Save parcel',
+    created: 'Parcel “{{name}}” saved',
+    saveFailed: 'Could not save the parcel',
+  },
   pagination: {
     label: 'Pages',
     previous: 'Previous',
@@ -140,5 +148,7 @@ export const en: Messages = {
     passwordsMismatch: 'Passwords do not match',
     confirmRequired: 'Repeat your password',
     nameRequired: 'Enter your name',
+    vineyardNameRequired: 'Enter the parcel name',
+    vineyardNameMax: 'At most 255 characters',
   },
 }
