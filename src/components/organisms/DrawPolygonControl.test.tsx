@@ -200,6 +200,15 @@ describe('DrawPolygonControl', () => {
     expect(useMapStore.getState().isDrawing).toBe(false)
   })
 
+  it('недоступно, пока работает линейка', () => {
+    useMapStore.setState({ isDrawing: true })
+    renderControl()
+
+    expect(
+      screen.getByRole('button', { name: 'Нарисовать участок' }),
+    ).toBeDisabled()
+  })
+
   it('останавливает рисование при уходе со страницы', () => {
     const { unmount } = renderControl()
 

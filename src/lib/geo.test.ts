@@ -2,6 +2,7 @@ import type { Polygon } from 'geojson'
 import { describe, expect, it } from 'vitest'
 import {
   boundsOf,
+  lineLengthMeters,
   polygonAreaSquareMeters,
   squareMetersToHectares,
 } from './geo'
@@ -92,5 +93,36 @@ describe('рамка участков', () => {
 
   it('без участков рамки нет', () => {
     expect(boundsOf([])).toBeNull()
+  })
+})
+
+describe('длина ломаной', () => {
+  it('градус по меридиану — около 111,2 км', () => {
+    // 2πR / 360 при среднем радиусе Земли 6 371 008,8 м
+    expect(
+      lineLengthMeters([
+        [28.8, 47],
+        [28.8, 48],
+      ]),
+    ).toBeCloseTo(111_195.08, 1)
+  })
+
+  it('складывает отрезки', () => {
+    const there = lineLengthMeters([
+      [28.8, 47],
+      [28.81, 47],
+    ])
+
+    expect(
+      lineLengthMeters([
+        [28.8, 47],
+        [28.81, 47],
+        [28.8, 47],
+      ]),
+    ).toBeCloseTo(2 * there)
+  })
+
+  it('меньше двух точек — нулевая длина', () => {
+    expect(lineLengthMeters([[28.8, 47]])).toBe(0)
   })
 })

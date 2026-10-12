@@ -66,6 +66,16 @@ export const ro: Messages = {
     nothing: 'Nu s-a găsit nimic',
     hectares: 'ha',
   },
+  measure: {
+    start: 'Măsurați distanța și suprafața',
+    hint: 'Puneți puncte cu clicuri pe hartă. De la trei puncte se calculează și suprafața figurii. Esc — terminați.',
+    distance: 'Distanța: {{distance}}',
+    meters: '{{value}} m',
+    kilometers: '{{value}} km',
+    area: 'Suprafața: {{hectares}} ha ({{squareMeters}} m²)',
+    undo: 'Elimină punctul',
+    finish: 'Gata',
+  },
   pagination: {
     label: 'Pagini',
     previous: 'Înapoi',

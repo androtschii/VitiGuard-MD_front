@@ -77,7 +77,10 @@ export function MapView({ className, children }: MapViewProps) {
     map.addControl(new ScaleControl({ unit: 'metric' }), 'bottom-left')
 
     mapRef.current = map
-    map.on('load', () => setLoadedMap(map))
+    // style.load, а не load: load ждёт все тайлы первого экрана, и на медленном
+    // интернете инструменты появлялись бы с большой задержкой. Слоям и
+    // рисованию нужен только загруженный стиль
+    map.once('style.load', () => setLoadedMap(map))
 
     return () => {
       mapRef.current = null

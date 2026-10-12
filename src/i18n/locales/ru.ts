@@ -64,6 +64,16 @@ export const ru = {
     nothing: 'Ничего не найдено',
     hectares: 'га',
   },
+  measure: {
+    start: 'Измерить расстояние и площадь',
+    hint: 'Ставьте точки кликами по карте. С трёх точек считается и площадь фигуры. Esc — закончить.',
+    distance: 'Расстояние: {{distance}}',
+    meters: '{{value}} м',
+    kilometers: '{{value}} км',
+    area: 'Площадь: {{hectares}} га ({{squareMeters}} м²)',
+    undo: 'Убрать точку',
+    finish: 'Готово',
+  },
   pagination: {
     label: 'Страницы',
     previous: 'Назад',
