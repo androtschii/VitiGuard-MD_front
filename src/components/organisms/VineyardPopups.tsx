@@ -8,8 +8,6 @@ import { useMapStore } from '@/store/map'
 
 const LAYER = 'vineyards-fill'
 
-type Selection = { id: string; lngLat: [number, number] }
-
 function vineyardId(event: MapLayerMouseEvent) {
   const id: unknown = event.features?.[0]?.properties.id
   return typeof id === 'string' ? id : null
@@ -22,7 +20,8 @@ export function VineyardPopups() {
   const { t, i18n } = useTranslation()
   const map = useMap()
   const { data: vineyards } = useVineyards()
-  const [selection, setSelection] = useState<Selection | null>(null)
+  const selection = useMapStore((state) => state.selection)
+  const select = useMapStore((state) => state.select)
   const [container] = useState(() => document.createElement('div'))
 
   useEffect(() => {
@@ -50,7 +49,9 @@ export function VineyardPopups() {
       const id = vineyardId(event)
       if (!id || useMapStore.getState().isDrawing) return
       tooltip.remove()
-      setSelection({ id, lngLat: [event.lngLat.lng, event.lngLat.lat] })
+      useMapStore
+        .getState()
+        .select({ id, lngLat: [event.lngLat.lng, event.lngLat.lat] })
     }
 
     map.on('mousemove', LAYER, onMove)
@@ -71,11 +72,11 @@ export function VineyardPopups() {
       .setDOMContent(container)
       .addTo(map)
     // Попап закрывают крестиком, кликом мимо или Esc — выбор сбрасывается
-    popup.on('close', () => setSelection(null))
+    popup.on('close', () => select(null))
     return () => {
       popup.remove()
     }
-  }, [map, selection, container])
+  }, [map, selection, select, container])
 
   const vineyard = vineyards?.find((item) => item.id === selection?.id)
   if (!vineyard) return null

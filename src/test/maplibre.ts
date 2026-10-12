@@ -16,6 +16,7 @@ export const Map = vi.fn(
     removeLayer = vi.fn()
     removeSource = vi.fn()
     fitBounds = vi.fn()
+    flyTo = vi.fn()
     getSource = vi.fn(() => ({ setData: vi.fn() }))
     off = vi.fn()
     canvas = { style: { cursor: '' } }
@@ -31,6 +32,25 @@ export const NavigationControl = vi.fn(class {})
 export const FullscreenControl = vi.fn(class {})
 export const ScaleControl = vi.fn(class {})
 export const setWorkerUrl = vi.fn()
+
+export const Marker = vi.fn(
+  class {
+    lngLat: unknown = null
+    isOnMap = false
+    setLngLat = vi.fn((lngLat: unknown) => {
+      this.lngLat = lngLat
+      return this
+    })
+    addTo = vi.fn(() => {
+      this.isOnMap = true
+      return this
+    })
+    remove = vi.fn(() => {
+      this.isOnMap = false
+      return this
+    })
+  },
+)
 
 // Попап: методы возвращают сам попап, как в MapLibre, чтобы работали цепочки
 export const Popup = vi.fn(

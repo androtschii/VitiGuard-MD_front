@@ -12,6 +12,9 @@ function readStoredBasemap(): Basemap {
   }
 }
 
+// Участок, попап которого открыт: его выбирают кликом по карте или в поиске
+export type VineyardSelection = { id: string; lngLat: [number, number] }
+
 type MapState = {
   basemap: Basemap
   setBasemap: (basemap: Basemap) => void
@@ -19,6 +22,8 @@ type MapState = {
   // а не выбор участка: попапы участков в это время не открываются
   isDrawing: boolean
   setDrawing: (isDrawing: boolean) => void
+  selection: VineyardSelection | null
+  select: (selection: VineyardSelection | null) => void
 }
 
 // Выбранная подложка сохраняется: агроном, работающий по снимкам,
@@ -35,4 +40,6 @@ export const useMapStore = create<MapState>()((set) => ({
   },
   isDrawing: false,
   setDrawing: (isDrawing) => set({ isDrawing }),
+  selection: null,
+  select: (selection) => set({ selection }),
 }))

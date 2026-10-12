@@ -182,7 +182,7 @@ export function DrawPolygonControl({
   return (
     <div
       className={cn(
-        'flex max-w-xs flex-col gap-2 rounded-md border border-line bg-surface p-3 text-sm shadow-sm',
+        'flex flex-col gap-2 rounded-md border border-line bg-surface p-3 text-sm shadow-sm',
         className,
       )}
     >

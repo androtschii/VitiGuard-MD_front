@@ -59,6 +59,13 @@ export const ro: Messages = {
     area: 'Suprafața: {{area}} ha',
     addedOn: 'Adăugată la {{date}}',
   },
+  search: {
+    label: 'Căutarea parcelei sau a coordonatelor',
+    placeholder: 'Denumire sau 47.14, 28.86',
+    point: 'Mergi la punctul {{lat}}, {{lon}}',
+    nothing: 'Nu s-a găsit nimic',
+    hectares: 'ha',
+  },
   pagination: {
     label: 'Pagini',
     previous: 'Înapoi',
