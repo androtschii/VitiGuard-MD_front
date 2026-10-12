@@ -1,4 +1,4 @@
-import type { Polygon, Position } from 'geojson'
+import type { MultiPolygon, Polygon, Position } from 'geojson'
 
 // Средний радиус Земли (IUGG), как в Turf: для расчётов на сфере он точнее
 // экваториального радиуса WGS84
@@ -29,4 +29,31 @@ export function polygonAreaSquareMeters(polygon: Polygon) {
 
 export function squareMetersToHectares(squareMeters: number) {
   return squareMeters / 10_000
+}
+
+export type Bounds = [[number, number], [number, number]]
+
+// Прямоугольник, в который помещаются все контуры, — для fitBounds карты.
+// Достаточно внешних колец: дыры лежат внутри них
+export function boundsOf(geometries: MultiPolygon[]): Bounds | null {
+  let west = Infinity
+  let south = Infinity
+  let east = -Infinity
+  let north = -Infinity
+  for (const geometry of geometries) {
+    for (const [outer = []] of geometry.coordinates) {
+      for (const [lon = 0, lat = 0] of outer) {
+        west = Math.min(west, lon)
+        south = Math.min(south, lat)
+        east = Math.max(east, lon)
+        north = Math.max(north, lat)
+      }
+    }
+  }
+  return west === Infinity
+    ? null
+    : [
+        [west, south],
+        [east, north],
+      ]
 }

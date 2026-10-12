@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { MultiPolygon, Polygon } from 'geojson'
 import { api } from './client'
 
@@ -18,6 +18,34 @@ export type VineyardInput = {
 
 export const vineyardKeys = {
   all: ['vineyards'] as const,
+}
+
+type Page<T> = {
+  items: T[]
+  total: number
+  page: number
+  size: number
+  pages: number
+}
+
+// Больше за один запрос API не отдаёт (MAX_PAGE_SIZE на бэкенде)
+const PAGE_SIZE = 100
+
+// Карте нужны все участки сразу, поэтому страницы загружаются подряд.
+// У виноградаря их единицы или десятки — обычно хватает одного запроса
+export async function fetchAllVineyards() {
+  const vineyards: Vineyard[] = []
+  for (let page = 1; ; page++) {
+    const { data } = await api.get<Page<Vineyard>>('/vineyards', {
+      params: { page, size: PAGE_SIZE },
+    })
+    vineyards.push(...data.items)
+    if (page >= data.pages) return vineyards
+  }
+}
+
+export function useVineyards() {
+  return useQuery({ queryKey: vineyardKeys.all, queryFn: fetchAllVineyards })
 }
 
 // На карте рисуется один контур, а участок в базе может состоять из нескольких

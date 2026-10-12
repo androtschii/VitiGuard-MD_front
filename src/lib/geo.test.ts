@@ -1,6 +1,10 @@
 import type { Polygon } from 'geojson'
 import { describe, expect, it } from 'vitest'
-import { polygonAreaSquareMeters, squareMetersToHectares } from './geo'
+import {
+  boundsOf,
+  polygonAreaSquareMeters,
+  squareMetersToHectares,
+} from './geo'
 
 // Квадрат 0.01° × 0.01° у Кишинёва (47° с. ш.): около 760 × 1110 м, 84 га
 const square: Polygon = {
@@ -65,5 +69,28 @@ describe('площадь участка', () => {
 
   it('переводит квадратные метры в гектары', () => {
     expect(squareMetersToHectares(25_000)).toBe(2.5)
+  })
+})
+
+describe('рамка участков', () => {
+  it('охватывает все части всех участков', () => {
+    const second = (square.coordinates[0] ?? []).map(([lon = 0, lat = 0]) => [
+      lon + 0.1,
+      lat - 0.05,
+    ])
+
+    expect(
+      boundsOf([
+        { type: 'MultiPolygon', coordinates: [square.coordinates] },
+        { type: 'MultiPolygon', coordinates: [[second]] },
+      ]),
+    ).toEqual([
+      [28.8, 46.95],
+      [28.91, 47.01],
+    ])
+  })
+
+  it('без участков рамки нет', () => {
+    expect(boundsOf([])).toBeNull()
   })
 })
