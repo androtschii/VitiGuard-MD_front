@@ -6,6 +6,7 @@ import { DrawPolygonControl } from '@/components/organisms/DrawPolygonControl'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { MapView } from '@/components/organisms/MapView'
 import { VineyardForm } from '@/components/organisms/VineyardForm'
+import { VineyardPopups } from '@/components/organisms/VineyardPopups'
 import { VineyardsLayer } from '@/components/organisms/VineyardsLayer'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
 
@@ -24,6 +25,7 @@ export function MapPage() {
       </p>
       <MapView className="h-[calc(100svh-14rem)] min-h-96">
         <VineyardsLayer />
+        <VineyardPopups />
         <DrawPolygonControl
           className="absolute top-14 left-2.5"
           onChange={(polygon) => polygon && setSavedName(null)}

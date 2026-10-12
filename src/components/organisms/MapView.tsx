@@ -68,6 +68,7 @@ export function MapView({ className, children }: MapViewProps) {
         'FullscreenControl.Enter': t('map.fullscreenEnter'),
         'FullscreenControl.Exit': t('map.fullscreenExit'),
         'AttributionControl.ToggleAttribution': t('map.attribution'),
+        'Popup.Close': t('common.close'),
       },
     })
 

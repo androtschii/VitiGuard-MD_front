@@ -2,11 +2,13 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { MultiPolygon, Polygon } from 'geojson'
 import { api } from './client'
 
-// Ответ бэкенда (backend/pr-026): контур всегда MultiPolygon в WGS84
+// Ответ бэкенда (backend/pr-026, pr-029): контур всегда MultiPolygon в WGS84
 export type Vineyard = {
   id: string
   name: string
   geometry: MultiPolygon
+  // Площадь по PostGIS (backend/pr-029), в гектарах
+  area_ha: number
   created_at: string
   updated_at: string
 }

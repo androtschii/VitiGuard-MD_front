@@ -54,6 +54,8 @@ export const ru = {
     create: 'Сохранить участок',
     created: 'Участок «{{name}}» сохранён',
     saveFailed: 'Не удалось сохранить участок',
+    area: 'Площадь: {{area}} га',
+    addedOn: 'Добавлен {{date}}',
   },
   pagination: {
     label: 'Страницы',

@@ -28,6 +28,7 @@ const vineyard: Vineyard = {
   id: 'vineyard-1',
   name: 'Криково',
   geometry,
+  area_ha: 1.69,
   created_at: '2026-10-12T10:00:00Z',
   updated_at: '2026-10-12T10:00:00Z',
 }

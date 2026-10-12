@@ -56,6 +56,8 @@ export const en: Messages = {
     create: 'Save parcel',
     created: 'Parcel “{{name}}” saved',
     saveFailed: 'Could not save the parcel',
+    area: 'Area: {{area}} ha',
+    addedOn: 'Added on {{date}}',
   },
   pagination: {
     label: 'Pages',

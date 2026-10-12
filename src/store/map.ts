@@ -15,6 +15,10 @@ function readStoredBasemap(): Basemap {
 type MapState = {
   basemap: Basemap
   setBasemap: (basemap: Basemap) => void
+  // Пока контур рисуется или правится, клик по карте — точка контура,
+  // а не выбор участка: попапы участков в это время не открываются
+  isDrawing: boolean
+  setDrawing: (isDrawing: boolean) => void
 }
 
 // Выбранная подложка сохраняется: агроном, работающий по снимкам,
@@ -29,4 +33,6 @@ export const useMapStore = create<MapState>()((set) => ({
     }
     set({ basemap })
   },
+  isDrawing: false,
+  setDrawing: (isDrawing) => set({ isDrawing }),
 }))
