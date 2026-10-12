@@ -20,9 +20,11 @@ if (typeof HTMLDialogElement.prototype.showModal !== 'function') {
   })
 }
 
-// В jsdom нет WebGL: MapLibre заменён заглушкой, а холст не даёт контекст.
+// В jsdom нет WebGL: MapLibre и Terra Draw заменены заглушками, а холст не даёт контекст.
 // Тесты карты включают «WebGL» сами через spyOn на getContext
 vi.mock('maplibre-gl', () => import('./maplibre'))
+vi.mock('terra-draw', () => import('./terraDraw'))
+vi.mock('terra-draw-maplibre-gl-adapter', () => import('./terraDraw'))
 HTMLCanvasElement.prototype.getContext = () => null
 
 beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))

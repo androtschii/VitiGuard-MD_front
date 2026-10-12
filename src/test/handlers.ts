@@ -14,6 +14,19 @@ export const tokens: AccessToken = {
 }
 
 export const handlers = [
+  http.post('/api/v1/vineyards', async ({ request }) => {
+    const body = (await request.json()) as Record<string, unknown>
+    return HttpResponse.json(
+      {
+        id: 'vineyard-1',
+        name: body.name,
+        geometry: body.geometry,
+        created_at: '2026-10-12T10:00:00Z',
+        updated_at: '2026-10-12T10:00:00Z',
+      },
+      { status: 201 },
+    )
+  }),
   http.get('/api/v1/info', () => HttpResponse.json(apiInfo)),
   http.post('/api/v1/auth/login', () => HttpResponse.json(tokens)),
   http.post('/api/v1/auth/refresh', () => HttpResponse.json(tokens)),
