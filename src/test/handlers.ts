@@ -14,6 +14,9 @@ export const tokens: AccessToken = {
 }
 
 export const handlers = [
+  http.get('/api/v1/vineyards', () =>
+    HttpResponse.json({ items: [], total: 0, page: 1, size: 100, pages: 0 }),
+  ),
   http.post('/api/v1/vineyards', async ({ request }) => {
     const body = (await request.json()) as Record<string, unknown>
     return HttpResponse.json(

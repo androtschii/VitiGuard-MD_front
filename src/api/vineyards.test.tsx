@@ -6,6 +6,7 @@ import type { ReactNode } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import { server } from '@/test/server'
 import {
+  fetchAllVineyards,
   toMultiPolygon,
   updateVineyard,
   useCreateVineyard,
@@ -89,5 +90,39 @@ describe('API участков', () => {
     await expect(updateVineyard('missing', { name: 'x' })).rejects.toThrow(
       'Участок не найден',
     )
+  })
+
+  it('загружает все страницы участков подряд', async () => {
+    const pages: string[] = []
+    server.use(
+      http.get('/api/v1/vineyards', ({ request }) => {
+        const page = Number(new URL(request.url).searchParams.get('page'))
+        pages.push(new URL(request.url).search)
+        return HttpResponse.json({
+          items: [{ id: `vineyard-${page}`, name: `Участок ${page}` }],
+          total: 3,
+          page,
+          size: 100,
+          pages: 3,
+        })
+      }),
+    )
+
+    const vineyards = await fetchAllVineyards()
+
+    expect(vineyards.map((vineyard) => vineyard.id)).toEqual([
+      'vineyard-1',
+      'vineyard-2',
+      'vineyard-3',
+    ])
+    expect(pages).toEqual([
+      '?page=1&size=100',
+      '?page=2&size=100',
+      '?page=3&size=100',
+    ])
+  })
+
+  it('пустой список — один запрос', async () => {
+    await expect(fetchAllVineyards()).resolves.toEqual([])
   })
 })

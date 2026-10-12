@@ -11,6 +11,12 @@ export const Map = vi.fn(
     isStyleLoaded = vi.fn(() => true)
     once = vi.fn()
     on = vi.fn()
+    addSource = vi.fn()
+    addLayer = vi.fn()
+    removeLayer = vi.fn()
+    removeSource = vi.fn()
+    fitBounds = vi.fn()
+    getSource = vi.fn(() => ({ setData: vi.fn() }))
 
     constructor(options: unknown) {
       this.options = options
