@@ -128,7 +128,7 @@ describe('MapView', () => {
 
     expect(map?.setLayoutProperty).not.toHaveBeenCalled()
     expect(map?.once).toHaveBeenCalledWith('style.load', expect.any(Function))
-    const apply = map?.once.mock.calls[0]?.[1] as () => void
+    const apply = map?.once.mock.calls.at(-1)?.[1] as () => void
     apply()
     expect(map?.setLayoutProperty).toHaveBeenCalledWith(
       'hybrid-places',
@@ -149,8 +149,8 @@ describe('MapView', () => {
     expect(screen.getByText('ждём карту')).toBeInTheDocument()
 
     const [map] = createdMaps()
-    const onLoad = map?.on.mock.calls.find(
-      ([event]) => event === 'load',
+    const onLoad = map?.once.mock.calls.find(
+      ([event]) => event === 'style.load',
     )?.[1] as (() => void) | undefined
     act(() => onLoad?.())
 

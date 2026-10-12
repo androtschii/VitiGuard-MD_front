@@ -5,6 +5,7 @@ import { useNavItems } from '@/app/navigation'
 import { DrawPolygonControl } from '@/components/organisms/DrawPolygonControl'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { MapSearch } from '@/components/organisms/MapSearch'
+import { MeasureControl } from '@/components/organisms/MeasureControl'
 import { MapView } from '@/components/organisms/MapView'
 import { VineyardForm } from '@/components/organisms/VineyardForm'
 import { VineyardPopups } from '@/components/organisms/VineyardPopups'
@@ -48,6 +49,7 @@ export function MapPage() {
               />
             )}
           />
+          <MeasureControl />
         </div>
       </MapView>
     </DashboardTemplate>

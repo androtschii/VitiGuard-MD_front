@@ -53,6 +53,7 @@ export function DrawPolygonControl({
   const featureIdRef = useRef<string | number | null>(null)
   const onChangeRef = useRef(onChange)
   const [state, setState] = useState<DrawState>('idle')
+  const isDrawing = useMapStore((store) => store.isDrawing)
   const setDrawing = useMapStore((store) => store.setDrawing)
   const [areaHa, setAreaHa] = useState<number | null>(null)
   const [polygon, setPolygon] = useState<Polygon | null>(null)
@@ -187,7 +188,8 @@ export function DrawPolygonControl({
       )}
     >
       {state === 'idle' && (
-        <Button size="sm" onClick={startDrawing}>
+        // Пока на карте работает линейка, клики заняты ей
+        <Button size="sm" disabled={isDrawing} onClick={startDrawing}>
           {t('draw.start')}
         </Button>
       )}

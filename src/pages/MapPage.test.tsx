@@ -52,10 +52,10 @@ describe('MapPage', () => {
 
     // Карта «загрузилась»: заглушка MapLibre вызывает подписку на load
     const map = vi.mocked(Map).mock.instances.at(-1) as unknown as {
-      on: ReturnType<typeof vi.fn>
+      once: ReturnType<typeof vi.fn>
     }
-    const onLoad = map.on.mock.calls.find(
-      ([event]) => event === 'load',
+    const onLoad = map.once.mock.calls.find(
+      ([event]) => event === 'style.load',
     )?.[1] as () => void
     act(() => onLoad())
 

@@ -27,6 +27,24 @@ export function polygonAreaSquareMeters(polygon: Polygon) {
   return holes.reduce((area, hole) => area - ringArea(hole), ringArea(outer))
 }
 
+// Длина ломаной по сфере (формула гаверсинусов), в метрах
+export function lineLengthMeters(points: Position[]) {
+  let total = 0
+  for (let i = 0; i < points.length - 1; i++) {
+    const [lon1 = 0, lat1 = 0] = points[i] ?? []
+    const [lon2 = 0, lat2 = 0] = points[i + 1] ?? []
+    const dLat = toRadians(lat2 - lat1)
+    const dLon = toRadians(lon2 - lon1)
+    const h =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(toRadians(lat1)) *
+        Math.cos(toRadians(lat2)) *
+        Math.sin(dLon / 2) ** 2
+    total += 2 * EARTH_RADIUS * Math.asin(Math.sqrt(h))
+  }
+  return total
+}
+
 export function squareMetersToHectares(squareMeters: number) {
   return squareMeters / 10_000
 }

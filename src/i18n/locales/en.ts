@@ -66,6 +66,16 @@ export const en: Messages = {
     nothing: 'Nothing found',
     hectares: 'ha',
   },
+  measure: {
+    start: 'Measure distance and area',
+    hint: 'Click on the map to place points. From three points the area of the shape is calculated too. Esc — finish.',
+    distance: 'Distance: {{distance}}',
+    meters: '{{value}} m',
+    kilometers: '{{value}} km',
+    area: 'Area: {{hectares}} ha ({{squareMeters}} m²)',
+    undo: 'Remove point',
+    finish: 'Done',
+  },
   pagination: {
     label: 'Pages',
     previous: 'Previous',
