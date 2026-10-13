@@ -27,7 +27,10 @@ export function DashboardTemplate({
       <Header actions={headerActions} />
       <div className="relative flex flex-1">
         <Sidebar items={navItems} />
-        <main id="content" className="min-w-0 flex-1 p-4 lg:p-6">
+        <main
+          id="content"
+          className="min-w-0 flex-1 p-4 motion-safe:animate-rise lg:p-6"
+        >
           {children}
         </main>
       </div>

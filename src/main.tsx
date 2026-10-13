@@ -5,6 +5,7 @@ import { AppProviders } from '@/app/AppProviders'
 import { initSession } from '@/app/session'
 import '@/i18n'
 import { applyTheme, readStoredTheme, watchSystemTheme } from '@/theme'
+import '@fontsource-variable/montserrat'
 import './index.css'
 
 // Страница показывается сразу, а сессия восстанавливается параллельно

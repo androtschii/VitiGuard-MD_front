@@ -4,6 +4,49 @@
    пользователь может выбрать её вручную */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Фирменная палитра снята с логотипа: ягоды от #622ac3 до #a68af0,
+   надпись — #351578. Шрифт надписи — геометрический Montserrat */
+@theme {
+  --color-brand-50: #f5f1fe;
+  --color-brand-100: #ece4fd;
+  --color-brand-200: #d9cbfb;
+  --color-brand-300: #c0a9f6;
+  --color-brand-400: #a68af0;
+  --color-brand-500: #8e67de;
+  --color-brand-600: #7e50d6;
+  --color-brand-700: #622ac3;
+  --color-brand-800: #5029a0;
+  --color-brand-900: #351578;
+  --color-brand-950: #22104f;
+  --font-brand: 'Montserrat Variable', ui-sans-serif, system-ui, sans-serif;
+
+  /* Появление: короткий подъём с проявлением, без «прыжков» */
+  --animate-rise: rise 0.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-grow-in: grow-in 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-breathe: breathe 1.6s ease-in-out infinite;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+
+  @keyframes grow-in {
+    from {
+      opacity: 0;
+      transform: scale(0.85);
+    }
+  }
+
+  @keyframes breathe {
+    50% {
+      opacity: 0.6;
+      transform: scale(0.94);
+    }
+  }
+}
+
 /* Компоненты используют смысловые цвета (фон, текст, линии), а не оттенки
    палитры: тема меняет значения переменных, разметка остаётся прежней */
 :root {
@@ -20,8 +63,9 @@
   --ink-faint: var(--color-stone-400);
   --line: var(--color-stone-200);
   --line-strong: var(--color-stone-300);
-  --accent: var(--color-emerald-800);
-  --accent-soft: var(--color-emerald-50);
+  --accent: var(--color-brand-700);
+  --accent-soft: var(--color-brand-50);
+  --brand-ink: var(--color-brand-900);
   --danger: var(--color-red-700);
 }
 
@@ -40,8 +84,9 @@
   --ink-faint: var(--color-stone-500);
   --line: var(--color-stone-800);
   --line-strong: var(--color-stone-700);
-  --accent: var(--color-emerald-400);
-  --accent-soft: var(--color-emerald-950);
+  --accent: var(--color-brand-300);
+  --accent-soft: var(--color-brand-950);
+  --brand-ink: var(--color-brand-100);
   --danger: var(--color-red-400);
 }
 
@@ -59,12 +104,18 @@
   --color-line-strong: var(--line-strong);
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
+  --color-brand-ink: var(--brand-ink);
   --color-danger: var(--danger);
 }
 
 body {
   background-color: var(--canvas);
   color: var(--ink);
+}
+
+/* Заголовки страниц — шрифтом логотипа, остальной текст — системным */
+h1 {
+  font-family: var(--font-brand);
 }
 
 /* Попапы MapLibre в цветах темы: по умолчанию они всегда белые. Стили карты

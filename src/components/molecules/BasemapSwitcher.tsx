@@ -32,9 +32,9 @@ export function BasemapSwitcher({
           key={basemap}
           className={cn(
             'cursor-pointer rounded px-2.5 py-1 text-sm font-medium transition-colors',
-            'has-focus-visible:outline-2 has-focus-visible:outline-emerald-600',
+            'has-focus-visible:outline-2 has-focus-visible:outline-brand-500',
             value === basemap
-              ? 'bg-emerald-700 text-white'
+              ? 'bg-brand-700 text-white'
               : 'text-ink-soft hover:bg-muted',
           )}
         >

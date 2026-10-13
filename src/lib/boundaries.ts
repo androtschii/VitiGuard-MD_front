@@ -28,7 +28,7 @@ export function boundariesSource(
 }
 
 // Фиолетовый — цвет винограда из логотипа: заметен и на схеме, и на снимках
-const BORDER_COLOR = '#6d28d9'
+const BORDER_COLOR = '#622ac3'
 
 export const boundaryLayers: LayerSpecification[] = [
   {
@@ -68,7 +68,7 @@ export const boundaryLayers: LayerSpecification[] = [
       'text-max-width': 8,
     },
     paint: {
-      'text-color': '#4c1d95',
+      'text-color': '#351578',
       'text-halo-color': '#ffffff',
       'text-halo-width': 1.5,
     },
