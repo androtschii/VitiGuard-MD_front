@@ -14,6 +14,12 @@ export const tokens: AccessToken = {
 }
 
 export const handlers = [
+  http.get('/api/v1/varieties', () =>
+    HttpResponse.json([
+      { id: 'merlot', name: 'Merlot', berry_color: 'red' },
+      { id: 'feteasca-neagra', name: 'Fetească Neagră', berry_color: 'red' },
+    ]),
+  ),
   http.get('/api/v1/vineyards', () =>
     HttpResponse.json({ items: [], total: 0, page: 1, size: 100, pages: 0 }),
   ),
@@ -25,6 +31,8 @@ export const handlers = [
         name: body.name,
         geometry: body.geometry,
         area_ha: 1.69,
+        variety: null,
+        planting_year: body.planting_year ?? null,
         created_at: '2026-10-12T10:00:00Z',
         updated_at: '2026-10-12T10:00:00Z',
       },

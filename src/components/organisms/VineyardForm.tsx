@@ -2,8 +2,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { ApiError } from '@/api/client'
+import { useVarieties } from '@/api/varieties'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
+import { Select } from '@/components/atoms/Select'
 import { Field } from '@/components/molecules/Field'
 import { vineyardSchema, type VineyardValues } from '@/schemas/vineyard'
 
@@ -25,6 +27,7 @@ export function VineyardForm({
   onCancel,
 }: VineyardFormProps) {
   const { t, i18n } = useTranslation()
+  const { data: varieties = [] } = useVarieties()
   const {
     register,
     handleSubmit,
@@ -32,7 +35,12 @@ export function VineyardForm({
     formState: { errors, isSubmitting },
   } = useForm<VineyardValues>({
     resolver: zodResolver(vineyardSchema),
-    defaultValues: { name: '', ...defaultValues },
+    defaultValues: {
+      name: '',
+      varietyId: '',
+      plantingYear: '',
+      ...defaultValues,
+    },
   })
 
   const submit = handleSubmit(async (values) => {
@@ -69,6 +77,31 @@ export function VineyardForm({
             {...register('name')}
             autoComplete="off"
             placeholder={t('vineyard.namePlaceholder')}
+          />
+        )}
+      </Field>
+      <Field label={t('vineyard.variety')} error={errors.varietyId?.message}>
+        {(control) => (
+          <Select {...control} {...register('varietyId')}>
+            <option value="">{t('vineyard.varietyNone')}</option>
+            {varieties.map((variety) => (
+              <option key={variety.id} value={variety.id}>
+                {variety.name}
+              </option>
+            ))}
+          </Select>
+        )}
+      </Field>
+      <Field
+        label={t('vineyard.plantingYear')}
+        error={errors.plantingYear?.message}
+      >
+        {(control) => (
+          <Input
+            {...control}
+            {...register('plantingYear')}
+            inputMode="numeric"
+            placeholder={t('vineyard.plantingYearPlaceholder')}
           />
         )}
       </Field>

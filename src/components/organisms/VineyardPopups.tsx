@@ -92,6 +92,12 @@ export function VineyardPopups() {
     <div className="flex flex-col gap-1 pr-4 text-sm">
       <h2 className="font-semibold text-ink">{vineyard.name}</h2>
       <p>{t('vineyard.area', { area })}</p>
+      {vineyard.variety && (
+        <p>{t('vineyard.varietyLine', { name: vineyard.variety.name })}</p>
+      )}
+      {vineyard.planting_year && (
+        <p>{t('vineyard.plantedLine', { year: vineyard.planting_year })}</p>
+      )}
       <p className="text-ink-muted">{t('vineyard.addedOn', { date })}</p>
     </div>,
     container,

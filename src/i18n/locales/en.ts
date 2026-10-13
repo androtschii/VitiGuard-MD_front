@@ -58,6 +58,12 @@ export const en: Messages = {
     saveFailed: 'Could not save the parcel',
     area: 'Area: {{area}} ha',
     addedOn: 'Added on {{date}}',
+    variety: 'Variety',
+    varietyNone: 'Not specified',
+    plantingYear: 'Planting year',
+    plantingYearPlaceholder: 'For example, 2015',
+    varietyLine: 'Variety: {{name}}',
+    plantedLine: 'Planted in {{year}}',
   },
   search: {
     label: 'Search for a parcel or coordinates',
@@ -75,6 +81,16 @@ export const en: Messages = {
     area: 'Area: {{hectares}} ha ({{squareMeters}} m²)',
     undo: 'Remove point',
     finish: 'Done',
+  },
+  filter: {
+    label: 'Parcel filter',
+    variety: 'Variety',
+    all: 'All varieties',
+    none: 'No variety',
+    minArea: 'Area from, ha',
+    maxArea: 'to, ha',
+    reset: 'Reset',
+    shown: 'Showing {{shown}} of {{total}}',
   },
   pagination: {
     label: 'Pages',
@@ -169,5 +185,6 @@ export const en: Messages = {
     nameRequired: 'Enter your name',
     vineyardNameRequired: 'Enter the parcel name',
     vineyardNameMax: 'At most 255 characters',
+    plantingYear: 'Planting year — from 1900 to the current year',
   },
 }

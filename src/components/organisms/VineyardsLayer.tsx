@@ -4,6 +4,8 @@ import { useVineyards } from '@/api/vineyards'
 import { LABEL_FONT } from '@/lib/boundaries'
 import { boundsOf } from '@/lib/geo'
 import { useMap } from '@/lib/mapContext'
+import { filterVineyards } from '@/lib/vineyardFilter'
+import { useMapStore } from '@/store/map'
 import { toFeatureCollection } from '@/lib/vineyardFeatures'
 
 const SOURCE = 'vineyards'
@@ -47,6 +49,7 @@ const layers: LayerSpecification[] = [
 export function VineyardsLayer() {
   const map = useMap()
   const { data: vineyards } = useVineyards()
+  const filter = useMapStore((state) => state.filter)
   const hasFittedRef = useRef(false)
 
   useEffect(() => {
@@ -74,7 +77,7 @@ export function VineyardsLayer() {
     // setData возвращает промис обработки в фоновом потоке; ждать его не нужно
     void map
       .getSource<GeoJSONSource>(SOURCE)
-      ?.setData(toFeatureCollection(vineyards))
+      ?.setData(toFeatureCollection(filterVineyards(vineyards, filter)))
 
     // Один раз приближаем карту к участкам: участок в пару гектаров на
     // масштабе всей страны занимает меньше пикселя
@@ -82,7 +85,7 @@ export function VineyardsLayer() {
     hasFittedRef.current = true
     const bounds = boundsOf(vineyards.map((vineyard) => vineyard.geometry))
     if (bounds) map.fitBounds(bounds, { padding: 48, maxZoom: 15, duration: 0 })
-  }, [map, vineyards])
+  }, [map, vineyards, filter])
 
   return null
 }

@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { isBasemap, type Basemap } from '@/lib/basemaps'
+import { NO_FILTER, type VineyardFilter } from '@/lib/vineyardFilter'
 
 export const BASEMAP_STORAGE_KEY = 'vitiguard.basemap'
 
@@ -24,6 +25,8 @@ type MapState = {
   setDrawing: (isDrawing: boolean) => void
   selection: VineyardSelection | null
   select: (selection: VineyardSelection | null) => void
+  filter: VineyardFilter
+  setFilter: (filter: VineyardFilter) => void
 }
 
 // Выбранная подложка сохраняется: агроном, работающий по снимкам,
@@ -42,4 +45,6 @@ export const useMapStore = create<MapState>()((set) => ({
   setDrawing: (isDrawing) => set({ isDrawing }),
   selection: null,
   select: (selection) => set({ selection }),
+  filter: NO_FILTER,
+  setFilter: (filter) => set({ filter }),
 }))

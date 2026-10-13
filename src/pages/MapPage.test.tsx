@@ -75,6 +75,8 @@ describe('MapPage', () => {
     )
     expect(saved).toEqual({
       name: 'Криково',
+      variety_id: null,
+      planting_year: null,
       geometry: {
         type: 'MultiPolygon',
         coordinates: [parcel.geometry.coordinates],

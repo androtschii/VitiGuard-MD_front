@@ -56,6 +56,12 @@ export const ru = {
     saveFailed: 'Не удалось сохранить участок',
     area: 'Площадь: {{area}} га',
     addedOn: 'Добавлен {{date}}',
+    variety: 'Сорт',
+    varietyNone: 'Не указан',
+    plantingYear: 'Год посадки',
+    plantingYearPlaceholder: 'Например, 2015',
+    varietyLine: 'Сорт: {{name}}',
+    plantedLine: 'Посажен в {{year}} году',
   },
   search: {
     label: 'Поиск участка или координат',
@@ -73,6 +79,16 @@ export const ru = {
     area: 'Площадь: {{hectares}} га ({{squareMeters}} м²)',
     undo: 'Убрать точку',
     finish: 'Готово',
+  },
+  filter: {
+    label: 'Фильтр участков',
+    variety: 'Сорт',
+    all: 'Все сорта',
+    none: 'Без сорта',
+    minArea: 'Площадь от, га',
+    maxArea: 'до, га',
+    reset: 'Сбросить',
+    shown: 'Показано {{shown}} из {{total}}',
   },
   pagination: {
     label: 'Страницы',
@@ -167,6 +183,7 @@ export const ru = {
     nameRequired: 'Введите имя',
     vineyardNameRequired: 'Введите название участка',
     vineyardNameMax: 'Не длиннее 255 символов',
+    plantingYear: 'Год посадки — от 1900 до текущего',
   },
 }
 
