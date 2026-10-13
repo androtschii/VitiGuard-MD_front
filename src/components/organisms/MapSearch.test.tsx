@@ -36,6 +36,8 @@ function vineyard(id: string, name: string, lon: number): Vineyard {
         ],
       ],
     },
+    variety: null,
+    planting_year: null,
     created_at: '2026-10-12T10:00:00Z',
     updated_at: '2026-10-12T10:00:00Z',
   }

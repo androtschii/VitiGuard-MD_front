@@ -7,6 +7,7 @@ import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { MapSearch } from '@/components/organisms/MapSearch'
 import { MeasureControl } from '@/components/organisms/MeasureControl'
 import { MapView } from '@/components/organisms/MapView'
+import { VineyardFilters } from '@/components/organisms/VineyardFilters'
 import { VineyardForm } from '@/components/organisms/VineyardForm'
 import { VineyardPopups } from '@/components/organisms/VineyardPopups'
 import { VineyardsLayer } from '@/components/organisms/VineyardsLayer'
@@ -38,10 +39,12 @@ export function MapPage() {
                 areaHa={areaHa}
                 submitLabel={t('vineyard.create')}
                 onCancel={reset}
-                onSubmit={async ({ name }) => {
+                onSubmit={async ({ name, varietyId, plantingYear }) => {
                   const vineyard = await createVineyard({
                     name,
                     geometry: toMultiPolygon(polygon),
+                    variety_id: varietyId || null,
+                    planting_year: plantingYear ? Number(plantingYear) : null,
                   })
                   reset()
                   setSavedName(vineyard.name)
@@ -50,6 +53,7 @@ export function MapPage() {
             )}
           />
           <MeasureControl />
+          <VineyardFilters />
         </div>
       </MapView>
     </DashboardTemplate>

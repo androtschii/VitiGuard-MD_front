@@ -58,6 +58,12 @@ export const ro: Messages = {
     saveFailed: 'Parcela nu a putut fi salvată',
     area: 'Suprafața: {{area}} ha',
     addedOn: 'Adăugată la {{date}}',
+    variety: 'Soi',
+    varietyNone: 'Nespecificat',
+    plantingYear: 'Anul plantării',
+    plantingYearPlaceholder: 'De exemplu, 2015',
+    varietyLine: 'Soi: {{name}}',
+    plantedLine: 'Plantată în {{year}}',
   },
   search: {
     label: 'Căutarea parcelei sau a coordonatelor',
@@ -75,6 +81,16 @@ export const ro: Messages = {
     area: 'Suprafața: {{hectares}} ha ({{squareMeters}} m²)',
     undo: 'Elimină punctul',
     finish: 'Gata',
+  },
+  filter: {
+    label: 'Filtrul parcelelor',
+    variety: 'Soi',
+    all: 'Toate soiurile',
+    none: 'Fără soi',
+    minArea: 'Suprafața de la, ha',
+    maxArea: 'până la, ha',
+    reset: 'Resetează',
+    shown: 'Afișate {{shown}} din {{total}}',
   },
   pagination: {
     label: 'Pagini',
@@ -171,5 +187,6 @@ export const ro: Messages = {
     nameRequired: 'Introduceți numele',
     vineyardNameRequired: 'Introduceți denumirea parcelei',
     vineyardNameMax: 'Cel mult 255 de caractere',
+    plantingYear: 'Anul plantării — de la 1900 până la anul curent',
   },
 }

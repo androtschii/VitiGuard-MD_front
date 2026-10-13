@@ -1,13 +1,14 @@
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { ApiError } from '@/api/client'
+import { renderWithQueryClient } from '@/test/render'
 import { VineyardForm } from './VineyardForm'
 
 function renderForm(props: Partial<Parameters<typeof VineyardForm>[0]> = {}) {
   const onSubmit = vi.fn().mockResolvedValue(undefined)
   const onCancel = vi.fn()
-  render(
+  renderWithQueryClient(
     <VineyardForm
       areaHa={2.345}
       submitLabel="Сохранить участок"
@@ -49,7 +50,11 @@ describe('VineyardForm', () => {
     )
     await submit()
 
-    expect(onSubmit).toHaveBeenCalledWith({ name: 'Криково, северный склон' })
+    expect(onSubmit).toHaveBeenCalledWith({
+      name: 'Криково, северный склон',
+      varietyId: '',
+      plantingYear: '',
+    })
   })
 
   it('при правке подставляет текущее название', () => {
@@ -83,5 +88,34 @@ describe('VineyardForm', () => {
     )
 
     expect(onCancel).toHaveBeenCalledOnce()
+  })
+
+  it('передаёт выбранный сорт и год посадки', async () => {
+    const { onSubmit } = renderForm({ defaultValues: { name: 'Криково' } })
+
+    await userEvent.selectOptions(
+      await screen.findByLabelText('Сорт'),
+      await screen.findByRole('option', { name: 'Merlot' }),
+    )
+    await userEvent.type(screen.getByLabelText('Год посадки'), '2015')
+    await submit()
+
+    expect(onSubmit).toHaveBeenCalledWith({
+      name: 'Криково',
+      varietyId: 'merlot',
+      plantingYear: '2015',
+    })
+  })
+
+  it.each(['1899', '2999', '15'])('отклоняет год посадки %s', async (year) => {
+    const { onSubmit } = renderForm({ defaultValues: { name: 'Криково' } })
+
+    await userEvent.type(screen.getByLabelText('Год посадки'), year)
+    await submit()
+
+    expect(
+      await screen.findByText('Год посадки — от 1900 до текущего'),
+    ).toBeInTheDocument()
+    expect(onSubmit).not.toHaveBeenCalled()
   })
 })

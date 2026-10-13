@@ -32,6 +32,8 @@ const vineyard: Vineyard = {
   name: 'Криково',
   geometry: { type: 'MultiPolygon', coordinates: [] },
   area_ha: 1.6912,
+  variety: { id: 'merlot', name: 'Merlot', berry_color: 'red' },
+  planting_year: 2015,
   created_at: '2026-10-12T10:00:00Z',
   updated_at: '2026-10-12T10:00:00Z',
 }
@@ -111,6 +113,8 @@ describe('VineyardPopups', () => {
     )
     expect(content.getByText('Площадь: 1,69 га')).toBeInTheDocument()
     expect(content.getByText('Добавлен 12 октября 2026 г.')).toBeInTheDocument()
+    expect(content.getByText('Сорт: Merlot')).toBeInTheDocument()
+    expect(content.getByText('Посажен в 2015 году')).toBeInTheDocument()
 
     // Закрытие попапа сбрасывает выбор
     act(() => details?.listeners.close?.())
@@ -153,5 +157,17 @@ describe('VineyardPopups', () => {
       'mouseleave',
       'click',
     ])
+  })
+
+  it('пока карта не загружена, ни на что не подписывается', () => {
+    render(
+      <QueryClientProvider client={new QueryClient()}>
+        <MapContext value={null}>
+          <VineyardPopups />
+        </MapContext>
+      </QueryClientProvider>,
+    )
+
+    expect(Popup).not.toHaveBeenCalled()
   })
 })
