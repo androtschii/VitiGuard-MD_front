@@ -1,7 +1,7 @@
 import { LanguageSwitcher } from '@/components/molecules/LanguageSwitcher'
 import { ThemeSwitcher } from '@/components/molecules/ThemeSwitcher'
 import type { ReactNode } from 'react'
-import { Logo } from '@/components/atoms/Logo'
+import { Wordmark } from '@/components/atoms/Wordmark'
 
 type AuthTemplateProps = {
   title: string
@@ -16,11 +16,8 @@ export function AuthTemplate({ title, children, footer }: AuthTemplateProps) {
         <LanguageSwitcher />
         <ThemeSwitcher />
       </div>
-      <div className="flex flex-col items-center gap-2">
-        <Logo className="size-12" />
-        <p className="font-semibold text-accent">VitiGuard MD</p>
-      </div>
-      <div className="w-full max-w-sm rounded-lg border border-line bg-surface p-6 shadow-sm">
+      <Wordmark size="lg" withTagline />
+      <div className="w-full max-w-sm rounded-lg border border-line bg-surface p-6 shadow-sm motion-safe:animate-rise">
         <h1 className="mb-5 text-xl font-semibold text-ink">{title}</h1>
         {children}
       </div>

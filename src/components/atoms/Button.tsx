@@ -3,7 +3,7 @@ import { Spinner } from '@/components/atoms/Spinner'
 import { cn } from '@/lib/cn'
 
 const variants = {
-  primary: 'bg-emerald-700 text-white hover:bg-emerald-800',
+  primary: 'bg-brand-700 text-white hover:bg-brand-800 hover:shadow-md',
   secondary: 'border border-line-strong bg-surface text-ink hover:bg-muted',
   ghost: 'text-ink-soft hover:bg-muted',
   danger: 'bg-red-700 text-white hover:bg-red-800',
@@ -37,8 +37,8 @@ export function Button({
       disabled={disabled || isLoading}
       aria-busy={isLoading || undefined}
       className={cn(
-        'inline-flex items-center justify-center rounded-md font-medium transition-colors',
-        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600',
+        'inline-flex items-center justify-center rounded-md font-medium transition active:translate-y-px',
+        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500',
         'disabled:cursor-not-allowed disabled:opacity-50',
         variants[variant],
         sizes[size],

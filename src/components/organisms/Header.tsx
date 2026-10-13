@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import type { ReactNode } from 'react'
 import { Link } from 'react-router'
 import { Button } from '@/components/atoms/Button'
-import { Logo } from '@/components/atoms/Logo'
+import { Wordmark } from '@/components/atoms/Wordmark'
 import { useUiStore } from '@/store/ui'
 
 type HeaderProps = {
@@ -29,12 +29,8 @@ export function Header({ actions }: HeaderProps) {
       >
         ☰
       </Button>
-      <Link
-        to="/"
-        className="flex items-center gap-2 font-semibold text-accent"
-      >
-        <Logo className="size-7" />
-        VitiGuard MD
+      <Link to="/" aria-label="VitiGuard MD" className="flex items-center">
+        <Wordmark />
       </Link>
       <div className="ml-auto flex items-center gap-2">
         <LanguageSwitcher />

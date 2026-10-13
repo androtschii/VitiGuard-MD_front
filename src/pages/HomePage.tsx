@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
-import { Logo } from '@/components/atoms/Logo'
+import { Wordmark } from '@/components/atoms/Wordmark'
 import { ApiStatus } from '@/components/organisms/ApiStatus'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { CenteredTemplate } from '@/components/templates/CenteredTemplate'
@@ -10,14 +10,17 @@ export function HomePage() {
 
   return (
     <CenteredTemplate>
-      <Logo className="size-16" />
-      <h1 className="text-4xl font-semibold text-accent">VitiGuard MD</h1>
-      <p className="max-w-md text-ink-muted">{t('home.description')}</p>
+      <h1 aria-label="VitiGuard MD">
+        <Wordmark size="lg" withTagline />
+      </h1>
+      <p className="max-w-md text-ink-muted motion-safe:animate-rise">
+        {t('home.description')}
+      </p>
       <ApiStatus />
       <div className="flex gap-3">
         <Link
           to="/map"
-          className="inline-flex h-8 items-center rounded-md bg-emerald-700 px-3 text-sm font-medium text-white hover:bg-emerald-800"
+          className="inline-flex h-8 items-center rounded-md bg-brand-700 px-3 text-sm font-medium text-white transition hover:bg-brand-800 hover:shadow-md active:translate-y-px"
         >
           {t('home.openMap')}
         </Link>

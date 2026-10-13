@@ -120,7 +120,7 @@ export function MapSearch() {
         }}
         onKeyDown={onKeyDown}
         onBlur={() => setIsOpen(false)}
-        className="h-9 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink shadow-sm placeholder:text-ink-faint focus:border-emerald-600 focus:outline-2 focus:outline-emerald-600/20"
+        className="h-9 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink shadow-sm placeholder:text-ink-faint focus:border-brand-500 focus:outline-2 focus:outline-brand-500/25"
       />
       {showList && (
         <ul
