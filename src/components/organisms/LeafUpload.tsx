@@ -1,11 +1,12 @@
-import { useEffect, useId, useMemo, useState, type DragEvent } from 'react'
+import { useId, useState, type DragEvent } from 'react'
 import { useTranslation } from 'react-i18next'
+import { cn } from '@/lib/cn'
 import {
   checkLeafPhoto,
   LEAF_PHOTO_TYPES,
   type LeafPhotoProblem,
 } from '@/lib/leafPhoto'
-import { cn } from '@/lib/cn'
+import { useObjectUrl } from '@/lib/useObjectUrl'
 
 type LeafUploadProps = {
   file: File | null
@@ -21,17 +22,7 @@ export function LeafUpload({ file, onSelect }: LeafUploadProps) {
   const [isDragging, setIsDragging] = useState(false)
   const [problem, setProblem] = useState<LeafPhotoProblem | null>(null)
 
-  const previewUrl = useMemo(
-    () => (file ? URL.createObjectURL(file) : null),
-    [file],
-  )
-  // Ссылка на файл держит его в памяти, пока её не освободить
-  useEffect(
-    () => () => {
-      if (previewUrl) URL.revokeObjectURL(previewUrl)
-    },
-    [previewUrl],
-  )
+  const previewUrl = useObjectUrl(file)
 
   const pick = (picked: File | undefined) => {
     if (!picked) return

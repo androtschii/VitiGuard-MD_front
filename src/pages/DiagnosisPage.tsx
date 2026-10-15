@@ -5,16 +5,19 @@ import { useNavItems } from '@/app/navigation'
 import { Button } from '@/components/atoms/Button'
 import { Card } from '@/components/atoms/Card'
 import { Spinner } from '@/components/atoms/Spinner'
+import { DiagnosisOverlay } from '@/components/organisms/DiagnosisOverlay'
 import { DiagnosisResult } from '@/components/organisms/DiagnosisResult'
 import { LeafUpload } from '@/components/organisms/LeafUpload'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
+import { useObjectUrl } from '@/lib/useObjectUrl'
 
 export function DiagnosisPage() {
   const { t } = useTranslation()
   const navItems = useNavItems()
   const [file, setFile] = useState<File | null>(null)
   const diagnose = useDiagnose()
+  const photoUrl = useObjectUrl(file)
 
   return (
     <DashboardTemplate navItems={navItems} headerActions={<LogoutButton />}>
@@ -24,25 +27,38 @@ export function DiagnosisPage() {
       <p className="mb-4 max-w-2xl text-sm text-ink-muted">
         {t('diagnosis.intro')}
       </p>
-      <div className="grid gap-4 lg:grid-cols-2">
-        <Card title={t('diagnosis.photo')} className="flex flex-col gap-1">
-          <LeafUpload
-            file={file}
-            onSelect={(picked) => {
-              setFile(picked)
-              // Результат относится к прежнему фото
-              diagnose.reset()
-            }}
-          />
-          <Button
-            className="w-full"
-            disabled={!file}
-            isLoading={diagnose.isPending}
-            onClick={() => file && diagnose.mutate(file)}
-          >
-            {t('diagnosis.analyze')}
-          </Button>
-        </Card>
+      <div className="grid items-start gap-4 lg:grid-cols-2">
+        <div className="flex flex-col gap-4">
+          <Card title={t('diagnosis.photo')} className="flex flex-col gap-1">
+            <LeafUpload
+              file={file}
+              onSelect={(picked) => {
+                setFile(picked)
+                // Результат относится к прежнему фото
+                diagnose.reset()
+              }}
+            />
+            <Button
+              className="w-full"
+              disabled={!file}
+              isLoading={diagnose.isPending}
+              onClick={() => file && diagnose.mutate(file)}
+            >
+              {t('diagnosis.analyze')}
+            </Button>
+          </Card>
+          {/* Наложения — под фото, слева: справа и так длинный список вероятностей */}
+          {diagnose.isSuccess &&
+            photoUrl &&
+            (diagnose.data.heatmap || diagnose.data.lesion) && (
+              <Card>
+                <DiagnosisOverlay
+                  photoUrl={photoUrl}
+                  diagnosis={diagnose.data}
+                />
+              </Card>
+            )}
+        </div>
 
         <Card title={t('diagnosis.result')}>
           <div aria-live="polite">

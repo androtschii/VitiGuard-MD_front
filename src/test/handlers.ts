@@ -27,6 +27,8 @@ export const diagnosis: Diagnosis = {
     { disease: 'esca', probability: 0.0034 },
     { disease: 'black_rot', probability: 0.002 },
   ],
+  heatmap: 'data:image/png;base64,aGVhdG1hcA==',
+  lesion: { mask: 'data:image/png;base64,bWFzaw==', severity: 0.18 },
 }
 
 export const handlers = [
