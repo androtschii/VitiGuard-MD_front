@@ -45,6 +45,7 @@ function fakeMap() {
       removeLayer: vi.fn<(id: string) => void>(),
       removeSource: vi.fn(),
       fitBounds: vi.fn(),
+      getContainer: vi.fn(() => ({ clientWidth: 1000 })),
       getSource: vi.fn(() => ({ setData })),
     },
   }
@@ -114,7 +115,10 @@ describe('VineyardsLayer', () => {
         [28.86, 47.14],
         [28.862, 47.141],
       ],
-      expect.objectContaining({ maxZoom: 15 }),
+      expect.objectContaining({
+        maxZoom: 15,
+        padding: { top: 48, right: 48, bottom: 48, left: 290 },
+      }),
     )
 
     // Новый участок обновляет данные, но не сдвигает карту
@@ -122,6 +126,21 @@ describe('VineyardsLayer', () => {
     await queryClient.invalidateQueries()
     await waitFor(() => expect(setData).toHaveBeenCalledTimes(2))
     expect(map.fitBounds).toHaveBeenCalledOnce()
+  })
+
+  it('на узкой карте не оставляет места под панель', async () => {
+    serve([vineyard])
+    const { map, setData } = fakeMap()
+    map.getContainer.mockReturnValue({ clientWidth: 400 })
+    renderLayer(map)
+
+    await waitFor(() => expect(setData).toHaveBeenCalled())
+    expect(map.fitBounds).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        padding: { top: 48, right: 48, bottom: 48, left: 48 },
+      }),
+    )
   })
 
   it('без участков карту не двигает', async () => {

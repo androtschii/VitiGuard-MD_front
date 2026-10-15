@@ -22,6 +22,7 @@ export const Map = vi.fn(
     off = vi.fn()
     getLayer = vi.fn()
     getZoom = vi.fn(() => 13)
+    getContainer = vi.fn(() => ({ clientWidth: 1000 }))
     getBounds = vi.fn(() => ({
       getWest: () => 28.851,
       getSouth: () => 47.131,

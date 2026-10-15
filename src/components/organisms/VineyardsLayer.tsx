@@ -46,6 +46,9 @@ const layers: LayerSpecification[] = [
 
 // Участки пользователя поверх подложки и границ. Список приходит из кэша
 // запросов, поэтому новый участок появляется сразу после сохранения
+// Ширина панели инструментов (16rem) с отступами
+const PANEL_GUTTER = 290
+
 export function VineyardsLayer() {
   const map = useMap()
   const { data: vineyards } = useVineyards()
@@ -84,7 +87,16 @@ export function VineyardsLayer() {
     if (hasFittedRef.current) return
     hasFittedRef.current = true
     const bounds = boundsOf(vineyards.map((vineyard) => vineyard.geometry))
-    if (bounds) map.fitBounds(bounds, { padding: 48, maxZoom: 15, duration: 0 })
+    if (!bounds) return
+    // Слева поверх карты лежит панель инструментов (MapToolbar): на широкой
+    // карте участки показываются правее неё, а не под ней
+    const width = map.getContainer().clientWidth
+    const left = width >= 3 * PANEL_GUTTER ? PANEL_GUTTER : 48
+    map.fitBounds(bounds, {
+      padding: { top: 48, right: 48, bottom: 48, left },
+      maxZoom: 15,
+      duration: 0,
+    })
   }, [map, vineyards, filter])
 
   return null
