@@ -21,6 +21,7 @@ export const en: Messages = {
   nav: {
     home: 'Home',
     map: 'Map',
+    regions: 'Districts',
     diagnosis: 'Diagnosis',
   },
   map: {
@@ -123,6 +124,7 @@ export const en: Messages = {
       'Vineyard health monitoring for Moldova: disease diagnosis from leaf photos, satellite indices and infection risk forecasts.',
     openMap: 'Open map',
     openDiagnosis: 'Check a leaf',
+    openRegions: 'District statistics',
   },
   errorPage: {
     title: 'Something went wrong',
@@ -226,6 +228,30 @@ export const en: Messages = {
     leaf_blight: 'Leaf blight',
     downy_mildew: 'Downy mildew',
     powdery_mildew: 'Powdery mildew',
+  },
+  regions: {
+    title: 'District statistics',
+    intro:
+      'Vineyards mapped in OpenStreetMap and your plots by district of Moldova. A vineyard belongs to the district that contains its middle.',
+    summary: {
+      osmCount: 'Vineyards in OpenStreetMap',
+      osmArea: 'Their area',
+      mine: 'My plots',
+    },
+    ha: '{{value}} ha',
+    mineValue: '{{count}} · {{area}} ha',
+    chart: 'Districts with the largest vineyard area',
+    table: 'Vineyards by district',
+    columns: {
+      name: 'District',
+      area: 'District area, ha',
+      osmCount: 'OSM vineyards',
+      osmArea: 'Their area, ha',
+      share: 'District share',
+      mine: 'My plots, pcs · ha',
+    },
+    source:
+      'Source: OpenStreetMap (ODbL), district boundaries by geoBoundaries. OpenStreetMap is not fully mapped, so the real vineyard area is larger.',
   },
   validation: {
     emailRequired: 'Enter your email',

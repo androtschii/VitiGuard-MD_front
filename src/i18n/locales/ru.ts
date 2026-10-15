@@ -19,6 +19,7 @@ export const ru = {
   nav: {
     home: 'Главная',
     map: 'Карта',
+    regions: 'Районы',
     diagnosis: 'Диагностика',
   },
   map: {
@@ -121,6 +122,7 @@ export const ru = {
       'Мониторинг здоровья виноградников Молдовы: диагностика болезней по фото листьев, спутниковые индексы и прогноз риска заражения.',
     openMap: 'Открыть карту',
     openDiagnosis: 'Проверить лист',
+    openRegions: 'Статистика районов',
   },
   errorPage: {
     title: 'Что-то пошло не так',
@@ -224,6 +226,30 @@ export const ru = {
     leaf_blight: 'Пятнистость листьев',
     downy_mildew: 'Милдью',
     powdery_mildew: 'Оидиум',
+  },
+  regions: {
+    title: 'Статистика по районам',
+    intro:
+      'Виноградники, размеченные в OpenStreetMap, и ваши участки по районам Молдовы. Виноградник относится к району, в котором лежит его середина.',
+    summary: {
+      osmCount: 'Виноградников в OpenStreetMap',
+      osmArea: 'Их площадь',
+      mine: 'Мои участки',
+    },
+    ha: '{{value}} га',
+    mineValue: '{{count}} · {{area}} га',
+    chart: 'Районы с наибольшей площадью виноградников',
+    table: 'Виноградники по районам',
+    columns: {
+      name: 'Район',
+      area: 'Площадь района, га',
+      osmCount: 'Виноградники OSM',
+      osmArea: 'Их площадь, га',
+      share: 'Доля района',
+      mine: 'Мои участки, шт. · га',
+    },
+    source:
+      'Источник: OpenStreetMap (ODbL), границы районов — geoBoundaries. OpenStreetMap размечен не полностью, поэтому реальная площадь виноградников больше.',
   },
   validation: {
     emailRequired: 'Введите email',

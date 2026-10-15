@@ -6,6 +6,7 @@ import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage'
 import { HomePage } from '@/pages/HomePage'
 import { LoginPage } from '@/pages/LoginPage'
 import { NotFoundPage } from '@/pages/NotFoundPage'
+import { RegionsPage } from '@/pages/RegionsPage'
 import { RegisterPage } from '@/pages/RegisterPage'
 import { ResetPasswordPage } from '@/pages/ResetPasswordPage'
 import { RouteErrorPage } from '@/pages/RouteErrorPage'
@@ -32,6 +33,7 @@ export const routes: RouteObject[] = [
             }),
           },
           { path: '/diagnosis', element: <DiagnosisPage /> },
+          { path: '/regions', element: <RegionsPage /> },
         ],
       },
       // Только для гостей
