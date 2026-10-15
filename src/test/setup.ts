@@ -28,6 +28,10 @@ vi.mock('terra-draw', () => import('./terraDraw'))
 vi.mock('terra-draw-maplibre-gl-adapter', () => import('./terraDraw'))
 HTMLCanvasElement.prototype.getContext = () => null
 
+// В jsdom нет ссылок на файлы (blob:): предпросмотр фото получает условный адрес
+URL.createObjectURL = vi.fn(() => 'blob:leaf-photo')
+URL.revokeObjectURL = vi.fn()
+
 beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
 
 // По умолчанию в тестах пользователь не вошёл; тесты сессии задают своё состояние

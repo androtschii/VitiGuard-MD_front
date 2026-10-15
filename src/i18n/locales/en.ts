@@ -21,6 +21,7 @@ export const en: Messages = {
   nav: {
     home: 'Home',
     map: 'Map',
+    diagnosis: 'Diagnosis',
   },
   map: {
     title: 'Vineyard map',
@@ -116,6 +117,7 @@ export const en: Messages = {
     description:
       'Vineyard health monitoring for Moldova: disease diagnosis from leaf photos, satellite indices and infection risk forecasts.',
     openMap: 'Open map',
+    openDiagnosis: 'Check a leaf',
   },
   errorPage: {
     title: 'Something went wrong',
@@ -175,6 +177,41 @@ export const en: Messages = {
         'The address has no password reset key. Open the full link from the email or <request>request a new one</request>.',
       requestNew: 'Request a new link',
     },
+  },
+  diagnosis: {
+    title: 'Leaf photo diagnosis',
+    intro:
+      'Upload a photo of a grape leaf: the model will identify the disease and show how confident it is.',
+    photo: 'Leaf photo',
+    input: 'Choose a leaf photo',
+    result: 'Result',
+    drop: 'Drag a photo here or',
+    choose: 'choose a file',
+    formats: 'JPEG, PNG or WebP up to 10 MB',
+    preview: 'Selected leaf photo',
+    change: 'Choose another photo',
+    wrongType: 'A JPEG, PNG or WebP photo is required',
+    tooLarge: 'The file is larger than 10 MB',
+    analyze: 'Identify disease',
+    analyzing: 'Analysing the photo…',
+    empty: 'The analysis result will appear here.',
+    tips: 'For an accurate answer: one leaf close up, daylight, no glare or shadows.',
+    verdict: 'Diagnosis',
+    confidence: 'Model confidence: {{value}}',
+    lowConfidence:
+      'The model is not sure. Retake the photo close up in daylight: one leaf, no glare or shadows.',
+    probabilities: 'Probabilities',
+    model: 'Model: {{name}}',
+    disclaimer:
+      'The result is a hint, not an agronomist’s conclusion: the model makes more mistakes on field photos than on laboratory ones.',
+  },
+  diseases: {
+    healthy: 'Healthy leaf',
+    black_rot: 'Black rot',
+    esca: 'Esca',
+    leaf_blight: 'Leaf blight',
+    downy_mildew: 'Downy mildew',
+    powdery_mildew: 'Powdery mildew',
   },
   validation: {
     emailRequired: 'Enter your email',

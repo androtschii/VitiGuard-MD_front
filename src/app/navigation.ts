@@ -6,6 +6,7 @@ import type { NavItem } from '@/components/organisms/Sidebar'
 const sections = [
   { labelKey: 'nav.home', href: '/' },
   { labelKey: 'nav.map', href: '/map' },
+  { labelKey: 'nav.diagnosis', href: '/diagnosis' },
 ] as const
 
 export function useNavItems(): NavItem[] {
