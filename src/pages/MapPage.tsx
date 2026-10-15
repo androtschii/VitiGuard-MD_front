@@ -6,6 +6,7 @@ import { OsmToggle } from '@/components/molecules/OsmToggle'
 import { DrawPolygonControl } from '@/components/organisms/DrawPolygonControl'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { MapSearch } from '@/components/organisms/MapSearch'
+import { MapToolbar } from '@/components/organisms/MapToolbar'
 import { MeasureControl } from '@/components/organisms/MeasureControl'
 import { MapView } from '@/components/organisms/MapView'
 import { OsmVineyardsLayer } from '@/components/organisms/OsmVineyardsLayer'
@@ -33,32 +34,42 @@ export function MapPage() {
         <OsmVineyardsLayer />
         <VineyardPopups />
         {/* Панель инструментов: поиск и рисование — столбиком под подложками */}
-        <div className="absolute top-14 left-2.5 flex w-72 max-w-[calc(100%-4.5rem)] flex-col gap-2">
-          <MapSearch />
-          <DrawPolygonControl
-            onChange={(polygon) => polygon && setSavedName(null)}
-            renderDrawn={({ polygon, areaHa, reset }) => (
-              <VineyardForm
-                areaHa={areaHa}
-                submitLabel={t('vineyard.create')}
-                onCancel={reset}
-                onSubmit={async ({ name, varietyId, plantingYear }) => {
-                  const vineyard = await createVineyard({
-                    name,
-                    geometry: toMultiPolygon(polygon),
-                    variety_id: varietyId || null,
-                    planting_year: plantingYear ? Number(plantingYear) : null,
-                  })
-                  reset()
-                  setSavedName(vineyard.name)
-                }}
+        <MapToolbar
+          tools={
+            <>
+              <MapSearch />
+              <DrawPolygonControl
+                onChange={(polygon) => polygon && setSavedName(null)}
+                renderDrawn={({ polygon, areaHa, reset }) => (
+                  <VineyardForm
+                    areaHa={areaHa}
+                    submitLabel={t('vineyard.create')}
+                    onCancel={reset}
+                    onSubmit={async ({ name, varietyId, plantingYear }) => {
+                      const vineyard = await createVineyard({
+                        name,
+                        geometry: toMultiPolygon(polygon),
+                        variety_id: varietyId || null,
+                        planting_year: plantingYear
+                          ? Number(plantingYear)
+                          : null,
+                      })
+                      reset()
+                      setSavedName(vineyard.name)
+                    }}
+                  />
+                )}
               />
-            )}
-          />
-          <MeasureControl />
-          <VineyardFilters />
-          <OsmToggle />
-        </div>
+              <MeasureControl />
+            </>
+          }
+          layers={
+            <>
+              <VineyardFilters />
+              <OsmToggle />
+            </>
+          }
+        />
       </MapView>
     </DashboardTemplate>
   )

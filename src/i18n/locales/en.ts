@@ -24,6 +24,11 @@ export const en: Messages = {
     diagnosis: 'Diagnosis',
   },
   map: {
+    tools: {
+      hide: 'Hide panel',
+      show: 'Tools',
+      layers: 'Filters and layers',
+    },
     title: 'Vineyard map',
     label: "Map of Moldova's vineyards",
     zoomIn: 'Zoom in',

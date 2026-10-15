@@ -24,6 +24,11 @@ export const ro: Messages = {
     diagnosis: 'Diagnostic',
   },
   map: {
+    tools: {
+      hide: 'Ascunde panoul',
+      show: 'Instrumente',
+      layers: 'Filtre și straturi',
+    },
     title: 'Harta viilor',
     label: 'Harta viilor din Moldova',
     zoomIn: 'Apropie',
