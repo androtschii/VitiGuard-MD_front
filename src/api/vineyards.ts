@@ -1,4 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  type QueryClient,
+} from '@tanstack/react-query'
 import type { MultiPolygon, Polygon } from 'geojson'
 import { api } from './client'
 import type { Variety } from './varieties'
@@ -74,13 +79,20 @@ export async function updateVineyard(
   return data
 }
 
+function invalidateVineyards(queryClient: QueryClient) {
+  return Promise.all([
+    queryClient.invalidateQueries({ queryKey: vineyardKeys.all }),
+    queryClient.invalidateQueries({ queryKey: ['regions'] }),
+  ])
+}
+
 export function useCreateVineyard() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: createVineyard,
-    // Список участков на карте (pr-024) перезагрузится с новым участком
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: vineyardKeys.all }),
+    // Список участков на карте (pr-024) перезагрузится с новым участком,
+    // а сводка по районам — с его площадью
+    onSuccess: () => invalidateVineyards(queryClient),
   })
 }
 
@@ -88,7 +100,6 @@ export function useUpdateVineyard(id: string) {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (input: Partial<VineyardInput>) => updateVineyard(id, input),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: vineyardKeys.all }),
+    onSuccess: () => invalidateVineyards(queryClient),
   })
 }

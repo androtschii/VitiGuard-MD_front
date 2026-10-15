@@ -21,6 +21,7 @@ export const ro: Messages = {
   nav: {
     home: 'Acasă',
     map: 'Harta',
+    regions: 'Raioane',
     diagnosis: 'Diagnostic',
   },
   map: {
@@ -123,6 +124,7 @@ export const ro: Messages = {
       'Monitorizarea sănătății viilor din Moldova: diagnosticarea bolilor după fotografiile frunzelor, indici satelitari și prognoza riscului de infecție.',
     openMap: 'Deschide harta',
     openDiagnosis: 'Verifică o frunză',
+    openRegions: 'Statistica raioanelor',
   },
   errorPage: {
     title: 'Ceva nu a mers bine',
@@ -229,6 +231,30 @@ export const ro: Messages = {
     leaf_blight: 'Pătarea frunzelor',
     downy_mildew: 'Mană',
     powdery_mildew: 'Făinare',
+  },
+  regions: {
+    title: 'Statistica pe raioane',
+    intro:
+      'Viile cartografiate în OpenStreetMap și parcelele dvs. pe raioanele Moldovei. O vie aparține raionului în care se află mijlocul ei.',
+    summary: {
+      osmCount: 'Vii în OpenStreetMap',
+      osmArea: 'Suprafața lor',
+      mine: 'Parcelele mele',
+    },
+    ha: '{{value}} ha',
+    mineValue: '{{count}} · {{area}} ha',
+    chart: 'Raioanele cu cea mai mare suprafață de vii',
+    table: 'Vii pe raioane',
+    columns: {
+      name: 'Raion',
+      area: 'Suprafața raionului, ha',
+      osmCount: 'Vii OSM',
+      osmArea: 'Suprafața lor, ha',
+      share: 'Cota raionului',
+      mine: 'Parcelele mele, buc. · ha',
+    },
+    source:
+      'Sursa: OpenStreetMap (ODbL), limitele raioanelor — geoBoundaries. OpenStreetMap nu este cartografiat complet, așa că suprafața reală a viilor este mai mare.',
   },
   validation: {
     emailRequired: 'Introduceți emailul',

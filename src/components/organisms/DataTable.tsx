@@ -1,5 +1,5 @@
+import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { ReactNode } from 'react'
 import { Skeleton } from '@/components/atoms/Skeleton'
 import { cn } from '@/lib/cn'
 
@@ -8,6 +8,13 @@ export type Column<Row> = {
   header: string
   cell: (row: Row) => ReactNode
   align?: 'left' | 'right'
+  // Значение для сортировки; без него столбец не сортируется
+  sortValue?: (row: Row) => number | string
+}
+
+export type SortState = {
+  key: string
+  direction: 'ascending' | 'descending'
 }
 
 type DataTableProps<Row> = {
@@ -17,9 +24,31 @@ type DataTableProps<Row> = {
   getRowKey: (row: Row) => string
   isLoading?: boolean
   emptyMessage?: string
+  initialSort?: SortState
 }
 
 const SKELETON_ROWS = 5
+
+function sortRows<Row>(
+  rows: Row[],
+  column: Column<Row> | undefined,
+  direction: SortState['direction'],
+  locale: string,
+) {
+  const value = column?.sortValue
+  if (!value) return rows
+  const sign = direction === 'ascending' ? 1 : -1
+  return [...rows].sort((a, b) => {
+    const left = value(a)
+    const right = value(b)
+    // Строки — по правилам языка интерфейса: «Bălți» рядом с «Basarabeasca»
+    const order =
+      typeof left === 'string' && typeof right === 'string'
+        ? left.localeCompare(right, locale)
+        : Number(left) - Number(right)
+    return order * sign
+  })
+}
 
 export function DataTable<Row>({
   caption,
@@ -28,10 +57,31 @@ export function DataTable<Row>({
   getRowKey,
   isLoading = false,
   emptyMessage,
+  initialSort,
 }: DataTableProps<Row>) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const [sort, setSort] = useState<SortState | null>(initialSort ?? null)
   const alignment = (align: Column<Row>['align']) =>
     align === 'right' ? 'text-right' : 'text-left'
+  const sorted = sort
+    ? sortRows(
+        rows,
+        columns.find((column) => column.key === sort.key),
+        sort.direction,
+        i18n.language,
+      )
+    : rows
+
+  const toggleSort = (key: string) =>
+    setSort((current) =>
+      current?.key === key
+        ? {
+            key,
+            direction:
+              current.direction === 'ascending' ? 'descending' : 'ascending',
+          }
+        : { key, direction: 'ascending' },
+    )
 
   return (
     // Узкий экран прокручивает таблицу по горизонтали, а не ломает вёрстку
@@ -43,15 +93,48 @@ export function DataTable<Row>({
         <caption className="sr-only">{caption}</caption>
         <thead className="bg-canvas text-xs text-ink-muted uppercase">
           <tr>
-            {columns.map((column) => (
-              <th
-                key={column.key}
-                scope="col"
-                className={cn('px-4 py-3 font-medium', alignment(column.align))}
-              >
-                {column.header}
-              </th>
-            ))}
+            {columns.map((column) => {
+              const direction =
+                sort?.key === column.key ? sort.direction : undefined
+              return (
+                <th
+                  key={column.key}
+                  scope="col"
+                  aria-sort={
+                    column.sortValue ? (direction ?? 'none') : undefined
+                  }
+                  className={cn(
+                    'px-4 py-3 font-medium',
+                    alignment(column.align),
+                  )}
+                >
+                  {column.sortValue ? (
+                    // Кнопка в заголовке: сортировка доступна с клавиатуры,
+                    // а направление озвучивает aria-sort
+                    <button
+                      type="button"
+                      onClick={() => toggleSort(column.key)}
+                      className={cn(
+                        'inline-flex items-center gap-1 uppercase hover:text-ink',
+                        column.align === 'right' && 'flex-row-reverse',
+                        direction && 'text-ink',
+                      )}
+                    >
+                      {column.header}
+                      <span aria-hidden="true" className="w-2">
+                        {direction === 'ascending'
+                          ? '↑'
+                          : direction === 'descending'
+                            ? '↓'
+                            : ''}
+                      </span>
+                    </button>
+                  ) : (
+                    column.header
+                  )}
+                </th>
+              )
+            })}
           </tr>
         </thead>
         <tbody className="divide-y divide-line">
@@ -65,7 +148,7 @@ export function DataTable<Row>({
                 ))}
               </tr>
             ))
-          ) : rows.length === 0 ? (
+          ) : sorted.length === 0 ? (
             <tr>
               <td
                 colSpan={columns.length}
@@ -75,7 +158,7 @@ export function DataTable<Row>({
               </td>
             </tr>
           ) : (
-            rows.map((row) => (
+            sorted.map((row) => (
               <tr key={getRowKey(row)} className="hover:bg-canvas">
                 {columns.map((column) => (
                   <td
