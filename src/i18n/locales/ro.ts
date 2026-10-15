@@ -191,6 +191,16 @@ export const ro: Messages = {
       'Încărcați o fotografie a frunzei de viță: modelul va determina boala și va arăta cât de sigur este de răspuns.',
     photo: 'Fotografia frunzei',
     input: 'Alegeți fotografia frunzei',
+    layers: {
+      title: 'Unde a văzut modelul boala',
+      heatmap: 'Hartă termică',
+      lesion: 'Leziuni',
+      photo: 'Doar fotografia',
+      severity:
+        'Afectată circa {{value}} din suprafața frunzei (după masca U-Net, orientativ)',
+      heatmapHint:
+        'Zonele luminoase au influențat cel mai mult răspunsul modelului.',
+    },
     result: 'Rezultat',
     drop: 'Trageți fotografia aici sau',
     choose: 'alegeți un fișier',

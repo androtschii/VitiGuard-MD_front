@@ -25,6 +25,10 @@ export type Diagnosis = {
   // Уверенность ниже порога сервера: ответ стоит перепроверить
   low_confidence: boolean
   top: DiseaseProbability[]
+  // Наложения поверх фото — прозрачные PNG (data URL) в пропорциях фото
+  // (backend/pr-046, pr-047); null, если модели нет на сервере
+  heatmap: string | null
+  lesion: { mask: string; severity: number } | null
 }
 
 export async function diagnoseLeaf(image: File) {

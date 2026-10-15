@@ -189,6 +189,15 @@ export const en: Messages = {
       'Upload a photo of a grape leaf: the model will identify the disease and show how confident it is.',
     photo: 'Leaf photo',
     input: 'Choose a leaf photo',
+    layers: {
+      title: 'Where the model saw the disease',
+      heatmap: 'Heatmap',
+      lesion: 'Lesions',
+      photo: 'Photo only',
+      severity:
+        'About {{value}} of the leaf area is affected (U-Net mask, approximate)',
+      heatmapHint: 'Bright areas influenced the model’s answer the most.',
+    },
     result: 'Result',
     drop: 'Drag a photo here or',
     choose: 'choose a file',
