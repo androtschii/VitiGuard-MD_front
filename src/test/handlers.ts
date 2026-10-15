@@ -1,5 +1,6 @@
 import { http, HttpResponse } from 'msw'
 import type { AccessToken } from '@/api/auth'
+import type { Diagnosis } from '@/api/diagnosis'
 import type { ApiInfo } from '@/api/info'
 
 export const apiInfo: ApiInfo = {
@@ -13,7 +14,23 @@ export const tokens: AccessToken = {
   token_type: 'bearer',
 }
 
+export const diagnosis: Diagnosis = {
+  model: 'efficientnet_b0',
+  disease: 'powdery_mildew',
+  confidence: 0.9312,
+  low_confidence: false,
+  top: [
+    { disease: 'powdery_mildew', probability: 0.9312 },
+    { disease: 'downy_mildew', probability: 0.0411 },
+    { disease: 'healthy', probability: 0.0156 },
+    { disease: 'leaf_blight', probability: 0.0067 },
+    { disease: 'esca', probability: 0.0034 },
+    { disease: 'black_rot', probability: 0.002 },
+  ],
+}
+
 export const handlers = [
+  http.post('/api/v1/ai/diagnose', () => HttpResponse.json(diagnosis)),
   http.get('/api/v1/varieties', () =>
     HttpResponse.json([
       { id: 'merlot', name: 'Merlot', berry_color: 'red' },

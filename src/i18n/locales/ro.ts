@@ -21,6 +21,7 @@ export const ro: Messages = {
   nav: {
     home: 'Acasă',
     map: 'Harta',
+    diagnosis: 'Diagnostic',
   },
   map: {
     title: 'Harta viilor',
@@ -116,6 +117,7 @@ export const ro: Messages = {
     description:
       'Monitorizarea sănătății viilor din Moldova: diagnosticarea bolilor după fotografiile frunzelor, indici satelitari și prognoza riscului de infecție.',
     openMap: 'Deschide harta',
+    openDiagnosis: 'Verifică o frunză',
   },
   errorPage: {
     title: 'Ceva nu a mers bine',
@@ -177,6 +179,41 @@ export const ro: Messages = {
         'Adresa nu conține cheia pentru schimbarea parolei. Deschideți linkul din email integral sau <request>solicitați unul nou</request>.',
       requestNew: 'Solicitați un link nou',
     },
+  },
+  diagnosis: {
+    title: 'Diagnostic după fotografia frunzei',
+    intro:
+      'Încărcați o fotografie a frunzei de viță: modelul va determina boala și va arăta cât de sigur este de răspuns.',
+    photo: 'Fotografia frunzei',
+    input: 'Alegeți fotografia frunzei',
+    result: 'Rezultat',
+    drop: 'Trageți fotografia aici sau',
+    choose: 'alegeți un fișier',
+    formats: 'JPEG, PNG sau WebP până la 10 MB',
+    preview: 'Fotografia aleasă a frunzei',
+    change: 'Alegeți altă fotografie',
+    wrongType: 'Este nevoie de o fotografie JPEG, PNG sau WebP',
+    tooLarge: 'Fișierul depășește 10 MB',
+    analyze: 'Determină boala',
+    analyzing: 'Analizăm fotografia…',
+    empty: 'Aici va apărea rezultatul analizei.',
+    tips: 'Pentru un răspuns precis: o singură frunză de aproape, lumină de zi, fără reflexe și umbre.',
+    verdict: 'Diagnostic',
+    confidence: 'Încrederea modelului: {{value}}',
+    lowConfidence:
+      'Modelul nu este sigur de răspuns. Refotografiați frunza de aproape, la lumina zilei: o singură frunză, fără reflexe și umbre.',
+    probabilities: 'Probabilități',
+    model: 'Model: {{name}}',
+    disclaimer:
+      'Rezultatul este un indiciu, nu concluzia agronomului: pe fotografiile din câmp modelul greșește mai des decât pe cele de laborator.',
+  },
+  diseases: {
+    healthy: 'Frunză sănătoasă',
+    black_rot: 'Putregai negru',
+    esca: 'Esca',
+    leaf_blight: 'Pătarea frunzelor',
+    downy_mildew: 'Mană',
+    powdery_mildew: 'Făinare',
   },
   validation: {
     emailRequired: 'Introduceți emailul',

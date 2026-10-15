@@ -1,6 +1,7 @@
 import type { RouteObject } from 'react-router'
 import { GuestRoute, ProtectedRoute } from '@/app/guards'
 import { LoadingScreen } from '@/components/templates/LoadingScreen'
+import { DiagnosisPage } from '@/pages/DiagnosisPage'
 import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage'
 import { HomePage } from '@/pages/HomePage'
 import { LoginPage } from '@/pages/LoginPage'
@@ -30,6 +31,7 @@ export const routes: RouteObject[] = [
               Component: (await import('@/pages/MapPage')).MapPage,
             }),
           },
+          { path: '/diagnosis', element: <DiagnosisPage /> },
         ],
       },
       // Только для гостей

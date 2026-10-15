@@ -24,6 +24,12 @@ export function HomePage() {
         >
           {t('home.openMap')}
         </Link>
+        <Link
+          to="/diagnosis"
+          className="inline-flex h-8 items-center rounded-md border border-line-strong bg-surface px-3 text-sm font-medium text-ink transition hover:bg-muted hover:shadow-md active:translate-y-px"
+        >
+          {t('home.openDiagnosis')}
+        </Link>
         <LogoutButton />
       </div>
     </CenteredTemplate>
