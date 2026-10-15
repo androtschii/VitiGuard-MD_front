@@ -92,6 +92,10 @@ export const en: Messages = {
     reset: 'Reset',
     shown: 'Showing {{shown}} of {{total}}',
   },
+  osm: {
+    toggle: 'OpenStreetMap vineyards',
+    zoomIn: 'Zoom in to see them',
+  },
   pagination: {
     label: 'Pages',
     previous: 'Previous',

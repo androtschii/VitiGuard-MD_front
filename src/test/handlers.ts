@@ -20,6 +20,9 @@ export const handlers = [
       { id: 'feteasca-neagra', name: 'Fetească Neagră', berry_color: 'red' },
     ]),
   ),
+  http.get('/api/v1/osm/vineyards', () =>
+    HttpResponse.json({ type: 'FeatureCollection', features: [] }),
+  ),
   http.get('/api/v1/vineyards', () =>
     HttpResponse.json({ items: [], total: 0, page: 1, size: 100, pages: 0 }),
   ),

@@ -2,11 +2,13 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toMultiPolygon, useCreateVineyard } from '@/api/vineyards'
 import { useNavItems } from '@/app/navigation'
+import { OsmToggle } from '@/components/molecules/OsmToggle'
 import { DrawPolygonControl } from '@/components/organisms/DrawPolygonControl'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { MapSearch } from '@/components/organisms/MapSearch'
 import { MeasureControl } from '@/components/organisms/MeasureControl'
 import { MapView } from '@/components/organisms/MapView'
+import { OsmVineyardsLayer } from '@/components/organisms/OsmVineyardsLayer'
 import { VineyardFilters } from '@/components/organisms/VineyardFilters'
 import { VineyardForm } from '@/components/organisms/VineyardForm'
 import { VineyardPopups } from '@/components/organisms/VineyardPopups'
@@ -28,6 +30,7 @@ export function MapPage() {
       </p>
       <MapView className="h-[calc(100svh-14rem)] min-h-96">
         <VineyardsLayer />
+        <OsmVineyardsLayer />
         <VineyardPopups />
         {/* Панель инструментов: поиск и рисование — столбиком под подложками */}
         <div className="absolute top-14 left-2.5 flex w-72 max-w-[calc(100%-4.5rem)] flex-col gap-2">
@@ -54,6 +57,7 @@ export function MapPage() {
           />
           <MeasureControl />
           <VineyardFilters />
+          <OsmToggle />
         </div>
       </MapView>
     </DashboardTemplate>
