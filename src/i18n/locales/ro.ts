@@ -92,6 +92,10 @@ export const ro: Messages = {
     reset: 'Resetează',
     shown: 'Afișate {{shown}} din {{total}}',
   },
+  osm: {
+    toggle: 'Viile din OpenStreetMap',
+    zoomIn: 'Apropiați harta pentru a le vedea',
+  },
   pagination: {
     label: 'Pagini',
     previous: 'Înapoi',

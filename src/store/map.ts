@@ -27,6 +27,11 @@ type MapState = {
   select: (selection: VineyardSelection | null) => void
   filter: VineyardFilter
   setFilter: (filter: VineyardFilter) => void
+  // Справочный слой виноградников OpenStreetMap и признак «масштаб слишком мелкий»
+  showOsm: boolean
+  setShowOsm: (showOsm: boolean) => void
+  osmTooFar: boolean
+  setOsmTooFar: (osmTooFar: boolean) => void
 }
 
 // Выбранная подложка сохраняется: агроном, работающий по снимкам,
@@ -47,4 +52,8 @@ export const useMapStore = create<MapState>()((set) => ({
   select: (selection) => set({ selection }),
   filter: NO_FILTER,
   setFilter: (filter) => set({ filter }),
+  showOsm: false,
+  setShowOsm: (showOsm) => set({ showOsm }),
+  osmTooFar: false,
+  setOsmTooFar: (osmTooFar) => set({ osmTooFar }),
 }))

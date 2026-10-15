@@ -90,6 +90,10 @@ export const ru = {
     reset: 'Сбросить',
     shown: 'Показано {{shown}} из {{total}}',
   },
+  osm: {
+    toggle: 'Виноградники OpenStreetMap',
+    zoomIn: 'Приблизьте карту, чтобы увидеть их',
+  },
   pagination: {
     label: 'Страницы',
     previous: 'Назад',

@@ -20,6 +20,14 @@ export const Map = vi.fn(
     doubleClickZoom = { disable: vi.fn(), enable: vi.fn() }
     getSource = vi.fn(() => ({ setData: vi.fn() }))
     off = vi.fn()
+    getLayer = vi.fn()
+    getZoom = vi.fn(() => 13)
+    getBounds = vi.fn(() => ({
+      getWest: () => 28.851,
+      getSouth: () => 47.131,
+      getEast: () => 28.879,
+      getNorth: () => 47.149,
+    }))
     canvas = { style: { cursor: '' } }
     getCanvas = vi.fn(() => this.canvas)
 

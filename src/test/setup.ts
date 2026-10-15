@@ -42,6 +42,8 @@ beforeEach(async () => {
     isDrawing: false,
     selection: null,
     filter: NO_FILTER,
+    showOsm: false,
+    osmTooFar: false,
   })
   document.documentElement.classList.remove('dark')
 })
