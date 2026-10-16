@@ -71,6 +71,22 @@ export const en: Messages = {
     plantingYearPlaceholder: 'For example, 2015',
     varietyLine: 'Variety: {{name}}',
     plantedLine: 'Planted in {{year}}',
+    card: {
+      district: 'District: {{name}}',
+      weather: 'Weather now',
+      weatherNow:
+        '{{temperature}} °C, humidity {{humidity}} %, precipitation {{precipitation}} mm',
+      weatherFailed: 'Weather is not available right now',
+      surroundings: 'Around the plot',
+      nearby: 'OpenStreetMap vineyards within 1 km: {{count}}',
+      nearest: 'The nearest is {{distance}} m away',
+      overlap: 'Matches OpenStreetMap mapping by {{value}} %',
+      download: 'Download boundaries:',
+      downloadFailed: 'Could not download the boundaries',
+      delete: 'Delete plot',
+      confirmDelete: 'Delete the plot? This cannot be undone.',
+      cancel: 'Cancel',
+    },
   },
   search: {
     label: 'Search for a parcel or coordinates',

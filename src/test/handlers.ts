@@ -39,6 +39,22 @@ export const handlers = [
       { id: 'feteasca-neagra', name: 'Fetească Neagră', berry_color: 'red' },
     ]),
   ),
+  http.get('/api/v1/vineyards/:id/context', () =>
+    HttpResponse.json({
+      osm_overlap_ratio: 0.42,
+      osm_vineyards_within_1km: 8,
+      nearest_osm_distance_m: 27.4,
+      district: { iso: 'MD-CU', name: 'Chișinău' },
+    }),
+  ),
+  http.get('/api/v1/weather/current', () =>
+    HttpResponse.json({
+      observed_at: '2026-10-16T14:30:00Z',
+      temperature_c: 9.6,
+      relative_humidity: 71,
+      precipitation_mm: 0,
+    }),
+  ),
   http.get('/api/v1/osm/vineyards', () =>
     HttpResponse.json({ type: 'FeatureCollection', features: [] }),
   ),

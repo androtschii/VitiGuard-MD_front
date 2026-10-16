@@ -1,23 +1,24 @@
 import { Popup, type MapLayerMouseEvent } from 'maplibre-gl'
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { useTranslation } from 'react-i18next'
 import { useVineyards } from '@/api/vineyards'
+import { VineyardCard } from '@/components/organisms/VineyardCard'
 import { useMap } from '@/lib/mapContext'
 import { useMapStore } from '@/store/map'
 
 const LAYER = 'vineyards-fill'
+// На сколько пикселей ниже центра карты оказывается выбранная точка
+const POPUP_SHIFT = 160
 
 function vineyardId(event: MapLayerMouseEvent) {
   const id: unknown = event.features?.[0]?.properties.id
   return typeof id === 'string' ? id : null
 }
 
-// Наведение на участок — подсказка с названием, клик — попап с площадью и
-// датой. Содержимое попапа рисует React через портал, поэтому оно
+// Наведение на участок — подсказка с названием, клик — попап с карточкой
+// участка. Содержимое попапа рисует React через портал, поэтому оно
 // переводится и оформляется так же, как остальной интерфейс
 export function VineyardPopups() {
-  const { t, i18n } = useTranslation()
   const map = useMap()
   const { data: vineyards } = useVineyards()
   const selection = useMapStore((state) => state.selection)
@@ -67,10 +68,17 @@ export function VineyardPopups() {
 
   useEffect(() => {
     if (!map || !selection) return
-    const popup = new Popup({ maxWidth: '260px', offset: 8 })
+    // Карточка всегда над точкой клика, а карта сдвигается так, чтобы точка
+    // оказалась ниже центра: иначе высокая карточка обрезалась бы краем карты
+    const popup = new Popup({ maxWidth: '300px', offset: 8, anchor: 'bottom' })
       .setLngLat(selection.lngLat)
       .setDOMContent(container)
       .addTo(map)
+    map.easeTo({
+      center: selection.lngLat,
+      offset: [0, POPUP_SHIFT],
+      duration: 300,
+    })
     // Попап закрывают крестиком, кликом мимо или Esc — выбор сбрасывается
     popup.on('close', () => select(null))
     return () => {
@@ -78,28 +86,17 @@ export function VineyardPopups() {
     }
   }, [map, selection, select, container])
 
-  const vineyard = vineyards?.find((item) => item.id === selection?.id)
-  if (!vineyard) return null
-
-  const area = new Intl.NumberFormat(i18n.resolvedLanguage, {
-    maximumFractionDigits: 2,
-  }).format(vineyard.area_ha)
-  const date = new Intl.DateTimeFormat(i18n.resolvedLanguage, {
-    dateStyle: 'long',
-  }).format(new Date(vineyard.created_at))
+  const vineyard = selection
+    ? vineyards?.find((item) => item.id === selection.id)
+    : undefined
+  if (!selection || !vineyard) return null
 
   return createPortal(
-    <div className="flex flex-col gap-1 pr-4 text-sm">
-      <h2 className="font-semibold text-ink">{vineyard.name}</h2>
-      <p>{t('vineyard.area', { area })}</p>
-      {vineyard.variety && (
-        <p>{t('vineyard.varietyLine', { name: vineyard.variety.name })}</p>
-      )}
-      {vineyard.planting_year && (
-        <p>{t('vineyard.plantedLine', { year: vineyard.planting_year })}</p>
-      )}
-      <p className="text-ink-muted">{t('vineyard.addedOn', { date })}</p>
-    </div>,
+    <VineyardCard
+      vineyard={vineyard}
+      point={selection.lngLat}
+      onDeleted={() => select(null)}
+    />,
     container,
   )
 }

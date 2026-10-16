@@ -71,6 +71,23 @@ export const ro: Messages = {
     plantingYearPlaceholder: 'De exemplu, 2015',
     varietyLine: 'Soi: {{name}}',
     plantedLine: 'Plantată în {{year}}',
+    card: {
+      district: 'Raion: {{name}}',
+      weather: 'Vremea acum',
+      weatherNow:
+        '{{temperature}} °C, umiditate {{humidity}} %, precipitații {{precipitation}} mm',
+      weatherFailed: 'Vremea nu este disponibilă acum',
+      surroundings: 'În jurul parcelei',
+      nearby: 'Vii OpenStreetMap pe o rază de 1 km: {{count}}',
+      nearest: 'Cea mai apropiată — la {{distance}} m',
+      overlap:
+        'Coincide cu cartografierea OpenStreetMap în proporție de {{value}} %',
+      download: 'Descarcă limitele:',
+      downloadFailed: 'Limitele nu au putut fi descărcate',
+      delete: 'Șterge parcela',
+      confirmDelete: 'Ștergeți parcela? Acțiunea nu poate fi anulată.',
+      cancel: 'Anulează',
+    },
   },
   search: {
     label: 'Căutarea parcelei sau a coordonatelor',
