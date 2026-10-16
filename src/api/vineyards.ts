@@ -103,3 +103,56 @@ export function useUpdateVineyard(id: string) {
     onSuccess: () => invalidateVineyards(queryClient),
   })
 }
+
+export async function deleteVineyard(id: string) {
+  await api.delete(`/vineyards/${id}`)
+}
+
+export function useDeleteVineyard() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: deleteVineyard,
+    onSuccess: () => invalidateVineyards(queryClient),
+  })
+}
+
+// Местность вокруг участка (backend/pr-033, pr-036): район и виноградники
+// OpenStreetMap рядом — соседние виноградники несут риск заражения
+export type VineyardContext = {
+  // Доля площади участка, которая и в OSM размечена как виноградник, 0..1
+  osm_overlap_ratio: number
+  osm_vineyards_within_1km: number
+  nearest_osm_distance_m: number | null
+  district: { iso: string; name: string } | null
+}
+
+export async function fetchVineyardContext(id: string) {
+  const { data } = await api.get<VineyardContext>(`/vineyards/${id}/context`)
+  return data
+}
+
+export function useVineyardContext(id: string | null) {
+  return useQuery({
+    queryKey: [...vineyardKeys.all, id, 'context'],
+    queryFn: () => fetchVineyardContext(id ?? ''),
+    enabled: id !== null,
+    // Разметка OSM вокруг участка меняется редко
+    staleTime: 10 * 60_000,
+  })
+}
+
+export type ExportFormat = 'geojson' | 'shapefile'
+
+// Границы участка файлом (backend/pr-032): GeoJSON или архив Shapefile для ГИС
+export async function downloadVineyard(id: string, format: ExportFormat) {
+  const { data } = await api.get<Blob>(`/vineyards/${id}/export`, {
+    params: { format },
+    responseType: 'blob',
+  })
+  const url = URL.createObjectURL(data)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = `vineyard-${id}.${format === 'shapefile' ? 'zip' : 'geojson'}`
+  link.click()
+  URL.revokeObjectURL(url)
+}

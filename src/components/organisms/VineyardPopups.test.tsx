@@ -13,13 +13,14 @@ import { VineyardPopups } from './VineyardPopups'
 type Handler = (event: unknown) => void
 
 type FakeMap = {
+  easeTo: ReturnType<typeof vi.fn>
   on: ReturnType<typeof vi.fn>
   off: ReturnType<typeof vi.fn>
   canvas: { style: { cursor: string } }
 }
 
 type FakePopup = {
-  options: { closeButton?: boolean }
+  options: { closeButton?: boolean; anchor?: string }
   text: string
   content: HTMLElement | null
   isOpen: boolean
@@ -98,7 +99,7 @@ describe('VineyardPopups', () => {
   })
 
   it('по клику открывает попап с площадью и датой', async () => {
-    const { handler, popups } = setup()
+    const { map, handler, popups } = setup()
     await waitFor(() => expect(handler('click')).toBeDefined())
 
     act(() => handler('click')(event({ id: 'vineyard-1', name: 'Криково' })))
@@ -115,12 +116,38 @@ describe('VineyardPopups', () => {
     expect(content.getByText('Добавлен 12 октября 2026 г.')).toBeInTheDocument()
     expect(content.getByText('Сорт: Merlot')).toBeInTheDocument()
     expect(content.getByText('Посажен в 2015 году')).toBeInTheDocument()
+    // Карточка над точкой, а карта сдвинута, чтобы карточка поместилась
+    expect(details?.options).toMatchObject({ anchor: 'bottom' })
+    expect(map.easeTo).toHaveBeenCalledWith(
+      expect.objectContaining({ center: [28.861, 47.1405], offset: [0, 160] }),
+    )
 
     // Закрытие попапа сбрасывает выбор
     act(() => details?.listeners.close?.())
     expect(
       content.queryByRole('heading', { name: 'Криково' }),
     ).not.toBeInTheDocument()
+  })
+
+  it('после удаления участка карточка закрывается', async () => {
+    server.use(
+      http.delete(
+        '/api/v1/vineyards/:id',
+        () => new HttpResponse(null, { status: 204 }),
+      ),
+    )
+    const { handler, popups } = setup()
+    await waitFor(() => expect(handler('click')).toBeDefined())
+    act(() => handler('click')(event({ id: 'vineyard-1', name: 'Криково' })))
+    const content = within(popups().at(-1)?.content ?? document.body)
+    const remove = await content.findByRole('button', {
+      name: 'Удалить участок',
+    })
+
+    act(() => remove.click())
+    act(() => content.getByRole('button', { name: 'Удалить участок' }).click())
+
+    await waitFor(() => expect(useMapStore.getState().selection).toBeNull())
   })
 
   it('пока рисуется контур, участки не реагируют', () => {

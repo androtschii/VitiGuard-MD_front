@@ -17,6 +17,7 @@ export const Map = vi.fn(
     removeSource = vi.fn()
     fitBounds = vi.fn()
     flyTo = vi.fn()
+    easeTo = vi.fn()
     doubleClickZoom = { disable: vi.fn(), enable: vi.fn() }
     getSource = vi.fn(() => ({ setData: vi.fn() }))
     off = vi.fn()

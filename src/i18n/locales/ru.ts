@@ -69,6 +69,22 @@ export const ru = {
     plantingYearPlaceholder: 'Например, 2015',
     varietyLine: 'Сорт: {{name}}',
     plantedLine: 'Посажен в {{year}} году',
+    card: {
+      district: 'Район: {{name}}',
+      weather: 'Погода сейчас',
+      weatherNow:
+        '{{temperature}} °C, влажность {{humidity}} %, осадки {{precipitation}} мм',
+      weatherFailed: 'Погода сейчас недоступна',
+      surroundings: 'Вокруг участка',
+      nearby: 'Виноградников OpenStreetMap в радиусе 1 км: {{count}}',
+      nearest: 'Ближайший — в {{distance}} м',
+      overlap: 'Совпадает с разметкой OpenStreetMap на {{value}} %',
+      download: 'Скачать границы:',
+      downloadFailed: 'Не удалось скачать границы',
+      delete: 'Удалить участок',
+      confirmDelete: 'Удалить участок? Это нельзя отменить.',
+      cancel: 'Отмена',
+    },
   },
   search: {
     label: 'Поиск участка или координат',
