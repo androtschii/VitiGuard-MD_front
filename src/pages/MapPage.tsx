@@ -4,6 +4,7 @@ import { toMultiPolygon, useCreateVineyard } from '@/api/vineyards'
 import { useNavItems } from '@/app/navigation'
 import { OsmToggle } from '@/components/molecules/OsmToggle'
 import { DrawPolygonControl } from '@/components/organisms/DrawPolygonControl'
+import { MapRiskLegend } from '@/components/organisms/MapRiskLegend'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { MapSearch } from '@/components/organisms/MapSearch'
 import { MapToolbar } from '@/components/organisms/MapToolbar'
@@ -33,6 +34,7 @@ export function MapPage() {
         <VineyardsLayer />
         <OsmVineyardsLayer />
         <VineyardPopups />
+        <MapRiskLegend />
         {/* Панель инструментов: поиск и рисование — столбиком под подложками */}
         <MapToolbar
           tools={

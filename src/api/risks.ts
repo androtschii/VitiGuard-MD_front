@@ -47,3 +47,26 @@ export function useRefreshRisks(id: string) {
     onSuccess: (data) => queryClient.setQueryData(risksKey(id), data),
   })
 }
+
+// Уровни на сегодня по всем участкам пользователя (backend/pr-079) — для
+// раскраски карты. Участков без оценки (вне сезона) в ответе нет
+export type TodayRisk = {
+  vineyard_id: string
+  day: string
+  downy: RiskLevel
+  powdery: RiskLevel
+}
+
+export async function fetchTodayRisks() {
+  const { data } = await api.get<TodayRisk[]>('/risks/today')
+  return data
+}
+
+export function useTodayRisks() {
+  return useQuery({
+    queryKey: ['risks', 'today'],
+    queryFn: fetchTodayRisks,
+    // Сервер пересчитывает риск раз в 6 часов
+    staleTime: 30 * 60_000,
+  })
+}

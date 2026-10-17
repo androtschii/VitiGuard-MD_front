@@ -294,6 +294,8 @@ export const en: Messages = {
     },
   },
   risk: {
+    mapLegend: 'Plot colour — today’s risk',
+    mapLegendWorst: 'The worse of downy and powdery mildew',
     section: 'Disease risk',
     open: 'Risk by day',
     title: 'Disease risk: {{name}}',
