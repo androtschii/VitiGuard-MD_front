@@ -293,6 +293,52 @@ export const en: Messages = {
       cloud: 'Clouds over the plot',
     },
   },
+  risk: {
+    section: 'Disease risk',
+    open: 'Risk by day',
+    title: 'Disease risk: {{name}}',
+    description:
+      'From the weather at the plot: the “three tens” rule and the Goidanich model for downy mildew, the Gubler-Thomas index for powdery mildew. Days after today use the weather forecast.',
+    downy: 'Downy mildew',
+    powdery: 'Powdery mildew',
+    levels: {
+      low: 'low',
+      medium: 'medium',
+      high: 'high',
+    },
+    today: 'Today',
+    lastDay: 'Latest estimate — {{date}}',
+    notCalculated: 'Risk has not been calculated yet',
+    offSeason:
+      'Today is out of season: the models estimate risk from April to September (the “three tens” rule — until June).',
+    incubation:
+      'Downy mildew incubation is under way after the infection on {{date}}: {{progress}} % done.',
+    symptoms:
+      'The Goidanich model expects downy mildew spots after the infection on {{date}} — the treatment should have been done before this day.',
+    noIncubation: 'No downy mildew incubation right now.',
+    gublerToday: 'Gubler-Thomas powdery mildew index — {{index}}.',
+    week: 'Week ahead (weather forecast)',
+    columns: {
+      date: 'Date',
+    },
+    powderyChart: 'Powdery mildew: Gubler-Thomas index',
+    powderyChartLabel:
+      'Gubler-Thomas index over the season: from 0 to 100, 60 and above is high risk',
+    gublerShort: 'Index',
+    downyChart: 'Downy mildew: Goidanich incubation, %',
+    downyChartLabel:
+      'Downy mildew incubation progress over the season: 100 % means spots are expected; triangles mark infection days',
+    incubationShort: 'Incubation',
+    todayMark: 'today',
+    infectionMark: 'Infection by the “three tens” rule: {{date}}',
+    markersHint:
+      'Triangles on the axis are days when the “three tens” rule allowed primary infection.',
+    empty:
+      'Risk has not been calculated yet. Press “Recalculate” — the server will load the season weather and forecast.',
+    refresh: 'Recalculate with fresh weather',
+    disclaimer:
+      'Agronomic models estimate conditions for the disease from the weather, not its presence: the agronomist decides on treatment.',
+  },
   validation: {
     emailRequired: 'Enter your email',
     emailInvalid: 'Enter a valid email',

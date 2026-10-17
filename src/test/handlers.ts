@@ -47,6 +47,7 @@ export const handlers = [
       district: { iso: 'MD-CU', name: 'Chișinău' },
     }),
   ),
+  http.get('/api/v1/vineyards/:id/risks', () => HttpResponse.json([])),
   http.get('/api/v1/weather/current', () =>
     HttpResponse.json({
       observed_at: '2026-10-16T14:30:00Z',
