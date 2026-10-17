@@ -1,28 +1,54 @@
-import type { GeoJSONSource, LayerSpecification } from 'maplibre-gl'
+import type {
+  ExpressionSpecification,
+  GeoJSONSource,
+  LayerSpecification,
+} from 'maplibre-gl'
 import { useEffect, useRef } from 'react'
+import { useTodayRisks } from '@/api/risks'
 import { useVineyards } from '@/api/vineyards'
 import { LABEL_FONT } from '@/lib/boundaries'
 import { boundsOf } from '@/lib/geo'
 import { useMap } from '@/lib/mapContext'
 import { filterVineyards } from '@/lib/vineyardFilter'
 import { useMapStore } from '@/store/map'
-import { toFeatureCollection } from '@/lib/vineyardFeatures'
+import { riskByVineyard, toFeatureCollection } from '@/lib/vineyardFeatures'
 
 const SOURCE = 'vineyards'
 
-// Цвет участков — изумрудный акцент приложения, как у рисуемого контура
+// Цвет участка — уровень риска на сегодня (pr-025): средний — янтарный,
+// высокий — красный. Низкий риск и участки без оценки (вне сезона) —
+// изумрудные, как растительность: красить их серым незачем
+const RISK_FILL: ExpressionSpecification = [
+  'match',
+  ['get', 'risk'],
+  'high',
+  '#ef4444',
+  'medium',
+  '#f59e0b',
+  '#10b981',
+]
+const RISK_LINE: ExpressionSpecification = [
+  'match',
+  ['get', 'risk'],
+  'high',
+  '#b91c1c',
+  'medium',
+  '#b45309',
+  '#047857',
+]
+
 const layers: LayerSpecification[] = [
   {
     id: 'vineyards-fill',
     type: 'fill',
     source: SOURCE,
-    paint: { 'fill-color': '#10b981', 'fill-opacity': 0.35 },
+    paint: { 'fill-color': RISK_FILL, 'fill-opacity': 0.45 },
   },
   {
     id: 'vineyards-outline',
     type: 'line',
     source: SOURCE,
-    paint: { 'line-color': '#047857', 'line-width': 2 },
+    paint: { 'line-color': RISK_LINE, 'line-width': 2 },
   },
   {
     id: 'vineyards-labels',
@@ -52,6 +78,7 @@ const PANEL_GUTTER = 290
 export function VineyardsLayer() {
   const map = useMap()
   const { data: vineyards } = useVineyards()
+  const { data: risks } = useTodayRisks()
   const filter = useMapStore((state) => state.filter)
   const hasFittedRef = useRef(false)
 
@@ -80,7 +107,12 @@ export function VineyardsLayer() {
     // setData возвращает промис обработки в фоновом потоке; ждать его не нужно
     void map
       .getSource<GeoJSONSource>(SOURCE)
-      ?.setData(toFeatureCollection(filterVineyards(vineyards, filter)))
+      ?.setData(
+        toFeatureCollection(
+          filterVineyards(vineyards, filter),
+          riskByVineyard(risks),
+        ),
+      )
 
     // Один раз приближаем карту к участкам: участок в пару гектаров на
     // масштабе всей страны занимает меньше пикселя
@@ -97,7 +129,7 @@ export function VineyardsLayer() {
       maxZoom: 15,
       duration: 0,
     })
-  }, [map, vineyards, filter])
+  }, [map, vineyards, filter, risks])
 
   return null
 }

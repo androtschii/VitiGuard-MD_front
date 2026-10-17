@@ -298,6 +298,8 @@ export const ro: Messages = {
     },
   },
   risk: {
+    mapLegend: 'Culoarea parcelelor — riscul de azi',
+    mapLegendWorst: 'Cel mai mare dintre mană și făinare',
     section: 'Riscul de boli',
     open: 'Riscul pe zile',
     title: 'Riscul de boli: {{name}}',

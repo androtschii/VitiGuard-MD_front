@@ -292,6 +292,8 @@ export const ru = {
     },
   },
   risk: {
+    mapLegend: 'Цвет участков — риск на сегодня',
+    mapLegendWorst: 'Худший из милдью и оидиума',
     section: 'Риск болезней',
     open: 'Риск по дням',
     title: 'Риск болезней: {{name}}',

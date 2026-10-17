@@ -104,7 +104,7 @@ describe('VineyardsLayer', () => {
         features: [
           {
             type: 'Feature',
-            properties: { id: 'vineyard-1', name: 'Криково' },
+            properties: { id: 'vineyard-1', name: 'Криково', risk: 'none' },
             geometry,
           },
         ],
@@ -126,6 +126,46 @@ describe('VineyardsLayer', () => {
     await queryClient.invalidateQueries()
     await waitFor(() => expect(setData).toHaveBeenCalledTimes(2))
     expect(map.fitBounds).toHaveBeenCalledOnce()
+  })
+
+  it('красит участок по худшему риску на сегодня', async () => {
+    serve([vineyard, { ...vineyard, id: 'vineyard-2', name: 'Пуркарь' }])
+    server.use(
+      http.get('/api/v1/risks/today', () =>
+        HttpResponse.json([
+          {
+            vineyard_id: 'vineyard-1',
+            day: '2026-06-10',
+            downy: 'low',
+            powdery: 'medium',
+          },
+        ]),
+      ),
+    )
+    const { map, setData } = fakeMap()
+    renderLayer(map)
+
+    await waitFor(() =>
+      expect(setData).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          features: [
+            expect.objectContaining({
+              properties: { id: 'vineyard-1', name: 'Криково', risk: 'medium' },
+            }),
+            expect.objectContaining({
+              properties: { id: 'vineyard-2', name: 'Пуркарь', risk: 'none' },
+            }),
+          ],
+        }),
+      ),
+    )
+    const fill = map.addLayer.mock.calls[0][0] as unknown as {
+      paint: { 'fill-color': unknown[] }
+    }
+    expect(fill.paint['fill-color'].slice(0, 2)).toEqual([
+      'match',
+      ['get', 'risk'],
+    ])
   })
 
   it('на узкой карте не оставляет места под панель', async () => {
