@@ -75,6 +75,10 @@
   --accent-soft: var(--color-brand-50);
   --brand-ink: var(--color-brand-900);
   --danger: var(--color-red-700);
+  /* Линии графика индексов: проверены на различимость при нарушениях
+     цветового зрения отдельно для светлой и тёмной поверхности */
+  --chart-ndvi: #622ac3;
+  --chart-ndre: #047857;
 }
 
 /* Оттенки подобраны так, чтобы контраст текста не падал ниже 4.5:1 (WCAG AA) */
@@ -96,6 +100,8 @@
   --accent-soft: var(--color-brand-950);
   --brand-ink: var(--color-brand-100);
   --danger: var(--color-red-400);
+  --chart-ndvi: #8e67de;
+  --chart-ndre: #059669;
 }
 
 @theme inline {
