@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useEffect, useId, useRef, type ReactNode } from 'react'
 import { Button } from '@/components/atoms/Button'
+import { cn } from '@/lib/cn'
 
 type ModalProps = {
   open: boolean
@@ -9,6 +10,8 @@ type ModalProps = {
   description?: string
   footer?: ReactNode
   children?: ReactNode
+  // lg — для графиков и таблиц
+  size?: 'md' | 'lg'
 }
 
 // Нативный <dialog> с showModal(): браузер сам удерживает фокус внутри окна,
@@ -20,6 +23,7 @@ export function Modal({
   description,
   footer,
   children,
+  size = 'md',
 }: ModalProps) {
   const { t } = useTranslation()
   const dialogRef = useRef<HTMLDialogElement>(null)
@@ -45,7 +49,10 @@ export function Modal({
         // Клик по самому <dialog> — это клик по фону вокруг содержимого
         if (event.target === event.currentTarget) onClose()
       }}
-      className="m-auto w-full max-w-lg rounded-lg bg-surface p-0 shadow-xl backdrop:bg-stone-900/50"
+      className={cn(
+        'm-auto w-full rounded-lg bg-surface p-0 shadow-xl backdrop:bg-stone-900/50',
+        size === 'lg' ? 'max-w-3xl' : 'max-w-lg',
+      )}
     >
       <div className="flex flex-col gap-4 p-6">
         <header className="flex items-start justify-between gap-4">

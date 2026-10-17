@@ -273,6 +273,30 @@ export const ro: Messages = {
     source:
       'Sursa: OpenStreetMap (ODbL), limitele raioanelor — geoBoundaries. OpenStreetMap nu este cartografiat complet, așa că suprafața reală a viilor este mai mare.',
   },
+  vegetation: {
+    open: 'Dinamica vegetației',
+    title: 'Dinamica vegetației: {{name}}',
+    description:
+      'Indici după imaginile Sentinel-2 din sezon: NDVI — biomasa verde, NDRE — clorofila, reflectă mai devreme stresul.',
+    series: {
+      ndvi: 'NDVI — biomasă',
+      ndre: 'NDRE — clorofilă',
+    },
+    chartLabel:
+      'Graficul NDVI și NDRE: {{count}} imagini între {{from}} și {{to}}; valorile sunt în tabelul de sub grafic',
+    summary:
+      'Ultimul NDVI {{ndvi}} ({{date}}). Imagini fără nori: {{clear}}, acoperite de nori deasupra parcelei: {{cloudy}}.',
+    empty:
+      'Încă nu există indici. Apăsați „Actualizează după imagini noi” — calculul durează câteva minute.',
+    refresh: 'Actualizează după imagini noi',
+    refreshing:
+      'Calculul a pornit: imaginile sezonului sunt procesate pe rând, graficul se va completa în câteva minute.',
+    table: 'Tabelul valorilor',
+    columns: {
+      date: 'Data',
+      cloud: 'Nori deasupra parcelei',
+    },
+  },
   validation: {
     emailRequired: 'Introduceți emailul',
     emailInvalid: 'Introduceți un email corect',

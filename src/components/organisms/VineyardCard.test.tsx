@@ -178,4 +178,19 @@ describe('VineyardCard', () => {
     )
     expect(onDeleted).not.toHaveBeenCalled()
   })
+
+  it('открывает окно динамики вегетации', async () => {
+    server.use(
+      http.get('/api/v1/vineyards/:id/vegetation', () => HttpResponse.json([])),
+    )
+    const { user } = renderCard()
+
+    await user.click(screen.getByRole('button', { name: 'Динамика вегетации' }))
+
+    expect(
+      screen.getByRole('dialog', { name: 'Динамика вегетации: Криково' }),
+    ).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Закрыть' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
 })

@@ -62,4 +62,14 @@ describe('Modal', () => {
     fireEvent.click(dialog)
     expect(onClose).toHaveBeenCalledOnce()
   })
+
+  it('широкое окно для графиков', () => {
+    render(
+      <Modal open onClose={() => {}} title="График" size="lg">
+        <p>Содержимое</p>
+      </Modal>,
+    )
+
+    expect(screen.getByRole('dialog')).toHaveClass('max-w-3xl')
+  })
 })

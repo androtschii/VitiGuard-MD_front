@@ -269,6 +269,30 @@ export const en: Messages = {
     source:
       'Source: OpenStreetMap (ODbL), district boundaries by geoBoundaries. OpenStreetMap is not fully mapped, so the real vineyard area is larger.',
   },
+  vegetation: {
+    open: 'Vegetation dynamics',
+    title: 'Vegetation dynamics: {{name}}',
+    description:
+      'Indices from Sentinel-2 images over the season: NDVI — green biomass, NDRE — chlorophyll, shows stress earlier.',
+    series: {
+      ndvi: 'NDVI — biomass',
+      ndre: 'NDRE — chlorophyll',
+    },
+    chartLabel:
+      'NDVI and NDRE chart: {{count}} images from {{from}} to {{to}}; values are in the table below the chart',
+    summary:
+      'Latest NDVI {{ndvi}} ({{date}}). Clear images: {{clear}}, covered by clouds over the plot: {{cloudy}}.',
+    empty:
+      'No indices yet. Press “Update from new images” — the calculation takes a few minutes.',
+    refresh: 'Update from new images',
+    refreshing:
+      'The calculation has started: season images are processed one by one, the chart will fill in over a few minutes.',
+    table: 'Table of values',
+    columns: {
+      date: 'Date',
+      cloud: 'Clouds over the plot',
+    },
+  },
   validation: {
     emailRequired: 'Enter your email',
     emailInvalid: 'Enter a valid email',

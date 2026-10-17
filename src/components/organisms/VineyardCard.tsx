@@ -9,6 +9,7 @@ import {
 } from '@/api/vineyards'
 import { useCurrentWeather } from '@/api/weather'
 import { Button } from '@/components/atoms/Button'
+import { VegetationDialog } from '@/components/organisms/VegetationDialog'
 
 type VineyardCardProps = {
   vineyard: Vineyard
@@ -29,6 +30,7 @@ export function VineyardCard({
   const remove = useDeleteVineyard()
   const [isConfirming, setIsConfirming] = useState(false)
   const [downloadError, setDownloadError] = useState(false)
+  const [isVegetationOpen, setIsVegetationOpen] = useState(false)
 
   const language = i18n.resolvedLanguage
   const number = (value: number, digits = 1) =>
@@ -112,6 +114,23 @@ export function VineyardCard({
       )}
 
       <div className="flex flex-col gap-1.5 border-t border-line pt-2">
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={() => setIsVegetationOpen(true)}
+        >
+          {t('vegetation.open')}
+        </Button>
+        {/* Окно монтируется только открытым: иначе история индексов
+            запрашивалась бы при каждом открытии карточки */}
+        {isVegetationOpen && (
+          <VegetationDialog
+            vineyardId={vineyard.id}
+            vineyardName={vineyard.name}
+            open={isVegetationOpen}
+            onClose={() => setIsVegetationOpen(false)}
+          />
+        )}
         <p className="flex flex-wrap items-center gap-x-2 text-ink-muted">
           {t('vineyard.card.download')}
           <button
