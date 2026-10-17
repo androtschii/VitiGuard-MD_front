@@ -1,0 +1,49 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { api } from './client'
+
+export type RiskLevel = 'low' | 'medium' | 'high'
+export type RiskDisease = 'downy_mildew' | 'powdery_mildew'
+export type RiskMethod = 'three_tens' | 'goidanich' | 'gubler_thomas'
+
+// Риск по одной агромодели на дату (backend/pr-077). Дни после сегодняшнего
+// посчитаны по прогнозу погоды — factors.forecast
+export type RiskEntry = {
+  target_date: string
+  disease: RiskDisease
+  method: RiskMethod
+  score: number
+  level: RiskLevel
+  factors: Record<string, unknown> | null
+  updated_at: string
+}
+
+const risksKey = (id: string) => ['vineyards', id, 'risks'] as const
+
+export async function fetchRisks(id: string) {
+  const { data } = await api.get<RiskEntry[]>(`/vineyards/${id}/risks`)
+  return data
+}
+
+export function useRisks(id: string) {
+  return useQuery({
+    queryKey: risksKey(id),
+    queryFn: () => fetchRisks(id),
+    // Риск пересчитывается по расписанию раз в несколько часов
+    staleTime: 30 * 60_000,
+  })
+}
+
+// Пересчёт по свежей погоде и прогнозу идёт на сервере секунды и сразу
+// возвращает новый риск сезона
+export async function refreshRisks(id: string) {
+  const { data } = await api.post<RiskEntry[]>(`/vineyards/${id}/risks/refresh`)
+  return data
+}
+
+export function useRefreshRisks(id: string) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: () => refreshRisks(id),
+    onSuccess: (data) => queryClient.setQueryData(risksKey(id), data),
+  })
+}

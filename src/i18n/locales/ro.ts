@@ -297,6 +297,52 @@ export const ro: Messages = {
       cloud: 'Nori deasupra parcelei',
     },
   },
+  risk: {
+    section: 'Riscul de boli',
+    open: 'Riscul pe zile',
+    title: 'Riscul de boli: {{name}}',
+    description:
+      'După vremea de pe parcelă: regula „celor trei de zece” și modelul Goidanich pentru mană, indicele Gubler-Thomas pentru făinare. Zilele de după azi — după prognoza meteo.',
+    downy: 'Mană',
+    powdery: 'Făinare',
+    levels: {
+      low: 'scăzut',
+      medium: 'mediu',
+      high: 'ridicat',
+    },
+    today: 'Azi',
+    lastDay: 'Ultima estimare — {{date}}',
+    notCalculated: 'Riscul încă nu este calculat',
+    offSeason:
+      'Azi este în afara sezonului: modelele calculează riscul din aprilie până în septembrie (regula „celor trei de zece” — până în iunie).',
+    incubation:
+      'Este în curs incubația manei după infecția din {{date}}: parcurs {{progress}} %.',
+    symptoms:
+      'După modelul Goidanich sunt așteptate pete de mană după infecția din {{date}} — tratamentul trebuia făcut înainte de această zi.',
+    noIncubation: 'Acum nu există incubație de mană.',
+    gublerToday: 'Indicele de făinare Gubler-Thomas — {{index}}.',
+    week: 'Săptămâna următoare (după prognoza meteo)',
+    columns: {
+      date: 'Data',
+    },
+    powderyChart: 'Făinare: indicele Gubler-Thomas',
+    powderyChartLabel:
+      'Graficul indicelui Gubler-Thomas pe sezon: de la 0 la 100, de la 60 — risc ridicat',
+    gublerShort: 'Indice',
+    downyChart: 'Mană: incubația după modelul Goidanich, %',
+    downyChartLabel:
+      'Graficul progresului incubației manei pe sezon: 100 % — sunt așteptate pete; triunghiurile — zile de infecție',
+    incubationShort: 'Incubație',
+    todayMark: 'azi',
+    infectionMark: 'Infecție după regula „celor trei de zece”: {{date}}',
+    markersHint:
+      'Triunghiurile de pe axă — zilele în care, după regula „celor trei de zece”, era posibilă infecția primară.',
+    empty:
+      'Riscul încă nu este calculat. Apăsați „Recalculează” — serverul va încărca vremea sezonului și prognoza.',
+    refresh: 'Recalculează după vremea actuală',
+    disclaimer:
+      'Modelele agronomice estimează condițiile pentru boală după vreme, nu prezența bolii: decizia privind tratamentul o ia agronomul.',
+  },
   validation: {
     emailRequired: 'Introduceți emailul',
     emailInvalid: 'Introduceți un email corect',

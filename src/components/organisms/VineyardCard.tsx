@@ -9,6 +9,7 @@ import {
 } from '@/api/vineyards'
 import { useCurrentWeather } from '@/api/weather'
 import { Button } from '@/components/atoms/Button'
+import { RiskSummary } from '@/components/organisms/RiskSummary'
 import { VegetationDialog } from '@/components/organisms/VegetationDialog'
 
 type VineyardCardProps = {
@@ -66,6 +67,8 @@ export function VineyardCard({
         )}
         <p className="text-ink-muted">{t('vineyard.addedOn', { date })}</p>
       </div>
+
+      <RiskSummary vineyardId={vineyard.id} vineyardName={vineyard.name} />
 
       <section aria-label={t('vineyard.card.weather')}>
         <h3 className="text-xs font-semibold text-ink-subtle uppercase">
