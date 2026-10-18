@@ -136,6 +136,22 @@ export const en: Messages = {
     tagline: 'vineyard health monitoring for Moldova',
   },
   home: {
+    title: 'Farm overview',
+    stats: {
+      vineyards: 'Plots',
+      area: 'Total area',
+      high: 'At high risk',
+      medium: 'At medium risk',
+      today: 'today, the worse of downy and powdery mildew',
+    },
+    plots: 'Risk by plot today',
+    columns: {
+      name: 'Plot',
+      area: 'Area, ha',
+    },
+    noEstimate: 'no estimate today',
+    noVineyards: 'No plots yet — draw the first one on the map.',
+    loadError: 'Could not load the plots. Reload the page.',
     description:
       'Vineyard health monitoring for Moldova: disease diagnosis from leaf photos, satellite indices and infection risk forecasts.',
     openMap: 'Open map',

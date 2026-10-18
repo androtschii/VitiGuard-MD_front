@@ -12,7 +12,7 @@ describe('routes', () => {
     renderWithQueryClient(<RouterProvider router={router} />)
 
     expect(
-      screen.getByRole('heading', { name: 'VitiGuard MD' }),
+      screen.getByRole('heading', { name: 'Обзор хозяйства' }),
     ).toBeInTheDocument()
   })
 
