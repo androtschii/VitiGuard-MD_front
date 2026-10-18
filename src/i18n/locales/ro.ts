@@ -117,6 +117,10 @@ export const ro: Messages = {
     reset: 'Resetează',
     shown: 'Afișate {{shown}} din {{total}}',
   },
+  mapExport: {
+    save: 'Salvează harta în PNG',
+    failed: 'Harta nu a putut fi salvată. Încercați din nou.',
+  },
   osm: {
     toggle: 'Viile din OpenStreetMap',
     zoomIn: 'Apropiați harta pentru a le vedea',

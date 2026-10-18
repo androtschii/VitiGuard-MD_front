@@ -114,6 +114,10 @@ export const ru = {
     reset: 'Сбросить',
     shown: 'Показано {{shown}} из {{total}}',
   },
+  mapExport: {
+    save: 'Сохранить карту в PNG',
+    failed: 'Не удалось сохранить карту. Попробуйте ещё раз.',
+  },
   osm: {
     toggle: 'Виноградники OpenStreetMap',
     zoomIn: 'Приблизьте карту, чтобы увидеть их',
