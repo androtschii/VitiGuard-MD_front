@@ -13,11 +13,12 @@ type LeafUploadProps = {
   onSelect: (file: File) => void
 }
 
-// Выбор фото листа: перетаскиванием или через диалог выбора файла. На телефоне
-// тот же диалог предлагает и камеру
+// Выбор фото листа: перетаскиванием или через диалог выбора файла. На
+// сенсорном экране перетаскивать нечего — там отдельная кнопка камеры (pr-049)
 export function LeafUpload({ file, onSelect }: LeafUploadProps) {
   const { t } = useTranslation()
   const inputId = useId()
+  const cameraId = useId()
   const hintId = useId()
   const [isDragging, setIsDragging] = useState(false)
   const [problem, setProblem] = useState<LeafPhotoProblem | null>(null)
@@ -48,7 +49,7 @@ export function LeafUpload({ file, onSelect }: LeafUploadProps) {
         onDragLeave={() => setIsDragging(false)}
         onDrop={onDrop}
         className={cn(
-          'flex min-h-56 cursor-pointer flex-col items-center justify-center gap-2 overflow-hidden rounded-lg border-2 border-dashed border-line-strong bg-muted/40 p-4 text-center text-sm text-ink-muted transition',
+          'flex min-h-44 cursor-pointer flex-col items-center justify-center gap-2 overflow-hidden rounded-lg border-2 border-dashed border-line-strong bg-muted/40 p-4 text-center text-sm text-ink-muted transition sm:min-h-56',
           'focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-brand-500 hover:border-brand-500',
           isDragging && 'border-brand-500 bg-accent-soft',
         )}
@@ -76,11 +77,14 @@ export function LeafUpload({ file, onSelect }: LeafUploadProps) {
             >
               <path d="M12 16V4m0 0-4 4m4-4 4 4M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
             </svg>
-            <span>
+            <span className="pointer-coarse:hidden">
               {t('diagnosis.drop')}{' '}
               <span className="font-medium text-accent underline">
                 {t('diagnosis.choose')}
               </span>
+            </span>
+            <span className="hidden font-medium text-accent underline pointer-coarse:inline">
+              {t('diagnosis.chooseTouch')}
             </span>
             <span id={hintId} className="text-xs text-ink-subtle">
               {t('diagnosis.formats')}
@@ -97,6 +101,35 @@ export function LeafUpload({ file, onSelect }: LeafUploadProps) {
           onChange={(event) => {
             pick(event.target.files?.[0])
             // Повторный выбор того же файла тоже должен сработать
+            event.target.value = ''
+          }}
+        />
+      </label>
+      {/* Камера сразу, без выбора из галереи: capture открывает съёмку */}
+      <label
+        htmlFor={cameraId}
+        className="hidden h-10 cursor-pointer items-center justify-center gap-2 rounded-md border border-line-strong bg-surface px-3 text-sm font-medium text-ink focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-brand-500 pointer-coarse:flex"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          aria-hidden="true"
+          className="size-5 text-brand-500"
+        >
+          <path d="M4 8h3l2-3h6l2 3h3v11H4z" />
+          <circle cx="12" cy="13" r="3.5" />
+        </svg>
+        {t('diagnosis.camera')}
+        <input
+          id={cameraId}
+          type="file"
+          accept="image/*"
+          capture="environment"
+          className="sr-only"
+          onChange={(event) => {
+            pick(event.target.files?.[0])
             event.target.value = ''
           }}
         />

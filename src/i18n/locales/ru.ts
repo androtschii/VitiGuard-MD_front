@@ -243,6 +243,8 @@ export const ru = {
     },
     result: 'Результат',
     drop: 'Перетащите фото сюда или',
+    chooseTouch: 'Выберите фото из галереи',
+    camera: 'Сфотографировать лист',
     choose: 'выберите файл',
     formats: 'JPEG, PNG или WebP до 10 МБ',
     preview: 'Выбранное фото листа',

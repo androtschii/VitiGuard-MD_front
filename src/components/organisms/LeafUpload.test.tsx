@@ -32,6 +32,16 @@ describe('LeafUpload', () => {
     expect(input).toHaveAccessibleDescription('JPEG, PNG или WebP до 10 МБ')
   })
 
+  it('кнопка камеры открывает съёмку и передаёт снимок', async () => {
+    const { onSelect, user } = setup()
+    const camera = screen.getByLabelText('Сфотографировать лист')
+
+    expect(camera).toHaveAttribute('capture', 'environment')
+    await user.upload(camera, leaf)
+
+    expect(onSelect).toHaveBeenCalledWith(leaf)
+  })
+
   it('передаёт выбранное фото', async () => {
     const { input, onSelect, user } = setup()
 

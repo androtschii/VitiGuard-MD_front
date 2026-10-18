@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDiagnose } from '@/api/diagnosis'
 import { useNavItems } from '@/app/navigation'
@@ -19,6 +19,15 @@ export function DiagnosisPage() {
   const [file, setFile] = useState<File | null>(null)
   const diagnose = useDiagnose()
   const photoUrl = useObjectUrl(file)
+  const resultRef = useRef<HTMLElement>(null)
+
+  // На узком экране результат — под фото, за краем экрана: показываем его,
+  // как только ответ пришёл (pr-049)
+  useEffect(() => {
+    if (!diagnose.isSuccess) return
+    if (!window.matchMedia?.('(max-width: 1023px)').matches) return
+    resultRef.current?.scrollIntoView?.({ behavior: 'smooth', block: 'start' })
+  }, [diagnose.isSuccess])
 
   return (
     <DashboardTemplate navItems={navItems} headerActions={<LogoutButton />}>
@@ -62,7 +71,7 @@ export function DiagnosisPage() {
             )}
         </div>
 
-        <Card title={t('diagnosis.result')}>
+        <Card ref={resultRef} title={t('diagnosis.result')}>
           <div aria-live="polite">
             {diagnose.isPending && (
               <p className="flex items-center gap-2 text-sm text-ink-muted">
