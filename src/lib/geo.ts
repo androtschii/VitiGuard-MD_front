@@ -75,3 +75,26 @@ export function boundsOf(geometries: MultiPolygon[]): Bounds | null {
         [east, north],
       ]
 }
+
+// Луч из точки вправо: нечётное число пересечений — точка внутри кольца
+function ringContains(ring: Position[], [x, y]: Position) {
+  let inside = false
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi = 0, yi = 0] = ring[i] ?? []
+    const [xj = 0, yj = 0] = ring[j] ?? []
+    if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) {
+      inside = !inside
+    }
+  }
+  return inside
+}
+
+// Лежит ли точка [долгота, широта] на участке: внутри контура и не в дыре.
+// Участки — сотни метров, поэтому плоская геометрия в градусах достаточна
+export function containsPoint(geometry: MultiPolygon, point: Position) {
+  return geometry.coordinates.some(
+    ([outer = [], ...holes]) =>
+      ringContains(outer, point) &&
+      !holes.some((hole) => ringContains(hole, point)),
+  )
+}

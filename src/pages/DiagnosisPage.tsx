@@ -8,6 +8,7 @@ import { Spinner } from '@/components/atoms/Spinner'
 import { DiagnosisOverlay } from '@/components/organisms/DiagnosisOverlay'
 import { DiagnosisResult } from '@/components/organisms/DiagnosisResult'
 import { LeafUpload } from '@/components/organisms/LeafUpload'
+import { PhotoLocation } from '@/components/organisms/PhotoLocation'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
 import { useObjectUrl } from '@/lib/useObjectUrl'
@@ -38,6 +39,7 @@ export function DiagnosisPage() {
                 diagnose.reset()
               }}
             />
+            <PhotoLocation file={file} />
             <Button
               className="w-full"
               disabled={!file}

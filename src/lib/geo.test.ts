@@ -1,6 +1,7 @@
 import type { Polygon } from 'geojson'
 import { describe, expect, it } from 'vitest'
 import {
+  containsPoint,
   boundsOf,
   lineLengthMeters,
   polygonAreaSquareMeters,
@@ -124,5 +125,52 @@ describe('длина ломаной', () => {
 
   it('меньше двух точек — нулевая длина', () => {
     expect(lineLengthMeters([[28.8, 47]])).toBe(0)
+  })
+})
+
+describe('точка на участке', () => {
+  // Квадрат 0..10 с дырой 4..6 и отдельный квадрат 20..30
+  const geometry = {
+    type: 'MultiPolygon' as const,
+    coordinates: [
+      [
+        [
+          [0, 0],
+          [10, 0],
+          [10, 10],
+          [0, 10],
+          [0, 0],
+        ],
+        [
+          [4, 4],
+          [6, 4],
+          [6, 6],
+          [4, 6],
+          [4, 4],
+        ],
+      ],
+      [
+        [
+          [20, 20],
+          [30, 20],
+          [30, 30],
+          [20, 30],
+          [20, 20],
+        ],
+      ],
+    ],
+  }
+
+  it('внутри любого из контуров, но не в дыре', () => {
+    expect(containsPoint(geometry, [2, 2])).toBe(true)
+    expect(containsPoint(geometry, [25, 25])).toBe(true)
+    expect(containsPoint(geometry, [5, 5])).toBe(false)
+    expect(containsPoint(geometry, [15, 15])).toBe(false)
+  })
+
+  it('пустая геометрия ничего не содержит', () => {
+    expect(
+      containsPoint({ type: 'MultiPolygon', coordinates: [[]] }, [0, 0]),
+    ).toBe(false)
   })
 })

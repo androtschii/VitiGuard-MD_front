@@ -227,6 +227,12 @@ export const ro: Messages = {
     },
   },
   diagnosis: {
+    location: {
+      taken:
+        'Fotografiat în punctul {{latitude}}, {{longitude}} (după GPS din fotografie)',
+      onPlot: '— pe parcela „{{name}}”.',
+      offPlot: '— în afara parcelelor dvs.',
+    },
     title: 'Diagnostic după fotografia frunzei',
     intro:
       'Încărcați o fotografie a frunzei de viță: modelul va determina boala și va arăta cât de sigur este de răspuns.',
