@@ -17,6 +17,8 @@ export type ChartSeries<T> = {
   legend?: string
   color: string
   value: (point: T) => number
+  // Столбцы — для величин за сутки (осадки), линия — для остального
+  kind?: 'line' | 'bar'
 }
 
 type TimeSeriesChartProps<T extends TimePoint> = {
@@ -63,6 +65,11 @@ export function TimeSeriesChart<T extends TimePoint>({
   const bottom = height - CHART.bottom
   const right = CHART.width - CHART.right
   const legend = series.filter((item) => item.legend)
+  // Столбец — на сутки, с зазором между соседними днями
+  const barWidth = Math.max(
+    1,
+    ((right - CHART.left) / Math.max(points.length, 1)) * 0.7,
+  )
 
   const onMove = (event: PointerEvent<SVGRectElement>) => {
     const box = event.currentTarget.ownerSVGElement?.getBoundingClientRect()
@@ -78,15 +85,19 @@ export function TimeSeriesChart<T extends TimePoint>({
           {legend.map((item) => (
             <span key={item.key} className="inline-flex items-center gap-1.5">
               <svg aria-hidden="true" width="16" height="8">
-                <line
-                  x1="0"
-                  y1="4"
-                  x2="16"
-                  y2="4"
-                  stroke={item.color}
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
+                {item.kind === 'bar' ? (
+                  <rect x="4" y="0" width="8" height="8" fill={item.color} />
+                ) : (
+                  <line
+                    x1="0"
+                    y1="4"
+                    x2="16"
+                    y2="4"
+                    stroke={item.color}
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                )}
               </svg>
               {item.legend}
             </span>
@@ -188,14 +199,31 @@ export function TimeSeriesChart<T extends TimePoint>({
           )}
           {series.map((item) => (
             <g key={item.key}>
-              <path
-                d={linePath(points, item.value, x, y)}
-                fill="none"
-                stroke={item.color}
-                strokeWidth="2"
-                strokeLinejoin="round"
-                strokeLinecap="round"
-              />
+              {item.kind === 'bar' ? (
+                <g data-testid={`chart-bars-${item.key}`} fill={item.color}>
+                  {points.map((p) => {
+                    const height = Math.max(0, y(0) - y(item.value(p)))
+                    return height > 0 ? (
+                      <rect
+                        key={p.time}
+                        x={x(p.time) - barWidth / 2}
+                        y={y(0) - height}
+                        width={barWidth}
+                        height={height}
+                      />
+                    ) : null
+                  })}
+                </g>
+              ) : (
+                <path
+                  d={linePath(points, item.value, x, y)}
+                  fill="none"
+                  stroke={item.color}
+                  strokeWidth="2"
+                  strokeLinejoin="round"
+                  strokeLinecap="round"
+                />
+              )}
               {/* Подпись у конца линии: серию видно и без легенды и цвета.
                   Одну линию называет заголовок графика — подпись не нужна */}
               {series.length > 1 && (

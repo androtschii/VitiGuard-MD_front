@@ -10,7 +10,10 @@ import {
   infectionDays,
   localToday,
   methodSeries,
+  niceRange,
+  weatherSeries,
   type IndexPoint,
+  type WeatherPoint,
 } from '@/lib/riskSeries'
 import { timeScales } from '@/lib/timeSeriesChart'
 
@@ -66,6 +69,82 @@ function SeasonChart({
   )
 }
 
+// Погода сезона (pr-057): температура и осадки на двух графиках, а не
+// на одном с двумя осями. Дни заражения отмечены на обоих
+function WeatherCharts({
+  points,
+  today,
+  markers,
+}: {
+  points: WeatherPoint[]
+  today: number
+  markers: { time: number; label: string }[]
+}) {
+  const { t } = useTranslation()
+  if (points.length === 0) return null
+  const times = points.map((point) => point.time)
+  const rain = points.filter((point) => point.precipitation !== null)
+  const rainValues = rain.map((point) => point.precipitation ?? 0)
+  return (
+    <section className="flex flex-col gap-1">
+      <h3 className="font-semibold text-ink">{t('risk.weatherChart')}</h3>
+      <TimeSeriesChart<WeatherPoint>
+        points={points}
+        scales={timeScales(
+          times,
+          niceRange(
+            points.map((point) => point.temperature),
+            10,
+            0,
+          ),
+          CHART_HEIGHT,
+        )}
+        label={t('risk.temperatureChartLabel')}
+        formatValue={(value) => `${Math.round(value)} °C`}
+        today={today}
+        todayLabel={t('risk.todayMark')}
+        markers={markers}
+        series={[
+          {
+            key: 'temperature',
+            label: t('risk.temperatureShort'),
+            legend: t('risk.temperatureLegend'),
+            color: 'var(--chart-ndvi)',
+            value: (point) => point.temperature,
+          },
+        ]}
+      />
+      {rain.length > 0 && (
+        <TimeSeriesChart<WeatherPoint>
+          points={rain}
+          scales={timeScales(
+            rain.map((point) => point.time),
+            niceRange(rainValues, 10, 0),
+            CHART_HEIGHT,
+          )}
+          label={t('risk.precipitationChartLabel')}
+          formatValue={(value) =>
+            t('risk.precipitationValue', { value: Math.round(value) })
+          }
+          today={today}
+          markers={markers}
+          series={[
+            {
+              key: 'precipitation',
+              kind: 'bar',
+              label: t('risk.precipitationShort'),
+              legend: t('risk.precipitationLegend'),
+              color: 'var(--chart-ndre)',
+              value: (point) => point.precipitation ?? 0,
+            },
+          ]}
+        />
+      )}
+      <p className="text-xs text-ink-subtle">{t('risk.weatherHint')}</p>
+    </section>
+  )
+}
+
 function factor(entry: RiskEntry | undefined, key: string) {
   return entry?.factors?.[key]
 }
@@ -95,6 +174,10 @@ export function RiskDialog({
   const gubler = todayEntries.find((entry) => entry.method === 'gubler_thomas')
   const infectionDay = factor(incubation, 'infection_day')
   const format = (date: string) => day.format(dayTime(date))
+  const infections = infectionDays(entries).map((date) => ({
+    time: dayTime(date),
+    label: t('risk.infectionMark', { date: format(date) }),
+  }))
 
   return (
     <Modal
@@ -211,13 +294,15 @@ export function RiskDialog({
                 lineLabel={t('risk.incubationShort')}
                 today={dayTime(today)}
                 todayLabel={t('risk.todayMark')}
-                markers={infectionDays(entries).map((date) => ({
-                  time: dayTime(date),
-                  label: t('risk.infectionMark', { date: format(date) }),
-                }))}
+                markers={infections}
               />
               <p className="text-xs text-ink-subtle">{t('risk.markersHint')}</p>
             </section>
+            <WeatherCharts
+              points={weatherSeries(entries)}
+              today={dayTime(today)}
+              markers={infections}
+            />
             <p className="text-xs text-ink-subtle">{t('risk.disclaimer')}</p>
           </>
         )}

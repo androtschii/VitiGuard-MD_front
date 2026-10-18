@@ -374,6 +374,17 @@ export const en: Messages = {
     },
   },
   risk: {
+    weatherChart: 'Season weather at the plot',
+    temperatureChartLabel:
+      'Mean daily temperature over the season; triangles mark downy mildew infection days',
+    temperatureShort: 'Temperature',
+    temperatureLegend: 'Mean daily temperature, °C',
+    precipitationChartLabel: 'Daily precipitation bars over the season, mm',
+    precipitationValue: '{{value}} mm',
+    precipitationShort: 'Precipitation',
+    precipitationLegend: 'Daily precipitation, mm',
+    weatherHint:
+      'Downy mildew infects leaves after at least 10 mm of rain above 10 °C. Days after today use the forecast.',
     mapLegend: 'Plot colour — today’s risk',
     mapLegendWorst: 'The worse of downy and powdery mildew',
     section: 'Disease risk',
