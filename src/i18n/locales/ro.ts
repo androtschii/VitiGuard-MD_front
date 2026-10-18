@@ -379,6 +379,17 @@ export const ro: Messages = {
     },
   },
   risk: {
+    weatherChart: 'Vremea sezonului pe parcelă',
+    temperatureChartLabel:
+      'Graficul temperaturii medii zilnice pe sezon; triunghiurile — zilele de infecție cu mană',
+    temperatureShort: 'Temperatura',
+    temperatureLegend: 'Temperatura medie zilnică, °C',
+    precipitationChartLabel: 'Coloanele precipitațiilor zilnice pe sezon, mm',
+    precipitationValue: '{{value}} mm',
+    precipitationShort: 'Precipitații',
+    precipitationLegend: 'Precipitații zilnice, mm',
+    weatherHint:
+      'Mana infectează frunza după o ploaie de cel puțin 10 mm la peste 10 °C. Zilele de după azi — după prognoză.',
     mapLegend: 'Culoarea parcelelor — riscul de azi',
     mapLegendWorst: 'Cel mai mare dintre mană și făinare',
     section: 'Riscul de boli',

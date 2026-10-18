@@ -61,6 +61,40 @@ export function methodSeries(
     }))
 }
 
+export type WeatherPoint = {
+  time: number
+  temperature: number
+  // null — запись посчитана до того, как сервер начал хранить осадки
+  precipitation: number | null
+}
+
+// Погода дня из факторов модели Гойданича (backend/pr-057): модель
+// считается каждый день сезона и хранит среднюю температуру и осадки
+export function weatherSeries(entries: RiskEntry[]): WeatherPoint[] {
+  return entries
+    .filter(
+      (entry) =>
+        entry.method === 'goidanich' &&
+        typeof entry.factors?.mean_temp === 'number',
+    )
+    .map((entry) => ({
+      time: dayTime(entry.target_date),
+      temperature: Number(entry.factors?.mean_temp),
+      precipitation:
+        typeof entry.factors?.precipitation_mm === 'number'
+          ? entry.factors.precipitation_mm
+          : null,
+    }))
+}
+
+// Границы оси, кратные шагу, с запасом вокруг данных
+export function niceRange(values: number[], step: number, floor?: number) {
+  const min = Math.floor(Math.min(...values) / step) * step
+  const max = Math.ceil(Math.max(...values) / step) * step
+  const low = floor === undefined ? min : Math.min(floor, min)
+  return { min: low, max: max > low ? max : low + step, step }
+}
+
 // Дни, когда по правилу «трёх десяток» возможно первичное заражение
 export function infectionDays(entries: RiskEntry[]) {
   return entries

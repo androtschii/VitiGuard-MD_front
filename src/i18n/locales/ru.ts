@@ -373,6 +373,17 @@ export const ru = {
     },
   },
   risk: {
+    weatherChart: 'Погода сезона на участке',
+    temperatureChartLabel:
+      'График средней суточной температуры за сезон; треугольники — дни заражения милдью',
+    temperatureShort: 'Температура',
+    temperatureLegend: 'Средняя температура за сутки, °C',
+    precipitationChartLabel: 'Столбцы осадков за сутки за сезон, мм',
+    precipitationValue: '{{value}} мм',
+    precipitationShort: 'Осадки',
+    precipitationLegend: 'Осадки за сутки, мм',
+    weatherHint:
+      'Милдью заражает лист после дождя от 10 мм при температуре от 10 °C. Дни после сегодняшнего — по прогнозу.',
     mapLegend: 'Цвет участков — риск на сегодня',
     mapLegendWorst: 'Худший из милдью и оидиума',
     section: 'Риск болезней',

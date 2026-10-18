@@ -65,6 +65,43 @@ describe('RiskDialog', () => {
     expect(within(downy).getByText(/Заражение по правилу/)).toBeInTheDocument()
   })
 
+  it('показывает температуру и осадки сезона на отдельных графиках', async () => {
+    renderDialog([
+      ...season(),
+      risk('2026-06-03', 'goidanich', 0, 'low', {
+        mean_temp: 19.5,
+        precipitation_mm: 14,
+      }),
+      risk('2026-06-04', 'goidanich', 0, 'low', {
+        mean_temp: 22,
+        precipitation_mm: 0,
+      }),
+    ])
+
+    const temperature = await screen.findByRole('img', {
+      name: /средней суточной температуры/,
+    })
+    expect(within(temperature).getByText('20 °C')).toBeInTheDocument()
+    const rain = screen.getByRole('img', { name: /Столбцы осадков/ })
+    // Сухой день столбца не рисует
+    expect(
+      within(rain).getByTestId('chart-bars-precipitation').children,
+    ).toHaveLength(1)
+    expect(screen.getByText('Осадки за сутки, мм')).toBeInTheDocument()
+  })
+
+  it('без осадков в старых записях — только температура', async () => {
+    renderDialog([
+      ...season(),
+      risk('2026-06-03', 'goidanich', 0, 'low', { mean_temp: 19.5 }),
+    ])
+
+    expect(
+      await screen.findByRole('img', { name: /средней суточной температуры/ }),
+    ).toBeInTheDocument()
+    expect(screen.queryByRole('img', { name: /Столбцы осадков/ })).toBeNull()
+  })
+
   it('сообщает об ожидаемых пятнах', async () => {
     vi.setSystemTime(new Date('2026-06-11T09:00:00Z'))
     renderDialog()
