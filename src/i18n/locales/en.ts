@@ -224,6 +224,11 @@ export const en: Messages = {
     },
   },
   diagnosis: {
+    location: {
+      taken: 'Taken at {{latitude}}, {{longitude}} (photo GPS)',
+      onPlot: '— on the plot “{{name}}”.',
+      offPlot: '— outside your plots.',
+    },
     title: 'Leaf photo diagnosis',
     intro:
       'Upload a photo of a grape leaf: the model will identify the disease and show how confident it is.',

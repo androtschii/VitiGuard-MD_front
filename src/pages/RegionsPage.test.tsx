@@ -94,7 +94,9 @@ describe('RegionsPage', () => {
     )
     renderPage()
 
-    expect(await screen.findByRole('cell', { name: 'Chișinău' })).toBeVisible()
+    expect(
+      await screen.findByText('Chișinău', { selector: 'td, td *' }),
+    ).toBeVisible()
     expect(
       screen.queryByRole('heading', {
         name: 'Районы с наибольшей площадью виноградников',
