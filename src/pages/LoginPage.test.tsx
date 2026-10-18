@@ -29,7 +29,7 @@ describe('LoginPage', () => {
     await user.click(screen.getByRole('button', { name: 'Войти' }))
 
     expect(
-      await screen.findByRole('heading', { name: 'VitiGuard MD' }),
+      await screen.findByRole('heading', { name: 'Обзор хозяйства' }),
     ).toBeInTheDocument()
     expect(router.state.location.pathname).toBe('/')
   })

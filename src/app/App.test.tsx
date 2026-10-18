@@ -10,7 +10,7 @@ describe('App', () => {
     renderWithQueryClient(<App />)
 
     expect(
-      screen.getByRole('heading', { name: 'VitiGuard MD' }),
+      screen.getByRole('heading', { name: 'Обзор хозяйства' }),
     ).toBeInTheDocument()
     expect(await screen.findByText(/API 0\.1\.0/)).toBeInTheDocument()
   })

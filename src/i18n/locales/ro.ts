@@ -137,6 +137,22 @@ export const ro: Messages = {
     tagline: 'monitorizarea sănătății viilor din Moldova',
   },
   home: {
+    title: 'Prezentarea gospodăriei',
+    stats: {
+      vineyards: 'Parcele',
+      area: 'Suprafața totală',
+      high: 'Cu risc ridicat',
+      medium: 'Cu risc mediu',
+      today: 'azi, cel mai mare dintre mană și făinare',
+    },
+    plots: 'Riscul pe parcele azi',
+    columns: {
+      name: 'Parcelă',
+      area: 'Suprafață, ha',
+    },
+    noEstimate: 'fără estimare azi',
+    noVineyards: 'Încă nu aveți parcele — desenați prima pe hartă.',
+    loadError: 'Parcelele nu s-au încărcat. Reîncărcați pagina.',
     description:
       'Monitorizarea sănătății viilor din Moldova: diagnosticarea bolilor după fotografiile frunzelor, indici satelitari și prognoza riscului de infecție.',
     openMap: 'Deschide harta',
