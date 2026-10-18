@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import type { Diagnosis } from '@/api/diagnosis'
 import { cn } from '@/lib/cn'
+import { DiseaseInfo } from './DiseaseInfo'
 
 type DiagnosisResultProps = {
   diagnosis: Diagnosis
@@ -75,6 +76,8 @@ export function DiagnosisResult({ diagnosis }: DiagnosisResultProps) {
           ))}
         </ul>
       </section>
+
+      <DiseaseInfo disease={diagnosis.disease} />
 
       <p className="text-xs text-ink-subtle">
         {t('diagnosis.model', { name: diagnosis.model })}

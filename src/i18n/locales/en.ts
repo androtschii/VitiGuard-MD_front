@@ -237,6 +237,58 @@ export const en: Messages = {
     disclaimer:
       'The result is a hint, not an agronomist’s conclusion: the model makes more mistakes on field photos than on laboratory ones.',
   },
+  diseaseInfo: {
+    title: 'About the disease',
+    symptoms: 'Signs',
+    conditions: 'When it develops',
+    control: 'What to do',
+    note: 'Choose products and doses from the state register of approved plant protection products, together with an agronomist.',
+    healthy: {
+      symptoms: 'The model found no spots, coating or drying on the leaf.',
+      conditions:
+        'Disease risk rises after rain, with dew and in a dense canopy.',
+      control:
+        'Inspect the vines once a week and after rain; weather-based risk is on the plot map.',
+    },
+    black_rot: {
+      symptoms:
+        'Round brown spots with a dark border and black dots inside; berries turn brown and shrivel into black “mummies”.',
+      conditions:
+        'Warm, wet weather and rain from bud break until bunch closure.',
+      control:
+        'Remove and destroy mummies and infected shoots, keep the canopy open; preventive fungicide sprays from bloom until bunch closure.',
+    },
+    esca: {
+      symptoms:
+        '“Tiger stripes” between the veins — yellow or red at first, then brown; in hot weather the vine can suddenly wilt.',
+      conditions:
+        'A wood disease: the fungi enter through pruning wounds, more often in old vines; signs are stronger in hot summers.',
+      control:
+        'There is no chemical cure. Prune in dry weather and seal large cuts, cut out and burn infected arms, mark diseased vines.',
+    },
+    leaf_blight: {
+      symptoms:
+        'Irregular brown spots on the leaf that later merge; infected leaves drop early.',
+      conditions: 'Warm, humid weather in the second half of summer.',
+      control:
+        'Remove fallen leaves, keep the canopy open; sprays against downy mildew and black rot are usually enough.',
+    },
+    downy_mildew: {
+      symptoms:
+        'Yellow “oil spots” on top of the leaf with white downy growth underneath; it also attacks flower clusters and young berries.',
+      conditions:
+        'Rain and wet leaves above 10 °C — the “three tens” rule; spots appear 5–18 days after infection.',
+      control:
+        'Follow the downy mildew risk on the map: contact (copper) products before rain, systemic ones in the first days after infection; remove laterals.',
+    },
+    powdery_mildew: {
+      symptoms:
+        'Grey-white powdery coating on both sides of the leaf and on berries, musty smell; berries crack.',
+      conditions: 'Warm 20–30 °C, humid air without rain, a dense canopy.',
+      control:
+        'Sulphur and systemic fungicides at intervals set by the Gubler-Thomas index; canopy management and airflow.',
+    },
+  },
   diseases: {
     healthy: 'Healthy leaf',
     black_rot: 'Black rot',

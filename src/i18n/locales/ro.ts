@@ -241,6 +241,59 @@ export const ro: Messages = {
     disclaimer:
       'Rezultatul este un indiciu, nu concluzia agronomului: pe fotografiile din câmp modelul greșește mai des decât pe cele de laborator.',
   },
+  diseaseInfo: {
+    title: 'Despre boală',
+    symptoms: 'Semne',
+    conditions: 'Când se dezvoltă',
+    control: 'Ce trebuie făcut',
+    note: 'Alegeți produsele și dozele după registrul de stat al produselor de protecție a plantelor și împreună cu agronomul.',
+    healthy: {
+      symptoms: 'Modelul nu a găsit pete, depuneri sau uscare pe frunză.',
+      conditions:
+        'Riscul de boli crește după ploi, la rouă și într-un coronament des.',
+      control:
+        'Verificați butucii o dată pe săptămână și după ploi; riscul după vreme — pe harta parcelelor.',
+    },
+    black_rot: {
+      symptoms:
+        'Pete rotunde brune cu margine închisă și puncte negre în interior; boabele se înnegresc și se zbârcesc în „mumii”.',
+      conditions:
+        'Vreme caldă și umedă, ploi de la dezmugurire până la închiderea strugurelui.',
+      control:
+        'Adunați și distrugeți „mumiile” și lăstarii afectați, aerisiți coronamentul; tratamente preventive cu fungicide de la înflorire până la închiderea strugurelui.',
+    },
+    esca: {
+      symptoms:
+        'Dungi „tigrate” între nervuri — întâi galbene sau roșii, apoi brune; pe arșiță butucul se poate usca brusc.',
+      conditions:
+        'Boală a lemnului: ciupercile pătrund prin rănile de tăiere, mai des la butucii bătrâni; în verile calde semnele sunt mai puternice.',
+      control:
+        'Nu există tratament chimic. Tăiați pe vreme uscată și acoperiți tăieturile mari, înlăturați și ardeți brațele afectate, marcați butucii bolnavi.',
+    },
+    leaf_blight: {
+      symptoms:
+        'Pete brune neregulate pe frunză, care apoi se unesc; frunzele afectate cad devreme.',
+      conditions: 'Vreme caldă și umedă în a doua jumătate a verii.',
+      control:
+        'Adunați frunzele căzute, aerisiți coronamentul; de obicei ajung tratamentele împotriva manei și putregaiului negru.',
+    },
+    downy_mildew: {
+      symptoms:
+        'Pe fața frunzei — pete galbene „uleioase”, pe dos sub ele — puf alb; atacă inflorescențele și boabele tinere.',
+      conditions:
+        'Ploaie și frunză udă la peste 10 °C — regula „celor trei de zece”; după infecție petele apar în 5–18 zile.',
+      control:
+        'Urmăriți riscul de mană pe hartă: produse de contact (cu cupru) — înainte de ploaie, sistemice — în primele zile după infecție; înlăturați copilii.',
+    },
+    powdery_mildew: {
+      symptoms:
+        'Depunere făinoasă alb-cenușie pe ambele fețe ale frunzei și pe boabe, miros de mucegai; boabele crapă.',
+      conditions:
+        'Căldură de 20–30 °C și aer umed fără ploaie, coronament des.',
+      control:
+        'Produse pe bază de sulf și fungicide sistemice la intervale după indicele Gubler-Thomas; lucrări în verde și aerisirea coronamentului.',
+    },
+  },
   diseases: {
     healthy: 'Frunză sănătoasă',
     black_rot: 'Putregai negru',
