@@ -19,6 +19,7 @@ export const ro: Messages = {
     dark: 'Întunecată',
   },
   nav: {
+    profile: 'Profil',
     home: 'Acasă',
     map: 'Harta',
     regions: 'Raioane',
@@ -178,6 +179,7 @@ export const ro: Messages = {
     role: 'Rol',
     passwordHint: 'Cel puțin 8 caractere, cu litere și cifre',
     roles: {
+      admin: 'Administrator',
       user: 'Viticultor',
       agronomist: 'Agronom',
     },
@@ -256,6 +258,16 @@ export const ro: Messages = {
     model: 'Model: {{name}}',
     disclaimer:
       'Rezultatul este un indiciu, nu concluzia agronomului: pe fotografiile din câmp modelul greșește mai des decât pe cele de laborator.',
+  },
+  profile: {
+    title: 'Profil',
+    account: 'Cont',
+    save: 'Salvează',
+    saved: 'Modificările au fost salvate',
+    failed: 'Profilul nu a putut fi salvat',
+    loadError: 'Profilul nu s-a încărcat. Reîncărcați pagina.',
+    interface: 'Interfață',
+    interfaceHint: 'Limba și tema se păstrează în acest browser.',
   },
   diseaseInfo: {
     title: 'Despre boală',
@@ -415,6 +427,7 @@ export const ro: Messages = {
       'Modelele agronomice estimează condițiile pentru boală după vreme, nu prezența bolii: decizia privind tratamentul o ia agronomul.',
   },
   validation: {
+    nameMax: 'Cel mult 255 de caractere',
     emailRequired: 'Introduceți emailul',
     emailInvalid: 'Introduceți un email corect',
     passwordRequired: 'Introduceți parola',

@@ -19,6 +19,7 @@ export const en: Messages = {
     dark: 'Dark',
   },
   nav: {
+    profile: 'Profile',
     home: 'Home',
     map: 'Map',
     regions: 'Districts',
@@ -177,6 +178,7 @@ export const en: Messages = {
     role: 'Role',
     passwordHint: 'At least 8 characters, with letters and digits',
     roles: {
+      admin: 'Administrator',
       user: 'Grower',
       agronomist: 'Agronomist',
     },
@@ -252,6 +254,16 @@ export const en: Messages = {
     model: 'Model: {{name}}',
     disclaimer:
       'The result is a hint, not an agronomist’s conclusion: the model makes more mistakes on field photos than on laboratory ones.',
+  },
+  profile: {
+    title: 'Profile',
+    account: 'Account',
+    save: 'Save',
+    saved: 'Changes saved',
+    failed: 'Could not save the profile',
+    loadError: 'Could not load the profile. Reload the page.',
+    interface: 'Interface',
+    interfaceHint: 'Language and theme are kept in this browser.',
   },
   diseaseInfo: {
     title: 'About the disease',
@@ -410,6 +422,7 @@ export const en: Messages = {
       'Agronomic models estimate conditions for the disease from the weather, not its presence: the agronomist decides on treatment.',
   },
   validation: {
+    nameMax: 'At most 255 characters',
     emailRequired: 'Enter your email',
     emailInvalid: 'Enter a valid email',
     passwordRequired: 'Enter your password',
