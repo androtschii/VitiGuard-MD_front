@@ -116,6 +116,10 @@ export const en: Messages = {
     reset: 'Reset',
     shown: 'Showing {{shown}} of {{total}}',
   },
+  mapExport: {
+    save: 'Save map as PNG',
+    failed: 'Could not save the map. Please try again.',
+  },
   osm: {
     toggle: 'OpenStreetMap vineyards',
     zoomIn: 'Zoom in to see them',

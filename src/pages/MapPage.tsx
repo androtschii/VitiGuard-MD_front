@@ -6,6 +6,7 @@ import { OsmToggle } from '@/components/molecules/OsmToggle'
 import { DrawPolygonControl } from '@/components/organisms/DrawPolygonControl'
 import { MapRiskLegend } from '@/components/organisms/MapRiskLegend'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
+import { MapExportControl } from '@/components/organisms/MapExportControl'
 import { MapSearch } from '@/components/organisms/MapSearch'
 import { MapToolbar } from '@/components/organisms/MapToolbar'
 import { MeasureControl } from '@/components/organisms/MeasureControl'
@@ -63,6 +64,7 @@ export function MapPage() {
                 )}
               />
               <MeasureControl />
+              <MapExportControl />
             </>
           }
           layers={
