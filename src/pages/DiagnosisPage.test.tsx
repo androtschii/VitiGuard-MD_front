@@ -2,7 +2,7 @@ import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
 import { MemoryRouter } from 'react-router'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { renderWithQueryClient } from '@/test/render'
 import { server } from '@/test/server'
 import { DiagnosisPage } from './DiagnosisPage'
@@ -24,6 +24,10 @@ async function analyze(user: ReturnType<typeof userEvent.setup>) {
 }
 
 describe('DiagnosisPage', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
   it('раздел отмечен в навигации, анализ доступен после выбора фото', () => {
     renderPage()
 
@@ -67,6 +71,36 @@ describe('DiagnosisPage', () => {
     ).toBeInTheDocument()
     expect(contentType).toMatch(/^multipart\/form-data/)
     expect(topK).toBe('6')
+  })
+
+  it('на узком экране прокручивает к результату', async () => {
+    const scroll = vi.fn()
+    Element.prototype.scrollIntoView = scroll
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn((query: string) => ({ matches: query.includes('max-width') })),
+    )
+    const user = renderPage()
+
+    await analyze(user)
+
+    await screen.findByText('Диагноз')
+    expect(scroll).toHaveBeenCalledWith({ behavior: 'smooth', block: 'start' })
+  })
+
+  it('на широком экране не прокручивает', async () => {
+    const scroll = vi.fn()
+    Element.prototype.scrollIntoView = scroll
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn(() => ({ matches: false })),
+    )
+    const user = renderPage()
+
+    await analyze(user)
+
+    await screen.findByText('Диагноз')
+    expect(scroll).not.toHaveBeenCalled()
   })
 
   it('пока идёт анализ, показывает индикатор', async () => {

@@ -245,6 +245,8 @@ export const en: Messages = {
     },
     result: 'Result',
     drop: 'Drag a photo here or',
+    chooseTouch: 'Choose a photo from the gallery',
+    camera: 'Take a photo of the leaf',
     choose: 'choose a file',
     formats: 'JPEG, PNG or WebP up to 10 MB',
     preview: 'Selected leaf photo',

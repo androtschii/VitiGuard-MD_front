@@ -33,8 +33,11 @@ export function Header({ actions }: HeaderProps) {
         <Wordmark />
       </Link>
       <div className="ml-auto flex items-center gap-2">
-        <LanguageSwitcher />
-        <ThemeSwitcher />
+        {/* На телефоне места под выпадающие списки нет: язык и тема — в профиле */}
+        <div className="hidden items-center gap-2 sm:flex">
+          <LanguageSwitcher />
+          <ThemeSwitcher />
+        </div>
         {actions}
       </div>
     </header>

@@ -250,6 +250,8 @@ export const ro: Messages = {
     },
     result: 'Rezultat',
     drop: 'Trageți fotografia aici sau',
+    chooseTouch: 'Alegeți o fotografie din galerie',
+    camera: 'Fotografiați frunza',
     choose: 'alegeți un fișier',
     formats: 'JPEG, PNG sau WebP până la 10 MB',
     preview: 'Fotografia aleasă a frunzei',
