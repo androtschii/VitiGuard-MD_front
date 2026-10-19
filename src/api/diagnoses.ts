@@ -20,6 +20,13 @@ export type DiagnosisRecord = {
   disease: Disease
   confidence: number
   top: DiseaseProbability[]
+  // Заключение агронома (pr-044); null — ещё не смотрел
+  review: {
+    disease: Disease
+    comment: string | null
+    reviewed_at: string
+    reviewer: string | null
+  } | null
 }
 
 export type DiagnosisFilters = {
@@ -74,6 +81,30 @@ export function useDeleteDiagnosis() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (id: string) => api.delete(`/diagnoses/${id}`),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: diagnosesKey }),
+  })
+}
+
+export function useReviewDiagnosis() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({
+      id,
+      disease,
+      comment,
+    }: {
+      id: string
+      disease: Disease
+      comment: string | null
+    }) => api.put(`/diagnoses/${id}/review`, { disease, comment }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: diagnosesKey }),
+  })
+}
+
+export function useDeleteReview() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => api.delete(`/diagnoses/${id}/review`),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: diagnosesKey }),
   })
 }

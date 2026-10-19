@@ -5,7 +5,9 @@ import {
   useDiagnosisImage,
   type DiagnosisRecord,
 } from '@/api/diagnoses'
+import { useMe } from '@/api/users'
 import { Button } from '@/components/atoms/Button'
+import { ReviewDialog } from '@/components/organisms/ReviewDialog'
 import { cn } from '@/lib/cn'
 import { useObjectUrl } from '@/lib/useObjectUrl'
 
@@ -20,6 +22,11 @@ export function DiagnosisCard({ record }: DiagnosisCardProps) {
   const photoUrl = useObjectUrl(image.data)
   const remove = useDeleteDiagnosis()
   const [isConfirming, setIsConfirming] = useState(false)
+  const [isReviewing, setIsReviewing] = useState(false)
+  // Заключение дают агроном и администратор (pr-044)
+  const { data: me } = useMe()
+  const canReview = me?.role === 'agronomist' || me?.role === 'admin'
+  const review = record.review
   const percent = new Intl.NumberFormat(i18n.resolvedLanguage, {
     style: 'percent',
     maximumFractionDigits: 0,
@@ -71,6 +78,21 @@ export function DiagnosisCard({ record }: DiagnosisCardProps) {
             {date.format(new Date(record.created_at))}
           </time>
         </p>
+        {review && (
+          <div className="mt-1 rounded-md border border-line bg-muted/40 p-2 text-xs text-ink-soft">
+            <p className="font-medium text-ink">
+              {review.disease === record.disease
+                ? t('review.confirmed', {
+                    reviewer: review.reviewer ?? t('review.expert'),
+                  })
+                : t('review.corrected', {
+                    reviewer: review.reviewer ?? t('review.expert'),
+                    disease: t(`diseases.${review.disease}`),
+                  })}
+            </p>
+            {review.comment && <p>{review.comment}</p>}
+          </div>
+        )}
         <div className="mt-auto flex gap-2 pt-2">
           {isConfirming ? (
             <>
@@ -91,13 +113,20 @@ export function DiagnosisCard({ record }: DiagnosisCardProps) {
               </Button>
             </>
           ) : (
-            <Button
-              size="sm"
-              variant="secondary"
-              onClick={() => setIsConfirming(true)}
-            >
-              {t('history.delete')}
-            </Button>
+            <>
+              {canReview && (
+                <Button size="sm" onClick={() => setIsReviewing(true)}>
+                  {t('review.open')}
+                </Button>
+              )}
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={() => setIsConfirming(true)}
+              >
+                {t('history.delete')}
+              </Button>
+            </>
           )}
         </div>
         {remove.isError && (
@@ -106,6 +135,15 @@ export function DiagnosisCard({ record }: DiagnosisCardProps) {
           </p>
         )}
       </div>
+      {/* Окно — только открытым: при каждом открытии оно начинается с текущего
+          заключения */}
+      {isReviewing && (
+        <ReviewDialog
+          record={record}
+          open
+          onClose={() => setIsReviewing(false)}
+        />
+      )}
     </article>
   )
 }

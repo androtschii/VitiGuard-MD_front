@@ -337,6 +337,23 @@ export const en: Messages = {
     cancel: 'Cancel',
     deleteFailed: 'Could not delete the check.',
   },
+  review: {
+    open: 'Review',
+    title: 'Agronomist review',
+    description:
+      'The model found: {{disease}}. The review is stored next to the model answer and does not change it.',
+    question: 'Is the model diagnosis correct?',
+    modelRight: 'Yes, the model is right',
+    modelWrong: 'No, the photo shows something else',
+    correct: 'Correct diagnosis',
+    comment: 'Comment (optional)',
+    save: 'Save review',
+    withdraw: 'Withdraw review',
+    failed: 'Could not save the review. Please try again.',
+    confirmed: '{{reviewer}}: diagnosis confirmed',
+    corrected: '{{reviewer}}: actually {{disease}}',
+    expert: 'Agronomist',
+  },
   camera: {
     title: 'Photograph the leaf',
     preview: 'Camera view',

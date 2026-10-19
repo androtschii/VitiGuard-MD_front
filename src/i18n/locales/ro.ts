@@ -344,6 +344,23 @@ export const ro: Messages = {
     cancel: 'Anulează',
     deleteFailed: 'Verificarea nu a putut fi ștearsă.',
   },
+  review: {
+    open: 'Aviz',
+    title: 'Avizul agronomului',
+    description:
+      'Modelul a determinat: {{disease}}. Avizul se păstrează alături de răspunsul modelului și nu îl schimbă.',
+    question: 'Diagnosticul modelului este corect?',
+    modelRight: 'Da, modelul are dreptate',
+    modelWrong: 'Nu, în fotografie este altceva',
+    correct: 'Diagnosticul corect',
+    comment: 'Comentariu (opțional)',
+    save: 'Salvează avizul',
+    withdraw: 'Retrage avizul',
+    failed: 'Avizul nu a putut fi salvat. Încercați din nou.',
+    confirmed: '{{reviewer}}: diagnostic confirmat',
+    corrected: '{{reviewer}}: de fapt — {{disease}}',
+    expert: 'Agronom',
+  },
   camera: {
     title: 'Fotografierea frunzei',
     preview: 'Imaginea de la cameră',

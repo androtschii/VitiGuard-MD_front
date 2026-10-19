@@ -49,6 +49,17 @@ export const handlers = [
   ),
   http.get('/api/v1/vineyards/:id/risks', () => HttpResponse.json([])),
   http.get('/api/v1/risks/today', () => HttpResponse.json([])),
+  http.get('/api/v1/users/me', () =>
+    HttpResponse.json({
+      id: 'user-1',
+      email: 'ion@example.md',
+      full_name: 'Ион',
+      role: 'user',
+      is_active: true,
+      created_at: '2026-06-01T00:00:00Z',
+      updated_at: '2026-06-01T00:00:00Z',
+    }),
+  ),
   http.get('/api/v1/diagnoses', () =>
     HttpResponse.json({ items: [], total: 0, page: 1, size: 12, pages: 0 }),
   ),
