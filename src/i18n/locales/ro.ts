@@ -31,6 +31,8 @@ export const ro: Messages = {
     },
     title: 'Harta viilor',
     label: 'Harta viilor din Moldova',
+    locate: 'Locația mea',
+    locateUnavailable: 'Locația nu este disponibilă',
     zoomIn: 'Apropie',
     zoomOut: 'Depărtează',
     resetBearing: 'Orientează spre nord',

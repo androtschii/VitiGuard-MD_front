@@ -1,5 +1,6 @@
 import {
   FullscreenControl,
+  GeolocateControl,
   Map,
   NavigationControl,
   ScaleControl,
@@ -51,8 +52,13 @@ export function MapView({ className, children }: MapViewProps) {
     const container = containerRef.current
     if (!isSupported || !container) return
 
+    // Сенсорный экран (pr-080): палец всегда чуть сдвигается, и касание с
+    // допуском в 3 пикселя по умолчанию считалось перетаскиванием — участок
+    // не открывался
+    const isTouch = window.matchMedia?.('(pointer: coarse)').matches ?? false
     const map = new Map({
       container,
+      clickTolerance: isTouch ? 6 : 3,
       style: buildStyle(basemapRef.current),
       bounds: MOLDOVA_BOUNDS,
       fitBoundsOptions: { padding: 16 },
@@ -68,12 +74,29 @@ export function MapView({ className, children }: MapViewProps) {
         'FullscreenControl.Enter': t('map.fullscreenEnter'),
         'FullscreenControl.Exit': t('map.fullscreenExit'),
         'AttributionControl.ToggleAttribution': t('map.attribution'),
+        'GeolocateControl.FindMyLocation': t('map.locate'),
+        'GeolocateControl.LocationNotAvailable': t('map.locateUnavailable'),
         'Popup.Close': t('common.close'),
       },
     })
 
     map.addControl(new NavigationControl({ visualizePitch: true }))
     map.addControl(new FullscreenControl())
+    // Где я на участке: в поле точка следует за человеком
+    map.addControl(
+      new GeolocateControl({
+        positionOptions: { enableHighAccuracy: true },
+        trackUserLocation: true,
+        showAccuracyCircle: true,
+        fitBoundsOptions: { maxZoom: 17 },
+      }),
+    )
+    if (isTouch) {
+      // Щипок двумя пальцами поворачивал и наклонял карту: север вверху
+      // привычнее, а повернуть всё равно можно кнопкой компаса
+      map.touchZoomRotate.disableRotation()
+      map.touchPitch.disable()
+    }
     map.addControl(new ScaleControl({ unit: 'metric' }), 'bottom-left')
 
     mapRef.current = map

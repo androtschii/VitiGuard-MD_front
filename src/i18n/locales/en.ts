@@ -31,6 +31,8 @@ export const en: Messages = {
     },
     title: 'Vineyard map',
     label: "Map of Moldova's vineyards",
+    locate: 'My location',
+    locateUnavailable: 'Location not available',
     zoomIn: 'Zoom in',
     zoomOut: 'Zoom out',
     resetBearing: 'Reset bearing to north',
