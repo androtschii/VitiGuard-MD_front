@@ -12,9 +12,11 @@ import { OfflineModelCard } from '@/components/organisms/OfflineModelCard'
 import { LeafUpload } from '@/components/organisms/LeafUpload'
 import { PhotoLocation } from '@/components/organisms/PhotoLocation'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
+import { SaveOptions } from '@/components/organisms/SaveOptions'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
 import { useObjectUrl } from '@/lib/useObjectUrl'
 import { useOnlineStatus } from '@/lib/useOnlineStatus'
+import { usePhotoLocation } from '@/lib/usePhotoLocation'
 
 export function DiagnosisPage() {
   const { t } = useTranslation()
@@ -31,6 +33,11 @@ export function DiagnosisPage() {
   const diagnose = onDevice ? device : server
   const canAnalyze = isOnline || Boolean(stored.data)
   const photoUrl = useObjectUrl(file)
+  const location = usePhotoLocation(file)
+  const [save, setSave] = useState(true)
+  // undefined — участок не выбран вручную: берётся тот, где снято фото
+  const [chosenPlot, setChosenPlot] = useState<string | undefined>()
+  const vineyardId = chosenPlot ?? location?.plot?.id ?? ''
   const resultRef = useRef<HTMLElement>(null)
 
   // На узком экране результат — под фото, за краем экрана: показываем его,
@@ -56,12 +63,22 @@ export function DiagnosisPage() {
               file={file}
               onSelect={(picked) => {
                 setFile(picked)
+                setChosenPlot(undefined)
                 // Результат относится к прежнему фото
                 server.reset()
                 device.reset()
               }}
             />
-            <PhotoLocation file={file} />
+            <PhotoLocation location={location} />
+            {/* Без сети фото анализируется на устройстве и не сохраняется */}
+            {isOnline && (
+              <SaveOptions
+                save={save}
+                onSaveChange={setSave}
+                vineyardId={vineyardId}
+                onVineyardChange={setChosenPlot}
+              />
+            )}
             <Button
               className="w-full"
               disabled={!file || !canAnalyze}
@@ -69,7 +86,7 @@ export function DiagnosisPage() {
               onClick={() => {
                 if (!file) return
                 setOnDevice(!isOnline)
-                if (isOnline) server.mutate(file)
+                if (isOnline) server.mutate({ image: file, save, vineyardId })
                 else device.mutate(file)
               }}
             >

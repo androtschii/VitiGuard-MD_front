@@ -33,7 +33,8 @@ export const vineyardKeys = {
   all: ['vineyards'] as const,
 }
 
-type Page<T> = {
+// Страница списка с сервера (Page[T] в API)
+export type Page<T> = {
   items: T[]
   total: number
   page: number

@@ -3,6 +3,7 @@ import { GuestRoute, ProtectedRoute } from '@/app/guards'
 import { LoadingScreen } from '@/components/templates/LoadingScreen'
 import { DiagnosisPage } from '@/pages/DiagnosisPage'
 import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage'
+import { HistoryPage } from '@/pages/HistoryPage'
 import { HomePage } from '@/pages/HomePage'
 import { LoginPage } from '@/pages/LoginPage'
 import { NotFoundPage } from '@/pages/NotFoundPage'
@@ -34,6 +35,7 @@ export const routes: RouteObject[] = [
             }),
           },
           { path: '/diagnosis', element: <DiagnosisPage /> },
+          { path: '/history', element: <HistoryPage /> },
           { path: '/regions', element: <RegionsPage /> },
           { path: '/profile', element: <ProfilePage /> },
         ],

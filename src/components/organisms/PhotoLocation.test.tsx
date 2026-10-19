@@ -6,7 +6,13 @@ import type { Vineyard } from '@/api/vineyards'
 import * as exifGps from '@/lib/exifGps'
 import { renderWithQueryClient } from '@/test/render'
 import { server } from '@/test/server'
+import { usePhotoLocation } from '@/lib/usePhotoLocation'
 import { PhotoLocation } from './PhotoLocation'
+
+// Подпись вместе с хуком, который читает координаты из фото
+function Located({ file }: { file: File | null }) {
+  return <PhotoLocation location={usePhotoLocation(file)} />
+}
 
 const plot: Vineyard = {
   id: 'vineyard-1',
@@ -59,7 +65,7 @@ describe('PhotoLocation', () => {
       latitude: 47.145,
       longitude: 28.865,
     })
-    renderWithQueryClient(<PhotoLocation file={photo()} />)
+    renderWithQueryClient(<Located file={photo()} />)
 
     expect(await screen.findByText(/на участке «Криково»/)).toHaveTextContent(
       'Снято в точке 47,14500, 28,86500',
@@ -72,16 +78,14 @@ describe('PhotoLocation', () => {
       latitude: 46.9,
       longitude: 28.6,
     })
-    renderWithQueryClient(<PhotoLocation file={photo()} />)
+    renderWithQueryClient(<Located file={photo()} />)
 
     expect(await screen.findByText(/вне ваших участков/)).toBeInTheDocument()
   })
 
   it('без GPS в фото ничего не показывает', async () => {
     const read = vi.spyOn(exifGps, 'readPhotoGps').mockResolvedValue(null)
-    const { container } = renderWithQueryClient(
-      <PhotoLocation file={photo()} />,
-    )
+    const { container } = renderWithQueryClient(<Located file={photo()} />)
 
     await waitFor(() => expect(read).toHaveBeenCalled())
     expect(container).toBeEmptyDOMElement()
@@ -93,7 +97,7 @@ describe('PhotoLocation', () => {
       .mockResolvedValueOnce({ latitude: 46.9, longitude: 28.6 })
       .mockResolvedValueOnce(null)
     const queryClient = new QueryClient()
-    const { rerender } = render(<PhotoLocation file={photo()} />, {
+    const { rerender } = render(<Located file={photo()} />, {
       wrapper: ({ children }) => (
         <QueryClientProvider client={queryClient}>
           {children}
@@ -102,7 +106,7 @@ describe('PhotoLocation', () => {
     })
     await screen.findByText(/Снято в точке/)
 
-    rerender(<PhotoLocation file={photo()} />)
+    rerender(<Located file={photo()} />)
 
     await waitFor(() => expect(read).toHaveBeenCalledTimes(2))
     expect(screen.queryByText(/Снято в точке/)).toBeNull()
@@ -110,7 +114,7 @@ describe('PhotoLocation', () => {
 
   it('без фото не читает файл', () => {
     const read = vi.spyOn(exifGps, 'readPhotoGps')
-    renderWithQueryClient(<PhotoLocation file={null} />)
+    renderWithQueryClient(<Located file={null} />)
 
     expect(read).not.toHaveBeenCalled()
   })

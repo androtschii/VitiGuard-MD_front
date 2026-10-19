@@ -8,6 +8,7 @@ const sections = [
   { labelKey: 'nav.map', href: '/map' },
   { labelKey: 'nav.regions', href: '/regions' },
   { labelKey: 'nav.diagnosis', href: '/diagnosis' },
+  { labelKey: 'nav.history', href: '/history' },
   { labelKey: 'nav.profile', href: '/profile' },
 ] as const
 
