@@ -306,6 +306,20 @@ export const en: Messages = {
     interface: 'Interface',
     interfaceHint: 'Language and theme are kept in this browser.',
   },
+  camera: {
+    title: 'Photograph the leaf',
+    preview: 'Camera view',
+    hint: 'Fit a single whole leaf inside the frame, in daylight and without glare.',
+    take: 'Take photo',
+    torchOn: 'Turn on flash',
+    torchOff: 'Turn off flash',
+    zoom: 'Zoom',
+    denied:
+      'No access to the camera. Allow it in the browser settings or choose a photo from the gallery.',
+    missing: 'No camera found. Choose a photo from the gallery.',
+    failed:
+      'The camera did not start. Try again or choose a photo from the gallery.',
+  },
   diseaseInfo: {
     title: 'About the disease',
     symptoms: 'Signs',

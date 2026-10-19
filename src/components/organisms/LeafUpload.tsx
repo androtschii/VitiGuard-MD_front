@@ -1,5 +1,7 @@
 import { useId, useState, type DragEvent } from 'react'
 import { useTranslation } from 'react-i18next'
+import { CameraCapture } from '@/components/organisms/CameraCapture'
+import { canUseCamera } from '@/lib/camera'
 import { cn } from '@/lib/cn'
 import {
   checkLeafPhoto,
@@ -22,6 +24,8 @@ export function LeafUpload({ file, onSelect }: LeafUploadProps) {
   const hintId = useId()
   const [isDragging, setIsDragging] = useState(false)
   const [problem, setProblem] = useState<LeafPhotoProblem | null>(null)
+  const [hasCamera] = useState(canUseCamera)
+  const [isCameraOpen, setIsCameraOpen] = useState(false)
 
   const previewUrl = useObjectUrl(file)
 
@@ -105,35 +109,64 @@ export function LeafUpload({ file, onSelect }: LeafUploadProps) {
           }}
         />
       </label>
-      {/* Камера сразу, без выбора из галереи: capture открывает съёмку */}
-      <label
-        htmlFor={cameraId}
-        className="hidden h-10 cursor-pointer items-center justify-center gap-2 rounded-md border border-line-strong bg-surface px-3 text-sm font-medium text-ink focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-brand-500 pointer-coarse:flex"
-      >
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          aria-hidden="true"
-          className="size-5 text-brand-500"
+      {/* Камера в приложении — с рамкой, вспышкой и зумом (pr-078). Где
+          браузер её не даёт, capture открывает системную съёмку */}
+      {hasCamera ? (
+        <>
+          <button
+            type="button"
+            onClick={() => setIsCameraOpen(true)}
+            className="hidden h-10 cursor-pointer items-center justify-center gap-2 rounded-md border border-line-strong bg-surface px-3 text-sm font-medium text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 pointer-coarse:flex"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              aria-hidden="true"
+              className="size-5 text-brand-500"
+            >
+              <path d="M4 8h3l2-3h6l2 3h3v11H4z" />
+              <circle cx="12" cy="13" r="3.5" />
+            </svg>
+            {t('diagnosis.camera')}
+          </button>
+          <CameraCapture
+            open={isCameraOpen}
+            onClose={() => setIsCameraOpen(false)}
+            onCapture={pick}
+          />
+        </>
+      ) : (
+        <label
+          htmlFor={cameraId}
+          className="hidden h-10 cursor-pointer items-center justify-center gap-2 rounded-md border border-line-strong bg-surface px-3 text-sm font-medium text-ink focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-brand-500 pointer-coarse:flex"
         >
-          <path d="M4 8h3l2-3h6l2 3h3v11H4z" />
-          <circle cx="12" cy="13" r="3.5" />
-        </svg>
-        {t('diagnosis.camera')}
-        <input
-          id={cameraId}
-          type="file"
-          accept="image/*"
-          capture="environment"
-          className="sr-only"
-          onChange={(event) => {
-            pick(event.target.files?.[0])
-            event.target.value = ''
-          }}
-        />
-      </label>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            aria-hidden="true"
+            className="size-5 text-brand-500"
+          >
+            <path d="M4 8h3l2-3h6l2 3h3v11H4z" />
+            <circle cx="12" cy="13" r="3.5" />
+          </svg>
+          {t('diagnosis.camera')}
+          <input
+            id={cameraId}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            className="sr-only"
+            onChange={(event) => {
+              pick(event.target.files?.[0])
+              event.target.value = ''
+            }}
+          />
+        </label>
+      )}
       <p aria-live="polite" className="min-h-5 text-sm text-danger">
         {problem && t(`diagnosis.${problem}`)}
       </p>

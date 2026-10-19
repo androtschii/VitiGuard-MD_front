@@ -313,6 +313,20 @@ export const ro: Messages = {
     interface: 'Interfață',
     interfaceHint: 'Limba și tema se păstrează în acest browser.',
   },
+  camera: {
+    title: 'Fotografierea frunzei',
+    preview: 'Imaginea de la cameră',
+    hint: 'Încadrați o singură frunză întreagă, la lumina zilei și fără reflexe.',
+    take: 'Fotografiază',
+    torchOn: 'Pornește blițul',
+    torchOff: 'Oprește blițul',
+    zoom: 'Zoom',
+    denied:
+      'Nu există acces la cameră. Permiteți-l în setările browserului sau alegeți o fotografie din galerie.',
+    missing: 'Camera nu a fost găsită. Alegeți o fotografie din galerie.',
+    failed:
+      'Camera nu a pornit. Încercați din nou sau alegeți o fotografie din galerie.',
+  },
   diseaseInfo: {
     title: 'Despre boală',
     symptoms: 'Semne',
