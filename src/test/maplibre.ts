@@ -19,6 +19,8 @@ export const Map = vi.fn(
     flyTo = vi.fn()
     easeTo = vi.fn()
     doubleClickZoom = { disable: vi.fn(), enable: vi.fn() }
+    touchZoomRotate = { disableRotation: vi.fn() }
+    touchPitch = { disable: vi.fn() }
     getSource = vi.fn(() => ({ setData: vi.fn() }))
     off = vi.fn()
     getLayer = vi.fn()
@@ -42,6 +44,7 @@ export const Map = vi.fn(
 export const NavigationControl = vi.fn(class {})
 export const FullscreenControl = vi.fn(class {})
 export const ScaleControl = vi.fn(class {})
+export const GeolocateControl = vi.fn(class {})
 export const setWorkerUrl = vi.fn()
 
 export const Marker = vi.fn(

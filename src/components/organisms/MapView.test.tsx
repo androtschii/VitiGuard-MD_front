@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { Map, ScaleControl } from 'maplibre-gl'
+import { GeolocateControl, Map, ScaleControl } from 'maplibre-gl'
 import { act } from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import i18n from '@/i18n'
@@ -17,6 +17,8 @@ type FakeMap = {
   isStyleLoaded: ReturnType<typeof vi.fn>
   once: ReturnType<typeof vi.fn>
   on: ReturnType<typeof vi.fn>
+  touchZoomRotate: { disableRotation: ReturnType<typeof vi.fn> }
+  touchPitch: { disable: ReturnType<typeof vi.fn> }
 }
 
 const createdMaps = () => vi.mocked(Map).mock.instances as unknown as FakeMap[]
@@ -50,8 +52,28 @@ describe('MapView', () => {
     render(<MapView />)
 
     const [map] = createdMaps()
-    expect(map?.addControl).toHaveBeenCalledTimes(3)
+    expect(map?.addControl).toHaveBeenCalledTimes(4)
     expect(ScaleControl).toHaveBeenCalledWith({ unit: 'metric' })
+    expect(GeolocateControl).toHaveBeenCalledWith(
+      expect.objectContaining({ trackUserLocation: true }),
+    )
+    // Мышь: допуск касания обычный, поворот не трогаем
+    expect(map?.options.clickTolerance).toBe(3)
+    expect(map?.touchZoomRotate.disableRotation).not.toHaveBeenCalled()
+  })
+
+  it('на сенсорном экране щипок не поворачивает карту', () => {
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn((query: string) => ({ matches: query === '(pointer: coarse)' })),
+    )
+    render(<MapView />)
+
+    const [map] = createdMaps()
+    expect(map?.options.clickTolerance).toBe(6)
+    expect(map?.touchZoomRotate.disableRotation).toHaveBeenCalled()
+    expect(map?.touchPitch.disable).toHaveBeenCalled()
+    vi.unstubAllGlobals()
   })
 
   it('подписывает кнопки карты на языке интерфейса', async () => {
