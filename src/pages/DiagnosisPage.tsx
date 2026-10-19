@@ -1,23 +1,35 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDiagnose } from '@/api/diagnosis'
+import { useOfflineDiagnose, useStoredModel } from '@/api/offlineModel'
 import { useNavItems } from '@/app/navigation'
 import { Button } from '@/components/atoms/Button'
 import { Card } from '@/components/atoms/Card'
 import { Spinner } from '@/components/atoms/Spinner'
 import { DiagnosisOverlay } from '@/components/organisms/DiagnosisOverlay'
 import { DiagnosisResult } from '@/components/organisms/DiagnosisResult'
+import { OfflineModelCard } from '@/components/organisms/OfflineModelCard'
 import { LeafUpload } from '@/components/organisms/LeafUpload'
 import { PhotoLocation } from '@/components/organisms/PhotoLocation'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
 import { useObjectUrl } from '@/lib/useObjectUrl'
+import { useOnlineStatus } from '@/lib/useOnlineStatus'
 
 export function DiagnosisPage() {
   const { t } = useTranslation()
   const navItems = useNavItems()
   const [file, setFile] = useState<File | null>(null)
-  const diagnose = useDiagnose()
+  const server = useDiagnose()
+  const device = useOfflineDiagnose()
+  const isOnline = useOnlineStatus()
+  const stored = useStoredModel()
+  // Без сети фото анализирует скачанная модель на устройстве (pr-074).
+  // Источник запоминается при нажатии: результат не пропадает, если сеть
+  // появится или исчезнет уже после анализа
+  const [onDevice, setOnDevice] = useState(false)
+  const diagnose = onDevice ? device : server
+  const canAnalyze = isOnline || Boolean(stored.data)
   const photoUrl = useObjectUrl(file)
   const resultRef = useRef<HTMLElement>(null)
 
@@ -45,18 +57,29 @@ export function DiagnosisPage() {
               onSelect={(picked) => {
                 setFile(picked)
                 // Результат относится к прежнему фото
-                diagnose.reset()
+                server.reset()
+                device.reset()
               }}
             />
             <PhotoLocation file={file} />
             <Button
               className="w-full"
-              disabled={!file}
+              disabled={!file || !canAnalyze}
               isLoading={diagnose.isPending}
-              onClick={() => file && diagnose.mutate(file)}
+              onClick={() => {
+                if (!file) return
+                setOnDevice(!isOnline)
+                if (isOnline) server.mutate(file)
+                else device.mutate(file)
+              }}
             >
               {t('diagnosis.analyze')}
             </Button>
+            {!canAnalyze && (
+              <p className="text-sm text-ink-muted">
+                {t('diagnosis.offlineNoModel')}
+              </p>
+            )}
           </Card>
           {/* Наложения — под фото, слева: справа и так длинный список вероятностей */}
           {diagnose.isSuccess &&
@@ -69,6 +92,7 @@ export function DiagnosisPage() {
                 />
               </Card>
             )}
+          <OfflineModelCard />
         </div>
 
         <Card ref={resultRef} title={t('diagnosis.result')}>
@@ -81,11 +105,20 @@ export function DiagnosisPage() {
             )}
             {diagnose.isError && (
               <p role="alert" className="text-sm text-danger">
-                {diagnose.error.message}
+                {onDevice
+                  ? t('diagnosis.deviceFailed')
+                  : diagnose.error.message}
               </p>
             )}
             {diagnose.isSuccess && (
-              <DiagnosisResult diagnosis={diagnose.data} />
+              <>
+                {onDevice && (
+                  <p className="mb-3 rounded-md border border-line bg-muted/40 p-3 text-sm text-ink-soft">
+                    {t('diagnosis.onDevice')}
+                  </p>
+                )}
+                <DiagnosisResult diagnosis={diagnose.data} />
+              </>
             )}
             {diagnose.isIdle && (
               <div className="flex flex-col gap-2 text-sm text-ink-muted">

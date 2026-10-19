@@ -5,6 +5,9 @@ import { MemoryRouter } from 'react-router'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { renderWithQueryClient } from '@/test/render'
 import { server } from '@/test/server'
+import * as offline from '@/lib/offlineClassifier'
+import { deleteModel, saveModel } from '@/lib/modelStore'
+import { diagnosis } from '@/test/handlers'
 import { DiagnosisPage } from './DiagnosisPage'
 import { sidebarLink } from '@/test/nav'
 
@@ -25,8 +28,70 @@ async function analyze(user: ReturnType<typeof userEvent.setup>) {
 }
 
 describe('DiagnosisPage', () => {
-  afterEach(() => {
+  afterEach(async () => {
     vi.unstubAllGlobals()
+    vi.restoreAllMocks()
+    await deleteModel()
+  })
+
+  async function goOffline(withModel: boolean) {
+    vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
+    if (withModel) {
+      await saveModel({
+        meta: {
+          name: 'efficientnet_b0',
+          classes: ['healthy'],
+          image_size: 224,
+          mean: [0.485, 0.456, 0.406],
+          std: [0.229, 0.224, 0.225],
+          version: '3f1c9a0b7d2e4f60',
+          size_bytes: 16_036_543,
+        },
+        bytes: new ArrayBuffer(1),
+      })
+    }
+  }
+
+  it('без сети и модели объясняет, почему анализ недоступен', async () => {
+    await goOffline(false)
+    const user = renderPage()
+
+    await user.upload(screen.getByLabelText('Выбрать фото листа'), leaf)
+
+    expect(
+      screen.getByRole('button', { name: 'Определить болезнь' }),
+    ).toBeDisabled()
+    expect(screen.getByText(/только скачанная модель/)).toBeInTheDocument()
+  })
+
+  it('без сети анализирует фото скачанной моделью на устройстве', async () => {
+    await goOffline(true)
+    const classify = vi
+      .spyOn(offline, 'classifyOffline')
+      .mockResolvedValue({ ...diagnosis, heatmap: null, lesion: null })
+    const user = renderPage()
+    await screen.findByText(/Модель на устройстве/)
+
+    await analyze(user)
+
+    expect(
+      await screen.findByText(/Определено на устройстве/),
+    ).toBeInTheDocument()
+    expect(classify).toHaveBeenCalledWith(leaf)
+    expect(screen.getByText('Оидиум', { selector: 'p' })).toBeInTheDocument()
+  })
+
+  it('сообщает, если анализ на устройстве не удался', async () => {
+    await goOffline(true)
+    vi.spyOn(offline, 'classifyOffline').mockRejectedValue(new Error('wasm'))
+    const user = renderPage()
+    await screen.findByText(/Модель на устройстве/)
+
+    await analyze(user)
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'Не удалось проанализировать фото на устройстве',
+    )
   })
 
   it('раздел отмечен в навигации, анализ доступен после выбора фото', () => {

@@ -115,6 +115,21 @@ export const ro: Messages = {
     reset: 'Resetează',
     shown: 'Afișate {{shown}} din {{total}}',
   },
+  offlineModel: {
+    title: 'Diagnostic fără rețea',
+    missing:
+      'Descărcați modelul (circa {{size}} MB) pentru a determina boala direct pe telefon, în câmp, fără semnal.',
+    downloading: 'Se descarcă modelul… {{progress}}',
+    ready:
+      'Modelul este pe dispozitiv (versiunea {{version}}, {{size}} MB): fără rețea fotografia va fi analizată de el.',
+    outdated:
+      'Pe server este o versiune nouă a modelului — actualizați copia salvată.',
+    download: 'Descarcă modelul',
+    update: 'Actualizează modelul',
+    remove: 'Șterge',
+    failed:
+      'Modelul nu a putut fi salvat. Verificați spațiul pe dispozitiv și încercați din nou.',
+  },
   network: {
     offline:
       'Fără rețea: sunt afișate datele deja încărcate. Analiza fotografiei, recalcularea riscului și salvarea parcelelor vor funcționa când rețeaua revine.',
@@ -273,6 +288,12 @@ export const ro: Messages = {
     analyzing: 'Analizăm fotografia…',
     empty: 'Aici va apărea rezultatul analizei.',
     tips: 'Pentru un răspuns precis: o singură frunză de aproape, lumină de zi, fără reflexe și umbre.',
+    offlineNoModel:
+      'Fără rețea fotografia este analizată doar de modelul descărcat — descărcați-l mai jos când apare rețeaua.',
+    deviceFailed:
+      'Fotografia nu a putut fi analizată pe dispozitiv. Încercați din nou sau așteptați rețeaua.',
+    onDevice:
+      'Determinat pe dispozitiv fără rețea: același clasificator ca pe server, dar fără hartă termică și mască a leziunilor.',
     verdict: 'Diagnostic',
     confidence: 'Încrederea modelului: {{value}}',
     lowConfidence:
