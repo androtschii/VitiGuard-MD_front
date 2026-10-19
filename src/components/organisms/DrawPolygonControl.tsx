@@ -138,7 +138,13 @@ export function DrawPolygonControl({
     return () => {
       drawRef.current = null
       featureIdRef.current = null
-      draw.stop()
+      // При уходе со страницы MapView может удалить карту раньше: тогда
+      // Terra Draw падает, очищая свои слои, которых уже нет
+      try {
+        draw.stop()
+      } catch {
+        /* карта уже удалена вместе со слоями рисования */
+      }
       useMapStore.getState().setDrawing(false)
     }
   }, [map])

@@ -40,10 +40,46 @@ export default defineConfig({
       workbox: {
         // Оболочка приложения: код, стили, шрифты и значки. Карта MapLibre —
         // самый большой фрагмент, лимит по умолчанию (2 МБ) его не пропускает
-        globPatterns: ['**/*.{js,css,html,woff2,png,svg}'],
+        // Границы районов и шрифт подписей карты — тоже часть оболочки (pr-070)
+        globPatterns: ['**/*.{js,css,html,woff2,png,svg,pbf,geojson}'],
         maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
+        // При первой установке Service Worker сразу берёт открытую страницу:
+        // иначе плитки первого визита прошли бы мимо кэша. Обновления
+        // по-прежнему ждут кнопки «Обновить» (skipWaiting не включён)
+        clientsClaim: true,
         // Запросы к API Service Worker не перехватывает: данные всегда свежие
         navigateFallbackDenylist: [/^\/api\//],
+        // Плитки подложки — по мере просмотра (pr-070): виденная часть карты
+        // открывается и без сети. Заранее ничего не скачивается — правила
+        // tile.openstreetmap.org запрещают массовую загрузку
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/tile\.openstreetmap\.org\//,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'tiles-osm',
+              expiration: {
+                maxEntries: 1000,
+                maxAgeSeconds: 7 * 24 * 60 * 60,
+                purgeOnQuotaError: true,
+              },
+              cacheableResponse: { statuses: [200] },
+            },
+          },
+          {
+            urlPattern: /^https:\/\/server\.arcgisonline\.com\//,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'tiles-esri',
+              expiration: {
+                maxEntries: 1000,
+                maxAgeSeconds: 7 * 24 * 60 * 60,
+                purgeOnQuotaError: true,
+              },
+              cacheableResponse: { statuses: [200] },
+            },
+          },
+        ],
       },
     }),
   ],
