@@ -1,6 +1,8 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
+import * as camera from '@/lib/camera'
+import { fakeStream, removeCamera, stubCamera } from '@/test/fakeCamera'
 import { LeafUpload } from './LeafUpload'
 
 const leaf = new File(['leaf'], 'leaf.jpg', { type: 'image/jpeg' })
@@ -40,6 +42,30 @@ describe('LeafUpload', () => {
     await user.upload(camera, leaf)
 
     expect(onSelect).toHaveBeenCalledWith(leaf)
+  })
+
+  it('если браузер даёт камеру, снимает в приложении', async () => {
+    stubCamera(fakeStream())
+    const { onSelect } = setup()
+    const photo = new File(['jpeg'], 'leaf-camera.jpg', { type: 'image/jpeg' })
+    vi.spyOn(camera, 'captureFrame').mockResolvedValue(photo)
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Сфотографировать лист' }),
+    )
+    const take = await screen.findByRole('button', { name: 'Снять' })
+    await waitFor(() => expect(take).toBeEnabled())
+    Object.defineProperty(
+      screen.getByLabelText('Изображение с камеры'),
+      'videoWidth',
+      {
+        value: 640,
+      },
+    )
+    await userEvent.click(take)
+
+    expect(onSelect).toHaveBeenCalledWith(photo)
+    removeCamera()
   })
 
   it('передаёт выбранное фото', async () => {
