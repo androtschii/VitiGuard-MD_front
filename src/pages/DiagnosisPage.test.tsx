@@ -1,10 +1,11 @@
-import { screen } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
 import { MemoryRouter } from 'react-router'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { renderWithQueryClient } from '@/test/render'
 import { server } from '@/test/server'
+import * as exifGps from '@/lib/exifGps'
 import * as offline from '@/lib/offlineClassifier'
 import { deleteModel, saveModel } from '@/lib/modelStore'
 import { diagnosis } from '@/test/handlers'
@@ -51,6 +52,89 @@ describe('DiagnosisPage', () => {
       })
     }
   }
+
+  function captureDiagnose() {
+    const requests: URLSearchParams[] = []
+    server.use(
+      http.post('/api/v1/ai/diagnose', ({ request }) => {
+        requests.push(new URL(request.url).searchParams)
+        return HttpResponse.json({ ...diagnosis, id: 'saved-1' })
+      }),
+    )
+    return requests
+  }
+
+  it('сохраняет проверку на участке, где снято фото', async () => {
+    const requests = captureDiagnose()
+    server.use(
+      http.get('/api/v1/vineyards', () =>
+        HttpResponse.json({
+          items: [
+            {
+              id: 'vineyard-1',
+              name: 'Криково',
+              geometry: {
+                type: 'MultiPolygon',
+                coordinates: [
+                  [
+                    [
+                      [28.86, 47.14],
+                      [28.87, 47.14],
+                      [28.87, 47.15],
+                      [28.86, 47.15],
+                      [28.86, 47.14],
+                    ],
+                  ],
+                ],
+              },
+              area_ha: 1,
+              variety: null,
+              planting_year: null,
+              created_at: '2026-06-01T00:00:00Z',
+              updated_at: '2026-06-01T00:00:00Z',
+            },
+          ],
+          total: 1,
+          page: 1,
+          size: 100,
+          pages: 1,
+        }),
+      ),
+    )
+    vi.spyOn(exifGps, 'readPhotoGps').mockResolvedValue({
+      latitude: 47.145,
+      longitude: 28.865,
+    })
+    const user = renderPage()
+    await user.upload(screen.getByLabelText('Выбрать фото листа'), leaf)
+
+    // Участок подставлен по GPS из фото
+    await waitFor(() =>
+      expect(screen.getByLabelText('Участок')).toHaveValue('vineyard-1'),
+    )
+    await user.click(screen.getByRole('button', { name: 'Определить болезнь' }))
+
+    await screen.findByText('Диагноз')
+    expect(requests[0]?.get('save')).toBe('true')
+    expect(requests[0]?.get('vineyard_id')).toBe('vineyard-1')
+  })
+
+  it('без галочки проверка не сохраняется, участок можно сменить', async () => {
+    const requests = captureDiagnose()
+    const user = renderPage()
+    await user.upload(screen.getByLabelText('Выбрать фото листа'), leaf)
+
+    await user.click(
+      screen.getByRole('checkbox', {
+        name: 'Сохранить фото и результат в историю',
+      }),
+    )
+    await user.click(screen.getByRole('button', { name: 'Определить болезнь' }))
+
+    await screen.findByText('Диагноз')
+    expect(requests[0]?.has('save')).toBe(false)
+    expect(requests[0]?.has('vineyard_id')).toBe(false)
+  })
 
   it('без сети и модели объясняет, почему анализ недоступен', async () => {
     await goOffline(false)

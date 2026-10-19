@@ -49,6 +49,14 @@ export const handlers = [
   ),
   http.get('/api/v1/vineyards/:id/risks', () => HttpResponse.json([])),
   http.get('/api/v1/risks/today', () => HttpResponse.json([])),
+  http.get('/api/v1/diagnoses', () =>
+    HttpResponse.json({ items: [], total: 0, page: 1, size: 12, pages: 0 }),
+  ),
+  http.get('/api/v1/diagnoses/:id/image', () =>
+    HttpResponse.arrayBuffer(new Uint8Array([255, 216, 255]).buffer, {
+      headers: { 'Content-Type': 'image/jpeg' },
+    }),
+  ),
   http.get('/api/v1/ai/models/classifier', () =>
     HttpResponse.json({
       name: 'efficientnet_b0',
