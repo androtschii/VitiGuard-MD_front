@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import type { ReactNode } from 'react'
+import { OfflineBanner } from '@/components/molecules/OfflineBanner'
 import { Footer } from '@/components/organisms/Footer'
 import { Header } from '@/components/organisms/Header'
 import { Sidebar, type NavItem } from '@/components/organisms/Sidebar'
@@ -25,6 +26,7 @@ export function DashboardTemplate({
         {t('common.skipToContent')}
       </a>
       <Header actions={headerActions} />
+      <OfflineBanner />
       <div className="relative flex flex-1">
         <Sidebar items={navItems} />
         <main
