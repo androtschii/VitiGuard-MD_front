@@ -117,6 +117,10 @@ export const ro: Messages = {
     reset: 'Resetează',
     shown: 'Afișate {{shown}} din {{total}}',
   },
+  network: {
+    offline:
+      'Fără rețea: sunt afișate datele deja încărcate. Analiza fotografiei, recalcularea riscului și salvarea parcelelor vor funcționa când rețeaua revine.',
+  },
   pwa: {
     updateReady:
       'A apărut o versiune nouă a aplicației. Reîncărcați pagina acum?',

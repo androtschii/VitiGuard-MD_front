@@ -116,6 +116,10 @@ export const en: Messages = {
     reset: 'Reset',
     shown: 'Showing {{shown}} of {{total}}',
   },
+  network: {
+    offline:
+      'No network: showing data that is already loaded. Photo analysis, risk recalculation and saving plots will work once the network is back.',
+  },
   pwa: {
     updateReady: 'A new version of the app is available. Reload the page now?',
     offlineReady:
