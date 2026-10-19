@@ -23,7 +23,7 @@ export function UpdatePrompt() {
   return (
     <div
       role="status"
-      className="fixed right-4 bottom-4 left-4 z-50 flex flex-col gap-3 rounded-lg border border-line bg-surface p-4 text-sm text-ink shadow-lg sm:left-auto sm:max-w-sm"
+      className="fixed right-4 bottom-20 left-4 z-50 flex flex-col gap-3 rounded-lg border border-line bg-surface p-4 text-sm text-ink shadow-lg sm:left-auto sm:max-w-sm lg:bottom-4"
     >
       <p>{needRefresh ? t('pwa.updateReady') : t('pwa.offlineReady')}</p>
       <div className="flex justify-end gap-2">

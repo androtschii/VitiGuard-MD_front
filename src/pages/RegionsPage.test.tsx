@@ -6,6 +6,7 @@ import type { DistrictStats } from '@/api/regions'
 import { renderWithQueryClient } from '@/test/render'
 import { server } from '@/test/server'
 import { RegionsPage } from './RegionsPage'
+import { sidebarLink } from '@/test/nav'
 
 const district = (
   iso: string,
@@ -47,10 +48,7 @@ describe('RegionsPage', () => {
     )
     renderPage()
 
-    expect(screen.getByRole('link', { name: 'Районы' })).toHaveAttribute(
-      'aria-current',
-      'page',
-    )
+    expect(sidebarLink('Районы')).toHaveAttribute('aria-current', 'page')
     expect(await screen.findByText(/^15\s870$/)).toBeInTheDocument()
     expect(screen.getByText('2 · 16,8 га')).toBeInTheDocument()
 

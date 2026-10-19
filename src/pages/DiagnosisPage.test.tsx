@@ -6,6 +6,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { renderWithQueryClient } from '@/test/render'
 import { server } from '@/test/server'
 import { DiagnosisPage } from './DiagnosisPage'
+import { sidebarLink } from '@/test/nav'
 
 const leaf = new File(['leaf'], 'leaf.jpg', { type: 'image/jpeg' })
 
@@ -34,10 +35,7 @@ describe('DiagnosisPage', () => {
     expect(
       screen.getByRole('heading', { name: 'Диагностика по фото листа' }),
     ).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Диагностика' })).toHaveAttribute(
-      'aria-current',
-      'page',
-    )
+    expect(sidebarLink('Диагностика')).toHaveAttribute('aria-current', 'page')
     expect(
       screen.getByRole('button', { name: 'Определить болезнь' }),
     ).toBeDisabled()

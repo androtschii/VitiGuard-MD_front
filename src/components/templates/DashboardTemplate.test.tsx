@@ -12,7 +12,8 @@ describe('DashboardTemplate', () => {
     )
 
     expect(screen.getByRole('banner')).toBeInTheDocument()
-    expect(screen.getByRole('navigation')).toBeInTheDocument()
+    // Боковая колонка и нижняя панель телефона: видна одна, по ширине экрана
+    expect(screen.getAllByRole('navigation')).toHaveLength(2)
     expect(screen.getByRole('main')).toHaveTextContent('Содержимое страницы')
     expect(screen.getByRole('contentinfo')).toBeInTheDocument()
   })

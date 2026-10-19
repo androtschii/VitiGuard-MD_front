@@ -8,6 +8,7 @@ import { renderWithQueryClient } from '@/test/render'
 import { server } from '@/test/server'
 import { lastDraw, parcel } from '@/test/terraDraw'
 import { MapPage } from './MapPage'
+import { sidebarLink } from '@/test/nav'
 
 describe('MapPage', () => {
   it('показывает карту в кабинете и отмечает раздел в навигации', () => {
@@ -20,13 +21,8 @@ describe('MapPage', () => {
     expect(
       screen.getByRole('heading', { name: 'Карта виноградников' }),
     ).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Карта' })).toHaveAttribute(
-      'aria-current',
-      'page',
-    )
-    expect(screen.getByRole('link', { name: 'Главная' })).not.toHaveAttribute(
-      'aria-current',
-    )
+    expect(sidebarLink('Карта')).toHaveAttribute('aria-current', 'page')
+    expect(sidebarLink('Главная')).not.toHaveAttribute('aria-current')
     expect(screen.getByRole('button', { name: 'Выйти' })).toBeInTheDocument()
   })
 

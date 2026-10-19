@@ -4,8 +4,6 @@ export const ro: Messages = {
   common: {
     loading: 'Se încarcă…',
     close: 'Închide',
-    menu: 'Meniu',
-    closeMenu: 'Închide meniul',
     mainNavigation: 'Navigare principală',
     skipToContent: 'Salt la conținut',
     noData: 'Nu există date',

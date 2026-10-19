@@ -2,8 +2,6 @@ export const ru = {
   common: {
     loading: 'Загрузка…',
     close: 'Закрыть',
-    menu: 'Меню',
-    closeMenu: 'Закрыть меню',
     mainNavigation: 'Основная навигация',
     skipToContent: 'Перейти к содержимому',
     noData: 'Нет данных',
