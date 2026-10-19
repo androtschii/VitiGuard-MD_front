@@ -26,7 +26,11 @@ const chevron = (
 // помещается по высоте, она прокручивается, а не обрезается
 export function MapToolbar({ tools, layers }: MapToolbarProps) {
   const { t } = useTranslation()
-  const [isHidden, setIsHidden] = useState(false)
+  // На телефоне раскрытая панель закрывает бóльшую часть карты: там она
+  // сначала свёрнута до кнопки «Показать» (pr-077)
+  const [isHidden, setIsHidden] = useState(
+    () => window.matchMedia?.('(max-width: 639px)').matches ?? false,
+  )
   // Включённый фильтр не прячется: иначе было бы непонятно, куда делись участки
   const [isLayersOpen, setIsLayersOpen] = useState(() =>
     isFiltered(useMapStore.getState().filter),

@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest'
 import { renderWithQueryClient } from '@/test/render'
 import { server } from '@/test/server'
 import { ProfilePage } from './ProfilePage'
+import { sidebarLink } from '@/test/nav'
 
 function renderPage() {
   return renderWithQueryClient(
@@ -36,10 +37,7 @@ describe('ProfilePage', () => {
     expect(
       screen.getByRole('heading', { name: 'Интерфейс' }),
     ).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Профиль' })).toHaveAttribute(
-      'aria-current',
-      'page',
-    )
+    expect(sidebarLink('Профиль')).toHaveAttribute('aria-current', 'page')
   })
 
   it('сообщает, если профиль не загрузился', async () => {

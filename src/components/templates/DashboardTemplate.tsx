@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import type { ReactNode } from 'react'
 import { OfflineBanner } from '@/components/molecules/OfflineBanner'
+import { BottomNav } from '@/components/organisms/BottomNav'
 import { Footer } from '@/components/organisms/Footer'
 import { Header } from '@/components/organisms/Header'
 import { Sidebar, type NavItem } from '@/components/organisms/Sidebar'
@@ -18,7 +19,7 @@ export function DashboardTemplate({
 }: DashboardTemplateProps) {
   const { t } = useTranslation()
   return (
-    <div className="flex min-h-svh flex-col bg-canvas">
+    <div className="flex min-h-svh flex-col bg-canvas pb-16 lg:pb-0">
       <a
         href="#content"
         className="sr-only focus:not-sr-only focus:absolute focus:z-30 focus:m-2 focus:rounded-md focus:bg-surface focus:px-3 focus:py-2 focus:text-sm"
@@ -37,6 +38,7 @@ export function DashboardTemplate({
         </main>
       </div>
       <Footer />
+      <BottomNav items={navItems} />
     </div>
   )
 }

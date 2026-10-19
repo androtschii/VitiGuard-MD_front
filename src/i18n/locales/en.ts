@@ -4,8 +4,6 @@ export const en: Messages = {
   common: {
     loading: 'Loading…',
     close: 'Close',
-    menu: 'Menu',
-    closeMenu: 'Close menu',
     mainNavigation: 'Main navigation',
     skipToContent: 'Skip to content',
     noData: 'No data',

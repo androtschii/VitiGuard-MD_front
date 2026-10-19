@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { useMapStore } from '@/store/map'
 import { MapToolbar } from './MapToolbar'
 
@@ -38,6 +38,19 @@ describe('MapToolbar', () => {
     expect(
       screen.getByRole('button', { name: 'Скрыть панель' }),
     ).toHaveAttribute('aria-expanded', 'true')
+  })
+
+  it('на телефоне панель сначала свёрнута', () => {
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn(() => ({ matches: true })),
+    )
+    renderToolbar()
+
+    expect(
+      screen.getByRole('button', { name: 'Инструменты' }),
+    ).toBeInTheDocument()
+    vi.unstubAllGlobals()
   })
 
   it('фильтры и слои по умолчанию свёрнуты и раскрываются', () => {
