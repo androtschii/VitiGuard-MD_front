@@ -219,4 +219,17 @@ describe('DrawPolygonControl', () => {
     expect(lastDraw().stop).toHaveBeenCalledOnce()
     expect(useMapStore.getState().isDrawing).toBe(false)
   })
+
+  it('не падает, если карту удалили раньше рисования', () => {
+    const { unmount } = renderControl()
+    useMapStore.setState({ isDrawing: true })
+    lastDraw().stop.mockImplementation(() => {
+      throw new TypeError(
+        "Cannot read properties of undefined (reading 'setData')",
+      )
+    })
+
+    expect(() => unmount()).not.toThrow()
+    expect(useMapStore.getState().isDrawing).toBe(false)
+  })
 })
