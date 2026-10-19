@@ -114,6 +114,20 @@ export const en: Messages = {
     reset: 'Reset',
     shown: 'Showing {{shown}} of {{total}}',
   },
+  offlineModel: {
+    title: 'Diagnosis without a network',
+    missing:
+      'Download the model (about {{size}} MB) to identify diseases right on your phone in the field, with no signal.',
+    downloading: 'Downloading the model… {{progress}}',
+    ready:
+      'The model is on this device (version {{version}}, {{size}} MB): without a network it will analyse photos.',
+    outdated: 'A new model version is on the server — update the saved copy.',
+    download: 'Download model',
+    update: 'Update model',
+    remove: 'Delete',
+    failed:
+      'Could not save the model. Check the free space on the device and try again.',
+  },
   network: {
     offline:
       'No network: showing data that is already loaded. Photo analysis, risk recalculation and saving plots will work once the network is back.',
@@ -267,6 +281,12 @@ export const en: Messages = {
     analyzing: 'Analysing the photo…',
     empty: 'The analysis result will appear here.',
     tips: 'For an accurate answer: one leaf close up, daylight, no glare or shadows.',
+    offlineNoModel:
+      'Without a network only the downloaded model can analyse photos — download it below once you are online.',
+    deviceFailed:
+      'Could not analyse the photo on this device. Try again or wait for the network.',
+    onDevice:
+      'Determined on this device without a network: the same classifier as on the server, but without the heatmap and lesion mask.',
     verdict: 'Diagnosis',
     confidence: 'Model confidence: {{value}}',
     lowConfidence:

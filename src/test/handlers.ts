@@ -49,6 +49,24 @@ export const handlers = [
   ),
   http.get('/api/v1/vineyards/:id/risks', () => HttpResponse.json([])),
   http.get('/api/v1/risks/today', () => HttpResponse.json([])),
+  http.get('/api/v1/ai/models/classifier', () =>
+    HttpResponse.json({
+      name: 'efficientnet_b0',
+      classes: [
+        'healthy',
+        'black_rot',
+        'esca',
+        'leaf_blight',
+        'downy_mildew',
+        'powdery_mildew',
+      ],
+      image_size: 224,
+      mean: [0.485, 0.456, 0.406],
+      std: [0.229, 0.224, 0.225],
+      version: '3f1c9a0b7d2e4f60',
+      size_bytes: 16_036_543,
+    }),
+  ),
   http.get('/api/v1/weather/current', () =>
     HttpResponse.json({
       observed_at: '2026-10-16T14:30:00Z',

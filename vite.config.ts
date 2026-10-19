@@ -41,7 +41,7 @@ export default defineConfig({
         // Оболочка приложения: код, стили, шрифты и значки. Карта MapLibre —
         // самый большой фрагмент, лимит по умолчанию (2 МБ) его не пропускает
         // Границы районов и шрифт подписей карты — тоже часть оболочки (pr-070)
-        globPatterns: ['**/*.{js,css,html,woff2,png,svg,pbf,geojson}'],
+        globPatterns: ['**/*.{js,mjs,css,html,woff2,png,svg,pbf,geojson}'],
         maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
         // При первой установке Service Worker сразу берёт открытую страницу:
         // иначе плитки первого визита прошли бы мимо кэша. Обновления
@@ -53,6 +53,17 @@ export default defineConfig({
         // открывается и без сети. Заранее ничего не скачивается — правила
         // tile.openstreetmap.org запрещают массовую загрузку
         runtimeCaching: [
+          // Движок ONNX Runtime (14 МБ) — больше лимита предзагрузки. Он
+          // сохраняется при скачивании модели для работы без сети (pr-071)
+          {
+            urlPattern: /\.wasm$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'ort-wasm',
+              expiration: { maxEntries: 2 },
+              cacheableResponse: { statuses: [200] },
+            },
+          },
           {
             urlPattern: /^https:\/\/tile\.openstreetmap\.org\//,
             handler: 'CacheFirst',
@@ -114,7 +125,15 @@ export default defineConfig({
       provider: 'v8',
       include: ['src/**/*.{ts,tsx}'],
       // Точка входа только монтирует приложение, а test — вспомогательный код тестов
-      exclude: ['src/main.tsx', 'src/test/**', 'src/**/*.test.{ts,tsx}'],
+      // Поток классификатора работает только в браузере (WebAssembly,
+      // OffscreenCanvas): он проверяется в браузере, а его разбор фото и ответа
+      // (leafTensor) и обмен сообщениями (offlineClassifier) — тестами
+      exclude: [
+        'src/main.tsx',
+        'src/test/**',
+        'src/**/*.test.{ts,tsx}',
+        'src/workers/**',
+      ],
       reporter: ['text-summary', 'html'],
       thresholds: {
         statements: 95,

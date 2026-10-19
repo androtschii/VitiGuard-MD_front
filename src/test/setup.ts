@@ -1,4 +1,6 @@
 import '@testing-library/jest-dom/vitest'
+// IndexedDB в jsdom нет: скачанная модель хранится в нём (pr-072)
+import 'fake-indexeddb/auto'
 import { cleanup } from '@testing-library/react'
 import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest'
 import i18n from '@/i18n'
