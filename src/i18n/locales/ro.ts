@@ -117,6 +117,15 @@ export const ro: Messages = {
     reset: 'Resetează',
     shown: 'Afișate {{shown}} din {{total}}',
   },
+  pwa: {
+    updateReady:
+      'A apărut o versiune nouă a aplicației. Reîncărcați pagina acum?',
+    offlineReady:
+      'Aplicația a fost salvată pe dispozitiv: se va deschide și fără rețea.',
+    reload: 'Actualizează',
+    later: 'Mai târziu',
+    ok: 'Am înțeles',
+  },
   mapExport: {
     save: 'Salvează harta în PNG',
     failed: 'Harta nu a putut fi salvată. Încercați din nou.',

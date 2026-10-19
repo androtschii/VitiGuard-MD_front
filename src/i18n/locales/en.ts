@@ -116,6 +116,14 @@ export const en: Messages = {
     reset: 'Reset',
     shown: 'Showing {{shown}} of {{total}}',
   },
+  pwa: {
+    updateReady: 'A new version of the app is available. Reload the page now?',
+    offlineReady:
+      'The app is saved on this device: it will open without a network.',
+    reload: 'Update',
+    later: 'Later',
+    ok: 'Got it',
+  },
   mapExport: {
     save: 'Save map as PNG',
     failed: 'Could not save the map. Please try again.',
