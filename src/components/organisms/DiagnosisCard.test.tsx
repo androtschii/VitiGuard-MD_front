@@ -90,4 +90,74 @@ describe('DiagnosisCard', () => {
       'Не удалось удалить проверку',
     )
   })
+
+  it('показывает заключение агронома', () => {
+    renderWithQueryClient(
+      <DiagnosisCard
+        record={record('r-6', {
+          review: {
+            disease: 'black_rot',
+            comment: null,
+            reviewed_at: '2026-06-11T08:00:00Z',
+            reviewer: 'Мария',
+          },
+        })}
+      />,
+    )
+
+    expect(screen.getByText('Мария: диагноз подтверждён')).toBeInTheDocument()
+  })
+
+  it('исправление с комментарием и без имени эксперта', () => {
+    renderWithQueryClient(
+      <DiagnosisCard
+        record={record('r-7', {
+          review: {
+            disease: 'esca',
+            comment: 'Тигровые полосы',
+            reviewed_at: '2026-06-11T08:00:00Z',
+            reviewer: null,
+          },
+        })}
+      />,
+    )
+
+    expect(
+      screen.getByText('Агроном: на самом деле — Эска'),
+    ).toBeInTheDocument()
+    expect(screen.getByText('Тигровые полосы')).toBeInTheDocument()
+  })
+
+  it('кнопка заключения — только агроному', async () => {
+    renderWithQueryClient(<DiagnosisCard record={record('r-8')} />)
+    await screen.findByRole('img')
+    expect(screen.queryByRole('button', { name: 'Заключение' })).toBeNull()
+  })
+
+  it('агроном открывает окно заключения и закрывает его', async () => {
+    server.use(
+      http.get('/api/v1/users/me', () =>
+        HttpResponse.json({
+          id: 'user-2',
+          email: 'agro@example.md',
+          full_name: 'Мария',
+          role: 'agronomist',
+          is_active: true,
+          created_at: '2026-06-01T00:00:00Z',
+          updated_at: '2026-06-01T00:00:00Z',
+        }),
+      ),
+    )
+    renderWithQueryClient(<DiagnosisCard record={record('r-9')} />)
+
+    await userEvent.click(
+      await screen.findByRole('button', { name: 'Заключение' }),
+    )
+    expect(
+      screen.getByRole('dialog', { name: 'Заключение агронома' }),
+    ).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: 'Закрыть' }))
+
+    expect(screen.queryByRole('dialog')).toBeNull()
+  })
 })
