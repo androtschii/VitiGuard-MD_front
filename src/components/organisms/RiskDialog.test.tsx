@@ -48,12 +48,17 @@ describe('RiskDialog', () => {
       ),
     ).toBeInTheDocument()
 
-    const week = screen.getByRole('table', {
-      name: 'Неделя вперёд (по прогнозу погоды)',
+    const plan = screen.getByRole('table', {
+      name: 'Что делать: сегодня и неделя вперёд (по прогнозу погоды)',
     })
-    const rows = within(week).getAllByRole('row')
-    expect(rows).toHaveLength(2)
-    expect(rows[1]).toHaveTextContent(/11 июн. 2026 г.\s*высокий\s*средний/)
+    const rows = within(plan).getAllByRole('row')
+    expect(rows).toHaveLength(3)
+    // Сегодня: инкубация милдью и высокий индекс оидиума
+    expect(rows[1]).toHaveTextContent(/^Сегодня/)
+    expect(rows[1]).toHaveTextContent(/осмотрите листья снизу/)
+    expect(rows[1]).toHaveTextContent(/обработка серой/)
+    expect(rows[2]).toHaveTextContent(/11 июн. 2026 г.\s*высокий\s*средний/)
+    expect(rows[2]).toHaveTextContent(/Ожидаются пятна милдью/)
 
     expect(
       screen.getByRole('img', { name: /График индекса Gubler-Thomas/ }),

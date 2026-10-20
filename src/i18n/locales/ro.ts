@@ -361,6 +361,19 @@ export const ro: Messages = {
     corrected: '{{reviewer}}: de fapt — {{disease}}',
     expert: 'Agronom',
   },
+  advice: {
+    downyInfection:
+      'Condiții pentru infecția cu mană. Dacă înainte de ploaie nu a fost un tratament de protecție — un produs sistemic în primele zile după infecție.',
+    downyIncubation:
+      'În curând pot apărea pete de mană: verificați dosul frunzelor.',
+    downySymptoms:
+      'Sunt așteptate pete de mană: verificați parcela, înlăturați frunzele afectate.',
+    powderyHigh:
+      'Risc ridicat de făinare: tratament cu sulf sau cu un produs sistemic, aerisirea coronamentului.',
+    powderyMedium:
+      'Riscul de făinare crește: verificați frunzele și strugurii.',
+    calm: 'Nu există condiții periculoase.',
+  },
   camera: {
     title: 'Fotografierea frunzei',
     preview: 'Imaginea de la cameră',
@@ -521,8 +534,9 @@ export const ro: Messages = {
       'După modelul Goidanich sunt așteptate pete de mană după infecția din {{date}} — tratamentul trebuia făcut înainte de această zi.',
     noIncubation: 'Acum nu există incubație de mană.',
     gublerToday: 'Indicele de făinare Gubler-Thomas — {{index}}.',
-    week: 'Săptămâna următoare (după prognoza meteo)',
+    plan: 'Ce trebuie făcut: azi și săptămâna următoare (după prognoza meteo)',
     columns: {
+      advice: 'Ce trebuie făcut',
       date: 'Data',
     },
     powderyChart: 'Făinare: indicele Gubler-Thomas',
