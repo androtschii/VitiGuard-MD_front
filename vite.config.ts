@@ -111,6 +111,8 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
+    // Сценарии Playwright запускаются в настоящем браузере, а не в Vitest
+    exclude: ['**/node_modules/**', '**/dist/**', 'e2e/**'],
     // Виртуальный модуль плагина PWA существует только в сборке Vite
     alias: {
       'virtual:pwa-register/react': fileURLToPath(
