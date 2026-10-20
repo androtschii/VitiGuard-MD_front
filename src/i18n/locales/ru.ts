@@ -358,6 +358,16 @@ export const ru = {
     cancel: 'Отмена',
     deleteFailed: 'Не удалось удалить проверку.',
   },
+  period: {
+    label: 'Период',
+    week: 'Неделя',
+    month: 'Месяц',
+    season: 'Сезон',
+    custom: 'Даты',
+    from: 'С',
+    to: 'По',
+    empty: 'За выбранный период данных нет.',
+  },
   compare: {
     title: 'Сравнение участков',
     intro:

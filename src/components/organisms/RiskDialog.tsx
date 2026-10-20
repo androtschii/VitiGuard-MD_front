@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRefreshRisks, useRisks, type RiskEntry } from '@/api/risks'
 import { Button } from '@/components/atoms/Button'
+import { PeriodFilter } from '@/components/molecules/PeriodFilter'
 import { RiskBadge } from '@/components/molecules/RiskBadge'
 import { Modal } from '@/components/organisms/Modal'
 import { TimeSeriesChart } from '@/components/organisms/TimeSeriesChart'
@@ -15,6 +17,7 @@ import {
   type IndexPoint,
   type WeatherPoint,
 } from '@/lib/riskSeries'
+import { inPeriod, periodRange, SEASON, type Period } from '@/lib/period'
 import { dayAdvice } from '@/lib/recommendations'
 import { timeScales } from '@/lib/timeSeriesChart'
 
@@ -161,6 +164,7 @@ export function RiskDialog({
   const { t, i18n } = useTranslation()
   const risks = useRisks(vineyardId)
   const refresh = useRefreshRisks(vineyardId)
+  const [period, setPeriod] = useState<Period>(SEASON)
   const day = new Intl.DateTimeFormat(i18n.resolvedLanguage, {
     dateStyle: 'medium',
     timeZone: 'UTC',
@@ -177,10 +181,16 @@ export function RiskDialog({
   const gubler = todayEntries.find((entry) => entry.method === 'gubler_thomas')
   const infectionDay = factor(incubation, 'infection_day')
   const format = (date: string) => day.format(dayTime(date))
-  const infections = infectionDays(entries).map((date) => ({
-    time: dayTime(date),
-    label: t('risk.infectionMark', { date: format(date) }),
-  }))
+  // Период — только для графиков сезона: сегодня и неделя вперёд видны всегда
+  const range = periodRange(period, today)
+  const shown = <T extends { time: number }>(points: T[]) =>
+    inPeriod(points, (point) => point.time, range)
+  const infections = shown(
+    infectionDays(entries).map((date) => ({
+      time: dayTime(date),
+      label: t('risk.infectionMark', { date: format(date) }),
+    })),
+  )
 
   return (
     <Modal
@@ -296,12 +306,13 @@ export function RiskDialog({
               </section>
             )}
 
+            <PeriodFilter value={period} onChange={setPeriod} />
             <section className="flex flex-col gap-1">
               <h3 className="font-semibold text-ink">
                 {t('risk.powderyChart')}
               </h3>
               <SeasonChart
-                points={methodSeries(entries, 'gubler_thomas')}
+                points={shown(methodSeries(entries, 'gubler_thomas'))}
                 label={t('risk.powderyChartLabel')}
                 lineLabel={t('risk.gublerShort')}
                 today={dayTime(today)}
@@ -311,7 +322,7 @@ export function RiskDialog({
             <section className="flex flex-col gap-1">
               <h3 className="font-semibold text-ink">{t('risk.downyChart')}</h3>
               <SeasonChart
-                points={methodSeries(entries, 'goidanich')}
+                points={shown(methodSeries(entries, 'goidanich'))}
                 label={t('risk.downyChartLabel')}
                 lineLabel={t('risk.incubationShort')}
                 today={dayTime(today)}
@@ -321,7 +332,7 @@ export function RiskDialog({
               <p className="text-xs text-ink-subtle">{t('risk.markersHint')}</p>
             </section>
             <WeatherCharts
-              points={weatherSeries(entries)}
+              points={shown(weatherSeries(entries))}
               today={dayTime(today)}
               markers={infections}
             />
