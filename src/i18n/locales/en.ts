@@ -361,6 +361,10 @@ export const en: Messages = {
     cancel: 'Cancel',
     deleteFailed: 'Could not delete the check.',
   },
+  print: {
+    button: 'Print',
+    header: 'VitiGuard MD · printed {{date}}',
+  },
   period: {
     label: 'Period',
     week: 'Week',

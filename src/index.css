@@ -161,3 +161,51 @@ h1 {
 html:has(dialog[open]) {
   overflow: hidden;
 }
+
+/* Печатная версия дашборда: на бумаге всегда светлая тема, без анимаций, а
+   таблицы, графики и плитки не разрываются между страницами */
+@page {
+  size: a4;
+  margin: 14mm;
+}
+
+@media print {
+  :root,
+  :root.dark {
+    color-scheme: light;
+
+    --canvas: var(--color-white);
+    --surface: var(--color-white);
+    --muted: var(--color-stone-100);
+    --muted-strong: var(--color-stone-200);
+    --ink: var(--color-stone-900);
+    --ink-soft: var(--color-stone-700);
+    --ink-muted: var(--color-stone-600);
+    --ink-subtle: var(--color-stone-500);
+    --ink-faint: var(--color-stone-400);
+    --line: var(--color-stone-300);
+    --line-strong: var(--color-stone-400);
+    --accent: var(--color-brand-700);
+    --chart-ndvi: #622ac3;
+    --chart-ndre: #047857;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  tr,
+  figure,
+  dl > div,
+  section {
+    break-inside: avoid;
+  }
+
+  /* Цвета уровней риска и линий графиков печатаются, а не выбрасываются */
+  body {
+    print-color-adjust: exact;
+  }
+}

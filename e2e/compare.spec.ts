@@ -32,3 +32,24 @@ test('сравнение двух участков с главной', async ({ 
     page.getByRole('img', { name: /NDVI участков .+ \(A\) и Пуркарь \(B\)/ }),
   ).toBeVisible()
 })
+
+test('печатная версия главной: только сводка, без навигации', async ({
+  page,
+}) => {
+  await mockApi(page)
+  await page.goto('/')
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+
+  await page.emulateMedia({ media: 'print' })
+
+  await expect(page.getByText(/^VitiGuard MD · напечатано/)).toBeVisible()
+  await expect(page.getByRole('banner')).toBeHidden()
+  await expect(page.getByRole('contentinfo')).toBeHidden()
+  await expect(page.getByRole('button', { name: 'Распечатать' })).toBeHidden()
+  await expect(page.getByRole('link', { name: 'Открыть карту' })).toBeHidden()
+  await expect(page.getByRole('cell', { name: CRICOVA.name })).toBeVisible()
+  const background = await page.evaluate(
+    () => getComputedStyle(document.body).backgroundColor,
+  )
+  expect(background).toBe('rgb(255, 255, 255)')
+})

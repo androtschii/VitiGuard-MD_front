@@ -17,28 +17,43 @@ export function DashboardTemplate({
   headerActions,
   children,
 }: DashboardTemplateProps) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const printed = new Intl.DateTimeFormat(i18n.resolvedLanguage, {
+    dateStyle: 'long',
+    timeStyle: 'short',
+  }).format(new Date())
+
   return (
-    <div className="flex min-h-svh flex-col bg-canvas pb-16 lg:pb-0">
+    <div className="flex min-h-svh flex-col bg-canvas pb-16 lg:pb-0 print:min-h-0 print:pb-0">
       <a
         href="#content"
-        className="sr-only focus:not-sr-only focus:absolute focus:z-30 focus:m-2 focus:rounded-md focus:bg-surface focus:px-3 focus:py-2 focus:text-sm"
+        className="sr-only focus:not-sr-only focus:absolute focus:z-30 focus:m-2 focus:rounded-md focus:bg-surface focus:px-3 focus:py-2 focus:text-sm print:hidden"
       >
         {t('common.skipToContent')}
       </a>
-      <Header actions={headerActions} />
-      <OfflineBanner />
+      {/* На бумаге навигация не нужна: остаётся содержимое страницы */}
+      <div className="contents print:hidden">
+        <Header actions={headerActions} />
+        <OfflineBanner />
+      </div>
       <div className="relative flex flex-1">
-        <Sidebar items={navItems} />
+        <div className="contents print:hidden">
+          <Sidebar items={navItems} />
+        </div>
         <main
           id="content"
-          className="min-w-0 flex-1 p-4 motion-safe:animate-rise lg:p-6"
+          className="min-w-0 flex-1 p-4 motion-safe:animate-rise lg:p-6 print:p-0"
         >
+          <p className="mb-4 hidden border-b border-line pb-2 text-xs text-ink-muted print:block">
+            {t('print.header', { date: printed })}
+          </p>
           {children}
         </main>
       </div>
-      <Footer />
-      <BottomNav items={navItems} />
+      <div className="contents print:hidden">
+        <Footer />
+        <BottomNav items={navItems} />
+      </div>
     </div>
   )
 }

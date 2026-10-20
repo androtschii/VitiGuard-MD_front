@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { useDistrictStats, type DistrictStats } from '@/api/regions'
 import { useNavItems } from '@/app/navigation'
 import { Card } from '@/components/atoms/Card'
+import { PrintButton } from '@/components/molecules/PrintButton'
 import { DataTable, type Column } from '@/components/organisms/DataTable'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
@@ -101,9 +102,10 @@ export function RegionsPage() {
 
   return (
     <DashboardTemplate navItems={navItems} headerActions={<LogoutButton />}>
-      <h1 className="mb-1 text-xl font-semibold text-ink">
-        {t('regions.title')}
-      </h1>
+      <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+        <h1 className="text-xl font-semibold text-ink">{t('regions.title')}</h1>
+        <PrintButton />
+      </div>
       <p className="mb-4 max-w-3xl text-sm text-ink-muted">
         {t('regions.intro')}
       </p>
