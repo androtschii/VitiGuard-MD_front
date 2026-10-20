@@ -361,6 +361,16 @@ export const en: Messages = {
     cancel: 'Cancel',
     deleteFailed: 'Could not delete the check.',
   },
+  period: {
+    label: 'Period',
+    week: 'Week',
+    month: 'Month',
+    season: 'Season',
+    custom: 'Dates',
+    from: 'From',
+    to: 'To',
+    empty: 'No data for the selected period.',
+  },
   compare: {
     title: 'Compare vineyards',
     intro:

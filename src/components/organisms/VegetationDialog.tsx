@@ -2,8 +2,10 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRefreshVegetation, useVegetation } from '@/api/vegetation'
 import { Button } from '@/components/atoms/Button'
+import { PeriodFilter } from '@/components/molecules/PeriodFilter'
 import { Modal } from '@/components/organisms/Modal'
 import { VegetationChart } from '@/components/organisms/VegetationChart'
+import { inPeriod, periodRange, SEASON, type Period } from '@/lib/period'
 
 type VegetationDialogProps = {
   vineyardId: string
@@ -22,6 +24,7 @@ export function VegetationDialog({
 }: VegetationDialogProps) {
   const { t, i18n } = useTranslation()
   const [isRefreshing, setIsRefreshing] = useState(false)
+  const [period, setPeriod] = useState<Period>(SEASON)
   const history = useVegetation(vineyardId, isRefreshing)
   const refresh = useRefreshVegetation(vineyardId)
 
@@ -34,6 +37,16 @@ export function VegetationDialog({
   const observations = history.data ?? []
   const clear = observations.filter((item) => item.ndvi)
   const latest = clear.at(-1)
+  // Сводка — по всем снимкам, график и таблица — за выбранный период до
+  // последнего снимка
+  const lastDay = observations.at(-1)?.acquired_at.slice(0, 10)
+  const shown = lastDay
+    ? inPeriod(
+        observations,
+        (item) => Date.parse(item.acquired_at),
+        periodRange(period, lastDay),
+      )
+    : observations
 
   return (
     <Modal
@@ -84,7 +97,12 @@ export function VegetationDialog({
                 cloudy: observations.length - clear.length,
               })}
             </p>
-            <VegetationChart observations={observations} />
+            <PeriodFilter value={period} onChange={setPeriod} />
+            {shown.some((item) => item.ndvi) ? (
+              <VegetationChart observations={shown} />
+            ) : (
+              <p className="text-ink-muted">{t('period.empty')}</p>
+            )}
             <details>
               <summary className="cursor-pointer font-medium text-accent">
                 {t('vegetation.table')}
@@ -109,7 +127,7 @@ export function VegetationDialog({
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-line">
-                    {observations.map((item) => (
+                    {shown.map((item) => (
                       <tr key={`${item.acquired_at}-${item.platform}`}>
                         <td className="py-1">
                           {day.format(new Date(item.acquired_at))}

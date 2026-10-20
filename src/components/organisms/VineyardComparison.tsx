@@ -1,11 +1,13 @@
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useTodayRisks } from '@/api/risks'
 import { useNdviAnomalies, useVegetation } from '@/api/vegetation'
 import type { Vineyard } from '@/api/vineyards'
+import { PeriodFilter } from '@/components/molecules/PeriodFilter'
 import { RiskBadge } from '@/components/molecules/RiskBadge'
 import { TimeSeriesChart } from '@/components/organisms/TimeSeriesChart'
 import { clearNdvi, pairSeries, type PairPoint } from '@/lib/compare'
+import { inPeriod, periodRange, SEASON, type Period } from '@/lib/period'
 import { timeScales } from '@/lib/timeSeriesChart'
 
 type VineyardComparisonProps = {
@@ -22,7 +24,17 @@ export function VineyardComparison({ a, b }: VineyardComparisonProps) {
   const anomalies = [useNdviAnomalies(a.id).data, useNdviAnomalies(b.id).data]
   const { data: risks = [] } = useTodayRisks()
   const series = history.map((items) => clearNdvi(items ?? []))
-  const pair = pairSeries(series[0], series[1])
+  const [period, setPeriod] = useState<Period>(SEASON)
+  const all = pairSeries(series[0], series[1])
+  const lastTime = all.at(-1)?.time
+  const pair =
+    lastTime === undefined
+      ? all
+      : inPeriod(
+          all,
+          (point) => point.time,
+          periodRange(period, new Date(lastTime).toISOString().slice(0, 10)),
+        )
 
   const hectares = new Intl.NumberFormat(language, { maximumFractionDigits: 2 })
   const index = new Intl.NumberFormat(language, {
@@ -125,6 +137,7 @@ export function VineyardComparison({ a, b }: VineyardComparisonProps) {
 
       <section className="flex flex-col gap-2 rounded-lg border border-line bg-surface p-4 shadow-sm">
         <h2 className="text-sm font-semibold text-ink">{t('compare.chart')}</h2>
+        {all.length > 1 && <PeriodFilter value={period} onChange={setPeriod} />}
         {pair.length > 1 ? (
           <TimeSeriesChart<PairPoint>
             points={pair}
@@ -157,7 +170,9 @@ export function VineyardComparison({ a, b }: VineyardComparisonProps) {
             ]}
           />
         ) : (
-          <p className="text-sm text-ink-muted">{t('compare.noCommon')}</p>
+          <p className="text-sm text-ink-muted">
+            {all.length > 1 ? t('period.empty') : t('compare.noCommon')}
+          </p>
         )}
       </section>
     </div>

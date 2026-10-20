@@ -369,6 +369,16 @@ export const ro: Messages = {
     cancel: 'Anulează',
     deleteFailed: 'Verificarea nu a putut fi ștearsă.',
   },
+  period: {
+    label: 'Perioada',
+    week: 'Săptămână',
+    month: 'Lună',
+    season: 'Sezon',
+    custom: 'Date',
+    from: 'De la',
+    to: 'Până la',
+    empty: 'Nu există date pentru perioada aleasă.',
+  },
   compare: {
     title: 'Compararea parcelelor',
     intro:

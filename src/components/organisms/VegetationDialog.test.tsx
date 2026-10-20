@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react'
+import { fireEvent, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
 import { describe, expect, it, vi } from 'vitest'
@@ -65,6 +65,29 @@ describe('VegetationDialog', () => {
     const rows = within(screen.getByRole('table')).getAllByRole('row')
     expect(rows[1]).toHaveTextContent(/0,80\s*0,45\s*0 %/)
     expect(rows[2]).toHaveTextContent(/—\s*—\s*—/)
+  })
+
+  it('период отсчитывается от последнего снимка', async () => {
+    const { user } = renderDialog([
+      { ...history[0], id: 'may', acquired_at: '2026-05-20T09:17:00Z' },
+      ...history,
+    ])
+    await screen.findByRole('img', { name: /График NDVI и NDRE/ })
+
+    // Неделя до снимка 28 июня: майский снимок в неё не попадает
+    await user.click(screen.getByText('Неделя'))
+    expect(within(screen.getByRole('table')).getAllByRole('row')).toHaveLength(
+      3,
+    )
+
+    await user.click(screen.getByText('Даты'))
+    fireEvent.change(screen.getByLabelText('С'), {
+      target: { value: '2026-09-01' },
+    })
+    expect(
+      screen.getByText('За выбранный период данных нет.'),
+    ).toBeInTheDocument()
+    expect(screen.queryByRole('img', { name: /График/ })).toBeNull()
   })
 
   it('без индексов предлагает обновить', async () => {
