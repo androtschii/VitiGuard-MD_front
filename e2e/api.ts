@@ -66,7 +66,7 @@ export const CHECK = {
 }
 
 // Прозрачный PNG 1 × 1 — картограмма, фото, наложения и плитки подложки
-const PNG = Buffer.from(
+export const PNG = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
   'base64',
 )
@@ -75,6 +75,8 @@ export type Api = {
   // Тела запросов на создание участков
   created: unknown[]
   ndviImages: string[]
+  // Параметры запросов диагностики
+  diagnoses: Record<string, string>[]
 }
 
 const json = (route: Route, body: unknown, status = 200) =>
@@ -83,7 +85,7 @@ const json = (route: Route, body: unknown, status = 200) =>
 // Подмена API бэкенда и плиток подложки: сценарии не зависят ни от сервера,
 // ни от сети
 export async function mockApi(page: Page): Promise<Api> {
-  const api: Api = { created: [], ndviImages: [] }
+  const api: Api = { created: [], ndviImages: [], diagnoses: [] }
   const vineyards = [CRICOVA]
 
   await page.route(
@@ -149,6 +151,23 @@ export async function mockApi(page: Page): Promise<Api> {
         temperature_c: 9.6,
         relative_humidity: 71,
         precipitation_mm: 0,
+      })
+    }
+    if (path === '/ai/diagnose') {
+      api.diagnoses.push(
+        Object.fromEntries(new URL(request.url()).searchParams.entries()),
+      )
+      const overlay = `data:image/png;base64,${PNG.toString('base64')}`
+      return json(route, {
+        model: CHECK.model,
+        disease: CHECK.disease,
+        confidence: CHECK.confidence,
+        low_confidence: false,
+        top: CHECK.top,
+        heatmap: overlay,
+        lesion: { mask: overlay, severity: 0.18 },
+        id: CHECK.id,
+        location: null,
       })
     }
     if (path === '/diagnoses') {
