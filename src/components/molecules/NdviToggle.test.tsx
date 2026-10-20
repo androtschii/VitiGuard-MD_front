@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { useMapStore } from '@/store/map'
@@ -25,5 +25,18 @@ describe('NdviToggle', () => {
     expect(screen.getByText('0 · почва')).toBeInTheDocument()
     expect(screen.getByText('1 · густая листва')).toBeInTheDocument()
     expect(screen.getByText(/обновите вегетацию/)).toBeInTheDocument()
+  })
+
+  it('слайдер задаёт прозрачность картограмм', () => {
+    useMapStore.setState({ showNdvi: true })
+    render(<NdviToggle />)
+    const slider = screen.getByRole('slider', { name: /Прозрачность/ })
+
+    expect(slider).toHaveValue('15')
+    expect(screen.getByText('15 %')).toBeInTheDocument()
+    fireEvent.change(slider, { target: { value: '60' } })
+
+    expect(useMapStore.getState().ndviOpacity).toBeCloseTo(0.4)
+    expect(screen.getByText('60 %')).toBeInTheDocument()
   })
 })
