@@ -120,6 +120,29 @@ describe('NdviLayer', () => {
     expect(map.addLayer.mock.calls[0][1]).toBeUndefined()
   })
 
+  it('на выбранный день показывает снимок не позже него', async () => {
+    useMapStore.setState({ showNdvi: true })
+    const images = useHistory()
+    server.use(
+      http.get('/api/v1/vineyards/:id/vegetation', ({ params }) =>
+        HttpResponse.json(
+          params.id === 'v1'
+            ? [scan('june', '2026-06-25'), scan('august', '2026-08-29')]
+            : [],
+        ),
+      ),
+    )
+    const map = fakeMap()
+    renderLayer(map)
+    await waitFor(() => expect(images).toHaveBeenCalledWith('august'))
+
+    act(() => useMapStore.setState({ ndviDay: '2026-07-31' }))
+
+    await waitFor(() => expect(images).toHaveBeenCalledWith('june'))
+    await waitFor(() => expect(map.addSource).toHaveBeenCalledTimes(2))
+    expect(map.removeSource).toHaveBeenCalledWith('ndvi-v1')
+  })
+
   it('меняет прозрачность, не загружая картинку заново', async () => {
     useMapStore.setState({ showNdvi: true, ndviOpacity: 0.5 })
     const images = useHistory()

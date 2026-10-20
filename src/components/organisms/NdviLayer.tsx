@@ -13,7 +13,8 @@ const BEFORE_LAYER = 'vineyards-outline'
 
 function ParcelNdvi({ map, vineyardId }: { map: Map; vineyardId: string }) {
   const { data: observations } = useVegetation(vineyardId)
-  const latest = observations ? latestNdviMap(observations) : null
+  const day = useMapStore((state) => state.ndviDay)
+  const latest = observations ? latestNdviMap(observations, day) : null
   const { data: image } = useNdviImage(vineyardId, latest?.id)
   const url = useObjectUrl(image)
   const corners = latest?.ndvi_map?.corners

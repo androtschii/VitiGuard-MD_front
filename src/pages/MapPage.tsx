@@ -13,6 +13,7 @@ import { MapToolbar } from '@/components/organisms/MapToolbar'
 import { MeasureControl } from '@/components/organisms/MeasureControl'
 import { MapView } from '@/components/organisms/MapView'
 import { NdviLayer } from '@/components/organisms/NdviLayer'
+import { NdviTimeline } from '@/components/organisms/NdviTimeline'
 import { OsmVineyardsLayer } from '@/components/organisms/OsmVineyardsLayer'
 import { VineyardFilters } from '@/components/organisms/VineyardFilters'
 import { VineyardForm } from '@/components/organisms/VineyardForm'
@@ -74,6 +75,7 @@ export function MapPage() {
             <>
               <VineyardFilters />
               <NdviToggle />
+              <NdviTimeline />
               <OsmToggle />
             </>
           }

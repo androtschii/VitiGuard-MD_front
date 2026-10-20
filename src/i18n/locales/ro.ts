@@ -159,6 +159,8 @@ export const ro: Messages = {
     low: 'sol',
     high: 'frunziș dens',
     transparency: 'Transparență',
+    date: 'Data imaginii',
+    latest: 'cea mai recentă imagine',
     hint: 'Cea mai recentă imagine fără nori deasupra parcelei. Nu apare stratul? Actualizați vegetația în fișa parcelei.',
   },
   pagination: {
