@@ -11,12 +11,14 @@ const observations: VegetationObservation[] = [
   ['2026-06-25', 0.79, 0.45],
   ['2026-10-11', 0.41, 0.24],
 ].map(([date, ndvi, ndre]) => ({
+  id: date as string,
   acquired_at: `${date as string}T09:17:00Z`,
   platform: 'sentinel-2a',
   scene_cloud_cover: 5,
   parcel_cloud_cover: ndvi === null ? 100 : 0,
   ndvi: ndvi === null ? null : index(ndvi as number),
   ndre: ndre === null ? null : index(ndre as number),
+  ndvi_map: null,
 }))
 
 function hover(target: Element, ratio: number) {

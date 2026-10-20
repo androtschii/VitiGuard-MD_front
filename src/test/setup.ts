@@ -50,6 +50,7 @@ beforeEach(async () => {
     filter: NO_FILTER,
     showOsm: false,
     osmTooFar: false,
+    showNdvi: false,
   })
   document.documentElement.classList.remove('dark')
 })

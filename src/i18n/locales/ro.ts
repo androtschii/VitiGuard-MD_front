@@ -154,6 +154,12 @@ export const ro: Messages = {
     toggle: 'Viile din OpenStreetMap',
     zoomIn: 'Apropiați harta pentru a le vedea',
   },
+  ndvi: {
+    toggle: 'Harta NDVI',
+    low: 'sol',
+    high: 'frunziș dens',
+    hint: 'Cea mai recentă imagine fără nori deasupra parcelei. Nu apare stratul? Actualizați vegetația în fișa parcelei.',
+  },
   pagination: {
     label: 'Pagini',
     previous: 'Înapoi',

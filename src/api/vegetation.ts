@@ -8,18 +8,43 @@ export type IndexValue = {
   std: number
 }
 
+export type LngLat = [number, number]
+
+// Углы картограммы NDVI (backend/pr-063) в порядке слоя-картинки MapLibre:
+// верхний левый, верхний правый, нижний правый, нижний левый
+export type NdviMap = { corners: [LngLat, LngLat, LngLat, LngLat] }
+
 // Снимок Sentinel-2 по участку (backend/pr-069). Без индексов — участок был
 // закрыт облаками: снимок показывается, чтобы было видно, откуда пропуск
 export type VegetationObservation = {
+  id: string
   acquired_at: string
   platform: string | null
   scene_cloud_cover: number
   parcel_cloud_cover: number | null
   ndvi: IndexValue | null
   ndre: IndexValue | null
+  ndvi_map: NdviMap | null
 }
 
 const vegetationKey = (id: string) => ['vineyards', id, 'vegetation'] as const
+
+// Картинка — с заголовком авторизации, поэтому не ссылкой в слое карты, а файлом.
+// Снимок не меняется, и загруженная картинка не перезапрашивается
+export function useNdviImage(vineyardId: string, scanId: string | undefined) {
+  return useQuery({
+    queryKey: [...vegetationKey(vineyardId), scanId, 'ndvi'],
+    queryFn: async () => {
+      const { data } = await api.get<Blob>(
+        `/vineyards/${vineyardId}/vegetation/${scanId}/ndvi.png`,
+        { responseType: 'blob' },
+      )
+      return data
+    },
+    enabled: scanId !== undefined,
+    staleTime: Infinity,
+  })
+}
 
 export async function fetchVegetation(id: string) {
   const { data } = await api.get<VegetationObservation[]>(

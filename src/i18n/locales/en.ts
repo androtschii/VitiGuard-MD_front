@@ -151,6 +151,12 @@ export const en: Messages = {
     toggle: 'OpenStreetMap vineyards',
     zoomIn: 'Zoom in to see them',
   },
+  ndvi: {
+    toggle: 'NDVI map',
+    low: 'bare soil',
+    high: 'dense foliage',
+    hint: 'Latest cloud-free image over the vineyard. No layer? Refresh vegetation in the vineyard card.',
+  },
   pagination: {
     label: 'Pages',
     previous: 'Previous',
