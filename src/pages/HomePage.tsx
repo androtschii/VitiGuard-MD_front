@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { useNavItems } from '@/app/navigation'
+import { PrintButton } from '@/components/molecules/PrintButton'
 import { ApiStatus } from '@/components/organisms/ApiStatus'
 import { FarmOverview } from '@/components/organisms/FarmOverview'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
@@ -28,7 +29,7 @@ export function HomePage() {
               {t('home.description')}
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 print:hidden">
             <Link to="/map" className={primary}>
               {t('home.openMap')}
             </Link>
@@ -41,10 +42,13 @@ export function HomePage() {
             <Link to="/compare" className={secondary}>
               {t('home.openCompare')}
             </Link>
+            <PrintButton />
           </div>
         </div>
         <FarmOverview />
-        <ApiStatus />
+        <div className="print:hidden">
+          <ApiStatus />
+        </div>
       </div>
     </DashboardTemplate>
   )

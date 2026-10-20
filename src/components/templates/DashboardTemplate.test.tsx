@@ -18,6 +18,17 @@ describe('DashboardTemplate', () => {
     expect(screen.getByRole('contentinfo')).toBeInTheDocument()
   })
 
+  it('для печати прячет навигацию и подписывает страницу датой', () => {
+    renderWithRouter(<DashboardTemplate navItems={[]}>Текст</DashboardTemplate>)
+
+    const header = screen.getByText(/^VitiGuard MD · напечатано \d+ \S+ \d{4}/)
+    expect(header).toHaveClass('hidden', 'print:block')
+    expect(screen.getByRole('banner').closest('.print\\:hidden')).not.toBeNull()
+    expect(
+      screen.getByRole('contentinfo').closest('.print\\:hidden'),
+    ).not.toBeNull()
+  })
+
   it('даёт ссылку для перехода к основному содержимому', () => {
     renderWithRouter(<DashboardTemplate navItems={[]}>Текст</DashboardTemplate>)
 

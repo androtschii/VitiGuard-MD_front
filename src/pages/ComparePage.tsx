@@ -4,6 +4,7 @@ import { Link } from 'react-router'
 import { useVineyards } from '@/api/vineyards'
 import { useNavItems } from '@/app/navigation'
 import { Select } from '@/components/atoms/Select'
+import { PrintButton } from '@/components/molecules/PrintButton'
 import { Field } from '@/components/molecules/Field'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { VineyardComparison } from '@/components/organisms/VineyardComparison'
@@ -50,13 +51,16 @@ export function ComparePage() {
   return (
     <DashboardTemplate navItems={navItems} headerActions={<LogoutButton />}>
       <div className="flex max-w-5xl flex-col gap-4">
-        <div>
-          <h1 className="text-xl font-semibold text-ink">
-            {t('compare.title')}
-          </h1>
-          <p className="max-w-2xl text-sm text-ink-muted">
-            {t('compare.intro')}
-          </p>
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <h1 className="text-xl font-semibold text-ink">
+              {t('compare.title')}
+            </h1>
+            <p className="max-w-2xl text-sm text-ink-muted">
+              {t('compare.intro')}
+            </p>
+          </div>
+          <PrintButton />
         </div>
         {!isPending && list.length < 2 ? (
           <p className="text-sm text-ink-muted">
@@ -67,7 +71,7 @@ export function ComparePage() {
           </p>
         ) : (
           <>
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2 print:hidden">
               {picker(0)}
               {picker(1)}
             </div>

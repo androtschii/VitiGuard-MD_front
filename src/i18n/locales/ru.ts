@@ -358,6 +358,10 @@ export const ru = {
     cancel: 'Отмена',
     deleteFailed: 'Не удалось удалить проверку.',
   },
+  print: {
+    button: 'Распечатать',
+    header: 'VitiGuard MD · напечатано {{date}}',
+  },
   period: {
     label: 'Период',
     week: 'Неделя',

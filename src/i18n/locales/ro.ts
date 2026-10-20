@@ -369,6 +369,10 @@ export const ro: Messages = {
     cancel: 'Anulează',
     deleteFailed: 'Verificarea nu a putut fi ștearsă.',
   },
+  print: {
+    button: 'Tipărește',
+    header: 'VitiGuard MD · tipărit {{date}}',
+  },
   period: {
     label: 'Perioada',
     week: 'Săptămână',

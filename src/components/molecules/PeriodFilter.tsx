@@ -15,7 +15,7 @@ export function PeriodFilter({ value, onChange }: PeriodFilterProps) {
   const { t } = useTranslation()
 
   return (
-    <div className="flex flex-wrap items-end gap-2">
+    <div className="flex flex-wrap items-end gap-2 print:hidden">
       <SegmentedControl
         label={t('period.label')}
         options={KINDS.map((kind) => ({
