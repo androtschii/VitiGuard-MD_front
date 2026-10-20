@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+  fetchLesionMask,
   useDeleteDiagnosis,
   useDiagnosisImage,
   type DiagnosisRecord,
@@ -9,6 +10,8 @@ import { useMe } from '@/api/users'
 import { Button } from '@/components/atoms/Button'
 import { ReviewDialog } from '@/components/organisms/ReviewDialog'
 import { cn } from '@/lib/cn'
+import { diagnosisPdf, reportFileName } from '@/lib/diagnosisReport'
+import { saveBlob } from '@/lib/mapImage'
 import { useObjectUrl } from '@/lib/useObjectUrl'
 
 type DiagnosisCardProps = {
@@ -23,6 +26,8 @@ export function DiagnosisCard({ record }: DiagnosisCardProps) {
   const remove = useDeleteDiagnosis()
   const [isConfirming, setIsConfirming] = useState(false)
   const [isReviewing, setIsReviewing] = useState(false)
+  const [isExporting, setIsExporting] = useState(false)
+  const [hasExportFailed, setHasExportFailed] = useState(false)
   // Заключение дают агроном и администратор (pr-044)
   const { data: me } = useMe()
   const canReview = me?.role === 'agronomist' || me?.role === 'admin'
@@ -36,6 +41,25 @@ export function DiagnosisCard({ record }: DiagnosisCardProps) {
     timeStyle: 'short',
   })
   const isHealthy = record.disease === 'healthy'
+  const photo = image.data
+
+  const exportPdf = async (file: Blob) => {
+    setIsExporting(true)
+    setHasExportFailed(false)
+    try {
+      const lesion = record.overlays.includes('lesion')
+        ? await fetchLesionMask(record.id)
+        : null
+      saveBlob(
+        await diagnosisPdf(record, file, lesion, t, i18n.resolvedLanguage),
+        reportFileName(record),
+      )
+    } catch {
+      setHasExportFailed(true)
+    } finally {
+      setIsExporting(false)
+    }
+  }
 
   return (
     <article className="flex flex-col overflow-hidden rounded-lg border border-line bg-surface shadow-sm">
@@ -119,6 +143,17 @@ export function DiagnosisCard({ record }: DiagnosisCardProps) {
                   {t('review.open')}
                 </Button>
               )}
+              {photo && (
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  aria-label={t('report.save')}
+                  isLoading={isExporting}
+                  onClick={() => void exportPdf(photo)}
+                >
+                  PDF
+                </Button>
+              )}
               <Button
                 size="sm"
                 variant="secondary"
@@ -132,6 +167,11 @@ export function DiagnosisCard({ record }: DiagnosisCardProps) {
         {remove.isError && (
           <p role="alert" className="text-xs text-danger">
             {t('history.deleteFailed')}
+          </p>
+        )}
+        {hasExportFailed && (
+          <p role="alert" className="text-xs text-danger">
+            {t('report.failed')}
           </p>
         )}
       </div>

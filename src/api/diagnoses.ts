@@ -20,6 +20,12 @@ export type DiagnosisRecord = {
   disease: Disease
   confidence: number
   top: DiseaseProbability[]
+  // Доля поражённой площади листа (backend/pr-048); null — без маски
+  severity: number | null
+  // Сохранённые наложения (backend/pr-050)
+  overlays: ('heatmap' | 'lesion')[]
+  // Где снято фото, по EXIF (backend/pr-051)
+  location: { lat: number; lon: number } | null
   // Заключение агронома (pr-044); null — ещё не смотрел
   review: {
     disease: Disease
@@ -75,6 +81,13 @@ export function useDiagnosisImage(id: string) {
     },
     staleTime: Infinity,
   })
+}
+
+export async function fetchLesionMask(id: string) {
+  const { data } = await api.get<Blob>(`/diagnoses/${id}/overlays/lesion`, {
+    responseType: 'blob',
+  })
+  return data
 }
 
 export function useDeleteDiagnosis() {

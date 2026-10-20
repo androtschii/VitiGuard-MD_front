@@ -360,6 +360,19 @@ export const en: Messages = {
     cancel: 'Cancel',
     deleteFailed: 'Could not delete the check.',
   },
+  report: {
+    save: 'Download the check card as PDF',
+    failed: 'Could not save the card. Please try again.',
+    title: 'VitiGuard MD — grape leaf check',
+    severity: 'About {{value}} of the leaf area is affected (U-Net mask)',
+    vineyard: 'Vineyard: {{name}}',
+    date: 'Taken: {{date}}',
+    location: 'Photo location: {{lat}}, {{lon}}',
+    probabilities: 'Disease probabilities',
+    model: 'Model {{model}}, version {{version}}',
+    disclaimer:
+      'The model’s diagnosis is a guide, not a verdict: it errs more often on field photos. Treatment decisions are made by an agronomist.',
+  },
   review: {
     open: 'Review',
     title: 'Agronomist review',

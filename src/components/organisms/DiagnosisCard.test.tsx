@@ -1,7 +1,9 @@
-import { screen } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
+import * as report from '@/lib/diagnosisReport'
+import * as mapImage from '@/lib/mapImage'
 import { record } from '@/test/historyData'
 import { renderWithQueryClient } from '@/test/render'
 import { server } from '@/test/server'
@@ -126,6 +128,61 @@ describe('DiagnosisCard', () => {
       screen.getByText('Агроном: на самом деле — Эска'),
     ).toBeInTheDocument()
     expect(screen.getByText('Тигровые полосы')).toBeInTheDocument()
+  })
+
+  it('скачивает карточку в PDF вместе с маской поражения', async () => {
+    let lesionRequested = false
+    server.use(
+      http.get('/api/v1/diagnoses/:id/overlays/lesion', () => {
+        lesionRequested = true
+        return HttpResponse.arrayBuffer(new Uint8Array([137, 80]).buffer, {
+          headers: { 'Content-Type': 'image/png' },
+        })
+      }),
+    )
+    const pdf = new Blob(['%PDF'], { type: 'application/pdf' })
+    const build = vi.spyOn(report, 'diagnosisPdf').mockResolvedValue(pdf)
+    const save = vi.spyOn(mapImage, 'saveBlob').mockImplementation(() => {})
+    renderWithQueryClient(
+      <DiagnosisCard
+        record={record('r-10', { overlays: ['heatmap', 'lesion'] })}
+      />,
+    )
+
+    await userEvent.click(
+      await screen.findByRole('button', {
+        name: 'Скачать карточку проверки в PDF',
+      }),
+    )
+
+    await waitFor(() =>
+      expect(save).toHaveBeenCalledWith(
+        pdf,
+        'vitiguard-diagnosis-2026-06-10-r-10.pdf',
+      ),
+    )
+    expect(lesionRequested).toBe(true)
+    const [, photo, lesion] = build.mock.calls[0]
+    expect(photo).toBeInstanceOf(Blob)
+    expect(lesion).toBeInstanceOf(Blob)
+  })
+
+  it('без маски PDF собирается из фото, сбой — сообщение', async () => {
+    const build = vi
+      .spyOn(report, 'diagnosisPdf')
+      .mockRejectedValue(new Error('canvas'))
+    renderWithQueryClient(<DiagnosisCard record={record('r-11')} />)
+
+    await userEvent.click(
+      await screen.findByRole('button', {
+        name: 'Скачать карточку проверки в PDF',
+      }),
+    )
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'Не удалось сохранить карточку',
+    )
+    expect(build.mock.calls[0][2]).toBeNull()
   })
 
   it('кнопка заключения — только агроному', async () => {

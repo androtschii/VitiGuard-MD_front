@@ -3,28 +3,36 @@
 // смещений. Текст в PDF не пишется: стандартные шрифты PDF не знают кириллицы,
 // поэтому подписи рисуются на самой картинке
 
-// A4 альбомной ориентации в пунктах (1/72 дюйма) и поля страницы
-export const PAGE = { width: 842, height: 595, margin: 28 }
+export type PdfPage = { width: number; height: number; margin: number }
+
+// A4 в пунктах (1/72 дюйма) и поля страницы: карта — альбомом, карточка — книгой
+export const LANDSCAPE: PdfPage = { width: 842, height: 595, margin: 28 }
+export const PORTRAIT: PdfPage = { width: 595, height: 842, margin: 28 }
 
 const encoder = new TextEncoder()
 
-export function fitImage(width: number, height: number) {
-  const maxWidth = PAGE.width - PAGE.margin * 2
-  const maxHeight = PAGE.height - PAGE.margin * 2
+export function fitImage(width: number, height: number, page = LANDSCAPE) {
+  const maxWidth = page.width - page.margin * 2
+  const maxHeight = page.height - page.margin * 2
   const scale = Math.min(maxWidth / width, maxHeight / height)
   const w = width * scale
   const h = height * scale
-  return { x: (PAGE.width - w) / 2, y: (PAGE.height - h) / 2, w, h }
+  return { x: (page.width - w) / 2, y: (page.height - h) / 2, w, h }
 }
 
-export function imagePdf(jpeg: Uint8Array, width: number, height: number) {
-  const { x, y, w, h } = fitImage(width, height)
+export function imagePdf(
+  jpeg: Uint8Array,
+  width: number,
+  height: number,
+  page = LANDSCAPE,
+) {
+  const { x, y, w, h } = fitImage(width, height, page)
   const draw = `q ${w.toFixed(2)} 0 0 ${h.toFixed(2)} ${x.toFixed(2)} ${y.toFixed(2)} cm /Im0 Do Q`
   const objects: (string | Uint8Array)[][] = [
     ['<< /Type /Catalog /Pages 2 0 R >>'],
     ['<< /Type /Pages /Kids [3 0 R] /Count 1 >>'],
     [
-      `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${PAGE.width} ${PAGE.height}]` +
+      `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${page.width} ${page.height}]` +
         ' /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>',
     ],
     [

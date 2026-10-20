@@ -368,6 +368,20 @@ export const ro: Messages = {
     cancel: 'Anulează',
     deleteFailed: 'Verificarea nu a putut fi ștearsă.',
   },
+  report: {
+    save: 'Descarcă fișa verificării în PDF',
+    failed: 'Fișa nu a putut fi salvată. Încercați din nou.',
+    title: 'VitiGuard MD — verificarea frunzei de viță-de-vie',
+    severity:
+      'Este afectată circa {{value}} din suprafața frunzei (masca U-Net)',
+    vineyard: 'Parcela: {{name}}',
+    date: 'Fotografiată: {{date}}',
+    location: 'Coordonatele fotografiei: {{lat}}, {{lon}}',
+    probabilities: 'Probabilitățile bolilor',
+    model: 'Modelul {{model}}, versiunea {{version}}',
+    disclaimer:
+      'Diagnosticul modelului este orientativ, nu o concluzie: pe fotografiile din teren greșește mai des. Decizia privind tratamentul o ia agronomul.',
+  },
   review: {
     open: 'Aviz',
     title: 'Avizul agronomului',

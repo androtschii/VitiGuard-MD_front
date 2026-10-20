@@ -19,6 +19,9 @@ export function record(
       { disease: 'black_rot', probability: 0.93 },
       { disease: 'downy_mildew', probability: 0.04 },
     ],
+    severity: null,
+    overlays: [],
+    location: null,
     review: null,
     ...overrides,
   }

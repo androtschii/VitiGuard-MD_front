@@ -45,7 +45,27 @@ function scan(id: string, date: string) {
   }
 }
 
-// Прозрачный PNG 1 × 1 — картограмма и плитки подложки
+export const CHECK = {
+  id: '3f1c9a0b-7d2e-4f60-9d7e-2c1b8a6f0e11',
+  created_at: '2026-06-10T09:30:00Z',
+  updated_at: '2026-06-10T09:30:00Z',
+  vineyard_id: CRICOVA.id,
+  vineyard_name: CRICOVA.name,
+  model: 'efficientnet_b0',
+  model_version: '82c7cbf32ff86379',
+  disease: 'downy_mildew',
+  confidence: 0.91,
+  top: [
+    { disease: 'downy_mildew', probability: 0.91 },
+    { disease: 'healthy', probability: 0.06 },
+  ],
+  severity: 0.18,
+  overlays: ['heatmap', 'lesion'],
+  location: { lat: 47.1401, lon: 28.86 },
+  review: null,
+}
+
+// Прозрачный PNG 1 × 1 — картограмма, фото, наложения и плитки подложки
 const PNG = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
   'base64',
@@ -130,6 +150,18 @@ export async function mockApi(page: Page): Promise<Api> {
         relative_humidity: 71,
         precipitation_mm: 0,
       })
+    }
+    if (path === '/diagnoses') {
+      return json(route, {
+        items: [CHECK],
+        total: 1,
+        page: 1,
+        size: 12,
+        pages: 1,
+      })
+    }
+    if (/^\/diagnoses\/[^/]+\/(image|overlays\/lesion)$/.test(path)) {
+      return route.fulfill({ contentType: 'image/png', body: PNG })
     }
     if (path === '/varieties') return json(route, [])
     if (path === '/osm/vineyards') {
