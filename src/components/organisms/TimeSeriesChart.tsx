@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type PointerEvent } from 'react'
+import { useEffect, useMemo, useRef, useState, type PointerEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   CHART,
@@ -78,11 +78,28 @@ export function TimeSeriesChart<T extends TimePoint>({
   const { i18n } = useTranslation()
   const [active, setActive] = useState<number | null>(null)
   const { ref, width } = useWidth()
-  const { x, y, invert, first, last, yTicks } = timeScales(
-    points.map((item) => item.time),
-    range,
-    height,
-    width,
+  // Наведение меняет только подсвеченную точку: масштабы и пути линий
+  // пересчитываются, лишь когда меняются данные или размер графика
+  const { min, max, step } = range
+  const scales = useMemo(
+    () =>
+      timeScales(
+        points.map((item) => item.time),
+        { min, max, step },
+        height,
+        width,
+      ),
+    [points, min, max, step, height, width],
+  )
+  const { x, y, invert, first, last, yTicks } = scales
+  const paths = useMemo(
+    () =>
+      series.map((item) =>
+        item.kind === 'bar'
+          ? ''
+          : linePath(points, item.value, scales.x, scales.y),
+      ),
+    [points, series, scales],
   )
   const language = i18n.resolvedLanguage
   const month = new Intl.DateTimeFormat(language, {
@@ -252,7 +269,7 @@ export function TimeSeriesChart<T extends TimePoint>({
                 </g>
               ) : (
                 <path
-                  d={linePath(points, item.value, x, y)}
+                  d={paths[index]}
                   fill="none"
                   stroke={item.color}
                   strokeWidth="2"
