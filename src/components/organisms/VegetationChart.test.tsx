@@ -1,5 +1,5 @@
-import { fireEvent, render, screen } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { act, fireEvent, render, screen } from '@testing-library/react'
+import { describe, expect, it, vi } from 'vitest'
 import type { VegetationObservation } from '@/api/vegetation'
 import { VegetationChart } from './VegetationChart'
 
@@ -74,6 +74,59 @@ describe('VegetationChart', () => {
     fireEvent.pointerMove(area, { clientX: 100 })
 
     expect(screen.queryByRole('status')).not.toBeInTheDocument()
+  })
+
+  it('рисуется в ширину контейнера и откликается на касание', () => {
+    let resize: ResizeObserverCallback = () => {}
+    const disconnect = vi.fn()
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        constructor(callback: ResizeObserverCallback) {
+          resize = callback
+        }
+        observe() {}
+        disconnect = disconnect
+      },
+    )
+    const { unmount } = render(<VegetationChart observations={observations} />)
+    const chart = screen.getByRole('img')
+
+    // Экран телефона: график шириной 350 пикселей, а не 640 единиц
+    act(() =>
+      resize(
+        [{ contentRect: { width: 350 } } as ResizeObserverEntry],
+        {} as ResizeObserver,
+      ),
+    )
+    expect(chart.getAttribute('viewBox')).toBe('0 0 350 240')
+    // Уже 280 пикселей график не сжимается: подписи останутся читаемыми
+    act(() =>
+      resize(
+        [{ contentRect: { width: 200 } } as ResizeObserverEntry],
+        {} as ResizeObserver,
+      ),
+    )
+    expect(chart.getAttribute('viewBox')).toBe('0 0 280 240')
+    // Скрытый контейнер (ширина 0) размер не сбрасывает
+    act(() =>
+      resize(
+        [{ contentRect: { width: 0 } } as ResizeObserverEntry],
+        {} as ResizeObserver,
+      ),
+    )
+    expect(chart.getAttribute('viewBox')).toBe('0 0 280 240')
+
+    const area = screen.getByTestId('chart-hover')
+    expect(area.style.touchAction).toBe('pan-y')
+    chart.getBoundingClientRect = () =>
+      ({ left: 0, top: 0, width: 280, height: 240 }) as DOMRect
+    fireEvent.pointerDown(area, { clientX: 140 })
+    expect(screen.getByRole('status')).toHaveTextContent('25 июн. 2026 г.')
+
+    unmount()
+    expect(disconnect).toHaveBeenCalled()
+    vi.unstubAllGlobals()
   })
 
   it('без снимков с индексами не рисуется', () => {

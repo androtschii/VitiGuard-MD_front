@@ -1,6 +1,7 @@
 // Общая геометрия графиков по датам: индексы вегетации, риск болезней
 
-// Размеры графика в единицах viewBox; SVG растягивается по ширине окна
+// Размеры графика в пикселях: ширина — по контейнеру, это значение — пока
+// контейнер не измерен; поля — под подписи осей и концов линий
 export const CHART = {
   width: 640,
   height: 240,
@@ -10,19 +11,25 @@ export const CHART = {
   bottom: 28,
 }
 
+// Подпись месяца шириной около 30 пикселей: реже — подписи наезжают друг на друга
+const MIN_TICK_SPACING = 36
+
 export type TimePoint = { time: number }
+
+export type AxisRange = { min: number; max: number; step: number }
 
 const DAY = 86_400_000
 
 export function timeScales(
   times: number[],
-  { min, max, step }: { min: number; max: number; step: number },
+  { min, max, step }: AxisRange,
   height = CHART.height,
+  width = CHART.width,
 ) {
   const first = Math.min(...times)
   // Один день данных — всё равно ось шириной в сутки, чтобы не делить на ноль
   const last = Math.max(...times, first + DAY)
-  const plotWidth = CHART.width - CHART.left - CHART.right
+  const plotWidth = width - CHART.left - CHART.right
   const plotHeight = height - CHART.top - CHART.bottom
   const x = (time: number) =>
     CHART.left + ((time - first) / (last - first)) * plotWidth
@@ -34,7 +41,27 @@ export function timeScales(
   for (let value = min; value <= max + 1e-9; value += step) {
     yTicks.push(Math.round(value * 100) / 100)
   }
-  return { x, y, invert, first, last, yTicks, height }
+  return { x, y, invert, first, last, yTicks, height, width }
+}
+
+// Подписи у концов линий на близких значениях раздвигаются по вертикали
+// не меньше чем на gap: иначе «A» и «B» ложатся одна на другую
+export function spreadLabels(ys: number[], gap = 12) {
+  const order = ys.map((y, index) => ({ y, index })).sort((a, b) => a.y - b.y)
+  const placed = [...ys]
+  order.forEach((item, position) => {
+    const above = position > 0 ? placed[order[position - 1].index] : -Infinity
+    placed[item.index] = Math.max(item.y, above + gap)
+  })
+  return placed
+}
+
+// Каждое n-е деление подписывается так, чтобы подписи не наезжали
+export function labeledTicks(ticks: number[], plotWidth: number) {
+  if (ticks.length < 2) return ticks
+  const spacing = plotWidth / ticks.length
+  const every = Math.ceil(MIN_TICK_SPACING / spacing)
+  return ticks.filter((_, index) => index % every === 0)
 }
 
 export type TimeScales = ReturnType<typeof timeScales>

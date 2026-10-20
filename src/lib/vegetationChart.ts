@@ -2,6 +2,7 @@ import type { VegetationObservation } from '@/api/vegetation'
 import {
   linePath as timeLinePath,
   timeScales,
+  type AxisRange,
   type TimePoint,
 } from '@/lib/timeSeriesChart'
 
@@ -30,11 +31,21 @@ export function chartPoints(observations: VegetationObservation[]) {
 }
 
 // Ось индексов — от 0 (или ниже, если индекс отрицательный: вода, тень) до 1
-export function chartScales(points: ChartPoint[]) {
-  const lowest = Math.min(0, ...points.map((p) => Math.min(p.ndvi, p.ndre)))
+export function indexRange(values: number[]): AxisRange {
+  const lowest = Math.min(0, ...values)
+  return { min: Math.floor(lowest * 4) / 4, max: 1, step: 0.25 }
+}
+
+export function chartRange(points: ChartPoint[]) {
+  return indexRange(points.flatMap((point) => [point.ndvi, point.ndre]))
+}
+
+export function chartScales(points: ChartPoint[], width?: number) {
   return timeScales(
     points.map((point) => point.time),
-    { min: Math.floor(lowest * 4) / 4, max: 1, step: 0.25 },
+    chartRange(points),
+    undefined,
+    width,
   )
 }
 

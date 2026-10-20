@@ -19,7 +19,6 @@ import {
 } from '@/lib/riskSeries'
 import { inPeriod, periodRange, SEASON, type Period } from '@/lib/period'
 import { dayAdvice } from '@/lib/recommendations'
-import { timeScales } from '@/lib/timeSeriesChart'
 
 type RiskDialogProps = {
   vineyardId: string
@@ -51,11 +50,8 @@ function SeasonChart({
   return (
     <TimeSeriesChart<IndexPoint>
       points={points}
-      scales={timeScales(
-        points.map((point) => point.time),
-        { min: 0, max: 100, step: 25 },
-        CHART_HEIGHT,
-      )}
+      range={{ min: 0, max: 100, step: 25 }}
+      height={CHART_HEIGHT}
       label={label}
       formatValue={(value) => String(Math.round(value))}
       today={today}
@@ -86,7 +82,6 @@ function WeatherCharts({
 }) {
   const { t } = useTranslation()
   if (points.length === 0) return null
-  const times = points.map((point) => point.time)
   const rain = points.filter((point) => point.precipitation !== null)
   const rainValues = rain.map((point) => point.precipitation ?? 0)
   return (
@@ -94,15 +89,12 @@ function WeatherCharts({
       <h3 className="font-semibold text-ink">{t('risk.weatherChart')}</h3>
       <TimeSeriesChart<WeatherPoint>
         points={points}
-        scales={timeScales(
-          times,
-          niceRange(
-            points.map((point) => point.temperature),
-            10,
-            0,
-          ),
-          CHART_HEIGHT,
+        range={niceRange(
+          points.map((point) => point.temperature),
+          10,
+          0,
         )}
+        height={CHART_HEIGHT}
         label={t('risk.temperatureChartLabel')}
         formatValue={(value) => `${Math.round(value)} °C`}
         today={today}
@@ -121,11 +113,8 @@ function WeatherCharts({
       {rain.length > 0 && (
         <TimeSeriesChart<WeatherPoint>
           points={rain}
-          scales={timeScales(
-            rain.map((point) => point.time),
-            niceRange(rainValues, 10, 0),
-            CHART_HEIGHT,
-          )}
+          range={niceRange(rainValues, 10, 0)}
+          height={CHART_HEIGHT}
           label={t('risk.precipitationChartLabel')}
           formatValue={(value) =>
             t('risk.precipitationValue', { value: Math.round(value) })

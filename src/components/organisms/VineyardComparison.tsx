@@ -8,7 +8,7 @@ import { RiskBadge } from '@/components/molecules/RiskBadge'
 import { TimeSeriesChart } from '@/components/organisms/TimeSeriesChart'
 import { clearNdvi, pairSeries, type PairPoint } from '@/lib/compare'
 import { inPeriod, periodRange, SEASON, type Period } from '@/lib/period'
-import { timeScales } from '@/lib/timeSeriesChart'
+import { indexRange } from '@/lib/vegetationChart'
 
 type VineyardComparisonProps = {
   a: Vineyard
@@ -100,8 +100,6 @@ export function VineyardComparison({ a, b }: VineyardComparisonProps) {
     { label: t('compare.rows.drops'), cells: [drops(0), drops(1)] },
   ]
 
-  const lowest = Math.min(0, ...pair.map((point) => Math.min(point.a, point.b)))
-
   return (
     <div className="flex flex-col gap-4">
       <div className="overflow-x-auto rounded-lg border border-line bg-surface shadow-sm">
@@ -141,10 +139,7 @@ export function VineyardComparison({ a, b }: VineyardComparisonProps) {
         {pair.length > 1 ? (
           <TimeSeriesChart<PairPoint>
             points={pair}
-            scales={timeScales(
-              pair.map((point) => point.time),
-              { min: Math.floor(lowest * 4) / 4, max: 1, step: 0.25 },
-            )}
+            range={indexRange(pair.flatMap((point) => [point.a, point.b]))}
             label={t('compare.chartLabel', {
               a: a.name,
               b: b.name,
