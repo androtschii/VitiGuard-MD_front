@@ -5,8 +5,10 @@ import {
   captureMap,
   mapFileName,
   saveBlob,
+  toJpegBytes,
   toPngBlob,
   withAttribution,
+  withTitle,
 } from './mapImage'
 
 function fakeContext() {
@@ -129,6 +131,48 @@ describe('mapImage', () => {
     await expect(toPngBlob(canvas)).resolves.toBe(png)
     await expect(toPngBlob(canvas)).rejects.toThrow('PNG')
     expect(toBlob).toHaveBeenCalledTimes(2)
+  })
+
+  it('имя файла PDF — с тем же днём', () => {
+    expect(mapFileName(new Date('2026-10-18T12:00:00Z'), 'pdf')).toBe(
+      'vitiguard-map-2026-10-18.pdf',
+    )
+  })
+
+  it('добавляет над кадром полосу с заголовком', () => {
+    const context = fakeContext()
+    vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(
+      context as never,
+    )
+    const frame = source()
+
+    const canvas = withTitle(frame, 'Карта участков')
+
+    // Шрифт 18 px и отступы при плотности 2: полоса 36 + 48 = 84 px
+    expect([canvas.width, canvas.height]).toEqual([800, 684])
+    expect(context.fillRect).toHaveBeenCalledWith(0, 0, 800, 84)
+    expect(context.fillText).toHaveBeenCalledWith('Карта участков', 24, 42)
+    expect(context.drawImage).toHaveBeenCalledWith(frame, 0, 84)
+  })
+
+  it('JPEG из холста в байтах, а пустой результат — ошибка', async () => {
+    const canvas = document.createElement('canvas')
+    const toBlob = vi
+      .spyOn(canvas, 'toBlob')
+      .mockImplementationOnce((done) =>
+        done(new Blob([new Uint8Array([255, 216])])),
+      )
+      .mockImplementationOnce((done) => done(null))
+
+    await expect(toJpegBytes(canvas)).resolves.toEqual(
+      new Uint8Array([255, 216]),
+    )
+    await expect(toJpegBytes(canvas)).rejects.toThrow('JPEG')
+    expect(toBlob).toHaveBeenCalledWith(
+      expect.any(Function),
+      'image/jpeg',
+      0.92,
+    )
   })
 
   it('сохраняет файл через ссылку и освобождает адрес', () => {
