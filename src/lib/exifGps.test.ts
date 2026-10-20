@@ -19,6 +19,10 @@ function jpeg({
   latRef = 'N',
   lonRef = 'E',
   withGps = true,
+  order = undefined as number[] | undefined,
+  ifd0 = 8,
+  refType = 2,
+  latAt = 80,
 } = {}) {
   const tiff: number[] = []
   const u16 = (v: number) => (little ? [v & 0xff, v >> 8] : [v >> 8, v & 0xff])
@@ -33,16 +37,17 @@ function jpeg({
     ...value,
   ]
   // Заголовок TIFF: порядок байт, 42, смещение IFD0 = 8
-  tiff.push(...(little ? [0x49, 0x49] : [0x4d, 0x4d]), ...u16(42), ...u32(8))
+  const byteOrder = order ?? (little ? [0x49, 0x49] : [0x4d, 0x4d])
+  tiff.push(...byteOrder, ...u16(42), ...u32(ifd0))
   // IFD0: одна запись — ссылка на GPS IFD по смещению 26
   tiff.push(...u16(1), ...entry(0x8825, 4, 1, u32(withGps ? 26 : 0)), ...u32(0))
   // GPS IFD: 4 записи, дроби — после него (26 + 2 + 48 + 4 = 80)
   const ascii = (c: string) => [c.charCodeAt(0), 0, 0, 0]
   tiff.push(
     ...u16(4),
-    ...entry(1, 2, 2, ascii(latRef)),
-    ...entry(2, 5, 3, u32(80)),
-    ...entry(3, 2, 2, ascii(lonRef)),
+    ...entry(1, refType, 2, ascii(latRef)),
+    ...entry(2, 5, 3, u32(latAt)),
+    ...entry(3, refType, 2, ascii(lonRef)),
     ...entry(4, 5, 3, u32(104)),
     ...u32(0),
   )
@@ -109,6 +114,21 @@ describe('parseExifGps', () => {
       parseExifGps(new Uint8Array([0xff, 0xd8, 0x12, 0x34]).buffer),
     ).toBeNull()
     expect(parseExifGps(new ArrayBuffer(0))).toBeNull()
+  })
+
+  it('неизвестный порядок байт и ссылки за концом файла — не координаты', () => {
+    expect(parseExifGps(jpeg({ order: [0x58, 0x58] }))).toBeNull()
+    // IFD0 дальше конца файла
+    expect(parseExifGps(jpeg({ ifd0: 60_000 }))).toBeNull()
+    // Дроби широты дальше конца файла
+    expect(parseExifGps(jpeg({ latAt: 60_000 }))).toBeNull()
+  })
+
+  it('полушарие не текстом считается северным и восточным', () => {
+    const point = parseExifGps(jpeg({ latRef: 'S', lonRef: 'W', refType: 3 }))
+
+    expect(point?.latitude).toBeCloseTo(47.14, 4)
+    expect(point?.longitude).toBeCloseTo(28.86, 4)
   })
 
   it('обрезанный файл не роняет разбор', () => {

@@ -1,10 +1,12 @@
-import { screen, waitFor } from '@testing-library/react'
+import { fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
 import { MemoryRouter } from 'react-router'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { renderWithQueryClient } from '@/test/render'
 import { server } from '@/test/server'
+import { api } from '@/api/client'
+import * as crop from '@/lib/crop'
 import * as exifGps from '@/lib/exifGps'
 import * as offline from '@/lib/offlineClassifier'
 import { deleteModel, saveModel } from '@/lib/modelStore'
@@ -117,6 +119,61 @@ describe('DiagnosisPage', () => {
     await screen.findByText('Диагноз')
     expect(requests[0]?.get('save')).toBe('true')
     expect(requests[0]?.get('vineyard_id')).toBe('vineyard-1')
+  })
+
+  it('анализирует кадрированное фото, а участок берёт по GPS исходного', async () => {
+    // jsdom не кладёт содержимое файла в multipart: отправленный файл видно
+    // только в FormData, переданной клиенту API
+    const post = vi.spyOn(api, 'post')
+    const readGps = vi.spyOn(exifGps, 'readPhotoGps').mockResolvedValue({
+      latitude: 47.145,
+      longitude: 28.865,
+    })
+    const cropped = new File(['crop'], 'leaf-crop.jpg', { type: 'image/jpeg' })
+    vi.spyOn(crop, 'cropPhoto').mockResolvedValue(cropped)
+    const user = renderPage()
+    await user.upload(screen.getByLabelText('Выбрать фото листа'), leaf)
+    await screen.findByText(/Снято в точке 47,145/)
+
+    await user.click(screen.getByRole('button', { name: 'Кадрировать' }))
+    const dialog = screen.getByRole('dialog', { name: 'Кадрирование фото' })
+    const image = within(dialog).getByRole('img')
+    Object.defineProperty(image, 'naturalWidth', { value: 800 })
+    Object.defineProperty(image, 'naturalHeight', { value: 600 })
+    fireEvent.load(image)
+    await user.click(
+      within(dialog).getByRole('button', { name: 'Кадрировать' }),
+    )
+    await user.click(screen.getByRole('button', { name: 'Определить болезнь' }))
+
+    await screen.findByText('Диагноз')
+    const [url, form] = post.mock.calls[0]
+    expect(url).toBe('/ai/diagnose')
+    expect((form as FormData).get('image')).toBe(cropped)
+    // Координаты съёмки остались от исходного файла: в копии EXIF нет
+    expect(screen.getByText(/Снято в точке 47,145/)).toBeInTheDocument()
+    expect(readGps.mock.calls.map(([file]) => file)).not.toContain(cropped)
+  })
+
+  it('кадрирование отменяет результат прежнего анализа', async () => {
+    vi.spyOn(crop, 'cropPhoto').mockResolvedValue(
+      new File(['crop'], 'leaf-crop.jpg', { type: 'image/jpeg' }),
+    )
+    const user = renderPage()
+    await analyze(user)
+    await screen.findByText('Диагноз')
+
+    await user.click(screen.getByRole('button', { name: 'Кадрировать' }))
+    const dialog = screen.getByRole('dialog', { name: 'Кадрирование фото' })
+    const image = within(dialog).getByRole('img')
+    Object.defineProperty(image, 'naturalWidth', { value: 800 })
+    Object.defineProperty(image, 'naturalHeight', { value: 600 })
+    fireEvent.load(image)
+    await user.click(
+      within(dialog).getByRole('button', { name: 'Кадрировать' }),
+    )
+
+    expect(screen.queryByText('Диагноз')).not.toBeInTheDocument()
   })
 
   it('без галочки проверка не сохраняется, участок можно сменить', async () => {
