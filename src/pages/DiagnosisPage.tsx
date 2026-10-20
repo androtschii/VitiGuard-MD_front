@@ -22,6 +22,8 @@ export function DiagnosisPage() {
   const { t } = useTranslation()
   const navItems = useNavItems()
   const [file, setFile] = useState<File | null>(null)
+  // Выбранный файл до кадрирования: в кадрированной копии нет EXIF с GPS
+  const [original, setOriginal] = useState<File | null>(null)
   const server = useDiagnose()
   const device = useOfflineDiagnose()
   const isOnline = useOnlineStatus()
@@ -33,7 +35,7 @@ export function DiagnosisPage() {
   const diagnose = onDevice ? device : server
   const canAnalyze = isOnline || Boolean(stored.data)
   const photoUrl = useObjectUrl(file)
-  const location = usePhotoLocation(file)
+  const location = usePhotoLocation(original)
   const [save, setSave] = useState(true)
   // undefined — участок не выбран вручную: берётся тот, где снято фото
   const [chosenPlot, setChosenPlot] = useState<string | undefined>()
@@ -63,8 +65,14 @@ export function DiagnosisPage() {
               file={file}
               onSelect={(picked) => {
                 setFile(picked)
+                setOriginal(picked)
                 setChosenPlot(undefined)
                 // Результат относится к прежнему фото
+                server.reset()
+                device.reset()
+              }}
+              onCrop={(cropped) => {
+                setFile(cropped)
                 server.reset()
                 device.reset()
               }}
