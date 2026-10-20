@@ -32,6 +32,9 @@ type MapState = {
   setShowOsm: (showOsm: boolean) => void
   osmTooFar: boolean
   setOsmTooFar: (osmTooFar: boolean) => void
+  // Картограммы NDVI поверх участков пользователя
+  showNdvi: boolean
+  setShowNdvi: (showNdvi: boolean) => void
 }
 
 // Выбранная подложка сохраняется: агроном, работающий по снимкам,
@@ -56,4 +59,6 @@ export const useMapStore = create<MapState>()((set) => ({
   setShowOsm: (showOsm) => set({ showOsm }),
   osmTooFar: false,
   setOsmTooFar: (osmTooFar) => set({ osmTooFar }),
+  showNdvi: false,
+  setShowNdvi: (showNdvi) => set({ showNdvi }),
 }))

@@ -12,20 +12,24 @@ const index = (mean: number) => ({ mean, min: mean, max: mean, std: 0 })
 
 const history: VegetationObservation[] = [
   {
+    id: 'scan-1',
     acquired_at: '2026-06-25T09:17:00Z',
     platform: 'sentinel-2a',
     scene_cloud_cover: 3.8,
     parcel_cloud_cover: 0,
     ndvi: index(0.7951),
     ndre: index(0.4504),
+    ndvi_map: null,
   },
   {
+    id: 'scan-2',
     acquired_at: '2026-06-28T09:07:00Z',
     platform: 'sentinel-2b',
     scene_cloud_cover: 22.5,
     parcel_cloud_cover: null,
     ndvi: null,
     ndre: null,
+    ndvi_map: null,
   },
 ]
 

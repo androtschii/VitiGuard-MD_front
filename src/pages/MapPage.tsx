@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toMultiPolygon, useCreateVineyard } from '@/api/vineyards'
 import { useNavItems } from '@/app/navigation'
+import { NdviToggle } from '@/components/molecules/NdviToggle'
 import { OsmToggle } from '@/components/molecules/OsmToggle'
 import { DrawPolygonControl } from '@/components/organisms/DrawPolygonControl'
 import { MapRiskLegend } from '@/components/organisms/MapRiskLegend'
@@ -11,6 +12,7 @@ import { MapSearch } from '@/components/organisms/MapSearch'
 import { MapToolbar } from '@/components/organisms/MapToolbar'
 import { MeasureControl } from '@/components/organisms/MeasureControl'
 import { MapView } from '@/components/organisms/MapView'
+import { NdviLayer } from '@/components/organisms/NdviLayer'
 import { OsmVineyardsLayer } from '@/components/organisms/OsmVineyardsLayer'
 import { VineyardFilters } from '@/components/organisms/VineyardFilters'
 import { VineyardForm } from '@/components/organisms/VineyardForm'
@@ -33,6 +35,7 @@ export function MapPage() {
       </p>
       <MapView className="h-[calc(100svh-14rem)] min-h-96">
         <VineyardsLayer />
+        <NdviLayer />
         <OsmVineyardsLayer />
         <VineyardPopups />
         <MapRiskLegend />
@@ -70,6 +73,7 @@ export function MapPage() {
           layers={
             <>
               <VineyardFilters />
+              <NdviToggle />
               <OsmToggle />
             </>
           }

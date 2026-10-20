@@ -17,12 +17,14 @@ function observation(
   ndre: number | null = ndvi,
 ): VegetationObservation {
   return {
+    id: date,
     acquired_at: `${date}T09:17:00Z`,
     platform: 'sentinel-2a',
     scene_cloud_cover: 5,
     parcel_cloud_cover: ndvi === null ? 100 : 0,
     ndvi: ndvi === null ? null : index(ndvi),
     ndre: ndre === null ? null : index(ndre),
+    ndvi_map: null,
   }
 }
 
