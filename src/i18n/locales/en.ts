@@ -201,6 +201,7 @@ export const en: Messages = {
     openMap: 'Open map',
     openDiagnosis: 'Check a leaf',
     openRegions: 'District statistics',
+    openCompare: 'Compare vineyards',
   },
   errorPage: {
     title: 'Something went wrong',
@@ -359,6 +360,34 @@ export const en: Messages = {
     confirmDelete: 'Delete this check?',
     cancel: 'Cancel',
     deleteFailed: 'Could not delete the check.',
+  },
+  compare: {
+    title: 'Compare vineyards',
+    intro:
+      'Two vineyards side by side: today’s disease risk, vegetation from Sentinel-2 images and NDVI drops. It shows which vineyard needs attention first.',
+    first: 'Vineyard A',
+    second: 'Vineyard B',
+    same: 'Choose two different vineyards.',
+    needTwo:
+      'You need at least two vineyards to compare — draw them on the map.',
+    table: 'Vineyard comparison',
+    rows: {
+      area: 'Area',
+      variety: 'Variety',
+      planted: 'Planting year',
+      downy: 'Downy mildew today',
+      powdery: 'Powdery mildew today',
+      ndvi: 'Latest NDVI',
+      clear: 'Cloud-free images',
+      drops: 'NDVI drops',
+    },
+    noDrops: 'none',
+    drops: '{{count}}, confirmed: {{confirmed}}',
+    chart: 'NDVI over the common image period',
+    chartLabel:
+      'NDVI of {{a}} (A) and {{b}} (B) from {{from}} to {{to}}; values are in each vineyard’s vegetation table',
+    noCommon:
+      'The vineyards have no common image period: refresh vegetation in each vineyard card.',
   },
   share: {
     open: 'Share',

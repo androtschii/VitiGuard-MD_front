@@ -64,6 +64,28 @@ export function useVegetation(id: string, refreshing = false) {
   })
 }
 
+// Снимок с просадкой NDVI ниже нормы участка и соседей (backend/pr-065)
+export type NdviAnomaly = {
+  acquired_at: string
+  ndvi: number
+  below_norm: number
+  below_peers: number | null
+  z: number
+  level: 'suspected' | 'confirmed'
+}
+
+export function useNdviAnomalies(id: string) {
+  return useQuery({
+    queryKey: [...vegetationKey(id), 'anomalies'],
+    queryFn: async () => {
+      const { data } = await api.get<NdviAnomaly[]>(
+        `/vineyards/${id}/vegetation/anomalies`,
+      )
+      return data
+    },
+  })
+}
+
 // Расчёт индексов по новым снимкам сезона — фоновая задача (backend/pr-060)
 export async function refreshVegetation(id: string) {
   const { data } = await api.post<{ task_id: string }>(

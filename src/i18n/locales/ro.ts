@@ -204,6 +204,7 @@ export const ro: Messages = {
     openMap: 'Deschide harta',
     openDiagnosis: 'Verifică o frunză',
     openRegions: 'Statistica raioanelor',
+    openCompare: 'Compară parcelele',
   },
   errorPage: {
     title: 'Ceva nu a mers bine',
@@ -367,6 +368,34 @@ export const ro: Messages = {
     confirmDelete: 'Ștergeți verificarea?',
     cancel: 'Anulează',
     deleteFailed: 'Verificarea nu a putut fi ștearsă.',
+  },
+  compare: {
+    title: 'Compararea parcelelor',
+    intro:
+      'Două parcele alături: riscul bolilor azi, vegetația după imaginile Sentinel-2 și scăderile NDVI. Așa se vede care parcelă are nevoie de atenție mai întâi.',
+    first: 'Parcela A',
+    second: 'Parcela B',
+    same: 'Alegeți două parcele diferite.',
+    needTwo:
+      'Pentru comparare sunt necesare cel puțin două parcele — desenați-le pe hartă.',
+    table: 'Compararea parcelelor',
+    rows: {
+      area: 'Suprafața',
+      variety: 'Soiul',
+      planted: 'Anul plantării',
+      downy: 'Mana azi',
+      powdery: 'Făinarea azi',
+      ndvi: 'Ultimul NDVI',
+      clear: 'Imagini fără nori',
+      drops: 'Scăderi NDVI',
+    },
+    noDrops: 'nu sunt',
+    drops: '{{count}}, confirmate: {{confirmed}}',
+    chart: 'NDVI pe perioada comună a imaginilor',
+    chartLabel:
+      'NDVI al parcelelor {{a}} (A) și {{b}} (B) de la {{from}} până la {{to}}; valorile sunt în tabelul dinamicii fiecărei parcele',
+    noCommon:
+      'Parcelele nu au o perioadă comună de imagini: actualizați vegetația în fișa fiecărei parcele.',
   },
   share: {
     open: 'Distribuie',
