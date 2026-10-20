@@ -27,7 +27,8 @@ export type VegetationObservation = {
   ndvi_map: NdviMap | null
 }
 
-const vegetationKey = (id: string) => ['vineyards', id, 'vegetation'] as const
+export const vegetationKey = (id: string) =>
+  ['vineyards', id, 'vegetation'] as const
 
 // Картинка — с заголовком авторизации, поэтому не ссылкой в слое карты, а файлом.
 // Снимок не меняется, и загруженная картинка не перезапрашивается

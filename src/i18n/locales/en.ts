@@ -156,6 +156,8 @@ export const en: Messages = {
     low: 'bare soil',
     high: 'dense foliage',
     transparency: 'Transparency',
+    date: 'Image date',
+    latest: 'latest image',
     hint: 'Latest cloud-free image over the vineyard. No layer? Refresh vegetation in the vineyard card.',
   },
   pagination: {

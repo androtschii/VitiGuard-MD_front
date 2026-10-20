@@ -39,6 +39,10 @@ type MapState = {
   // Непрозрачность картограмм 0..1: сквозь снимок видна подложка
   ndviOpacity: number
   setNdviOpacity: (ndviOpacity: number) => void
+  // День на шкале снимков YYYY-MM-DD; null — последний снимок, в том числе
+  // новый, пришедший после выбора
+  ndviDay: string | null
+  setNdviDay: (ndviDay: string | null) => void
 }
 
 // Выбранная подложка сохраняется: агроном, работающий по снимкам,
@@ -67,4 +71,6 @@ export const useMapStore = create<MapState>()((set) => ({
   setShowNdvi: (showNdvi) => set({ showNdvi }),
   ndviOpacity: NDVI_OPACITY,
   setNdviOpacity: (ndviOpacity) => set({ ndviOpacity }),
+  ndviDay: null,
+  setNdviDay: (ndviDay) => set({ ndviDay }),
 }))

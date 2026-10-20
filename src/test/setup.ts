@@ -53,6 +53,7 @@ beforeEach(async () => {
     osmTooFar: false,
     showNdvi: false,
     ndviOpacity: NDVI_OPACITY,
+    ndviDay: null,
   })
   document.documentElement.classList.remove('dark')
 })
