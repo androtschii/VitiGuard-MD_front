@@ -44,6 +44,38 @@ describe('MapExportControl', () => {
     expect(screen.queryByRole('alert')).toBeNull()
   })
 
+  it('сохраняет карту в PDF с заголовком и датой', async () => {
+    const page = document.createElement('canvas')
+    page.width = 800
+    page.height = 684
+    vi.spyOn(mapImage, 'captureMap').mockResolvedValue(
+      document.createElement('canvas'),
+    )
+    const title = vi.spyOn(mapImage, 'withTitle').mockReturnValue(page)
+    vi.spyOn(mapImage, 'toJpegBytes').mockResolvedValue(
+      new Uint8Array([255, 216, 255, 217]),
+    )
+    const save = vi.spyOn(mapImage, 'saveBlob').mockImplementation(() => {})
+    renderControl({} as Map)
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Сохранить карту в PDF' }),
+    )
+
+    expect(title).toHaveBeenCalledWith(
+      expect.any(HTMLCanvasElement),
+      expect.stringMatching(
+        /^VitiGuard MD — карта участков, \d+ \S+ \d{4} г\.$/,
+      ),
+    )
+    const [blob, name] = save.mock.calls[0]
+    expect(blob.type).toBe('application/pdf')
+    expect(
+      new TextDecoder().decode((await blob.arrayBuffer()).slice(0, 8)),
+    ).toBe('%PDF-1.4')
+    expect(name).toMatch(/^vitiguard-map-\d{4}-\d{2}-\d{2}\.pdf$/)
+  })
+
   it('сообщает, если сохранить не удалось', async () => {
     vi.spyOn(mapImage, 'captureMap').mockRejectedValue(new Error('tainted'))
     renderControl({} as Map)

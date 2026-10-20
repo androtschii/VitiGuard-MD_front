@@ -147,7 +147,10 @@ export const ro: Messages = {
     ok: 'Am înțeles',
   },
   mapExport: {
-    save: 'Salvează harta în PNG',
+    save: 'Salvează harta',
+    png: 'Salvează harta în PNG',
+    pdf: 'Salvează harta în PDF',
+    title: 'VitiGuard MD — harta parcelelor, {{date}}',
     failed: 'Harta nu a putut fi salvată. Încercați din nou.',
   },
   osm: {

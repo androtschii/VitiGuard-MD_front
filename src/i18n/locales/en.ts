@@ -144,7 +144,10 @@ export const en: Messages = {
     ok: 'Got it',
   },
   mapExport: {
-    save: 'Save map as PNG',
+    save: 'Save map',
+    png: 'Save map as PNG',
+    pdf: 'Save map as PDF',
+    title: 'VitiGuard MD — vineyard map, {{date}}',
     failed: 'Could not save the map. Please try again.',
   },
   osm: {

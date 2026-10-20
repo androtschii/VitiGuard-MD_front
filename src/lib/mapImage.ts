@@ -14,9 +14,47 @@ export function attributionText(container: HTMLElement) {
   return inner?.textContent?.replace(/\s+/g, ' ').trim() ?? ''
 }
 
-export function mapFileName(now = new Date()) {
+export function mapFileName(now = new Date(), extension = 'png') {
   const day = now.toISOString().slice(0, 10)
-  return `vitiguard-map-${day}.png`
+  return `vitiguard-map-${day}.${extension}`
+}
+
+// Полоса с заголовком над картой — для PDF: в отчёте видно, что и когда снято
+export function withTitle(source: HTMLCanvasElement, title: string) {
+  const scale = source.width / (source.clientWidth || source.width)
+  const size = FONT_SIZE * 1.5 * scale
+  const band = size + PADDING * 4 * scale
+  const canvas = document.createElement('canvas')
+  canvas.width = source.width
+  canvas.height = source.height + band
+  const context = canvas.getContext('2d')
+  if (!context) throw new Error('Canvas 2D недоступен')
+  context.fillStyle = '#ffffff'
+  context.fillRect(0, 0, canvas.width, band)
+  context.fillStyle = '#1f2937'
+  context.font = `600 ${size}px sans-serif`
+  context.textBaseline = 'middle'
+  context.fillText(title, PADDING * 2 * scale, band / 2)
+  context.drawImage(source, 0, band)
+  return canvas
+}
+
+export function toJpegBytes(canvas: HTMLCanvasElement) {
+  return new Promise<Uint8Array>((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => {
+        if (!blob) {
+          reject(new Error('Не удалось сохранить JPEG'))
+          return
+        }
+        void blob
+          .arrayBuffer()
+          .then((buffer) => resolve(new Uint8Array(buffer)), reject)
+      },
+      'image/jpeg',
+      0.92,
+    )
+  })
 }
 
 // Копия кадра с подписью источников в правом нижнем углу
