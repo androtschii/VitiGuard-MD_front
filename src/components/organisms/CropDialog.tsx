@@ -36,39 +36,23 @@ const KEYS: Record<string, [number, number]> = {
   ArrowDown: [0, 1],
 }
 
-// Кадрирование фото листа квадратной рамкой: рамку двигают мышью, пальцем или
-// стрелками, размер задаёт слайдер
-export function CropDialog({
-  open,
-  photoUrl,
-  fileName,
-  onClose,
-  onCrop,
-}: CropDialogProps) {
+type CropFrameProps = {
+  image: HTMLImageElement
+  square: Square
+  onChange: (square: Square) => void
+}
+
+// Рамка поверх загруженного фото
+function CropFrame({ image, square, onChange }: CropFrameProps) {
   const { t } = useTranslation()
-  const sizeId = useId()
-  const imageRef = useRef<HTMLImageElement>(null)
   const dragRef = useRef<Drag | null>(null)
-  const [natural, setNatural] = useState<{ width: number; height: number }>()
-  const [square, setSquare] = useState<Square>()
-  const [isCropping, setIsCropping] = useState(false)
-  const [hasFailed, setHasFailed] = useState(false)
-
-  const onLoad = () => {
-    const image = imageRef.current
-    if (!image) return
-    const size = { width: image.naturalWidth, height: image.naturalHeight }
-    setNatural(size)
-    setSquare(centeredSquare(size.width, size.height))
-  }
-
-  const side = natural ? Math.min(natural.width, natural.height) : 0
-  const place = (next: Square) => {
-    if (natural) setSquare(clampSquare(next, natural.width, natural.height))
-  }
+  const width = image.naturalWidth
+  const height = image.naturalHeight
+  const side = Math.min(width, height)
+  const place = (next: Square) => onChange(clampSquare(next, width, height))
+  const percent = (value: number, total: number) => `${(value / total) * 100}%`
 
   const onPointerDown = (event: PointerEvent<HTMLButtonElement>) => {
-    if (!square) return
     event.currentTarget.setPointerCapture?.(event.pointerId)
     dragRef.current = {
       pointerId: event.pointerId,
@@ -80,11 +64,9 @@ export function CropDialog({
 
   const onPointerMove = (event: PointerEvent<HTMLButtonElement>) => {
     const drag = dragRef.current
-    const image = imageRef.current
-    if (!drag || drag.pointerId !== event.pointerId || !image || !natural)
-      return
+    if (drag?.pointerId !== event.pointerId) return
     // Сдвиг на экране — в пиксели исходного фото
-    const scale = natural.width / (image.clientWidth || natural.width)
+    const scale = width / (image.clientWidth || width)
     place({
       ...drag.square,
       x: drag.square.x + (event.clientX - drag.x) * scale,
@@ -92,9 +74,13 @@ export function CropDialog({
     })
   }
 
+  const endDrag = () => {
+    dragRef.current = null
+  }
+
   const onKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
     const direction = KEYS[event.key]
-    if (!direction || !square) return
+    if (!direction) return
     event.preventDefault()
     place({
       ...square,
@@ -103,21 +89,88 @@ export function CropDialog({
     })
   }
 
-  const apply = async () => {
-    const image = imageRef.current
-    if (!image || !square) return
+  return (
+    <button
+      type="button"
+      aria-label={t('diagnosis.crop.frame')}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={endDrag}
+      onPointerCancel={endDrag}
+      onKeyDown={onKeyDown}
+      className="absolute cursor-move border-2 border-white shadow-[0_0_0_9999px_rgb(0_0_0/0.5)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500"
+      style={{
+        left: percent(square.x, width),
+        top: percent(square.y, height),
+        width: percent(square.size, width),
+        height: percent(square.size, height),
+      }}
+    />
+  )
+}
+
+// Размер рамки — доля короткой стороны фото, вокруг центра рамки
+function CropSize({ image, square, onChange }: CropFrameProps) {
+  const { t } = useTranslation()
+  const id = useId()
+  const width = image.naturalWidth
+  const height = image.naturalHeight
+  const side = Math.min(width, height)
+
+  return (
+    <div className="flex flex-col gap-1">
+      <label htmlFor={id} className="text-sm text-ink">
+        {t('diagnosis.crop.size')}
+      </label>
+      <input
+        id={id}
+        type="range"
+        min={MIN_CROP_SHARE * 100}
+        max={100}
+        step={1}
+        value={Math.round((square.size / side) * 100)}
+        onChange={(event) =>
+          onChange(
+            resizeSquare(
+              square,
+              (Number(event.target.value) / 100) * side,
+              width,
+              height,
+            ),
+          )
+        }
+        className="accent-brand-700"
+      />
+    </div>
+  )
+}
+
+// Кадрирование фото листа квадратной рамкой: рамку двигают мышью, пальцем или
+// стрелками, размер задаёт слайдер
+export function CropDialog({
+  open,
+  photoUrl,
+  fileName,
+  onClose,
+  onCrop,
+}: CropDialogProps) {
+  const { t } = useTranslation()
+  const [image, setImage] = useState<HTMLImageElement | null>(null)
+  const [square, setSquare] = useState<Square | null>(null)
+  const [isCropping, setIsCropping] = useState(false)
+  const [hasFailed, setHasFailed] = useState(false)
+
+  const apply = async (loaded: HTMLImageElement, frame: Square) => {
     setIsCropping(true)
     setHasFailed(false)
     try {
-      onCrop(await cropPhoto(image, square, fileName))
+      onCrop(await cropPhoto(loaded, frame, fileName))
     } catch {
       setHasFailed(true)
     } finally {
       setIsCropping(false)
     }
   }
-
-  const percent = (value: number, total: number) => `${(value / total) * 100}%`
 
   return (
     <Modal
@@ -130,69 +183,35 @@ export function CropDialog({
           <Button variant="secondary" onClick={onClose}>
             {t('diagnosis.crop.cancel')}
           </Button>
-          <Button
-            disabled={!square}
-            isLoading={isCropping}
-            onClick={() => void apply()}
-          >
-            {t('diagnosis.crop.apply')}
-          </Button>
+          {image && square && (
+            <Button
+              isLoading={isCropping}
+              onClick={() => void apply(image, square)}
+            >
+              {t('diagnosis.crop.apply')}
+            </Button>
+          )}
         </>
       }
     >
       <div className="relative mx-auto w-fit touch-none overflow-hidden rounded-md select-none">
         <img
-          ref={imageRef}
           src={photoUrl}
           alt={t('diagnosis.preview')}
-          onLoad={onLoad}
           draggable={false}
+          onLoad={(event) => {
+            const loaded = event.currentTarget
+            setImage(loaded)
+            setSquare(centeredSquare(loaded.naturalWidth, loaded.naturalHeight))
+          }}
           className="block max-h-[60svh] max-w-full"
         />
-        {natural && square && (
-          <button
-            type="button"
-            aria-label={t('diagnosis.crop.frame')}
-            onPointerDown={onPointerDown}
-            onPointerMove={onPointerMove}
-            onPointerUp={() => (dragRef.current = null)}
-            onPointerCancel={() => (dragRef.current = null)}
-            onKeyDown={onKeyDown}
-            className="absolute cursor-move border-2 border-white shadow-[0_0_0_9999px_rgb(0_0_0/0.5)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500"
-            style={{
-              left: percent(square.x, natural.width),
-              top: percent(square.y, natural.height),
-              width: percent(square.size, natural.width),
-              height: percent(square.size, natural.height),
-            }}
-          />
+        {image && square && (
+          <CropFrame image={image} square={square} onChange={setSquare} />
         )}
       </div>
-      {natural && square && (
-        <div className="flex flex-col gap-1">
-          <label htmlFor={sizeId} className="text-sm text-ink">
-            {t('diagnosis.crop.size')}
-          </label>
-          <input
-            id={sizeId}
-            type="range"
-            min={MIN_CROP_SHARE * 100}
-            max={100}
-            step={1}
-            value={Math.round((square.size / side) * 100)}
-            onChange={(event) =>
-              setSquare(
-                resizeSquare(
-                  square,
-                  (Number(event.target.value) / 100) * side,
-                  natural.width,
-                  natural.height,
-                ),
-              )
-            }
-            className="accent-brand-700"
-          />
-        </div>
+      {image && square && (
+        <CropSize image={image} square={square} onChange={setSquare} />
       )}
       {hasFailed && (
         <p role="alert" className="text-sm text-danger">

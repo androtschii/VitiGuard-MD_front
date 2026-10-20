@@ -46,6 +46,18 @@ describe('CropDialog', () => {
     expect(frame.style.left).toBe('24%')
     fireEvent.keyDown(frame, { key: 'ArrowUp' })
     expect(frame.style.top).toBe('0%')
+    fireEvent.keyDown(frame, { key: 'Enter' })
+    expect(frame.style.left).toBe('24%')
+  })
+
+  it('отменённое касание больше не двигает рамку', () => {
+    const { frame } = renderDialog()
+
+    fireEvent.pointerDown(frame, { pointerId: 1, clientX: 100, clientY: 0 })
+    fireEvent.pointerCancel(frame, { pointerId: 1 })
+    fireEvent.pointerMove(frame, { pointerId: 1, clientX: 0, clientY: 0 })
+
+    expect(frame.style.left).toBe('25%')
   })
 
   it('слайдер уменьшает рамку вокруг центра', () => {

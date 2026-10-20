@@ -60,6 +60,17 @@ describe('LeafUpload', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
+  it('«Отмена» закрывает кадрирование без изменений', async () => {
+    const onCrop = vi.fn<(file: File) => void>()
+    render(<LeafUpload file={leaf} onSelect={vi.fn()} onCrop={onCrop} />)
+
+    await userEvent.click(screen.getByRole('button', { name: 'Кадрировать' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Отмена' }))
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(onCrop).not.toHaveBeenCalled()
+  })
+
   it('предлагает перетащить или выбрать фото', () => {
     const { input } = setup()
 
