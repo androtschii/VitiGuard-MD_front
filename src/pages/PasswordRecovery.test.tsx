@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
 import { createMemoryRouter, RouterProvider } from 'react-router'
 import { describe, expect, it } from 'vitest'
-import { routes } from '@/app/routes'
+import { routes } from '@/test/routes'
 import { renderWithQueryClient } from '@/test/render'
 import { server } from '@/test/server'
 

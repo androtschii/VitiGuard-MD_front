@@ -1,6 +1,7 @@
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import type { VegetationObservation } from '@/api/vegetation'
+import * as timeSeriesChart from '@/lib/timeSeriesChart'
 import { VegetationChart } from './VegetationChart'
 
 const index = (mean: number) => ({ mean, min: mean, max: mean, std: 0 })
@@ -65,6 +66,18 @@ describe('VegetationChart', () => {
 
     fireEvent.pointerLeave(area)
     expect(screen.queryByRole('status')).not.toBeInTheDocument()
+  })
+
+  it('наведение не пересчитывает пути линий', () => {
+    const paths = vi.spyOn(timeSeriesChart, 'linePath')
+    render(<VegetationChart observations={observations} />)
+    const drawn = paths.mock.calls.length
+
+    hover(screen.getByTestId('chart-hover'), 0.5)
+    hover(screen.getByTestId('chart-hover'), 0.9)
+
+    expect(screen.getByRole('status')).toBeInTheDocument()
+    expect(paths).toHaveBeenCalledTimes(drawn)
   })
 
   it('без размеров графика наведение ничего не делает', () => {

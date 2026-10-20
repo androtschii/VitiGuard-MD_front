@@ -9,7 +9,7 @@ import { describe, expect, it } from 'vitest'
 import { LoginPage } from '@/pages/LoginPage'
 import { useSessionStore } from '@/store/session'
 import { renderWithQueryClient } from '@/test/render'
-import { routes } from './routes'
+import { routes } from '@/test/routes'
 import { GuestRoute, ProtectedRoute } from './guards'
 
 const testRoutes: RouteObject[] = [

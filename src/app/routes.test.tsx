@@ -46,6 +46,33 @@ describe('routes', () => {
     ).toBeInTheDocument()
   })
 
+  it('страницы, кроме главной и ошибок, загружаются при открытии', async () => {
+    const lazy = routes[0]?.children?.flatMap((route) =>
+      route.children ? route.children : [route],
+    )
+    expect(
+      lazy?.filter((route) => route.lazy).map((route) => route.path),
+    ).toEqual([
+      '/map',
+      '/diagnosis',
+      '/history',
+      '/regions',
+      '/compare',
+      '/profile',
+      '/login',
+      '/register',
+      '/forgot-password',
+      '/reset-password',
+    ])
+
+    const router = createMemoryRouter(routes, { initialEntries: ['/login'] })
+    renderWithQueryClient(<RouterProvider router={router} />)
+
+    expect(
+      await screen.findByRole('heading', { name: 'Вход' }, { timeout: 5000 }),
+    ).toBeInTheDocument()
+  })
+
   it('карта загружается отдельно и открывается вошедшему', async () => {
     useSessionStore.getState().setAccessToken('token')
     const router = createMemoryRouter(routes, { initialEntries: ['/map'] })
