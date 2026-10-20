@@ -58,12 +58,14 @@ describe('границы', () => {
     expect(labels?.layout).toMatchObject({
       'text-font': ['Open Sans Semibold'],
     })
-    // ă и î — во втором диапазоне глифов, ș и ț — в третьем
+    // ă и î — во втором диапазоне глифов, ș и ț — в третьем, кириллица
+    // названий участков — в 1024–1279
     expect(fonts).toEqual(
       expect.arrayContaining([
         '/public/fonts/Open Sans Semibold/0-255.pbf',
         '/public/fonts/Open Sans Semibold/256-511.pbf',
         '/public/fonts/Open Sans Semibold/512-767.pbf',
+        '/public/fonts/Open Sans Semibold/1024-1279.pbf',
       ]),
     )
   })
