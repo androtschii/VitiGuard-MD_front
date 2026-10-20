@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react'
+import { fireEvent, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -127,6 +127,29 @@ describe('RiskDialog', () => {
         /Инкубации милдью сейчас нет. Индекс оидиума Gubler-Thomas — 0./,
       ),
     ).toBeInTheDocument()
+  })
+
+  it('без оценки оидиума на сегодня индекс считается нулевым', async () => {
+    renderDialog([risk('2026-06-10', 'three_tens', 0)])
+
+    expect(
+      await screen.findByText(/Индекс оидиума Gubler-Thomas — 0./),
+    ).toBeInTheDocument()
+  })
+
+  it('фильтр периода сужает графики сезона, но не сегодняшний риск', async () => {
+    const user = renderDialog()
+    await screen.findByRole('img', { name: /индекса Gubler-Thomas/ })
+
+    await user.click(screen.getByText('Даты'))
+    fireEvent.change(screen.getByLabelText('С'), {
+      target: { value: '2026-07-01' },
+    })
+
+    expect(
+      screen.queryByRole('img', { name: /индекса Gubler-Thomas/ }),
+    ).toBeNull()
+    expect(screen.getByText(/Идёт инкубация милдью/)).toBeInTheDocument()
   })
 
   it('вне сезона объясняет, почему нет риска на сегодня', async () => {

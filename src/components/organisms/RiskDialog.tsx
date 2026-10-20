@@ -82,8 +82,13 @@ function WeatherCharts({
 }) {
   const { t } = useTranslation()
   if (points.length === 0) return null
-  const rain = points.filter((point) => point.precipitation !== null)
-  const rainValues = rain.map((point) => point.precipitation ?? 0)
+  // Дни, по которым осадки известны: без них столбец был бы ложным нулём
+  const rain = points.flatMap((point) =>
+    point.precipitation === null
+      ? []
+      : [{ time: point.time, precipitation: point.precipitation }],
+  )
+  const rainValues = rain.map((point) => point.precipitation)
   return (
     <section className="flex flex-col gap-1">
       <h3 className="font-semibold text-ink">{t('risk.weatherChart')}</h3>
@@ -111,7 +116,7 @@ function WeatherCharts({
         ]}
       />
       {rain.length > 0 && (
-        <TimeSeriesChart<WeatherPoint>
+        <TimeSeriesChart<(typeof rain)[number]>
           points={rain}
           range={niceRange(rainValues, 10, 0)}
           height={CHART_HEIGHT}
@@ -128,7 +133,7 @@ function WeatherCharts({
               label: t('risk.precipitationShort'),
               legend: t('risk.precipitationLegend'),
               color: 'var(--chart-ndre)',
-              value: (point) => point.precipitation ?? 0,
+              value: (point) => point.precipitation,
             },
           ]}
         />

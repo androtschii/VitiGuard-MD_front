@@ -1,4 +1,5 @@
 import { screen, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
 import { MemoryRouter } from 'react-router'
 import { describe, expect, it } from 'vitest'
@@ -72,6 +73,31 @@ describe('RegionsPage', () => {
       '2 · 16,8',
     )
     expect(within(rows[1]).getAllByRole('cell')[5]).toHaveTextContent('—')
+  })
+
+  it('таблица сортируется по любому столбцу', async () => {
+    server.use(
+      http.get('/api/v1/regions/stats', () => HttpResponse.json(stats)),
+    )
+    renderPage()
+    await screen.findByText(/^15\s870$/)
+    const header = (name: string) =>
+      screen.getByRole('columnheader', { name: new RegExp(`^${name}`) })
+
+    for (const name of [
+      'Район',
+      'Площадь района',
+      'Виноградники OSM',
+      'Их площадь',
+      'Доля района',
+      'Мои участки',
+    ]) {
+      await userEvent.click(within(header(name)).getByRole('button'))
+      expect(header(name)).toHaveAttribute(
+        'aria-sort',
+        expect.stringMatching(/ascending|descending/),
+      )
+    }
   })
 
   it('пока данные загружаются, показывает заглушки', () => {

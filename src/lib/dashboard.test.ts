@@ -45,6 +45,23 @@ describe('summarize', () => {
     ])
   })
 
+  it('участки без оценки — после оценённых, между собой по названию', () => {
+    const summary = summarize(
+      [
+        vineyard('a', 'Яловены', 1),
+        vineyard('b', 'Бульбоака', 1),
+        vineyard('c', 'Криково', 1),
+      ],
+      [{ vineyard_id: 'c', day, downy: 'low', powdery: 'low' }],
+    )
+
+    expect(summary.rows.map((row) => row.vineyard.name)).toEqual([
+      'Криково',
+      'Бульбоака',
+      'Яловены',
+    ])
+  })
+
   it('без оценок и участков возвращает нули', () => {
     expect(summarize([])).toEqual({
       count: 0,
