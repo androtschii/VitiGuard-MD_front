@@ -297,6 +297,18 @@ export const ro: Messages = {
     formats: 'JPEG, PNG sau WebP până la 10 MB',
     preview: 'Fotografia aleasă a frunzei',
     change: 'Alegeți altă fotografie',
+    crop: {
+      open: 'Decupează',
+      title: 'Decuparea fotografiei',
+      description:
+        'Păstrați o singură frunză în pătrat: modelul vede imaginea ca un pătrat de 224 × 224, iar fundalul în plus îi ia frunzei din detalii.',
+      frame:
+        'Cadrul decupării: mutați-l cu mouse-ul, cu degetul sau cu săgețile',
+      size: 'Mărimea cadrului',
+      apply: 'Decupează',
+      cancel: 'Anulează',
+      failed: 'Fotografia nu a putut fi decupată. Încercați din nou.',
+    },
     wrongType: 'Este nevoie de o fotografie JPEG, PNG sau WebP',
     tooLarge: 'Fișierul depășește 10 MB',
     analyze: 'Determină boala',

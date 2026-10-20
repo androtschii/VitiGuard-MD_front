@@ -1,6 +1,8 @@
 import { useId, useState, type DragEvent } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Button } from '@/components/atoms/Button'
 import { CameraCapture } from '@/components/organisms/CameraCapture'
+import { CropDialog } from '@/components/organisms/CropDialog'
 import { canUseCamera } from '@/lib/camera'
 import { cn } from '@/lib/cn'
 import {
@@ -13,11 +15,13 @@ import { useObjectUrl } from '@/lib/useObjectUrl'
 type LeafUploadProps = {
   file: File | null
   onSelect: (file: File) => void
+  // Кадрированная копия выбранного фото
+  onCrop?: (file: File) => void
 }
 
 // Выбор фото листа: перетаскиванием или через диалог выбора файла. На
 // сенсорном экране перетаскивать нечего — там отдельная кнопка камеры (pr-049)
-export function LeafUpload({ file, onSelect }: LeafUploadProps) {
+export function LeafUpload({ file, onSelect, onCrop }: LeafUploadProps) {
   const { t } = useTranslation()
   const inputId = useId()
   const cameraId = useId()
@@ -26,6 +30,7 @@ export function LeafUpload({ file, onSelect }: LeafUploadProps) {
   const [problem, setProblem] = useState<LeafPhotoProblem | null>(null)
   const [hasCamera] = useState(canUseCamera)
   const [isCameraOpen, setIsCameraOpen] = useState(false)
+  const [isCropOpen, setIsCropOpen] = useState(false)
 
   const previewUrl = useObjectUrl(file)
 
@@ -109,6 +114,31 @@ export function LeafUpload({ file, onSelect }: LeafUploadProps) {
           }}
         />
       </label>
+      {file && previewUrl && onCrop && (
+        <>
+          <Button
+            variant="secondary"
+            size="sm"
+            className="self-center"
+            onClick={() => setIsCropOpen(true)}
+          >
+            {t('diagnosis.crop.open')}
+          </Button>
+          {/* Окно создаётся открытым: рамка каждый раз начинается по центру фото */}
+          {isCropOpen && (
+            <CropDialog
+              open
+              photoUrl={previewUrl}
+              fileName={file.name}
+              onClose={() => setIsCropOpen(false)}
+              onCrop={(cropped) => {
+                setIsCropOpen(false)
+                onCrop(cropped)
+              }}
+            />
+          )}
+        </>
+      )}
       {/* Камера в приложении — с рамкой, вспышкой и зумом (pr-078). Где
           браузер её не даёт, capture открывает системную съёмку */}
       {hasCamera ? (

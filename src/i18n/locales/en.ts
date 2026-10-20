@@ -290,6 +290,17 @@ export const en: Messages = {
     formats: 'JPEG, PNG or WebP up to 10 MB',
     preview: 'Selected leaf photo',
     change: 'Choose another photo',
+    crop: {
+      open: 'Crop',
+      title: 'Crop photo',
+      description:
+        'Keep a single leaf in the square: the model sees the image as a 224 × 224 square, and extra background takes detail away from the leaf.',
+      frame: 'Crop frame: move it with the mouse, a finger or the arrow keys',
+      size: 'Frame size',
+      apply: 'Crop',
+      cancel: 'Cancel',
+      failed: 'Could not crop the photo. Please try again.',
+    },
     wrongType: 'A JPEG, PNG or WebP photo is required',
     tooLarge: 'The file is larger than 10 MB',
     analyze: 'Identify disease',

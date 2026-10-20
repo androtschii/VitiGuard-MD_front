@@ -1,7 +1,14 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import * as camera from '@/lib/camera'
+import * as crop from '@/lib/crop'
 import { fakeStream, removeCamera, stubCamera } from '@/test/fakeCamera'
 import { LeafUpload } from './LeafUpload'
 
@@ -26,6 +33,33 @@ function dropZone() {
 }
 
 describe('LeafUpload', () => {
+  it('кадрирование — только для выбранного фото и только если его ждут', () => {
+    setup(leaf)
+    expect(
+      screen.queryByRole('button', { name: 'Кадрировать' }),
+    ).not.toBeInTheDocument()
+  })
+
+  it('открывает кадрирование и передаёт кадрированную копию', async () => {
+    const cropped = new File(['jpeg'], 'leaf-crop.jpg', { type: 'image/jpeg' })
+    vi.spyOn(crop, 'cropPhoto').mockResolvedValue(cropped)
+    const onCrop = vi.fn<(file: File) => void>()
+    render(<LeafUpload file={leaf} onSelect={vi.fn()} onCrop={onCrop} />)
+
+    await userEvent.click(screen.getByRole('button', { name: 'Кадрировать' }))
+    const dialog = screen.getByRole('dialog', { name: 'Кадрирование фото' })
+    const image = within(dialog).getByRole('img')
+    Object.defineProperty(image, 'naturalWidth', { value: 800 })
+    Object.defineProperty(image, 'naturalHeight', { value: 600 })
+    fireEvent.load(image)
+    await userEvent.click(
+      within(dialog).getByRole('button', { name: 'Кадрировать' }),
+    )
+
+    expect(onCrop).toHaveBeenCalledWith(cropped)
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+
   it('предлагает перетащить или выбрать фото', () => {
     const { input } = setup()
 
