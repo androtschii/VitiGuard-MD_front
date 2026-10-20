@@ -1,6 +1,7 @@
 import type { RouteObject } from 'react-router'
 import { GuestRoute, ProtectedRoute } from '@/app/guards'
 import { LoadingScreen } from '@/components/templates/LoadingScreen'
+import { ComparePage } from '@/pages/ComparePage'
 import { DiagnosisPage } from '@/pages/DiagnosisPage'
 import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage'
 import { HistoryPage } from '@/pages/HistoryPage'
@@ -37,6 +38,7 @@ export const routes: RouteObject[] = [
           { path: '/diagnosis', element: <DiagnosisPage /> },
           { path: '/history', element: <HistoryPage /> },
           { path: '/regions', element: <RegionsPage /> },
+          { path: '/compare', element: <ComparePage /> },
           { path: '/profile', element: <ProfilePage /> },
         ],
       },

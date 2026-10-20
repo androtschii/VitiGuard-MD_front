@@ -38,6 +38,9 @@ export function HomePage() {
             <Link to="/regions" className={secondary}>
               {t('home.openRegions')}
             </Link>
+            <Link to="/compare" className={secondary}>
+              {t('home.openCompare')}
+            </Link>
           </div>
         </div>
         <FarmOverview />

@@ -131,6 +131,23 @@ export async function mockApi(page: Page): Promise<Api> {
       api.ndviImages.push(path)
       return route.fulfill({ contentType: 'image/png', body: PNG })
     }
+    if (path.endsWith('/vegetation/anomalies')) {
+      return json(
+        route,
+        path.includes(CRICOVA.id)
+          ? [
+              {
+                acquired_at: '2026-08-29T09:17:00Z',
+                ndvi: 0.52,
+                below_norm: 0.19,
+                below_peers: null,
+                z: 4.1,
+                level: 'suspected',
+              },
+            ]
+          : [],
+      )
+    }
     if (path.endsWith('/vegetation')) {
       return json(route, [
         scan('june', '2026-06-25'),
