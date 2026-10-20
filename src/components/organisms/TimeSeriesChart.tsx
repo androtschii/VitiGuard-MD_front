@@ -1,13 +1,37 @@
-import { useState, type PointerEvent } from 'react'
+import { useEffect, useRef, useState, type PointerEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   CHART,
+  labeledTicks,
   linePath,
   monthTicks,
   nearestIndex,
+  spreadLabels,
+  timeScales,
+  type AxisRange,
   type TimePoint,
-  type TimeScales,
 } from '@/lib/timeSeriesChart'
+
+// Уже такого графика не прочитать: на узком экране он прокручивается вбок
+const MIN_WIDTH = 280
+
+// Ширина контейнера в пикселях: график рисуется в ней один к одному, и
+// подписи на телефоне того же размера, что на компьютере
+function useWidth() {
+  const ref = useRef<HTMLDivElement>(null)
+  const [width, setWidth] = useState(CHART.width)
+  useEffect(() => {
+    const element = ref.current
+    if (!element || typeof ResizeObserver === 'undefined') return
+    const observer = new ResizeObserver(([entry]) => {
+      const measured = Math.round(entry.contentRect.width)
+      if (measured > 0) setWidth(Math.max(measured, MIN_WIDTH))
+    })
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [])
+  return { ref, width }
+}
 
 export type ChartSeries<T> = {
   key: string
@@ -24,7 +48,9 @@ export type ChartSeries<T> = {
 type TimeSeriesChartProps<T extends TimePoint> = {
   points: T[]
   series: ChartSeries<T>[]
-  scales: TimeScales
+  // Ось значений: пределы и шаг делений
+  range: AxisRange
+  height?: number
   // Текстовое описание графика для экранного диктора
   label: string
   formatValue: (value: number) => string
@@ -41,7 +67,8 @@ type TimeSeriesChartProps<T extends TimePoint> = {
 export function TimeSeriesChart<T extends TimePoint>({
   points,
   series,
-  scales,
+  range,
+  height = CHART.height,
   label,
   formatValue,
   today,
@@ -50,7 +77,13 @@ export function TimeSeriesChart<T extends TimePoint>({
 }: TimeSeriesChartProps<T>) {
   const { i18n } = useTranslation()
   const [active, setActive] = useState<number | null>(null)
-  const { x, y, invert, first, last, yTicks, height } = scales
+  const { ref, width } = useWidth()
+  const { x, y, invert, first, last, yTicks } = timeScales(
+    points.map((item) => item.time),
+    range,
+    height,
+    width,
+  )
   const language = i18n.resolvedLanguage
   const month = new Intl.DateTimeFormat(language, {
     month: 'short',
@@ -62,8 +95,9 @@ export function TimeSeriesChart<T extends TimePoint>({
   })
   const point = active === null ? null : points[active]
   const lastPoint = points[points.length - 1]
+  const endLabels = spreadLabels(series.map((item) => y(item.value(lastPoint))))
   const bottom = height - CHART.bottom
-  const right = CHART.width - CHART.right
+  const right = width - CHART.right
   const legend = series.filter((item) => item.legend)
   // Столбец — на сутки, с зазором между соседними днями
   const barWidth = Math.max(
@@ -74,7 +108,7 @@ export function TimeSeriesChart<T extends TimePoint>({
   const onMove = (event: PointerEvent<SVGRectElement>) => {
     const box = event.currentTarget.ownerSVGElement?.getBoundingClientRect()
     if (!box?.width) return
-    const svgX = ((event.clientX - box.left) / box.width) * CHART.width
+    const svgX = ((event.clientX - box.left) / box.width) * width
     setActive(nearestIndex(points, invert(svgX)))
   }
 
@@ -104,9 +138,9 @@ export function TimeSeriesChart<T extends TimePoint>({
           ))}
         </figcaption>
       )}
-      <div className="relative">
+      <div ref={ref} className="relative">
         <svg
-          viewBox={`0 0 ${CHART.width} ${height}`}
+          viewBox={`0 0 ${width} ${height}`}
           role="img"
           aria-label={label}
           className="block w-full text-ink-subtle"
@@ -143,18 +177,20 @@ export function TimeSeriesChart<T extends TimePoint>({
               </text>
             </g>
           ))}
-          {monthTicks(first, last).map((tick) => (
-            <text
-              key={tick}
-              x={x(tick)}
-              y={height - 8}
-              textAnchor="middle"
-              fontSize="11"
-              fill="currentColor"
-            >
-              {month.format(tick)}
-            </text>
-          ))}
+          {labeledTicks(monthTicks(first, last), right - CHART.left).map(
+            (tick) => (
+              <text
+                key={tick}
+                x={x(tick)}
+                y={height - 8}
+                textAnchor="middle"
+                fontSize="11"
+                fill="currentColor"
+              >
+                {month.format(tick)}
+              </text>
+            ),
+          )}
           {today !== undefined && today >= first && today <= last && (
             <g>
               <line
@@ -197,7 +233,7 @@ export function TimeSeriesChart<T extends TimePoint>({
               strokeWidth="1"
             />
           )}
-          {series.map((item) => (
+          {series.map((item, index) => (
             <g key={item.key}>
               {item.kind === 'bar' ? (
                 <g data-testid={`chart-bars-${item.key}`} fill={item.color}>
@@ -229,7 +265,7 @@ export function TimeSeriesChart<T extends TimePoint>({
               {series.length > 1 && (
                 <text
                   x={x(lastPoint.time) + 8}
-                  y={y(item.value(lastPoint))}
+                  y={endLabels[index]}
                   dominantBaseline="middle"
                   fontSize="11"
                   fontWeight="600"
@@ -250,7 +286,9 @@ export function TimeSeriesChart<T extends TimePoint>({
               )}
             </g>
           ))}
-          {/* Область наведения больше самих линий: попасть мышью проще */}
+          {/* Область наведения больше самих линий: попасть мышью проще. На
+              сенсорном экране касание показывает точку, ведение пальцем вбок —
+              соседние, а вертикальная прокрутка страницы не перехватывается */}
           <rect
             data-testid="chart-hover"
             x={CHART.left}
@@ -258,6 +296,8 @@ export function TimeSeriesChart<T extends TimePoint>({
             width={right - CHART.left}
             height={bottom - CHART.top}
             fill="transparent"
+            style={{ touchAction: 'pan-y' }}
+            onPointerDown={onMove}
             onPointerMove={onMove}
             onPointerLeave={() => setActive(null)}
           />
@@ -267,8 +307,8 @@ export function TimeSeriesChart<T extends TimePoint>({
             role="status"
             className="pointer-events-none absolute top-0 rounded-md border border-line bg-surface px-2.5 py-1.5 text-xs text-ink shadow-md"
             style={{
-              left: `${(x(point.time) / CHART.width) * 100}%`,
-              transform: `translateX(${x(point.time) > CHART.width / 2 ? '-105%' : '5%'})`,
+              left: `${(x(point.time) / width) * 100}%`,
+              transform: `translateX(${x(point.time) > width / 2 ? '-105%' : '5%'})`,
             }}
           >
             <p className="font-medium">{day.format(point.time)}</p>
