@@ -4,6 +4,7 @@ import 'fake-indexeddb/auto'
 import { cleanup } from '@testing-library/react'
 import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest'
 import i18n from '@/i18n'
+import { NDVI_OPACITY } from '@/lib/ndviLayer'
 import { NO_FILTER } from '@/lib/vineyardFilter'
 import { useMapStore } from '@/store/map'
 import { useSessionStore } from '@/store/session'
@@ -51,6 +52,7 @@ beforeEach(async () => {
     showOsm: false,
     osmTooFar: false,
     showNdvi: false,
+    ndviOpacity: NDVI_OPACITY,
   })
   document.documentElement.classList.remove('dark')
 })

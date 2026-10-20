@@ -11,12 +11,24 @@ import { MapContext } from '@/lib/mapContext'
 import { NdviLayer } from './NdviLayer'
 
 function fakeMap({ hasVineyards = true } = {}) {
+  const added = new Set<string>()
   return {
     addSource: vi.fn(),
-    addLayer: vi.fn<(layer: { id: string }, beforeId?: string) => void>(),
-    removeLayer: vi.fn<(id: string) => void>(),
+    addLayer: vi.fn<(layer: { id: string }, beforeId?: string) => void>(
+      (layer) => {
+        added.add(layer.id)
+      },
+    ),
+    removeLayer: vi.fn((id: string) => {
+      added.delete(id)
+    }),
     removeSource: vi.fn(),
-    getLayer: vi.fn(() => (hasVineyards ? {} : undefined)),
+    getLayer: vi.fn((id: string) =>
+      added.has(id) || (hasVineyards && !id.startsWith('ndvi-'))
+        ? {}
+        : undefined,
+    ),
+    setPaintProperty: vi.fn(),
   }
 }
 
@@ -106,6 +118,27 @@ describe('NdviLayer', () => {
 
     await waitFor(() => expect(map.addLayer).toHaveBeenCalled())
     expect(map.addLayer.mock.calls[0][1]).toBeUndefined()
+  })
+
+  it('меняет прозрачность, не загружая картинку заново', async () => {
+    useMapStore.setState({ showNdvi: true, ndviOpacity: 0.5 })
+    const images = useHistory()
+    const map = fakeMap()
+    renderLayer(map)
+    await waitFor(() => expect(map.addLayer).toHaveBeenCalled())
+    expect(map.addLayer.mock.calls[0][0]).toMatchObject({
+      paint: { 'raster-opacity': 0.5 },
+    })
+
+    act(() => useMapStore.setState({ ndviOpacity: 0.2 }))
+
+    expect(map.setPaintProperty).toHaveBeenLastCalledWith(
+      'ndvi-v1',
+      'raster-opacity',
+      0.2,
+    )
+    expect(map.addLayer).toHaveBeenCalledTimes(1)
+    expect(images).toHaveBeenCalledTimes(1)
   })
 
   it('при выключении убирает картограммы', async () => {

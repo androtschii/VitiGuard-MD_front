@@ -158,6 +158,7 @@ export const ro: Messages = {
     toggle: 'Harta NDVI',
     low: 'sol',
     high: 'frunziș dens',
+    transparency: 'Transparență',
     hint: 'Cea mai recentă imagine fără nori deasupra parcelei. Nu apare stratul? Actualizați vegetația în fișa parcelei.',
   },
   pagination: {

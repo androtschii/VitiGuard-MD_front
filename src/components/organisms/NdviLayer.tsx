@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useNdviImage, useVegetation } from '@/api/vegetation'
 import { useVineyards } from '@/api/vineyards'
 import { useMap } from '@/lib/mapContext'
-import { latestNdviMap, NDVI_OPACITY, ndviLayerId } from '@/lib/ndviLayer'
+import { latestNdviMap, ndviLayerId } from '@/lib/ndviLayer'
 import { useObjectUrl } from '@/lib/useObjectUrl'
 import { filterVineyards } from '@/lib/vineyardFilter'
 import { useMapStore } from '@/store/map'
@@ -17,6 +17,7 @@ function ParcelNdvi({ map, vineyardId }: { map: Map; vineyardId: string }) {
   const { data: image } = useNdviImage(vineyardId, latest?.id)
   const url = useObjectUrl(image)
   const corners = latest?.ndvi_map?.corners
+  const opacity = useMapStore((state) => state.ndviOpacity)
 
   useEffect(() => {
     if (!url || !corners) return
@@ -28,7 +29,7 @@ function ParcelNdvi({ map, vineyardId }: { map: Map; vineyardId: string }) {
         type: 'raster',
         source: id,
         paint: {
-          'raster-opacity': NDVI_OPACITY,
+          'raster-opacity': useMapStore.getState().ndviOpacity,
           // Пиксель снимка — 10 м: сглаживание выдумало бы детали, которых нет
           'raster-resampling': 'nearest',
           'raster-fade-duration': 0,
@@ -45,6 +46,12 @@ function ParcelNdvi({ map, vineyardId }: { map: Map; vineyardId: string }) {
       }
     }
   }, [map, vineyardId, url, corners])
+
+  // Слайдер меняет только прозрачность: картинка не загружается заново
+  useEffect(() => {
+    const id = ndviLayerId(vineyardId)
+    if (map.getLayer(id)) map.setPaintProperty(id, 'raster-opacity', opacity)
+  }, [map, vineyardId, opacity])
 
   return null
 }

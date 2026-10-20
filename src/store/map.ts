@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { isBasemap, type Basemap } from '@/lib/basemaps'
+import { NDVI_OPACITY } from '@/lib/ndviLayer'
 import { NO_FILTER, type VineyardFilter } from '@/lib/vineyardFilter'
 
 export const BASEMAP_STORAGE_KEY = 'vitiguard.basemap'
@@ -35,6 +36,9 @@ type MapState = {
   // Картограммы NDVI поверх участков пользователя
   showNdvi: boolean
   setShowNdvi: (showNdvi: boolean) => void
+  // Непрозрачность картограмм 0..1: сквозь снимок видна подложка
+  ndviOpacity: number
+  setNdviOpacity: (ndviOpacity: number) => void
 }
 
 // Выбранная подложка сохраняется: агроном, работающий по снимкам,
@@ -61,4 +65,6 @@ export const useMapStore = create<MapState>()((set) => ({
   setOsmTooFar: (osmTooFar) => set({ osmTooFar }),
   showNdvi: false,
   setShowNdvi: (showNdvi) => set({ showNdvi }),
+  ndviOpacity: NDVI_OPACITY,
+  setNdviOpacity: (ndviOpacity) => set({ ndviOpacity }),
 }))

@@ -155,6 +155,7 @@ export const en: Messages = {
     toggle: 'NDVI map',
     low: 'bare soil',
     high: 'dense foliage',
+    transparency: 'Transparency',
     hint: 'Latest cloud-free image over the vineyard. No layer? Refresh vegetation in the vineyard card.',
   },
   pagination: {
