@@ -4,6 +4,7 @@ import { http, HttpResponse } from 'msw'
 import { describe, expect, it, vi } from 'vitest'
 import * as report from '@/lib/diagnosisReport'
 import * as mapImage from '@/lib/mapImage'
+import * as sharing from '@/lib/share'
 import { record } from '@/test/historyData'
 import { renderWithQueryClient } from '@/test/render'
 import { server } from '@/test/server'
@@ -183,6 +184,53 @@ describe('DiagnosisCard', () => {
       'Не удалось сохранить карточку',
     )
     expect(build.mock.calls[0][2]).toBeNull()
+  })
+
+  it('делится карточкой файлом PDF с описанием', async () => {
+    const pdf = new Blob(['%PDF'], { type: 'application/pdf' })
+    vi.spyOn(report, 'diagnosisPdf').mockResolvedValue(pdf)
+    const send = vi.spyOn(sharing, 'share').mockResolvedValue('shared')
+    renderWithQueryClient(<DiagnosisCard record={record('r-12')} />)
+
+    await userEvent.click(
+      await screen.findByRole('button', { name: 'Поделиться' }),
+    )
+
+    await waitFor(() => expect(send).toHaveBeenCalled())
+    const [title, text, file] = send.mock.calls[0]
+    expect(title).toBe('VitiGuard MD — проверка листа винограда')
+    expect(text).toMatch(/^VitiGuard MD: Чёрная гниль/)
+    expect(file).toBeInstanceOf(File)
+    expect(file?.name).toBe('vitiguard-diagnosis-2026-06-10-r-12.pdf')
+    expect(screen.getByRole('status')).toBeEmptyDOMElement()
+  })
+
+  it('без меню «Поделиться» сообщает, что описание скопировано', async () => {
+    vi.spyOn(report, 'diagnosisPdf').mockResolvedValue(new Blob(['%PDF']))
+    vi.spyOn(sharing, 'share').mockResolvedValue('copied')
+    renderWithQueryClient(<DiagnosisCard record={record('r-13')} />)
+
+    await userEvent.click(
+      await screen.findByRole('button', { name: 'Поделиться' }),
+    )
+
+    expect(await screen.findByRole('status')).toHaveTextContent(
+      'Описание проверки скопировано',
+    )
+  })
+
+  it('сбой при попытке поделиться — сообщение', async () => {
+    vi.spyOn(report, 'diagnosisPdf').mockResolvedValue(new Blob(['%PDF']))
+    vi.spyOn(sharing, 'share').mockRejectedValue(new Error('denied'))
+    renderWithQueryClient(<DiagnosisCard record={record('r-14')} />)
+
+    await userEvent.click(
+      await screen.findByRole('button', { name: 'Поделиться' }),
+    )
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'Не удалось поделиться проверкой',
+    )
   })
 
   it('кнопка заключения — только агроному', async () => {

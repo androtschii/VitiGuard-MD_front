@@ -26,3 +26,25 @@ test('карточка проверки скачивается в PDF', async ({
   expect(pdf.length).toBeGreaterThan(20_000)
   await expect(page.getByRole('alert')).toHaveCount(0)
 })
+
+test('без меню «Поделиться» описание проверки копируется', async ({
+  page,
+  context,
+}) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+  await mockApi(page)
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'share', { value: undefined })
+  })
+  await page.goto('/history')
+
+  await page.getByRole('button', { name: 'Поделиться' }).click()
+
+  await expect(page.getByRole('status')).toHaveText(
+    /Описание проверки скопировано/,
+  )
+  const copied = await page.evaluate(() => navigator.clipboard.readText())
+  expect(copied).toMatch(
+    /^VitiGuard MD: Милдью \(уверенность модели 91\s%\), Криково, северный склон, 10 июня 2026/,
+  )
+})

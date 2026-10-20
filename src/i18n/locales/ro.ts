@@ -368,6 +368,12 @@ export const ro: Messages = {
     cancel: 'Anulează',
     deleteFailed: 'Verificarea nu a putut fi ștearsă.',
   },
+  share: {
+    open: 'Distribuie',
+    text: 'VitiGuard MD: {{disease}} (încrederea modelului {{confidence}}), {{place}}, {{date}}. Fișa verificării este în PDF-ul atașat.',
+    copied: 'Descrierea verificării a fost copiată — lipiți-o în mesaj.',
+    failed: 'Verificarea nu a putut fi distribuită. Încercați din nou.',
+  },
   report: {
     save: 'Descarcă fișa verificării în PDF',
     failed: 'Fișa nu a putut fi salvată. Încercați din nou.',

@@ -360,6 +360,12 @@ export const en: Messages = {
     cancel: 'Cancel',
     deleteFailed: 'Could not delete the check.',
   },
+  share: {
+    open: 'Share',
+    text: 'VitiGuard MD: {{disease}} (model confidence {{confidence}}), {{place}}, {{date}}. The check card is in the attached PDF.',
+    copied: 'Check summary copied — paste it into a message.',
+    failed: 'Could not share the check. Please try again.',
+  },
   report: {
     save: 'Download the check card as PDF',
     failed: 'Could not save the card. Please try again.',
