@@ -15,6 +15,7 @@ import {
   type IndexPoint,
   type WeatherPoint,
 } from '@/lib/riskSeries'
+import { dayAdvice } from '@/lib/recommendations'
 import { timeScales } from '@/lib/timeSeriesChart'
 
 type RiskDialogProps = {
@@ -169,6 +170,8 @@ export function RiskDialog({
   const days = dailyRisk(entries)
   const now = days.find((item) => item.day === today)
   const week = days.filter((item) => item.day > today).slice(0, WEEK)
+  // Что делать (pr-059): сегодня и неделя вперёд
+  const plan = now ? [now, ...week] : week
   const todayEntries = entries.filter((entry) => entry.target_date === today)
   const incubation = todayEntries.find((entry) => entry.method === 'goidanich')
   const gubler = todayEntries.find((entry) => entry.method === 'gubler_thomas')
@@ -239,38 +242,57 @@ export function RiskDialog({
               )}
             </section>
 
-            {week.length > 0 && (
+            {plan.length > 0 && (
               <section className="flex flex-col gap-1.5">
-                <h3 className="font-semibold text-ink">{t('risk.week')}</h3>
-                <table className="w-full text-left text-xs">
-                  <caption className="sr-only">{t('risk.week')}</caption>
-                  <thead className="text-ink-muted">
-                    <tr>
-                      <th scope="col" className="py-1">
-                        {t('risk.columns.date')}
-                      </th>
-                      <th scope="col" className="py-1">
-                        {t('risk.downy')}
-                      </th>
-                      <th scope="col" className="py-1">
-                        {t('risk.powdery')}
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-line">
-                    {week.map((item) => (
-                      <tr key={item.day}>
-                        <td className="py-1">{format(item.day)}</td>
-                        <td className="py-1">
-                          <RiskBadge level={item.downy} />
-                        </td>
-                        <td className="py-1">
-                          <RiskBadge level={item.powdery} />
-                        </td>
+                <h3 className="font-semibold text-ink">{t('risk.plan')}</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs">
+                    <caption className="sr-only">{t('risk.plan')}</caption>
+                    <thead className="text-ink-muted">
+                      <tr>
+                        <th scope="col" className="py-1 pr-2">
+                          {t('risk.columns.date')}
+                        </th>
+                        <th scope="col" className="py-1 pr-2">
+                          {t('risk.downy')}
+                        </th>
+                        <th scope="col" className="py-1 pr-2">
+                          {t('risk.powdery')}
+                        </th>
+                        <th scope="col" className="py-1">
+                          {t('risk.columns.advice')}
+                        </th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="divide-y divide-line">
+                      {plan.map((item) => (
+                        <tr key={item.day} className="align-top">
+                          <td className="py-1.5 pr-2 whitespace-nowrap">
+                            {item.day === today
+                              ? t('risk.today')
+                              : format(item.day)}
+                          </td>
+                          <td className="py-1.5 pr-2">
+                            <RiskBadge level={item.downy} />
+                          </td>
+                          <td className="py-1.5 pr-2">
+                            <RiskBadge level={item.powdery} />
+                          </td>
+                          <td className="py-1.5 text-ink-soft">
+                            <ul className="flex flex-col gap-0.5">
+                              {dayAdvice(entries, item.day).map((advice) => (
+                                <li key={advice}>{t(`advice.${advice}`)}</li>
+                              ))}
+                            </ul>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <p className="text-xs text-ink-subtle">
+                  {t('diseaseInfo.note')}
+                </p>
               </section>
             )}
 

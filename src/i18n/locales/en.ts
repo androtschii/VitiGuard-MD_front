@@ -354,6 +354,18 @@ export const en: Messages = {
     corrected: '{{reviewer}}: actually {{disease}}',
     expert: 'Agronomist',
   },
+  advice: {
+    downyInfection:
+      'Conditions for downy mildew infection. If there was no protective spray before the rain, use a systemic product in the first days after infection.',
+    downyIncubation:
+      'Downy mildew spots may appear soon: check the undersides of the leaves.',
+    downySymptoms:
+      'Downy mildew spots are expected: inspect the plot and remove infected leaves.',
+    powderyHigh:
+      'High powdery mildew risk: spray sulphur or a systemic product, open up the canopy.',
+    powderyMedium: 'Powdery mildew risk is rising: inspect leaves and bunches.',
+    calm: 'No dangerous conditions.',
+  },
   camera: {
     title: 'Photograph the leaf',
     preview: 'Camera view',
@@ -513,8 +525,9 @@ export const en: Messages = {
       'The Goidanich model expects downy mildew spots after the infection on {{date}} — the treatment should have been done before this day.',
     noIncubation: 'No downy mildew incubation right now.',
     gublerToday: 'Gubler-Thomas powdery mildew index — {{index}}.',
-    week: 'Week ahead (weather forecast)',
+    plan: 'What to do: today and the week ahead (weather forecast)',
     columns: {
+      advice: 'What to do',
       date: 'Date',
     },
     powderyChart: 'Powdery mildew: Gubler-Thomas index',
