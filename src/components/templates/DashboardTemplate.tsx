@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import type { ReactNode } from 'react'
+import { AlertsBell } from '@/components/molecules/AlertsBell'
 import { OfflineBanner } from '@/components/molecules/OfflineBanner'
 import { BottomNav } from '@/components/organisms/BottomNav'
 import { Footer } from '@/components/organisms/Footer'
@@ -33,7 +34,15 @@ export function DashboardTemplate({
       </a>
       {/* На бумаге навигация не нужна: остаётся содержимое страницы */}
       <div className="contents print:hidden">
-        <Header actions={headerActions} />
+        {/* Колокольчик предупреждений — на всех страницах кабинета (pr-063) */}
+        <Header
+          actions={
+            <>
+              <AlertsBell />
+              {headerActions}
+            </>
+          }
+        />
         <OfflineBanner />
       </div>
       <div className="relative flex flex-1">

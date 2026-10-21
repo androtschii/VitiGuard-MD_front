@@ -13,6 +13,15 @@ export function renderWithQueryClient(ui: ReactElement) {
   )
 }
 
+// Страницы кабинета запрашивают данные и в шапке (колокольчик предупреждений),
+// поэтому вместе с маршрутами — и клиент запросов
 export function renderWithRouter(ui: ReactElement, route = '/') {
-  return render(<MemoryRouter initialEntries={[route]}>{ui}</MemoryRouter>)
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  })
+  return render(
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter initialEntries={[route]}>{ui}</MemoryRouter>
+    </QueryClientProvider>,
+  )
 }
