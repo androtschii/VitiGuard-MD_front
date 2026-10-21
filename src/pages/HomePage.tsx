@@ -43,6 +43,9 @@ export function HomePage() {
             <Link to="/compare" className={secondary}>
               {t('home.openCompare')}
             </Link>
+            <Link to="/tips" className={secondary}>
+              {t('home.openTips')}
+            </Link>
             <PrintButton />
           </div>
         </div>

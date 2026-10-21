@@ -59,6 +59,7 @@ describe('routes', () => {
       '/regions',
       '/compare',
       '/alerts',
+      '/tips',
       '/profile',
       '/login',
       '/register',
