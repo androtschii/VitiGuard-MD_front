@@ -205,6 +205,7 @@ export const ro: Messages = {
     openDiagnosis: 'Verifică o frunză',
     openRegions: 'Statistica raioanelor',
     openCompare: 'Compară parcelele',
+    openTips: 'Sfaturi pentru câmp',
   },
   errorPage: {
     title: 'Ceva nu a mers bine',
@@ -486,6 +487,57 @@ export const ro: Messages = {
     showAll_few: 'Toate avertizările ({{count}})',
     showAll_many: 'Toate avertizările ({{count}})',
     showAll_other: 'Toate avertizările ({{count}})',
+  },
+  tips: {
+    title: 'Sfaturi pentru lucrul în câmp',
+    intro:
+      'Pe scurt despre cum să fotografiați frunza, cum să citiți riscul și cum să vă pregătiți pentru lucru fără semnal. Pagina se deschide și fără rețea.',
+    photo: {
+      title: 'Cum să fotografiați frunza',
+      items: {
+        one: 'O singură frunză, de aproape, întreagă în cadru — modelul a fost antrenat pe astfel de fotografii.',
+        light:
+          'Lumină de zi difuză, fără reflexe și umbre puternice; nu fotografiați contra soarelui.',
+        close:
+          'Dacă petele sunt mici, apropiați-vă în loc să folosiți zoomul: vor fi mai multe detalii.',
+        both: 'Mana se vede pe dosul frunzei (puf alb): dacă aveți îndoieli, fotografiați și partea de jos.',
+        gps: 'Activați localizarea pentru cameră: după coordonatele fotografiei parcela se completează singură.',
+      },
+    },
+    risk: {
+      title: 'Ce înseamnă nivelurile de risc',
+      items: {
+        high: 'Ridicat — vremea favorizează infecția sau sunt așteptate pete: vedeți „Ce trebuie făcut” în fereastra „Riscul pe zile”.',
+        medium:
+          'Mediu — riscul crește (incubația manei, indicele de făinare de la 30): verificați parcela.',
+        low: 'Scăzut — nu există condiții periculoase; verificare obișnuită.',
+        forecast:
+          'Zilele de după azi sunt calculate după prognoza meteo și se precizează la fiecare recalculare.',
+      },
+    },
+    offline: {
+      title: 'Lucrul fără semnal',
+      items: {
+        model:
+          'Descărcați din timp modelul pe pagina „Diagnostic” — fără rețea fotografia o va analiza telefonul.',
+        map: 'Deschideți harta parcelelor necesare când aveți semnal: fundalul vizualizat se va păstra.',
+        install:
+          'Instalați aplicația pe telefon („Adaugă pe ecranul principal”) — se va deschide și fără rețea.',
+        sync: 'Fără rețea verificările nu se salvează în istoric: repetați analiza cu salvare când apare semnalul.',
+      },
+    },
+    safety: {
+      title: 'Siguranța la tratamente',
+      items: {
+        label:
+          'Produsul, doza și numărul de tratamente — după etichetă și registrul de stat al produselor de protecție a plantelor.',
+        ppe: 'Lucrați cu mănuși, ochelari de protecție și respirator; nu mâncați și nu fumați în timpul tratamentului.',
+        wind: 'Nu stropiți pe vânt și înainte de ploaie: produsul va fi purtat sau spălat.',
+        wait: 'Respectați termenul de pauză de la ultimul tratament până la recoltare — este indicat pe etichetă.',
+      },
+    },
+    diseases: 'Semnele bolilor',
+    check: 'Verifică frunza după fotografie',
   },
   camera: {
     title: 'Fotografierea frunzei',

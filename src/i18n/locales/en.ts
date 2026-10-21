@@ -202,6 +202,7 @@ export const en: Messages = {
     openDiagnosis: 'Check a leaf',
     openRegions: 'District statistics',
     openCompare: 'Compare vineyards',
+    openTips: 'Field tips',
   },
   errorPage: {
     title: 'Something went wrong',
@@ -476,6 +477,57 @@ export const en: Messages = {
     showAll_few: 'All alerts ({{count}})',
     showAll_many: 'All alerts ({{count}})',
     showAll_other: 'All alerts ({{count}})',
+  },
+  tips: {
+    title: 'Field tips',
+    intro:
+      'In short: how to photograph a leaf, how to read the risk and how to prepare for working without a signal. This page opens offline too.',
+    photo: {
+      title: 'How to photograph a leaf',
+      items: {
+        one: 'One leaf, close up, entirely in the frame — the model was trained on such photos.',
+        light:
+          'Diffuse daylight, no glare or harsh shadows; do not shoot against the sun.',
+        close:
+          'If the spots are small, move closer instead of zooming in: you will get more detail.',
+        both: 'Downy mildew shows on the underside (white down): when in doubt, photograph the underside too.',
+        gps: 'Enable location for the camera: the plot is filled in from the photo coordinates.',
+      },
+    },
+    risk: {
+      title: 'What the risk levels mean',
+      items: {
+        high: 'High — the weather favoured infection or spots are expected: see “What to do” in the “Risk by day” window.',
+        medium:
+          'Medium — risk is rising (downy mildew incubation, powdery mildew index from 30): inspect the plot.',
+        low: 'Low — no dangerous conditions; routine inspection.',
+        forecast:
+          'Days after today use the weather forecast and are refined at every recalculation.',
+      },
+    },
+    offline: {
+      title: 'Working without a signal',
+      items: {
+        model:
+          'Download the model on the “Diagnosis” page in advance — without a network the phone will analyse the photo.',
+        map: 'Open the map of the plots you need while online: the viewed basemap will be kept.',
+        install:
+          'Install the app on your phone (“Add to Home screen”) — it will open without a network.',
+        sync: 'Offline checks are not saved to history: repeat the analysis with saving once you are online.',
+      },
+    },
+    safety: {
+      title: 'Safety when spraying',
+      items: {
+        label:
+          'Take the product, dose and number of sprays from the label and the state register of plant protection products.',
+        ppe: 'Wear gloves, goggles and a respirator; do not eat or smoke while spraying.',
+        wind: 'Do not spray in wind or before rain: the product will drift or wash off.',
+        wait: 'Keep the pre-harvest interval after the last spray — it is on the label.',
+      },
+    },
+    diseases: 'Disease signs',
+    check: 'Check a leaf by photo',
   },
   camera: {
     title: 'Photograph the leaf',
