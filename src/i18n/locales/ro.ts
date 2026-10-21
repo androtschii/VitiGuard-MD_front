@@ -108,6 +108,27 @@ export const ro: Messages = {
     undo: 'Elimină punctul',
     finish: 'Gata',
   },
+  track: {
+    start: 'Înregistrează traseul',
+    stop: 'Oprește și salvează',
+    waiting: 'Căutăm sateliții… Țineți telefonul deschis.',
+    recording:
+      'Se înregistrează. Ecranul nu se stinge cât timp înregistrarea e pornită.',
+    summary: '{{distance}} · {{duration}}',
+    minutes_one: '{{count}} minut',
+    minutes_few: '{{count}} minute',
+    // В румынском нет формы many; ключ нужен для общей схемы
+    minutes_many: '{{count}} de minute',
+    minutes_other: '{{count}} de minute',
+    denied:
+      'Nu există acces la locație: permiteți-l pentru site în setările browserului.',
+    unavailable: 'Locația nu este disponibilă pe acest dispozitiv.',
+    saved: 'Trasee salvate',
+    show: 'Arată',
+    hide: 'Ascunde',
+    gpx: 'GPX',
+    delete: 'Șterge',
+  },
   filter: {
     label: 'Filtrul parcelelor',
     variety: 'Soi',

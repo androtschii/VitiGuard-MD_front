@@ -4,7 +4,7 @@ import { isFiltered } from '@/lib/vineyardFilter'
 import { useMapStore } from '@/store/map'
 
 type MapToolbarProps = {
-  // Инструменты, которые нужны постоянно: поиск, рисование, измерение
+  // Инструменты, которые нужны постоянно: поиск, рисование, измерение, трек
   tools: ReactNode
   // Фильтры и слои: нужны реже, поэтому свёрнуты в отдельный блок
   layers: ReactNode
