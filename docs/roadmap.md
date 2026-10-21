@@ -106,7 +106,7 @@
 
 ## Спринт 6. Telegram WebApp, настройки, тесты и доработка
 
-- [ ] pr-086 — Подключение Telegram WebApp SDK.
+- [x] pr-086 — Подключение Telegram WebApp SDK.
 - [ ] pr-087 — Адаптация интерфейса под тему Telegram (Theme Parameters).
 - [ ] pr-088 — Экран быстрой диагностики внутри Telegram WebApp.
 - [x] pr-089 — Настройки профиля и подписок на алерты.
