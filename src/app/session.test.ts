@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { api, setTokenProvider, setUnauthorizedHandler } from '@/api/client'
-import { useSessionStore } from '@/store/session'
+import { SIGNED_IN_KEY, useSessionStore } from '@/store/session'
 import { server } from '@/test/server'
 import { initSession, refreshSession } from './session'
 
@@ -52,6 +52,10 @@ describe('сессия', () => {
   })
 
   describe('восстановление при запуске', () => {
+    beforeEach(() => {
+      localStorage.setItem(SIGNED_IN_KEY, '1')
+    })
+
     it('получает токен по refresh-cookie и подставляет его в запросы', async () => {
       mockRefresh('fresh')
       const seen = mockProtected()
@@ -92,6 +96,24 @@ describe('сессия', () => {
       await initSession()
 
       expect(useSessionStore.getState().status).toBe('anonymous')
+    })
+
+    it('без признака входа на устройстве сервер не спрашивает', async () => {
+      localStorage.removeItem(SIGNED_IN_KEY)
+      const refresh = mockRefresh('fresh')
+
+      expect(await initSession()).toBe(false)
+
+      expect(refresh.count).toBe(0)
+      expect(useSessionStore.getState().status).toBe('anonymous')
+    })
+
+    it('неудачное восстановление снимает признак входа', async () => {
+      server.use(http.post('/api/v1/auth/refresh', unauthorized))
+
+      await initSession()
+
+      expect(localStorage.getItem(SIGNED_IN_KEY)).toBeNull()
     })
   })
 

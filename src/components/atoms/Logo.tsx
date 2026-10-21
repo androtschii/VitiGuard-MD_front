@@ -1,17 +1,20 @@
-import emblem from '@/assets/emblem.png'
+import emblem from '@/assets/emblem.webp'
 import { cn } from '@/lib/cn'
 
 type LogoProps = {
   className?: string
 }
 
-// Эмблема из логотипа (лист, щит со стрелкой, гроздь) с прозрачным фоном.
+// Эмблема из логотипа (лист, щит со стрелкой, гроздь) с прозрачным фоном:
+// WebP 192 px — с запасом для самого крупного показа (80 px) на экране 2x.
 // Название рядом пишется текстом (Wordmark), поэтому сама эмблема для
 // экранных дикторов — украшение
 export function Logo({ className }: LogoProps) {
   return (
     <img
       src={emblem}
+      width={192}
+      height={192}
       alt=""
       aria-hidden="true"
       draggable={false}

@@ -1,6 +1,6 @@
 import { refreshAccessToken } from '@/api/auth'
 import { setTokenProvider, setUnauthorizedHandler } from '@/api/client'
-import { useSessionStore } from '@/store/session'
+import { hasSignedIn, useSessionStore } from '@/store/session'
 
 let refreshing: Promise<boolean> | null = null
 
@@ -27,9 +27,14 @@ export function refreshSession(): Promise<boolean> {
 }
 
 // Вызывается один раз при запуске: подключает токен к запросам, включает
-// обновление токена при 401 и восстанавливает сессию после перезагрузки страницы
+// обновление токена при 401 и восстанавливает сессию после перезагрузки
+// страницы — если на этом устройстве был вход
 export function initSession() {
   setTokenProvider(() => useSessionStore.getState().accessToken)
   setUnauthorizedHandler(refreshSession)
+  if (!hasSignedIn()) {
+    useSessionStore.getState().clear()
+    return Promise.resolve(false)
+  }
   return refreshSession()
 }
