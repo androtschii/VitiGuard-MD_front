@@ -102,7 +102,7 @@
 - [x] pr-082 — Проверка PWA в Lighthouse.
 - [ ] pr-083 — Push-уведомления через Service Worker.
 - [x] pr-084 — Запись трека обхода виноградника на клиенте.
-- [ ] pr-085 — Тесты офлайн-режима (Cypress / Playwright).
+- [x] pr-085 — Тесты офлайн-режима (Cypress / Playwright).
 
 ## Спринт 6. Telegram WebApp, настройки, тесты и доработка
 
