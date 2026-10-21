@@ -137,6 +137,37 @@ export const ro: Messages = {
     offline:
       'Fără rețea: sunt afișate datele deja încărcate. Analiza fotografiei, recalcularea riscului și salvarea parcelelor vor funcționa când rețeaua revine.',
   },
+  outbox: {
+    waiting_one:
+      'În coadă: {{count}} verificare fără rețea; va ajunge în istoric când revine rețeaua.',
+    waiting_few:
+      'În coadă: {{count}} verificări fără rețea; vor ajunge în istoric când revine rețeaua.',
+    // В румынском нет формы many; ключ нужен для общей схемы
+    waiting_many:
+      'În coadă: {{count}} de verificări fără rețea; vor ajunge în istoric când revine rețeaua.',
+    waiting_other:
+      'În coadă: {{count}} de verificări fără rețea; vor ajunge în istoric când revine rețeaua.',
+    sending: 'Rețeaua a revenit: trimitem verificările din coadă ({{count}})…',
+    sent_one: 'Verificarea din coadă a fost salvată în istoric.',
+    sent_few: '{{count}} verificări din coadă au fost salvate în istoric.',
+    sent_many: '{{count}} de verificări din coadă au fost salvate în istoric.',
+    sent_other: '{{count}} de verificări din coadă au fost salvate în istoric.',
+    rejected_one:
+      'Serverul nu a acceptat {{count}} fotografie — a fost scoasă din coadă.',
+    rejected_few:
+      'Serverul nu a acceptat {{count}} fotografii — au fost scoase din coadă.',
+    rejected_many:
+      'Serverul nu a acceptat {{count}} de fotografii — au fost scoase din coadă.',
+    rejected_other:
+      'Serverul nu a acceptat {{count}} de fotografii — au fost scoase din coadă.',
+    failed:
+      'Verificările din coadă ({{count}}) nu au putut fi trimise: vom încerca din nou.',
+    retry: 'Trimite acum',
+    queued:
+      'Fotografia a fost pusă în coadă: când revine rețeaua, serverul o va verifica din nou și o va salva în istoric.',
+    queueFailed:
+      'Fotografia nu a putut fi pusă în coadă: nu este destul spațiu pe dispozitiv?',
+  },
   pwa: {
     updateReady:
       'A apărut o versiune nouă a aplicației. Reîncărcați pagina acum?',

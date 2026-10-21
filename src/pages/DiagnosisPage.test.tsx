@@ -10,6 +10,7 @@ import * as crop from '@/lib/crop'
 import * as exifGps from '@/lib/exifGps'
 import * as offline from '@/lib/offlineClassifier'
 import { deleteModel, saveModel } from '@/lib/modelStore'
+import { listQueued, removeQueued } from '@/lib/outbox'
 import { diagnosis } from '@/test/handlers'
 import { DiagnosisPage } from './DiagnosisPage'
 import { sidebarLink } from '@/test/nav'
@@ -35,6 +36,7 @@ describe('DiagnosisPage', () => {
     vi.unstubAllGlobals()
     vi.restoreAllMocks()
     await deleteModel()
+    for (const item of await listQueued()) await removeQueued(item.id)
   })
 
   async function goOffline(withModel: boolean) {
@@ -220,6 +222,49 @@ describe('DiagnosisPage', () => {
     ).toBeInTheDocument()
     expect(classify).toHaveBeenCalledWith(leaf)
     expect(screen.getByText('Оидиум', { selector: 'p' })).toBeInTheDocument()
+  })
+
+  it('без сети ставит проверку с сохранением в очередь', async () => {
+    await goOffline(true)
+    vi.spyOn(offline, 'classifyOffline').mockResolvedValue({
+      ...diagnosis,
+      heatmap: null,
+      lesion: null,
+    })
+    const user = renderPage()
+    await screen.findByText(/Модель на устройстве/)
+
+    await analyze(user)
+
+    expect(
+      await screen.findByText(/Фото поставлено в очередь/),
+    ).toBeInTheDocument()
+    const [queued] = await listQueued()
+    expect(queued).toMatchObject({
+      name: 'leaf.jpg',
+      type: 'image/jpeg',
+      vineyardId: null,
+      disease: 'powdery_mildew',
+    })
+    expect(new TextDecoder().decode(queued?.image)).toBe('leaf')
+  })
+
+  it('без сети и без галочки в очередь ничего не ставит', async () => {
+    await goOffline(true)
+    vi.spyOn(offline, 'classifyOffline').mockResolvedValue({
+      ...diagnosis,
+      heatmap: null,
+      lesion: null,
+    })
+    const user = renderPage()
+    await screen.findByText(/Модель на устройстве/)
+    await user.click(screen.getByLabelText(/Сохранить фото/))
+
+    await analyze(user)
+
+    await screen.findByText(/Определено на устройстве/)
+    expect(screen.queryByText(/Фото поставлено в очередь/)).toBeNull()
+    expect(await listQueued()).toEqual([])
   })
 
   it('сообщает, если анализ на устройстве не удался', async () => {

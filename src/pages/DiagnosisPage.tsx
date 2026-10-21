@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDiagnose } from '@/api/diagnosis'
 import { useOfflineDiagnose, useStoredModel } from '@/api/offlineModel'
+import { useQueueDiagnosis } from '@/api/outbox'
 import { useNavItems } from '@/app/navigation'
 import { Button } from '@/components/atoms/Button'
 import { Card } from '@/components/atoms/Card'
@@ -26,6 +27,7 @@ export function DiagnosisPage() {
   const [original, setOriginal] = useState<File | null>(null)
   const server = useDiagnose()
   const device = useOfflineDiagnose()
+  const queue = useQueueDiagnosis()
   const isOnline = useOnlineStatus()
   const stored = useStoredModel()
   // Без сети фото анализирует скачанная модель на устройстве (pr-074).
@@ -70,23 +72,23 @@ export function DiagnosisPage() {
                 // Результат относится к прежнему фото
                 server.reset()
                 device.reset()
+                queue.reset()
               }}
               onCrop={(cropped) => {
                 setFile(cropped)
                 server.reset()
                 device.reset()
+                queue.reset()
               }}
             />
             <PhotoLocation location={location} />
-            {/* Без сети фото анализируется на устройстве и не сохраняется */}
-            {isOnline && (
-              <SaveOptions
-                save={save}
-                onSaveChange={setSave}
-                vineyardId={vineyardId}
-                onVineyardChange={setChosenPlot}
-              />
-            )}
+            {/* Без сети проверка с сохранением встаёт в очередь (pr-076) */}
+            <SaveOptions
+              save={save}
+              onSaveChange={setSave}
+              vineyardId={vineyardId}
+              onVineyardChange={setChosenPlot}
+            />
             <Button
               className="w-full"
               disabled={!file || !canAnalyze}
@@ -95,7 +97,13 @@ export function DiagnosisPage() {
                 if (!file) return
                 setOnDevice(!isOnline)
                 if (isOnline) server.mutate({ image: file, save, vineyardId })
-                else device.mutate(file)
+                else
+                  device.mutate(file, {
+                    onSuccess: (result) => {
+                      if (save)
+                        queue.mutate({ image: file, vineyardId, result })
+                    },
+                  })
               }}
             >
               {t('diagnosis.analyze')}
@@ -140,6 +148,16 @@ export function DiagnosisPage() {
                 {onDevice && (
                   <p className="mb-3 rounded-md border border-line bg-muted/40 p-3 text-sm text-ink-soft">
                     {t('diagnosis.onDevice')}
+                  </p>
+                )}
+                {queue.isSuccess && (
+                  <p className="mb-3 text-sm text-ink-soft">
+                    {t('outbox.queued')}
+                  </p>
+                )}
+                {queue.isError && (
+                  <p role="alert" className="mb-3 text-sm text-danger">
+                    {t('outbox.queueFailed')}
                   </p>
                 )}
                 <DiagnosisResult diagnosis={diagnose.data} />
