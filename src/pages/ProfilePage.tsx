@@ -5,6 +5,7 @@ import { CardSkeleton } from '@/components/molecules/CardSkeleton'
 import { LanguageSwitcher } from '@/components/molecules/LanguageSwitcher'
 import { ThemeSwitcher } from '@/components/molecules/ThemeSwitcher'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
+import { NotificationSettings } from '@/components/organisms/NotificationSettings'
 import { ProfileForm } from '@/components/organisms/ProfileForm'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
 
@@ -34,6 +35,15 @@ export function ProfilePage() {
           )}
           {/* key: после загрузки форма начинается с имени из профиля */}
           {me.data && <ProfileForm key={me.data.id} user={me.data} />}
+        </section>
+        <section aria-labelledby="profile-notifications" className={card}>
+          <h2
+            id="profile-notifications"
+            className="mb-1 text-base font-semibold text-ink"
+          >
+            {t('notifications.title')}
+          </h2>
+          <NotificationSettings />
         </section>
         <section aria-labelledby="profile-interface" className={card}>
           <h2
