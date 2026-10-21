@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest'
-import { useSessionStore } from './session'
+import { hasSignedIn, useSessionStore } from './session'
 
 describe('useSessionStore', () => {
   beforeEach(() => {
@@ -31,6 +31,14 @@ describe('useSessionStore', () => {
       status: 'anonymous',
       accessToken: null,
     })
+  })
+
+  it('вход и выход ставят и снимают признак входа на устройстве', () => {
+    useSessionStore.getState().setAccessToken('token')
+    expect(hasSignedIn()).toBe(true)
+
+    useSessionStore.getState().clear()
+    expect(hasSignedIn()).toBe(false)
   })
 
   it('не записывает токен в постоянное хранилище браузера', () => {

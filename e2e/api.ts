@@ -88,6 +88,11 @@ export async function mockApi(page: Page): Promise<Api> {
   const api: Api = { created: [], ndviImages: [], diagnoses: [] }
   const vineyards = [CRICOVA]
 
+  // Пользователь уже входил на этом устройстве: сессия восстанавливается
+  // по refresh-cookie
+  await page.addInitScript(() =>
+    localStorage.setItem('vitiguard.signedIn', '1'),
+  )
   await page.route(
     /^https:\/\/(tile\.openstreetmap\.org|server\.arcgisonline\.com)\//,
     (route) => route.fulfill({ contentType: 'image/png', body: PNG }),
