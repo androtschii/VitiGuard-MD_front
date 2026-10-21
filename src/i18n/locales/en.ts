@@ -107,6 +107,26 @@ export const en: Messages = {
     undo: 'Remove point',
     finish: 'Done',
   },
+  track: {
+    start: 'Record a walk',
+    stop: 'Stop and save',
+    waiting: 'Looking for satellites… Keep the phone open.',
+    recording: 'Recording. The screen stays on while recording.',
+    summary: '{{distance}} · {{duration}}',
+    minutes_one: '{{count}} minute',
+    // В английском только one и other; few и many нужны для общей схемы ключей
+    minutes_few: '{{count}} minutes',
+    minutes_many: '{{count}} minutes',
+    minutes_other: '{{count}} minutes',
+    denied:
+      'No access to location: allow it for this site in the browser settings.',
+    unavailable: 'Location is not available on this device.',
+    saved: 'Saved walks',
+    show: 'Show',
+    hide: 'Hide',
+    gpx: 'GPX',
+    delete: 'Delete',
+  },
   filter: {
     label: 'Parcel filter',
     variety: 'Variety',

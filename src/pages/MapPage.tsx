@@ -11,6 +11,7 @@ import { MapExportControl } from '@/components/organisms/MapExportControl'
 import { MapSearch } from '@/components/organisms/MapSearch'
 import { MapToolbar } from '@/components/organisms/MapToolbar'
 import { MeasureControl } from '@/components/organisms/MeasureControl'
+import { TrackControl } from '@/components/organisms/TrackControl'
 import { MapView } from '@/components/organisms/MapView'
 import { NdviLayer } from '@/components/organisms/NdviLayer'
 import { NdviTimeline } from '@/components/organisms/NdviTimeline'
@@ -68,6 +69,7 @@ export function MapPage() {
                 )}
               />
               <MeasureControl />
+              <TrackControl />
               <MapExportControl />
             </>
           }
