@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom/vitest'
+import { configure } from '@testing-library/react'
 // IndexedDB в jsdom нет: скачанная модель хранится в нём (pr-072)
 import 'fake-indexeddb/auto'
 import { cleanup } from '@testing-library/react'
@@ -66,3 +67,7 @@ afterEach(() => {
 })
 
 afterAll(() => server.close())
+
+// findBy и waitFor ждут до 3 секунд, а не 1: под нагрузкой (покрытие, все
+// тесты разом) запрос и отрисовка иногда не укладывались в секунду
+configure({ asyncUtilTimeout: 3000 })

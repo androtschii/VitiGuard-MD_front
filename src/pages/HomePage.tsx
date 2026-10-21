@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { useNavItems } from '@/app/navigation'
 import { PrintButton } from '@/components/molecules/PrintButton'
+import { AlertsSummary } from '@/components/organisms/AlertsSummary'
 import { ApiStatus } from '@/components/organisms/ApiStatus'
 import { FarmOverview } from '@/components/organisms/FarmOverview'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
@@ -45,6 +46,7 @@ export function HomePage() {
             <PrintButton />
           </div>
         </div>
+        <AlertsSummary />
         <FarmOverview />
         <div className="print:hidden">
           <ApiStatus />
