@@ -55,6 +55,9 @@ export const handlers = [
   http.get('/api/v1/alerts/unread-count', () =>
     HttpResponse.json({ count: 0 }),
   ),
+  http.get('/api/v1/users/me/notifications', () =>
+    HttpResponse.json({ alert_level: 'high' }),
+  ),
   http.get('/api/v1/users/me', () =>
     HttpResponse.json({
       id: 'user-1',

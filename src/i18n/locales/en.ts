@@ -529,6 +529,21 @@ export const en: Messages = {
     diseases: 'Disease signs',
     check: 'Check a leaf by photo',
   },
+  notifications: {
+    title: 'Disease alerts',
+    question: 'Which risk to alert about',
+    high: 'High risk only',
+    highHint:
+      'Downy mildew infection by the “three tens” rule, expected spots, powdery mildew index of 60 and above.',
+    medium: 'Medium and high risk',
+    mediumHint:
+      'Also incubation onset and a rising powdery mildew index — there will be more alerts.',
+    off: 'No alerts',
+    offHint: 'Risk is still shown on the map and the home page.',
+    saved: 'Saved',
+    failed: 'Could not save. Please try again.',
+    loadError: 'Could not load the alert settings.',
+  },
   camera: {
     title: 'Photograph the leaf',
     preview: 'Camera view',

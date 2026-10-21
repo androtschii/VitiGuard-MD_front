@@ -38,3 +38,35 @@ export function useUpdateMe() {
     onSuccess: (data) => queryClient.setQueryData(meKey, data),
   })
 }
+
+// С какого уровня риска присылать предупреждения; null — не присылать
+// (backend/pr-084)
+export type AlertLevel = 'medium' | 'high' | null
+
+const notificationsKey = ['users', 'me', 'notifications'] as const
+
+export function useNotificationSettings() {
+  return useQuery({
+    queryKey: notificationsKey,
+    queryFn: async () => {
+      const { data } = await api.get<{ alert_level: AlertLevel }>(
+        '/users/me/notifications',
+      )
+      return data
+    },
+  })
+}
+
+export function useUpdateNotificationSettings() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (level: AlertLevel) => {
+      const { data } = await api.put<{ alert_level: AlertLevel }>(
+        '/users/me/notifications',
+        { alert_level: level },
+      )
+      return data
+    },
+    onSuccess: (data) => queryClient.setQueryData(notificationsKey, data),
+  })
+}

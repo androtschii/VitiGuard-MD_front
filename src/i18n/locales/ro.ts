@@ -539,6 +539,21 @@ export const ro: Messages = {
     diseases: 'Semnele bolilor',
     check: 'Verifică frunza după fotografie',
   },
+  notifications: {
+    title: 'Avertizări despre boli',
+    question: 'Despre ce risc să fiți avertizat',
+    high: 'Doar despre riscul ridicat',
+    highHint:
+      'Infecția cu mană după regula „celor trei de zece”, pete așteptate, indicele de făinare de la 60.',
+    medium: 'Despre riscul mediu și ridicat',
+    mediumHint:
+      'Și despre începutul incubației și creșterea indicelui de făinare — vor fi mai multe avertizări.',
+    off: 'Fără avertizări',
+    offHint: 'Riscul se vede în continuare pe hartă și pe pagina principală.',
+    saved: 'Salvat',
+    failed: 'Nu s-a putut salva. Încercați din nou.',
+    loadError: 'Setările avertizărilor nu s-au încărcat.',
+  },
   camera: {
     title: 'Fotografierea frunzei',
     preview: 'Imaginea de la cameră',
