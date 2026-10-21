@@ -135,6 +135,35 @@ export const en: Messages = {
     offline:
       'No network: showing data that is already loaded. Photo analysis, risk recalculation and saving plots will work once the network is back.',
   },
+  outbox: {
+    waiting_one:
+      '{{count}} offline check is queued: it will be saved to history once the network is back.',
+    // В английском только one и other; few и many нужны для общей схемы ключей
+    waiting_few:
+      '{{count}} offline checks are queued: they will be saved to history once the network is back.',
+    waiting_many:
+      '{{count}} offline checks are queued: they will be saved to history once the network is back.',
+    waiting_other:
+      '{{count}} offline checks are queued: they will be saved to history once the network is back.',
+    sending: 'Network is back: sending queued checks ({{count}})…',
+    sent_one: 'The queued check was saved to history.',
+    sent_few: '{{count}} queued checks were saved to history.',
+    sent_many: '{{count}} queued checks were saved to history.',
+    sent_other: '{{count}} queued checks were saved to history.',
+    rejected_one:
+      'The server did not accept {{count}} photo; it was removed from the queue.',
+    rejected_few:
+      'The server did not accept {{count}} photos; they were removed from the queue.',
+    rejected_many:
+      'The server did not accept {{count}} photos; they were removed from the queue.',
+    rejected_other:
+      'The server did not accept {{count}} photos; they were removed from the queue.',
+    failed: 'Could not send the queued checks ({{count}}): we will try again.',
+    retry: 'Send now',
+    queued:
+      'The photo is queued: once the network is back, the server will check it again and save it to history.',
+    queueFailed: 'Could not queue the photo: is the device out of space?',
+  },
   pwa: {
     updateReady: 'A new version of the app is available. Reload the page now?',
     offlineReady:
