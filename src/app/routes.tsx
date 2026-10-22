@@ -37,6 +37,14 @@ export const routes: RouteObject[] = [
             path: '/diagnosis',
             lazy: page(() => import('@/pages/DiagnosisPage'), 'DiagnosisPage'),
           },
+          // Быстрая диагностика для мини-приложения Telegram (pr-088)
+          {
+            path: '/diagnosis/quick',
+            lazy: page(
+              () => import('@/pages/QuickDiagnosisPage'),
+              'QuickDiagnosisPage',
+            ),
+          },
           {
             path: '/history',
             lazy: page(() => import('@/pages/HistoryPage'), 'HistoryPage'),

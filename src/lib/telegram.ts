@@ -30,6 +30,19 @@ export type TelegramWebApp = {
     onClick: (callback: () => void) => void
     offClick: (callback: () => void) => void
   }
+  // Большая кнопка внизу окна Telegram (pr-088)
+  MainButton: {
+    setText: (text: string) => void
+    show: () => void
+    hide: () => void
+    showProgress: (leaveActive?: boolean) => void
+    hideProgress: () => void
+    onClick: (callback: () => void) => void
+    offClick: (callback: () => void) => void
+  }
+  HapticFeedback?: {
+    notificationOccurred: (type: 'success' | 'warning' | 'error') => void
+  }
 }
 
 export type TelegramThemeParams = Partial<

@@ -156,6 +156,15 @@ export const en: Messages = {
     offline:
       'No network: showing data that is already loaded. Photo analysis, risk recalculation and saving plots will work once the network is back.',
   },
+  quick: {
+    title: 'Quick diagnosis',
+    intro:
+      'Take a close-up of a single leaf in daylight — the model will identify the disease and the check will be saved to history.',
+    analyze: 'Identify disease',
+    saved: 'The check is saved.',
+    history: 'Open history',
+    fullApp: 'Full VitiGuard MD',
+  },
   outbox: {
     waiting_one:
       '{{count}} offline check is queued: it will be saved to history once the network is back.',
