@@ -1,27 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import type { TelegramWebApp } from './telegram'
+import { fakeTelegram } from '@/test/telegram'
 
-function fakeWebApp(version = '8.0'): TelegramWebApp {
-  return {
-    initData: 'query_id=1',
-    version,
-    platform: 'android',
-    colorScheme: 'light',
-    themeParams: {},
-    onEvent: vi.fn(),
-    offEvent: vi.fn(),
-    ready: vi.fn(),
-    expand: vi.fn(),
-    isVersionAtLeast: (wanted) => Number(version) >= Number(wanted),
-    disableVerticalSwipes: vi.fn(),
-    BackButton: {
-      show: vi.fn(),
-      hide: vi.fn(),
-      onClick: vi.fn(),
-      offClick: vi.fn(),
-    },
-  }
-}
+const fakeWebApp = fakeTelegram
 
 // Модуль хранит загрузку SDK: каждый тест начинает с чистого
 async function load() {

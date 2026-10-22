@@ -55,6 +55,7 @@ describe('routes', () => {
     ).toEqual([
       '/map',
       '/diagnosis',
+      '/diagnosis/quick',
       '/history',
       '/regions',
       '/compare',

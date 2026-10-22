@@ -159,6 +159,15 @@ export const ro: Messages = {
     offline:
       'Fără rețea: sunt afișate datele deja încărcate. Analiza fotografiei, recalcularea riscului și salvarea parcelelor vor funcționa când rețeaua revine.',
   },
+  quick: {
+    title: 'Diagnostic rapid',
+    intro:
+      'Fotografiați o singură frunză de aproape, la lumina zilei — modelul va determina boala, iar verificarea se va salva în istoric.',
+    analyze: 'Determină boala',
+    saved: 'Verificarea a fost salvată.',
+    history: 'Deschide istoricul',
+    fullApp: 'Versiunea completă VitiGuard MD',
+  },
   outbox: {
     waiting_one:
       'În coadă: {{count}} verificare fără rețea; va ajunge în istoric când revine rețeaua.',
