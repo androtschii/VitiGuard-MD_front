@@ -69,6 +69,11 @@ export const routes: RouteObject[] = [
             path: '/profile',
             lazy: page(() => import('@/pages/ProfilePage'), 'ProfilePage'),
           },
+          // Только администратору: остальным сервер отвечает 403 (pr-091)
+          {
+            path: '/admin',
+            lazy: page(() => import('@/pages/AdminPage'), 'AdminPage'),
+          },
         ],
       },
       // Только для гостей

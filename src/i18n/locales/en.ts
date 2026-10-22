@@ -24,6 +24,7 @@ export const en: Messages = {
     map: 'Map',
     regions: 'Districts',
     diagnosis: 'Diagnosis',
+    admin: 'Admin',
   },
   map: {
     tools: {
@@ -155,6 +156,29 @@ export const en: Messages = {
   network: {
     offline:
       'No network: showing data that is already loaded. Photo analysis, risk recalculation and saving plots will work once the network is back.',
+  },
+  admin: {
+    title: 'Users and roles',
+    intro:
+      'An agronomist confirms diagnoses and gives advice, an administrator manages users. A blocked user is signed out of all devices at once.',
+    search: 'Search by email or name',
+    user: 'User',
+    role: 'Role',
+    roleOf: 'Role of {{email}}',
+    created: 'Registered',
+    access: 'Access',
+    active: 'Active',
+    blocked: 'Blocked',
+    block: 'Block',
+    unblock: 'Unblock',
+    blockUser: 'Block {{email}}',
+    unblockUser: 'Unblock {{email}}',
+    empty: 'Nobody found.',
+    roles: {
+      user: 'User',
+      agronomist: 'Agronomist',
+      admin: 'Administrator',
+    },
   },
   telegram: {
     title: 'Telegram',

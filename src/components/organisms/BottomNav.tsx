@@ -3,7 +3,8 @@ import { Link } from 'react-router'
 import type { NavItem } from '@/components/organisms/Sidebar'
 import { cn } from '@/lib/cn'
 
-// Значки разделов (24×24, контур): дом, карта, районы, лист, часы, человек
+// Значки разделов (24×24, контур): дом, карта, районы, лист, часы, человек,
+// щит администратора
 const ICONS: Record<string, string> = {
   '/': 'M4 11l8-7 8 7v9h-5v-6H9v6H4z',
   '/map': 'M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14',
@@ -11,6 +12,7 @@ const ICONS: Record<string, string> = {
   '/diagnosis': 'M5 19c0-8 5-14 14-14 0 9-6 14-14 14zM5 19l8-8',
   '/history': 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3 2',
   '/profile': 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 20c1-4 4-6 8-6s7 2 8 6',
+  '/admin': 'M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6zM9 12l2 2 4-4',
 }
 
 type BottomNavProps = {
