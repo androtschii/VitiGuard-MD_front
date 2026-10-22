@@ -24,6 +24,7 @@ export const ro: Messages = {
     map: 'Harta',
     regions: 'Raioane',
     diagnosis: 'Diagnostic',
+    admin: 'Administrare',
   },
   map: {
     tools: {
@@ -158,6 +159,29 @@ export const ro: Messages = {
   network: {
     offline:
       'Fără rețea: sunt afișate datele deja încărcate. Analiza fotografiei, recalcularea riscului și salvarea parcelelor vor funcționa când rețeaua revine.',
+  },
+  admin: {
+    title: 'Utilizatori și roluri',
+    intro:
+      'Agronomul confirmă diagnosticele și dă recomandări, administratorul gestionează utilizatorii. Utilizatorul blocat iese imediat de pe toate dispozitivele.',
+    search: 'Căutare după email și nume',
+    user: 'Utilizator',
+    role: 'Rol',
+    roleOf: 'Rolul {{email}}',
+    created: 'Înregistrat',
+    access: 'Acces',
+    active: 'Activ',
+    blocked: 'Blocat',
+    block: 'Blochează',
+    unblock: 'Deblochează',
+    blockUser: 'Blochează {{email}}',
+    unblockUser: 'Deblochează {{email}}',
+    empty: 'Nu s-a găsit nimeni.',
+    roles: {
+      user: 'Utilizator',
+      agronomist: 'Agronom',
+      admin: 'Administrator',
+    },
   },
   telegram: {
     title: 'Telegram',
