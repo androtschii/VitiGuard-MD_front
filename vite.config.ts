@@ -42,6 +42,9 @@ export default defineConfig({
         // самый большой фрагмент, лимит по умолчанию (2 МБ) его не пропускает
         // Границы районов и шрифт подписей карты — тоже часть оболочки (pr-070)
         globPatterns: ['**/*.{js,mjs,css,html,woff2,png,svg,pbf,geojson}'],
+        // SDK Sentry (pr-092) загружается, только если задан DSN: в оболочку
+        // для работы без сети его 450 КБ не входят
+        globIgnores: ['**/sentry-*.js'],
         maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
         // При первой установке Service Worker сразу берёт открытую страницу:
         // иначе плитки первого визита прошли бы мимо кэша. Обновления
@@ -97,6 +100,17 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        // У фрагмента с SDK Sentry — узнаваемое имя: его исключает предзагрузка
+        chunkFileNames: (chunk) =>
+          chunk.moduleIds.some((id) => id.includes('/@sentry/'))
+            ? 'assets/sentry-[hash].js'
+            : 'assets/[name]-[hash].js',
+      },
     },
   },
   server: {

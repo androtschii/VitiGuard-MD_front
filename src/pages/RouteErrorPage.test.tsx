@@ -1,13 +1,26 @@
 import { render, screen } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { createMemoryRouter, RouterProvider } from 'react-router'
+import { describe, expect, it, vi } from 'vitest'
+import * as monitoring from '@/lib/monitoring'
 import { RouteErrorPage } from './RouteErrorPage'
 
+function Broken(): never {
+  throw new Error('Страница сломалась')
+}
+
 describe('RouteErrorPage', () => {
-  it('показывает экран ошибки с кнопкой обновления', () => {
-    render(<RouteErrorPage />)
+  it('показывает экран ошибки и отправляет ошибку в мониторинг', async () => {
+    const report = vi.spyOn(monitoring, 'reportError')
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    const router = createMemoryRouter([
+      { path: '/', element: <Broken />, errorElement: <RouteErrorPage /> },
+    ])
+
+    render(<RouterProvider router={router} />)
 
     expect(
-      screen.getByRole('button', { name: 'Обновить страницу' }),
+      await screen.findByRole('button', { name: 'Обновить страницу' }),
     ).toBeInTheDocument()
+    expect(report).toHaveBeenCalledWith(new Error('Страница сломалась'))
   })
 })
