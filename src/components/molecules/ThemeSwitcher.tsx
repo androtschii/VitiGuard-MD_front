@@ -1,5 +1,6 @@
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useTelegramStore } from '@/lib/telegram'
 import { THEMES, useThemeStore, type Theme } from '@/theme'
 
 export function ThemeSwitcher() {
@@ -7,6 +8,8 @@ export function ThemeSwitcher() {
   const id = useId()
   const theme = useThemeStore((state) => state.theme)
   const setTheme = useThemeStore((state) => state.setTheme)
+  // В мини-приложении «как в системе» — это тема Telegram (pr-087)
+  const inTelegram = useTelegramStore((state) => state.webApp !== null)
 
   return (
     <div className="flex items-center">
@@ -21,7 +24,11 @@ export function ThemeSwitcher() {
       >
         {THEMES.map((value) => (
           <option key={value} value={value}>
-            {t(`theme.${value}`)}
+            {t(
+              value === 'system' && inTelegram
+                ? 'theme.telegram'
+                : `theme.${value}`,
+            )}
           </option>
         ))}
       </select>

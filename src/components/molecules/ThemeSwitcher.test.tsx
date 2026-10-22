@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
+import { useTelegramStore, type TelegramWebApp } from '@/lib/telegram'
 import { ThemeSwitcher } from './ThemeSwitcher'
 
 describe('ThemeSwitcher', () => {
@@ -21,5 +22,18 @@ describe('ThemeSwitcher', () => {
 
     expect(screen.getByLabelText('Тема')).toHaveValue('dark')
     expect(document.documentElement).toHaveClass('dark')
+  })
+})
+
+describe('ThemeSwitcher в Telegram', () => {
+  afterEach(() => {
+    useTelegramStore.setState({ webApp: null })
+  })
+
+  it('режим «как в системе» называется по Telegram', () => {
+    useTelegramStore.setState({ webApp: {} as TelegramWebApp })
+    render(<ThemeSwitcher />)
+
+    expect(screen.getAllByRole('option')[0]).toHaveTextContent('Как в Telegram')
   })
 })

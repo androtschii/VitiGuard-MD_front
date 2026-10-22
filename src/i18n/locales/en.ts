@@ -13,6 +13,7 @@ export const en: Messages = {
   theme: {
     label: 'Theme',
     system: 'System',
+    telegram: 'Same as Telegram',
     light: 'Light',
     dark: 'Dark',
   },

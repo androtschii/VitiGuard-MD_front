@@ -2,6 +2,7 @@
 // бота. SDK Telegram загружается только при таком запуске: в браузере и в
 // установленном PWA он не нужен, а без него приложение работает как сайт
 import { create } from 'zustand'
+import { watchTelegramTheme } from './telegramTheme'
 
 export const SDK_URL = 'https://telegram.org/js/telegram-web-app.js'
 // Telegram передаёт параметры запуска в адресе (#tgWebAppData=...) только при
@@ -13,6 +14,12 @@ export type TelegramWebApp = {
   version: string
   platform: string
   colorScheme: 'light' | 'dark'
+  // Цвета текущей темы Telegram, #rrggbb (pr-087)
+  themeParams: TelegramThemeParams
+  onEvent: (event: 'themeChanged', handler: () => void) => void
+  offEvent: (event: 'themeChanged', handler: () => void) => void
+  setHeaderColor?: (color: string) => void
+  setBackgroundColor?: (color: string) => void
   ready: () => void
   expand: () => void
   isVersionAtLeast: (version: string) => boolean
@@ -24,6 +31,22 @@ export type TelegramWebApp = {
     offClick: (callback: () => void) => void
   }
 }
+
+export type TelegramThemeParams = Partial<
+  Record<
+    | 'bg_color'
+    | 'secondary_bg_color'
+    | 'section_bg_color'
+    | 'text_color'
+    | 'hint_color'
+    | 'subtitle_text_color'
+    | 'link_color'
+    | 'accent_text_color'
+    | 'destructive_text_color'
+    | 'section_separator_color',
+    string
+  >
+>
 
 declare global {
   interface Window {
@@ -69,6 +92,7 @@ export async function initTelegram() {
   // Свайп вниз по карте двигает карту, а не закрывает мини-приложение
   if (webApp.isVersionAtLeast('7.7')) webApp.disableVerticalSwipes?.()
   document.documentElement.dataset.telegram = webApp.platform
+  watchTelegramTheme(webApp)
   useTelegramStore.setState({ webApp })
   return webApp
 }

@@ -13,6 +13,7 @@ export const ro: Messages = {
   theme: {
     label: 'Tema',
     system: 'Ca în sistem',
+    telegram: 'Ca în Telegram',
     light: 'Luminoasă',
     dark: 'Întunecată',
   },
