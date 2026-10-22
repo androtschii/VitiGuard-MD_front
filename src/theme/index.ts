@@ -55,6 +55,8 @@ export function watchSystemTheme() {
   const query = window.matchMedia?.(darkQuery)
   if (!query) return () => {}
   const onChange = () => {
+    // В Telegram «как в системе» значит «как в Telegram» (pr-087)
+    if (document.documentElement.dataset.telegram) return
     if (useThemeStore.getState().theme === 'system') applyTheme('system')
   }
   query.addEventListener('change', onChange)

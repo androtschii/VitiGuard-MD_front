@@ -11,6 +11,7 @@ export const ru = {
   theme: {
     label: 'Тема',
     system: 'Как в системе',
+    telegram: 'Как в Telegram',
     light: 'Светлая',
     dark: 'Тёмная',
   },

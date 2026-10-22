@@ -109,6 +109,18 @@ describe('тема', () => {
     expect(system.listeners.size).toBe(0)
   })
 
+  it('в Telegram тема ОС не перебивает тему Telegram', () => {
+    const system = mockSystemTheme(false)
+    const stop = watchSystemTheme()
+    document.documentElement.dataset.telegram = 'android'
+
+    system.change(true)
+
+    expect(isDark()).toBe(false)
+    delete document.documentElement.dataset.telegram
+    stop()
+  })
+
   it('без matchMedia подписка ничего не делает', () => {
     vi.stubGlobal('matchMedia', undefined)
 
