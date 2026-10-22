@@ -94,3 +94,11 @@ export async function confirmPasswordReset({
 export function useConfirmPasswordReset() {
   return useMutation({ mutationFn: confirmPasswordReset })
 }
+
+// Вход в мини-приложение Telegram по подписанным данным запуска (pr-090)
+export async function telegramLogin(initData: string) {
+  const { data } = await api.post<AccessToken>('/auth/telegram', {
+    init_data: initData,
+  })
+  return data
+}

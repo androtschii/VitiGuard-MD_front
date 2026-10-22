@@ -112,6 +112,7 @@ export async function mockApi(page: Page): Promise<Api> {
         full_name: 'Ион',
         role: 'agronomist',
         is_active: true,
+        telegram_linked: false,
         created_at: '2026-06-01T00:00:00Z',
         updated_at: '2026-06-01T00:00:00Z',
       })

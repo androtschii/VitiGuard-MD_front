@@ -7,6 +7,7 @@ import { ThemeSwitcher } from '@/components/molecules/ThemeSwitcher'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { NotificationSettings } from '@/components/organisms/NotificationSettings'
 import { ProfileForm } from '@/components/organisms/ProfileForm'
+import { TelegramConnect } from '@/components/organisms/TelegramConnect'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
 
 const card = 'rounded-lg border border-line bg-surface p-4 shadow-sm'
@@ -44,6 +45,15 @@ export function ProfilePage() {
             {t('notifications.title')}
           </h2>
           <NotificationSettings />
+        </section>
+        <section aria-labelledby="profile-telegram" className={card}>
+          <h2
+            id="profile-telegram"
+            className="mb-1 text-base font-semibold text-ink"
+          >
+            {t('telegram.title')}
+          </h2>
+          <TelegramConnect />
         </section>
         <section aria-labelledby="profile-interface" className={card}>
           <h2

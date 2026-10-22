@@ -10,6 +10,8 @@ export type CurrentUser = {
   full_name: string | null
   role: UserRole
   is_active: boolean
+  // Привязан ли чат Telegram-бота (backend/pr-082)
+  telegram_linked: boolean
   created_at: string
   updated_at: string
 }
@@ -68,5 +70,25 @@ export function useUpdateNotificationSettings() {
       return data
     },
     onSuccess: (data) => queryClient.setQueryData(notificationsKey, data),
+  })
+}
+
+// Одноразовая ссылка на бота: переход по ней привязывает чат (backend/pr-082)
+export type TelegramLink = { url: string; expires_in: number }
+
+export function useTelegramLink() {
+  return useMutation({
+    mutationFn: async () => {
+      const { data } = await api.post<TelegramLink>('/users/me/telegram')
+      return data
+    },
+  })
+}
+
+export function useUnlinkTelegram() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: () => api.delete('/users/me/telegram'),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: meKey }),
   })
 }

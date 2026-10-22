@@ -159,6 +159,19 @@ export const ro: Messages = {
     offline:
       'Fără rețea: sunt afișate datele deja încărcate. Analiza fotografiei, recalcularea riscului și salvarea parcelelor vor funcționa când rețeaua revine.',
   },
+  telegram: {
+    title: 'Telegram',
+    about:
+      'Conectați botul @VitiGuard_bot: primește fotografii ale frunzelor pentru diagnostic direct din chat, trimite avertizări despre risc pe parcele, iar mini-aplicația se deschide fără parolă.',
+    connect: 'Conectează Telegram',
+    open: 'Deschideți botul și apăsați «Start»',
+    expires:
+      '— linkul este valabil {{minutes}} minute și funcționează o singură dată.',
+    linked:
+      'Chatul cu botul este conectat: fotografiile din Telegram ajung în istoric, avertizările vin în chat.',
+    unlink: 'Deconectează',
+    notConfigured: 'Botul Telegram nu este încă configurat pe server.',
+  },
   quick: {
     title: 'Diagnostic rapid',
     intro:

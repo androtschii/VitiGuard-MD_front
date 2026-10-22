@@ -1,4 +1,4 @@
-import { refreshAccessToken } from '@/api/auth'
+import { refreshAccessToken, telegramLogin } from '@/api/auth'
 import { setTokenProvider, setUnauthorizedHandler } from '@/api/client'
 import { hasSignedIn, useSessionStore } from '@/store/session'
 
@@ -37,4 +37,24 @@ export function initSession() {
     return Promise.resolve(false)
   }
   return refreshSession()
+}
+
+// В мини-приложении Telegram вход без пароля (pr-090): если сессию не
+// удалось восстановить, сервер проверяет подписанные данные запуска. Пока
+// идёт проверка, вместо формы входа — экран загрузки. Не вышло (Telegram не
+// привязан) — обычная форма входа
+export async function signInWithTelegram(
+  initData: string,
+  restoring: Promise<boolean>,
+) {
+  if ((await restoring) || !initData) return false
+  useSessionStore.setState({ status: 'unknown' })
+  try {
+    const { access_token } = await telegramLogin(initData)
+    useSessionStore.getState().setAccessToken(access_token)
+    return true
+  } catch {
+    useSessionStore.getState().clear()
+    return false
+  }
 }
