@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { api, setTokenProvider, setUnauthorizedHandler } from '@/api/client'
 import { SIGNED_IN_KEY, useSessionStore } from '@/store/session'
 import { server } from '@/test/server'
-import { initSession, refreshSession } from './session'
+import { initSession, refreshSession, signInWithTelegram } from './session'
 
 const unauthorized = () =>
   HttpResponse.json({ detail: 'Не авторизован' }, { status: 401 })
@@ -198,5 +198,56 @@ describe('сессия', () => {
 
       expect(refresh.count).toBe(0)
     })
+  })
+})
+
+describe('вход в мини-приложение Telegram', () => {
+  it('восстановленной сессии вход по Telegram не нужен', async () => {
+    const calls = { count: 0 }
+    server.use(
+      http.post('/api/v1/auth/telegram', () => {
+        calls.count += 1
+        return unauthorized()
+      }),
+    )
+
+    expect(await signInWithTelegram('query_id=1', Promise.resolve(true))).toBe(
+      false,
+    )
+    expect(calls.count).toBe(0)
+  })
+
+  it('без сессии входит по подписанным данным запуска', async () => {
+    const bodies: unknown[] = []
+    server.use(
+      http.post('/api/v1/auth/telegram', async ({ request }) => {
+        bodies.push(await request.json())
+        return HttpResponse.json({ access_token: 'tg', token_type: 'bearer' })
+      }),
+    )
+
+    const signing = signInWithTelegram('query_id=1', Promise.resolve(false))
+    await Promise.resolve()
+
+    expect(useSessionStore.getState().status).toBe('unknown')
+    expect(await signing).toBe(true)
+    expect(bodies).toEqual([{ init_data: 'query_id=1' }])
+    expect(useSessionStore.getState()).toMatchObject({
+      status: 'authenticated',
+      accessToken: 'tg',
+    })
+  })
+
+  it('непривязанный Telegram — обычная форма входа', async () => {
+    server.use(http.post('/api/v1/auth/telegram', unauthorized))
+
+    expect(await signInWithTelegram('query_id=1', Promise.resolve(false))).toBe(
+      false,
+    )
+    expect(useSessionStore.getState().status).toBe('anonymous')
+  })
+
+  it('без данных запуска ничего не делает', async () => {
+    expect(await signInWithTelegram('', Promise.resolve(false))).toBe(false)
   })
 })

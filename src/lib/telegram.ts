@@ -40,6 +40,8 @@ export type TelegramWebApp = {
     onClick: (callback: () => void) => void
     offClick: (callback: () => void) => void
   }
+  // Ссылка t.me открывается в самом Telegram, а не во внешнем браузере
+  openTelegramLink: (url: string) => void
   HapticFeedback?: {
     notificationOccurred: (type: 'success' | 'warning' | 'error') => void
   }

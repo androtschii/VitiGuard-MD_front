@@ -156,6 +156,18 @@ export const en: Messages = {
     offline:
       'No network: showing data that is already loaded. Photo analysis, risk recalculation and saving plots will work once the network is back.',
   },
+  telegram: {
+    title: 'Telegram',
+    about:
+      'Connect @VitiGuard_bot: it diagnoses leaf photos sent right in the chat, sends risk alerts for your plots, and the mini app opens without a password.',
+    connect: 'Connect Telegram',
+    open: 'Open the bot and press “Start”',
+    expires: '— the link is valid for {{minutes}} minutes and works once.',
+    linked:
+      'The bot chat is connected: photos from Telegram go to history, alerts arrive in the chat.',
+    unlink: 'Disconnect',
+    notConfigured: 'The Telegram bot is not configured on the server yet.',
+  },
   quick: {
     title: 'Quick diagnosis',
     intro:

@@ -65,6 +65,7 @@ export const handlers = [
       full_name: 'Ион',
       role: 'user',
       is_active: true,
+      telegram_linked: false,
       created_at: '2026-06-01T00:00:00Z',
       updated_at: '2026-06-01T00:00:00Z',
     }),

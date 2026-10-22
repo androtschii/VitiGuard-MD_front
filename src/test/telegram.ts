@@ -28,6 +28,7 @@ export function fakeTelegram(version = '8.0'): TelegramWebApp {
       showProgress: vi.fn(),
       hideProgress: vi.fn(),
     },
+    openTelegramLink: vi.fn(),
     HapticFeedback: { notificationOccurred: vi.fn() },
   }
 }
