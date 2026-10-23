@@ -114,6 +114,9 @@ export default defineConfig({
     },
   },
   server: {
+    // Временный туннель Cloudflare (pr-082): с телефона и из Telegram сервер
+    // разработки открывается по https-адресу *.trycloudflare.com
+    allowedHosts: ['.trycloudflare.com'],
     // В разработке запросы к API уходят на локальный бэкенд — без настройки CORS
     proxy: {
       '/api': 'http://127.0.0.1:8000',
