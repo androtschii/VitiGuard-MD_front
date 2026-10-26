@@ -799,6 +799,12 @@ export const en: Messages = {
     noIncubation: 'No downy mildew incubation right now.',
     gublerToday: 'Gubler-Thomas powdery mildew index — {{index}}.',
     plan: 'What to do: today and the week ahead (weather forecast)',
+    outlookTitle: '7-day outbreak probability',
+    outlookMembers: 'ICON-EPS ensemble: {{count}} members',
+    outlookWeek: 'For the week',
+    offSeasonShort: 'off-season',
+    outlookTableNote:
+      'Below the risk level in forecast rows is the outbreak probability from the ICON-EPS ensemble.',
     columns: {
       advice: 'What to do',
       date: 'Date',

@@ -222,4 +222,97 @@ describe('RiskDialog', () => {
       'Сервер недоступен',
     )
   })
+
+  it('показывает вероятность вспышки за неделю и по дням из ансамбля', async () => {
+    server.use(
+      http.get(`${URL}/outlook`, () =>
+        HttpResponse.json({
+          members: 40,
+          days: [
+            { day: '2026-06-11', downy: 0.35, powdery: 0.1 },
+            { day: '2026-06-12', downy: 0.5, powdery: 0.25 },
+          ],
+          downy_week: 0.6,
+          powdery_week: 0.3,
+        }),
+      ),
+    )
+    renderDialog()
+
+    const outlookRegion = await screen.findByRole('region', {
+      name: 'Вероятность вспышки на 7 дней',
+    })
+    expect(outlookRegion).toBeInTheDocument()
+    expect(
+      within(outlookRegion).getByText('Ансамбль ICON-EPS: 40 вариантов'),
+    ).toBeInTheDocument()
+    expect(within(outlookRegion).getByText('60 %')).toBeInTheDocument()
+    expect(within(outlookRegion).getByText('30 %')).toBeInTheDocument()
+
+    // В строке прогноза на 11 июня показаны вероятности вспышки под бейджами
+    expect(screen.getByText('35 %')).toBeInTheDocument()
+    expect(screen.getByText('10 %')).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        'Под уровнем риска в строках прогноза указана вероятность вспышки по ансамблю ICON-EPS.',
+      ),
+    ).toBeInTheDocument()
+  })
+
+  it('вне сезона показывает «вне сезона» вместо процентов вспышки', async () => {
+    server.use(
+      http.get(`${URL}/outlook`, () =>
+        HttpResponse.json({
+          members: 0,
+          days: [{ day: '2026-06-11', downy: null, powdery: null }],
+          downy_week: null,
+          powdery_week: null,
+        }),
+      ),
+    )
+    renderDialog()
+
+    const outlookRegion = await screen.findByRole('region', {
+      name: 'Вероятность вспышки на 7 дней',
+    })
+    expect(outlookRegion).toBeInTheDocument()
+    expect(
+      within(outlookRegion).getByText('Ансамбль ICON-EPS: 0 вариантов'),
+    ).toBeInTheDocument()
+    const allOffSeason = screen.getAllByText('вне сезона')
+    // В сводке за неделю (для милдью и оидиума) и в ячейках дня
+    expect(allOffSeason.length).toBeGreaterThanOrEqual(2)
+  })
+
+  it('пересчёт по свежей погоде обновляет и вероятность вспышки', async () => {
+    let outlookCalls = 0
+    server.use(
+      http.get(`${URL}/outlook`, () => {
+        outlookCalls++
+        const val = outlookCalls === 1 ? 0.2 : 0.45
+        return HttpResponse.json({
+          members: 40,
+          days: [{ day: '2026-06-11', downy: val, powdery: 0.1 }],
+          downy_week: val,
+          powdery_week: 0.1,
+        })
+      }),
+      http.post(`${URL}/refresh`, () => HttpResponse.json(season())),
+    )
+    const user = renderDialog()
+    const outlookRegion = await screen.findByRole('region', {
+      name: 'Вероятность вспышки на 7 дней',
+    })
+    expect(within(outlookRegion).getByText('20 %')).toBeInTheDocument()
+    expect(outlookCalls).toBe(1)
+
+    await user.click(
+      screen.getByRole('button', { name: 'Пересчитать по свежей погоде' }),
+    )
+
+    // После успешного refresh queryClient инвалидирует outlook, и он перезапрашивается со значением 45 %
+    const updated = await screen.findAllByText('45 %')
+    expect(updated.length).toBeGreaterThanOrEqual(1)
+    expect(outlookCalls).toBe(2)
+  })
 })

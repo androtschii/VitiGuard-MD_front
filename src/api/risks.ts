@@ -17,7 +17,24 @@ export type RiskEntry = {
   updated_at: string
 }
 
+// Вероятность вспышки милдью и оидиума по ансамблю ICON-EPS (backend/pr-077).
+// null означает «вне сезона», а не ноль.
+export type OutlookDay = {
+  day: string
+  downy: number | null
+  powdery: number | null
+}
+
+export type RiskOutlook = {
+  members: number
+  days: OutlookDay[]
+  downy_week: number | null
+  powdery_week: number | null
+}
+
 const risksKey = (id: string) => ['vineyards', id, 'risks'] as const
+export const outlookKey = (id: string) =>
+  ['vineyards', id, 'risks', 'outlook'] as const
 
 export async function fetchRisks(id: string) {
   const { data } = await api.get<RiskEntry[]>(`/vineyards/${id}/risks`)
@@ -33,6 +50,20 @@ export function useRisks(id: string) {
   })
 }
 
+export async function fetchRiskOutlook(id: string) {
+  const { data } = await api.get<RiskOutlook>(`/vineyards/${id}/risks/outlook`)
+  return data
+}
+
+export function useRiskOutlook(id: string, enabled = true) {
+  return useQuery({
+    queryKey: outlookKey(id),
+    queryFn: () => fetchRiskOutlook(id),
+    staleTime: 30 * 60_000,
+    enabled,
+  })
+}
+
 // Пересчёт по свежей погоде и прогнозу идёт на сервере секунды и сразу
 // возвращает новый риск сезона
 export async function refreshRisks(id: string) {
@@ -44,7 +75,10 @@ export function useRefreshRisks(id: string) {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: () => refreshRisks(id),
-    onSuccess: (data) => queryClient.setQueryData(risksKey(id), data),
+    onSuccess: (data) => {
+      queryClient.setQueryData(risksKey(id), data)
+      void queryClient.invalidateQueries({ queryKey: outlookKey(id) })
+    },
   })
 }
 

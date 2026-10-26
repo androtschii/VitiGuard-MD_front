@@ -48,6 +48,14 @@ export const handlers = [
     }),
   ),
   http.get('/api/v1/vineyards/:id/risks', () => HttpResponse.json([])),
+  http.get('/api/v1/vineyards/:id/risks/outlook', () =>
+    HttpResponse.json({
+      members: 40,
+      days: [],
+      downy_week: null,
+      powdery_week: null,
+    }),
+  ),
   http.get('/api/v1/risks/today', () => HttpResponse.json([])),
   http.get('/api/v1/alerts', () =>
     HttpResponse.json({ items: [], total: 0, page: 1, size: 20, pages: 0 }),

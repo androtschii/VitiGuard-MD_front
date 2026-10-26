@@ -814,6 +814,12 @@ export const ro: Messages = {
     noIncubation: 'Acum nu există incubație de mană.',
     gublerToday: 'Indicele de făinare Gubler-Thomas — {{index}}.',
     plan: 'Ce trebuie făcut: azi și săptămâna următoare (după prognoza meteo)',
+    outlookTitle: 'Probabilitatea focarului pe 7 zile',
+    outlookMembers: 'Ansamblul ICON-EPS: {{count}} variante',
+    outlookWeek: 'Pe săptămână',
+    offSeasonShort: 'în afara sezonului',
+    outlookTableNote:
+      'Sub nivelul de risc în rândurile de prognoză este indicată probabilitatea focarului conform ansamblului ICON-EPS.',
     columns: {
       advice: 'Ce trebuie făcut',
       date: 'Data',
