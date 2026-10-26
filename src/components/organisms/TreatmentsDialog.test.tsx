@@ -215,12 +215,42 @@ describe('TreatmentsDialog', () => {
     const user = renderDialog()
     await screen.findByText('Купроксат')
 
-    const deleteBtn = screen.getByRole('button', {
-      name: 'Удалить запись об обработке от 5 июн. 2026 г.',
-    })
-    await user.click(deleteBtn)
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Удалить запись об обработке от 5 июн. 2026 г.',
+      }),
+    )
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Подтвердить удаление записи от 5 июн. 2026 г.',
+      }),
+    )
 
     expect(deletedId).toBe('t-1')
+  })
+
+  it('не удаляет запись без подтверждения и отменяет удаление', async () => {
+    let deleted = false
+    server.use(
+      http.delete(`${TREATMENTS_URL}/:id`, () => {
+        deleted = true
+        return new HttpResponse(null, { status: 204 })
+      }),
+    )
+    const user = renderDialog()
+    await screen.findByText('Купроксат')
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Удалить запись об обработке от 5 июн. 2026 г.',
+      }),
+    )
+    expect(screen.getByText('Удалить запись?')).toBeInTheDocument()
+    expect(deleted).toBe(false)
+
+    await user.click(screen.getByRole('button', { name: 'Отмена' }))
+    expect(screen.queryByText('Удалить запись?')).not.toBeInTheDocument()
+    expect(deleted).toBe(false)
   })
 
   it('показывает ошибку сервера при сохранении', async () => {
@@ -296,10 +326,16 @@ describe('TreatmentsDialog', () => {
     )
     const user = renderDialog()
     await screen.findByText('Купроксат')
-    const deleteBtn = screen.getByRole('button', {
-      name: 'Удалить запись об обработке от 5 июн. 2026 г.',
-    })
-    await user.click(deleteBtn)
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Удалить запись об обработке от 5 июн. 2026 г.',
+      }),
+    )
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Подтвердить удаление записи от 5 июн. 2026 г.',
+      }),
+    )
     expect(await screen.findByText('Не удалось удалить')).toBeInTheDocument()
   })
 })

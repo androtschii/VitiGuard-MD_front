@@ -45,6 +45,8 @@ export function TreatmentsDialog({
   const [fungicide, setFungicide] = useState<Fungicide>('contact')
   const [product, setProduct] = useState('')
   const [dateError, setDateError] = useState<string | null>(null)
+  // Удаление в два касания, как у участка: на телефоне кнопку легко задеть
+  const [confirmingId, setConfirmingId] = useState<string | null>(null)
 
   const handleCreate = (e: FormEvent) => {
     e.preventDefault()
@@ -370,21 +372,55 @@ export function TreatmentsDialog({
                         {item.product || '—'}
                       </td>
                       <td className="py-1.5 text-right whitespace-nowrap">
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          className="h-7 text-xs text-danger hover:bg-red-50 dark:hover:bg-red-950"
-                          aria-label={t('treatments.deleteTreatment', {
-                            date: format(item.applied_on),
-                          })}
-                          isLoading={
-                            deleteMutation.isPending &&
-                            deleteMutation.variables === item.id
-                          }
-                          onClick={() => deleteMutation.mutate(item.id)}
-                        >
-                          {t('treatments.delete')}
-                        </Button>
+                        {confirmingId === item.id ? (
+                          <span className="inline-flex items-center gap-1.5">
+                            <span className="text-xs text-ink">
+                              {t('treatments.confirmDelete')}
+                            </span>
+                            <Button
+                              size="sm"
+                              variant="danger"
+                              className="h-7 text-xs"
+                              aria-label={t(
+                                'treatments.confirmDeleteTreatment',
+                                {
+                                  date: format(item.applied_on),
+                                },
+                              )}
+                              isLoading={
+                                deleteMutation.isPending &&
+                                deleteMutation.variables === item.id
+                              }
+                              onClick={() =>
+                                deleteMutation.mutate(item.id, {
+                                  onSettled: () => setConfirmingId(null),
+                                })
+                              }
+                            >
+                              {t('treatments.delete')}
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="secondary"
+                              className="h-7 text-xs"
+                              onClick={() => setConfirmingId(null)}
+                            >
+                              {t('treatments.cancel')}
+                            </Button>
+                          </span>
+                        ) : (
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-7 text-xs text-danger hover:bg-red-50 dark:hover:bg-red-950"
+                            aria-label={t('treatments.deleteTreatment', {
+                              date: format(item.applied_on),
+                            })}
+                            onClick={() => setConfirmingId(item.id)}
+                          >
+                            {t('treatments.delete')}
+                          </Button>
+                        )}
                       </td>
                     </tr>
                   ))}

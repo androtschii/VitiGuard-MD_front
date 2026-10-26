@@ -889,6 +889,8 @@ export const ro: Messages = {
     productLabel: 'Denumirea produsului',
     productPlaceholder: 'De exemplu, Ridomil Gold',
     deleteTreatment: 'Șterge înregistrarea tratamentului din {{date}}',
+    confirmDeleteTreatment: 'Confirmă ștergerea înregistrării din {{date}}',
+    confirmDelete: 'Ștergi înregistrarea?',
     delete: 'Șterge',
     columns: {
       date: 'Data',

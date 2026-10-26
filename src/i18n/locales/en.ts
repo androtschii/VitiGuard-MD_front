@@ -874,6 +874,8 @@ export const en: Messages = {
     productLabel: 'Product name',
     productPlaceholder: 'E.g., Ridomil Gold',
     deleteTreatment: 'Delete treatment log from {{date}}',
+    confirmDeleteTreatment: 'Confirm deleting the record from {{date}}',
+    confirmDelete: 'Delete this record?',
     delete: 'Delete',
     columns: {
       date: 'Date',
