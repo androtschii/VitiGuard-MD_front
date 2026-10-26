@@ -46,7 +46,10 @@ export function AdminPage() {
       key: 'role',
       header: t('admin.role'),
       cell: (user) => (
+        // Узкий столбец на телефоне сжимал поле до одной стрелки: название роли
+        // не помещалось. Таблица прокручивается вбок, поэтому ширину держим
         <Select
+          className="min-w-40"
           aria-label={t('admin.roleOf', { email: user.email })}
           value={user.role}
           disabled={isSelf(user) || update.isPending}
