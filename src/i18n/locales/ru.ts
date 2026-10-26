@@ -866,6 +866,8 @@ export const ru = {
     productLabel: 'Название препарата',
     productPlaceholder: 'Например, Ридомил Голд',
     deleteTreatment: 'Удалить запись об обработке от {{date}}',
+    confirmDeleteTreatment: 'Подтвердить удаление записи от {{date}}',
+    confirmDelete: 'Удалить запись?',
     delete: 'Удалить',
     columns: {
       date: 'Дата',
