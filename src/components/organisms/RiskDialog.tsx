@@ -1,6 +1,11 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useRefreshRisks, useRisks, type RiskEntry } from '@/api/risks'
+import {
+  useRefreshRisks,
+  useRiskOutlook,
+  useRisks,
+  type RiskEntry,
+} from '@/api/risks'
 import { Button } from '@/components/atoms/Button'
 import { PeriodFilter } from '@/components/molecules/PeriodFilter'
 import { RiskBadge } from '@/components/molecules/RiskBadge'
@@ -164,6 +169,7 @@ export function RiskDialog({
     timeZone: 'UTC',
   })
   const entries = risks.data ?? []
+  const outlook = useRiskOutlook(vineyardId, open && entries.length > 0)
   const today = localToday()
   const days = dailyRisk(entries)
   const now = days.find((item) => item.day === today)
@@ -246,6 +252,40 @@ export function RiskDialog({
               )}
             </section>
 
+            {outlook.data && (
+              <section
+                aria-label={t('risk.outlookTitle')}
+                className="flex flex-col gap-1.5 rounded-lg border border-line bg-surface p-3"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <h4 className="font-semibold text-ink">
+                    {t('risk.outlookTitle')}
+                  </h4>
+                  <span className="text-xs text-ink-muted">
+                    {t('risk.outlookMembers', { count: outlook.data.members })}
+                  </span>
+                </div>
+                <div className="flex flex-wrap items-center gap-4 text-xs text-ink-soft">
+                  <div>
+                    <span>{t('risk.downy')}: </span>
+                    <span className="font-medium text-ink">
+                      {outlook.data.downy_week === null
+                        ? t('risk.offSeasonShort')
+                        : `${Math.round(outlook.data.downy_week * 100)} %`}
+                    </span>
+                  </div>
+                  <div>
+                    <span>{t('risk.powdery')}: </span>
+                    <span className="font-medium text-ink">
+                      {outlook.data.powdery_week === null
+                        ? t('risk.offSeasonShort')
+                        : `${Math.round(outlook.data.powdery_week * 100)} %`}
+                    </span>
+                  </div>
+                </div>
+              </section>
+            )}
+
             {plan.length > 0 && (
               <section className="flex flex-col gap-1.5">
                 <h3 className="font-semibold text-ink">{t('risk.plan')}</h3>
@@ -269,31 +309,59 @@ export function RiskDialog({
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-line">
-                      {plan.map((item) => (
-                        <tr key={item.day} className="align-top">
-                          <td className="py-1.5 pr-2 whitespace-nowrap">
-                            {item.day === today
-                              ? t('risk.today')
-                              : format(item.day)}
-                          </td>
-                          <td className="py-1.5 pr-2">
-                            <RiskBadge level={item.downy} />
-                          </td>
-                          <td className="py-1.5 pr-2">
-                            <RiskBadge level={item.powdery} />
-                          </td>
-                          <td className="py-1.5 text-ink-soft">
-                            <ul className="flex flex-col gap-0.5">
-                              {dayAdvice(entries, item.day).map((advice) => (
-                                <li key={advice}>{t(`advice.${advice}`)}</li>
-                              ))}
-                            </ul>
-                          </td>
-                        </tr>
-                      ))}
+                      {plan.map((item) => {
+                        const outlookDay = outlook.data?.days.find(
+                          (d) => d.day === item.day,
+                        )
+                        return (
+                          <tr key={item.day} className="align-top">
+                            <td className="py-1.5 pr-2 whitespace-nowrap">
+                              {item.day === today
+                                ? t('risk.today')
+                                : format(item.day)}
+                            </td>
+                            <td className="py-1.5 pr-2">
+                              <div className="flex flex-col gap-0.5">
+                                <RiskBadge level={item.downy} />
+                                {outlookDay && (
+                                  <span className="text-[11px] text-ink-subtle">
+                                    {outlookDay.downy === null
+                                      ? t('risk.offSeasonShort')
+                                      : `${Math.round(outlookDay.downy * 100)} %`}
+                                  </span>
+                                )}
+                              </div>
+                            </td>
+                            <td className="py-1.5 pr-2">
+                              <div className="flex flex-col gap-0.5">
+                                <RiskBadge level={item.powdery} />
+                                {outlookDay && (
+                                  <span className="text-[11px] text-ink-subtle">
+                                    {outlookDay.powdery === null
+                                      ? t('risk.offSeasonShort')
+                                      : `${Math.round(outlookDay.powdery * 100)} %`}
+                                  </span>
+                                )}
+                              </div>
+                            </td>
+                            <td className="py-1.5 text-ink-soft">
+                              <ul className="flex flex-col gap-0.5">
+                                {dayAdvice(entries, item.day).map((advice) => (
+                                  <li key={advice}>{t(`advice.${advice}`)}</li>
+                                ))}
+                              </ul>
+                            </td>
+                          </tr>
+                        )
+                      })}
                     </tbody>
                   </table>
                 </div>
+                {outlook.data && (
+                  <p className="text-xs text-ink-subtle">
+                    {t('risk.outlookTableNote')}
+                  </p>
+                )}
                 <p className="text-xs text-ink-subtle">
                   {t('diseaseInfo.note')}
                 </p>

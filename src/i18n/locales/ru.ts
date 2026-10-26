@@ -791,6 +791,12 @@ export const ru = {
     noIncubation: 'Инкубации милдью сейчас нет.',
     gublerToday: 'Индекс оидиума Gubler-Thomas — {{index}}.',
     plan: 'Что делать: сегодня и неделя вперёд (по прогнозу погоды)',
+    outlookTitle: 'Вероятность вспышки на 7 дней',
+    outlookMembers: 'Ансамбль ICON-EPS: {{count}} вариантов',
+    outlookWeek: 'За неделю',
+    offSeasonShort: 'вне сезона',
+    outlookTableNote:
+      'Под уровнем риска в строках прогноза указана вероятность вспышки по ансамблю ICON-EPS.',
     columns: {
       advice: 'Что делать',
       date: 'Дата',
