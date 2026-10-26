@@ -197,4 +197,16 @@ describe('VineyardCard', () => {
     await user.click(screen.getByRole('button', { name: 'Закрыть' }))
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
+
+  it('открывает окно обработок и плана', async () => {
+    const { user } = renderCard()
+
+    await user.click(screen.getByRole('button', { name: 'Обработки и план' }))
+
+    expect(
+      screen.getByRole('dialog', { name: 'Обработки и план: Криково' }),
+    ).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Закрыть' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
 })

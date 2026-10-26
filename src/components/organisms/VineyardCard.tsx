@@ -10,6 +10,7 @@ import {
 import { useCurrentWeather } from '@/api/weather'
 import { Button } from '@/components/atoms/Button'
 import { RiskSummary } from '@/components/organisms/RiskSummary'
+import { TreatmentsDialog } from '@/components/organisms/TreatmentsDialog'
 import { VegetationDialog } from '@/components/organisms/VegetationDialog'
 
 type VineyardCardProps = {
@@ -32,6 +33,7 @@ export function VineyardCard({
   const [isConfirming, setIsConfirming] = useState(false)
   const [downloadError, setDownloadError] = useState(false)
   const [isVegetationOpen, setIsVegetationOpen] = useState(false)
+  const [isTreatmentsOpen, setIsTreatmentsOpen] = useState(false)
 
   const language = i18n.resolvedLanguage
   const number = (value: number, digits = 1) =>
@@ -132,6 +134,21 @@ export function VineyardCard({
             vineyardName={vineyard.name}
             open={isVegetationOpen}
             onClose={() => setIsVegetationOpen(false)}
+          />
+        )}
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={() => setIsTreatmentsOpen(true)}
+        >
+          {t('treatments.open')}
+        </Button>
+        {isTreatmentsOpen && (
+          <TreatmentsDialog
+            vineyardId={vineyard.id}
+            vineyardName={vineyard.name}
+            open={isTreatmentsOpen}
+            onClose={() => setIsTreatmentsOpen(false)}
           />
         )}
         <p className="flex flex-wrap items-center gap-x-2 text-ink-muted">
