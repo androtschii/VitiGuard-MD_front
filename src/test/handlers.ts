@@ -56,6 +56,31 @@ export const handlers = [
       powdery_week: null,
     }),
   ),
+  http.get('/api/v1/vineyards/:id/treatments', () => HttpResponse.json([])),
+  http.get('/api/v1/vineyards/:id/treatments/plan', () =>
+    HttpResponse.json({
+      today: '2026-06-10',
+      protected_until: { downy_mildew: null, powdery_mildew: null },
+      recommendations: [],
+    }),
+  ),
+  http.post('/api/v1/vineyards/:id/treatments', async ({ request, params }) => {
+    const body = (await request.json()) as Record<string, unknown>
+    return HttpResponse.json(
+      {
+        id: 'treatment-1',
+        vineyard_id: params.id,
+        created_at: '2026-06-10T09:00:00Z',
+        updated_at: '2026-06-10T09:00:00Z',
+        ...body,
+      },
+      { status: 201 },
+    )
+  }),
+  http.delete(
+    '/api/v1/vineyards/:id/treatments/:treatmentId',
+    () => new HttpResponse(null, { status: 204 }),
+  ),
   http.get('/api/v1/risks/today', () => HttpResponse.json([])),
   http.get('/api/v1/alerts', () =>
     HttpResponse.json({ items: [], total: 0, page: 1, size: 20, pages: 0 }),
