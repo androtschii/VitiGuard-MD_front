@@ -1,11 +1,14 @@
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { useUnreadAlerts } from '@/api/alerts'
+import { useAlertsSocket } from '@/lib/useAlertsSocket'
 
 // Колокольчик в шапке: сколько предупреждений не прочитано (pr-063)
 export function AlertsBell() {
   const { t } = useTranslation()
-  const { data: count = 0 } = useUnreadAlerts()
+  // По WebSocket число приходит сразу; опрос — пока соединения нет
+  const isLive = useAlertsSocket()
+  const { data: count = 0 } = useUnreadAlerts(!isLive)
 
   return (
     <Link

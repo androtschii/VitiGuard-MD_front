@@ -71,3 +71,10 @@ afterAll(() => server.close())
 // findBy и waitFor ждут до 3 секунд, а не 1: под нагрузкой (покрытие, все
 // тесты разом) запрос и отрисовка иногда не укладывались в секунду
 configure({ asyncUtilTimeout: 3000 })
+
+// В jsdom есть настоящий WebSocket: колокольчик предупреждений на каждой
+// странице кабинета пытался бы подключиться к несуществующему серверу.
+// Тесты сокета подставляют свой (useAlertsSocket.test)
+beforeEach(() => {
+  vi.stubGlobal('WebSocket', undefined)
+})

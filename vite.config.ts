@@ -119,7 +119,8 @@ export default defineConfig({
     allowedHosts: ['.trycloudflare.com'],
     // В разработке запросы к API уходят на локальный бэкенд — без настройки CORS
     proxy: {
-      '/api': 'http://127.0.0.1:8000',
+      // ws: WebSocket предупреждений (/api/v1/ws/alerts) идёт тем же путём
+      '/api': { target: 'http://127.0.0.1:8000', ws: true },
     },
   },
   // Фоновый поток MapLibre импортирует общий модуль, поэтому собирается как ES-модуль

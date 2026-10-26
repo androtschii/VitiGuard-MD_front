@@ -32,6 +32,12 @@ export function setTokenProvider(provider: TokenProvider) {
   getAccessToken = provider
 }
 
+// Текущий access-токен — для соединений, где заголовок Authorization не
+// передать (WebSocket)
+export function readAccessToken() {
+  return getAccessToken()
+}
+
 export function setUnauthorizedHandler(handler: UnauthorizedHandler | null) {
   onUnauthorized = handler
 }

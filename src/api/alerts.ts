@@ -43,16 +43,19 @@ export function useAlerts(
   })
 }
 
-// Число непрочитанных для значка в шапке. Сервер пересчитывает риск раз в
-// 6 часов, поэтому раз в минуту — с запасом; WebSocket — backend/pr-093
-export function useUnreadAlerts() {
+// Число непрочитанных для значка в шапке. Обычно его присылает WebSocket
+// (useAlertsSocket); опрос раз в минуту — запасной путь, пока соединения нет
+export const unreadAlertsKey = [...alertsKey, 'unread-count'] as const
+
+// polling — опрос, пока нет WebSocket (useAlertsSocket)
+export function useUnreadAlerts(polling = true) {
   return useQuery({
-    queryKey: [...alertsKey, 'unread-count'],
+    queryKey: unreadAlertsKey,
     queryFn: async () => {
       const { data } = await api.get<{ count: number }>('/alerts/unread-count')
       return data.count
     },
-    refetchInterval: 60_000,
+    refetchInterval: polling ? 60_000 : false,
   })
 }
 
