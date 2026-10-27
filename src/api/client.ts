@@ -66,7 +66,7 @@ api.interceptors.response.use(
       // Токен обновлён: тот же запрос повторяется уже с новым токеном
       return api.request({ ...config, _retried: true })
     }
-    throw toApiError(error)
+    throw await toApiError(error)
   },
 )
 
@@ -80,11 +80,42 @@ function getRetryableConfig(error: unknown) {
   return config.url?.startsWith('/auth/') ? null : config
 }
 
-function toApiError(error: unknown): ApiError {
+// Blob из другой реализации (адаптер axios в тестах) не проходит instanceof,
+// а у Blob в jsdom нет text(): тело читается через FileReader, он есть везде
+function isBlobLike(value: unknown): value is Blob {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    typeof (value as Blob).size === 'number' &&
+    typeof (value as Blob).type === 'string'
+  )
+}
+
+function readBlobText(blob: Blob) {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () =>
+      resolve(typeof reader.result === 'string' ? reader.result : '')
+    reader.onerror = () => reject(reader.error ?? new Error('read failed'))
+    reader.readAsText(blob)
+  })
+}
+
+async function toApiError(error: unknown): Promise<ApiError> {
   if (!isAxiosError<{ detail?: unknown }>(error) || !error.response) {
     return new ApiError(i18n.t('api.serverUnavailable'), null)
   }
-  const { status, data } = error.response
+  let { data } = error.response
+  // При responseType: 'blob' тело ошибки тоже приходит как Blob — парсим JSON из него
+  if (isBlobLike(data)) {
+    try {
+      const text = await readBlobText(data)
+      data = JSON.parse(text) as { detail?: unknown }
+    } catch {
+      // Не JSON в теле ответа
+    }
+  }
+  const { status } = error.response
   // FastAPI возвращает текст ошибки в поле detail
   const message =
     typeof data?.detail === 'string'

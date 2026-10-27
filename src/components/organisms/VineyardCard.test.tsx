@@ -209,4 +209,57 @@ describe('VineyardCard', () => {
     await user.click(screen.getByRole('button', { name: 'Закрыть' }))
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
+
+  it('скачивает PDF-отчёт участка', async () => {
+    let requestedPdf = false
+    server.use(
+      http.get('/api/v1/vineyards/:id/report.pdf', () => {
+        requestedPdf = true
+        return new HttpResponse(new Uint8Array([1, 2, 3]), {
+          headers: {
+            'Content-Type': 'application/pdf',
+            'Content-Disposition':
+              'attachment; filename="vitiguard-report.pdf"',
+          },
+        })
+      }),
+    )
+    const click = vi
+      .spyOn(HTMLAnchorElement.prototype, 'click')
+      .mockImplementation(() => {})
+    const { user } = renderCard()
+
+    await user.click(screen.getByRole('button', { name: 'PDF-отчёт' }))
+
+    await waitFor(() => expect(requestedPdf).toBe(true))
+    expect(click).toHaveBeenCalled()
+    click.mockRestore()
+  })
+
+  it('показывает ошибку, если скачать PDF-отчёт не удалось', async () => {
+    server.use(
+      http.get('/api/v1/vineyards/:id/report.pdf', () =>
+        HttpResponse.json({ detail: 'Ошибка генерации PDF' }, { status: 400 }),
+      ),
+    )
+    const { user } = renderCard()
+
+    await user.click(screen.getByRole('button', { name: 'PDF-отчёт' }))
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'Ошибка генерации PDF',
+    )
+  })
+
+  it('открывает окно выгрузки данных', async () => {
+    const { user } = renderCard()
+
+    await user.click(screen.getByRole('button', { name: 'Выгрузить данные' }))
+
+    expect(
+      screen.getByRole('dialog', { name: 'Выгрузка данных: Криково' }),
+    ).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Отмена' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
 })

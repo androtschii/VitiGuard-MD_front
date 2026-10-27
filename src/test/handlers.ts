@@ -81,6 +81,30 @@ export const handlers = [
     '/api/v1/vineyards/:id/treatments/:treatmentId',
     () => new HttpResponse(null, { status: 204 }),
   ),
+  http.get('/api/v1/vineyards/:id/report.pdf', () => {
+    return new HttpResponse(new Uint8Array([0x25, 0x50, 0x44, 0x46]), {
+      headers: {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition':
+          'attachment; filename="vitiguard-report-2026-06-10.pdf"',
+      },
+    })
+  }),
+  http.get('/api/v1/vineyards/:id/data', ({ request }) => {
+    const url = new URL(request.url)
+    const format = url.searchParams.get('format') ?? 'xlsx'
+    const ext = format === 'csv' ? 'zip' : 'xlsx'
+    const mime =
+      format === 'csv'
+        ? 'application/zip'
+        : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    return new HttpResponse(new Uint8Array([0x50, 0x4b]), {
+      headers: {
+        'Content-Type': mime,
+        'Content-Disposition': `attachment; filename="vitiguard-data-2026-03-01-2026-06-10.${ext}"`,
+      },
+    })
+  }),
   http.get('/api/v1/risks/today', () => HttpResponse.json([])),
   http.get('/api/v1/alerts', () =>
     HttpResponse.json({ items: [], total: 0, page: 1, size: 20, pages: 0 }),

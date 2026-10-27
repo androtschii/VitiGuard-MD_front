@@ -41,4 +41,27 @@ describe('api', () => {
 
     expect(error).toMatchObject({ message: 'Сервер недоступен', status: null })
   })
+
+  it('извлекает текст ошибки detail из Blob-ответа', async () => {
+    server.use(
+      // Ответ — обычный JSON: с responseType: 'blob' axios отдаёт его как Blob,
+      // как сервер отдаёт ошибку вместо файла
+      http.get('/api/v1/blob-error', () =>
+        HttpResponse.json(
+          { detail: 'Ошибка в бинарном запросе' },
+          { status: 400 },
+        ),
+      ),
+    )
+
+    const error = await api
+      .get('/blob-error', { responseType: 'blob' })
+      .catch((e: unknown) => e)
+
+    expect(error).toBeInstanceOf(ApiError)
+    expect(error).toMatchObject({
+      message: 'Ошибка в бинарном запросе',
+      status: 400,
+    })
+  })
 })
