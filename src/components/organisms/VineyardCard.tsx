@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { downloadPdfReport } from '@/api/reports'
 import {
   downloadVineyard,
   useDeleteVineyard,
@@ -9,6 +10,7 @@ import {
 } from '@/api/vineyards'
 import { useCurrentWeather } from '@/api/weather'
 import { Button } from '@/components/atoms/Button'
+import { ExportDataDialog } from '@/components/organisms/ExportDataDialog'
 import { RiskSummary } from '@/components/organisms/RiskSummary'
 import { TreatmentsDialog } from '@/components/organisms/TreatmentsDialog'
 import { VegetationDialog } from '@/components/organisms/VegetationDialog'
@@ -34,6 +36,9 @@ export function VineyardCard({
   const [downloadError, setDownloadError] = useState(false)
   const [isVegetationOpen, setIsVegetationOpen] = useState(false)
   const [isTreatmentsOpen, setIsTreatmentsOpen] = useState(false)
+  const [isExportOpen, setIsExportOpen] = useState(false)
+  const [isPdfLoading, setIsPdfLoading] = useState(false)
+  const [pdfError, setPdfError] = useState<string | null>(null)
 
   const language = i18n.resolvedLanguage
   const number = (value: number, digits = 1) =>
@@ -47,6 +52,22 @@ export function VineyardCard({
   const download = (format: ExportFormat) => {
     setDownloadError(false)
     downloadVineyard(vineyard.id, format).catch(() => setDownloadError(true))
+  }
+
+  const handleDownloadPdf = async () => {
+    setIsPdfLoading(true)
+    setPdfError(null)
+    try {
+      await downloadPdfReport(vineyard.id)
+    } catch (err: unknown) {
+      setPdfError(
+        err instanceof Error && err.message
+          ? err.message
+          : t('reports.pdfFailed'),
+      )
+    } finally {
+      setIsPdfLoading(false)
+    }
   }
 
   return (
@@ -149,6 +170,35 @@ export function VineyardCard({
             vineyardName={vineyard.name}
             open={isTreatmentsOpen}
             onClose={() => setIsTreatmentsOpen(false)}
+          />
+        )}
+        <Button
+          size="sm"
+          variant="secondary"
+          isLoading={isPdfLoading}
+          disabled={isPdfLoading}
+          onClick={() => void handleDownloadPdf()}
+        >
+          {t('reports.pdf')}
+        </Button>
+        {pdfError && (
+          <p role="alert" className="text-danger">
+            {pdfError}
+          </p>
+        )}
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={() => setIsExportOpen(true)}
+        >
+          {t('reports.exportData')}
+        </Button>
+        {isExportOpen && (
+          <ExportDataDialog
+            vineyardId={vineyard.id}
+            vineyardName={vineyard.name}
+            open={isExportOpen}
+            onClose={() => setIsExportOpen(false)}
           />
         )}
         <p className="flex flex-wrap items-center gap-x-2 text-ink-muted">
