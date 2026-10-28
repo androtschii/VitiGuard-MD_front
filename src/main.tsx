@@ -7,7 +7,7 @@ import '@/i18n'
 import { initMonitoring } from '@/lib/monitoring'
 import { initTelegram } from '@/lib/telegram'
 import { applyTheme, readStoredTheme, watchSystemTheme } from '@/theme'
-import '@fontsource-variable/montserrat'
+import './fonts.css'
 import './index.css'
 
 // Мониторинг ошибок — до всего остального, чтобы не пропустить ранние
