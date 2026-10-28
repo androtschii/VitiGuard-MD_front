@@ -9,6 +9,11 @@ import { useMapStore } from '@/store/map'
 const LAYER = 'vineyards-fill'
 // На сколько пикселей ниже центра карты оказывается выбранная точка
 const POPUP_SHIFT = 160
+// Сколько места над точкой занимает не сама карточка: внутренние отступы
+// попапа, его хвостик и отступ от точки, плюс зазор до верхнего края карты
+const POPUP_MARGIN = 72
+// На низкой карте карточка не сжимается меньше этого: её всё равно прокручивают
+const MIN_POPUP_HEIGHT = 160
 
 function vineyardId(event: MapLayerMouseEvent) {
   const id: unknown = event.features?.[0]?.properties.id
@@ -91,12 +96,19 @@ export function VineyardPopups() {
     : undefined
   if (!selection || !vineyard) return null
 
+  // Карточка выше места над точкой обрезалась бы краем карты: её высота
+  // ограничена этим местом, остальное прокручивается внутри карточки
+  const above = map ? map.getContainer().clientHeight / 2 + POPUP_SHIFT : 0
+  const maxHeight = Math.max(above - POPUP_MARGIN, MIN_POPUP_HEIGHT)
+
   return createPortal(
-    <VineyardCard
-      vineyard={vineyard}
-      point={selection.lngLat}
-      onDeleted={() => select(null)}
-    />,
+    <div style={{ maxHeight, overflowY: 'auto' }}>
+      <VineyardCard
+        vineyard={vineyard}
+        point={selection.lngLat}
+        onDeleted={() => select(null)}
+      />
+    </div>,
     container,
   )
 }

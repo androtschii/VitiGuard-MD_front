@@ -60,7 +60,9 @@ export function MapToolbar({ tools, layers }: MapToolbarProps) {
         type="button"
         aria-expanded="true"
         onClick={() => setIsHidden(true)}
-        className={`${buttonClass} self-start`}
+        // Панель прокручивается: кнопка закреплена сверху, иначе после
+        // прокрутки скрыть панель было бы нечем
+        className={`${buttonClass} sticky top-0 z-10 self-start`}
       >
         {t('map.tools.hide')}
       </button>
