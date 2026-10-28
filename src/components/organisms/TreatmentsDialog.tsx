@@ -380,7 +380,7 @@ export function TreatmentsDialog({
                             <Button
                               size="sm"
                               variant="danger"
-                              className="h-7 text-xs"
+                              className="min-h-7 text-xs"
                               aria-label={t(
                                 'treatments.confirmDeleteTreatment',
                                 {
@@ -402,7 +402,7 @@ export function TreatmentsDialog({
                             <Button
                               size="sm"
                               variant="secondary"
-                              className="h-7 text-xs"
+                              className="min-h-7 text-xs"
                               onClick={() => setConfirmingId(null)}
                             >
                               {t('treatments.cancel')}
@@ -412,7 +412,7 @@ export function TreatmentsDialog({
                           <Button
                             size="sm"
                             variant="ghost"
-                            className="h-7 text-xs text-danger hover:bg-red-50 dark:hover:bg-red-950"
+                            className="min-h-7 text-xs text-danger hover:bg-red-50 dark:hover:bg-red-950"
                             aria-label={t('treatments.deleteTreatment', {
                               date: format(item.applied_on),
                             })}
