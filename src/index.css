@@ -133,6 +133,12 @@ h1 {
   font-family: var(--font-brand);
 }
 
+/* Ссылки в подписи источников карты (OpenStreetMap, geoBoundaries) отличаются
+   от текста не только цветом: WCAG 1.4.1, ссылка внутри текста (pr-094) */
+.maplibregl-map .maplibregl-ctrl-attrib a {
+  text-decoration: underline;
+}
+
 /* Попапы MapLibre в цветах темы: по умолчанию они всегда белые. Стили карты
    загружаются позже этого файла, поэтому селекторы на уровень точнее */
 .maplibregl-map .maplibregl-popup-content {

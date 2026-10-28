@@ -32,7 +32,7 @@ export function Wordmark({
           <span className="font-medium">Guard</span>
         </span>
         {withTagline && (
-          <span className="mt-2 font-brand text-[0.7rem] font-medium tracking-[0.08em] text-brand-500 uppercase">
+          <span className="mt-2 font-brand text-[0.7rem] font-medium tracking-[0.08em] text-brand-700 uppercase dark:text-brand-500">
             MD | Vineyard health monitoring system
           </span>
         )}
