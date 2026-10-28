@@ -7,6 +7,10 @@ import { sidebarLink } from '@/test/nav'
 import { renderWithQueryClient } from '@/test/render'
 import { App } from './App'
 
+// Страницы — ленивые фрагменты сборки: под нагрузкой (все тесты с покрытием
+// разом) первая загрузка фрагмента не всегда укладывается в общие 3 с
+const LAZY_PAGE = { timeout: 10_000 }
+
 describe('App', () => {
   it('показывает главную страницу вошедшему пользователю', async () => {
     useSessionStore.getState().setAccessToken('token')
@@ -15,8 +19,10 @@ describe('App', () => {
     expect(
       screen.getByRole('heading', { name: 'Обзор хозяйства' }),
     ).toBeInTheDocument()
-    expect(await screen.findByText(/API 0\.1\.0/)).toBeInTheDocument()
-  })
+    expect(
+      await screen.findByText(/API 0\.1\.0/, undefined, LAZY_PAGE),
+    ).toBeInTheDocument()
+  }, 30_000)
 })
 
 describe('App в Telegram', () => {
@@ -40,15 +46,19 @@ describe('App в Telegram', () => {
 
     expect(BackButton.hide).toHaveBeenCalled()
     await user.click(sidebarLink('Профиль'))
-    await waitFor(() => expect(BackButton.show).toHaveBeenCalled())
+    await waitFor(() => expect(BackButton.show).toHaveBeenCalled(), LAZY_PAGE)
 
     const back = BackButton.onClick.mock.calls[0]?.[0] as () => void
     act(back)
     expect(
-      await screen.findByRole('heading', { name: 'Обзор хозяйства' }),
+      await screen.findByRole(
+        'heading',
+        { name: 'Обзор хозяйства' },
+        LAZY_PAGE,
+      ),
     ).toBeInTheDocument()
 
     unmount()
     expect(BackButton.offClick).toHaveBeenCalledWith(back)
-  })
+  }, 30_000)
 })
