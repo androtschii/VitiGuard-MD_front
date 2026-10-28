@@ -1,0 +1,26 @@
+[
+ [
+  {
+   "path": "/login",
+   "id": "color-contrast",
+   "nodes": [
+    {
+     "html": "<span class=\"mt-2 font-brand text-[0.7rem] font-medium tracking-[0.08em] text-brand-500 uppercase\">MD | Vineyard health monitoring system</span>",
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.9 (foreground color: #8e67de, background color: #fafaf9, font size: 8.4pt (11.2px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ]
+  }
+ ],
+ [
+  {
+   "path": "/register",
+   "id": "color-contrast",
+   "nodes": [
+    {
+     "html": "<span class=\"mt-2 font-brand text-[0.7rem] font-medium tracking-[0.08em] text-brand-500 uppercase\">MD | Vineyard health monitoring system</span>",
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.9 (foreground color: #8e67de, background color: #fafaf9, font size: 8.4pt (11.2px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ]
+  }
+ ]
+]
