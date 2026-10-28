@@ -19,9 +19,10 @@ describe('App', () => {
     expect(
       screen.getByRole('heading', { name: 'Обзор хозяйства' }),
     ).toBeInTheDocument()
-    expect(
-      await screen.findByText(/API 0\.1\.0/, undefined, LAZY_PAGE),
-    ).toBeInTheDocument()
+    await waitFor(
+      () => expect(screen.getByText(/API 0\.1\.0/)).toBeInTheDocument(),
+      LAZY_PAGE,
+    )
   }, 30_000)
 })
 
@@ -50,13 +51,16 @@ describe('App в Telegram', () => {
 
     const back = BackButton.onClick.mock.calls[0]?.[0] as () => void
     act(back)
-    expect(
-      await screen.findByRole(
-        'heading',
-        { name: 'Обзор хозяйства' },
-        LAZY_PAGE,
-      ),
-    ).toBeInTheDocument()
+    // Поиск и проверка — в одном шаге: найденный заголовок может тут же
+    // замениться новым при перерисовке, и отдельная проверка видела бы уже
+    // убранный из документа элемент
+    await waitFor(
+      () =>
+        expect(
+          screen.getByRole('heading', { name: 'Обзор хозяйства' }),
+        ).toBeInTheDocument(),
+      LAZY_PAGE,
+    )
 
     unmount()
     expect(BackButton.offClick).toHaveBeenCalledWith(back)
