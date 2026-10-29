@@ -77,6 +77,16 @@ export type Api = {
   ndviImages: string[]
   // Параметры запросов диагностики
   diagnoses: Record<string, string>[]
+  // Тела запросов регистрации и входа
+  registered: unknown[]
+  logins: unknown[]
+}
+
+type MockOptions = {
+  // Гость: на устройстве ещё не входили, сессию восстанавливать не по чему
+  guest?: boolean
+  // Новый пользователь: участков пока нет
+  empty?: boolean
 }
 
 const json = (route: Route, body: unknown, status = 200) =>
@@ -84,15 +94,25 @@ const json = (route: Route, body: unknown, status = 200) =>
 
 // Подмена API бэкенда и плиток подложки: сценарии не зависят ни от сервера,
 // ни от сети
-export async function mockApi(page: Page): Promise<Api> {
-  const api: Api = { created: [], ndviImages: [], diagnoses: [] }
-  const vineyards = [CRICOVA]
+export async function mockApi(
+  page: Page,
+  { guest = false, empty = false }: MockOptions = {},
+): Promise<Api> {
+  const api: Api = {
+    created: [],
+    ndviImages: [],
+    diagnoses: [],
+    registered: [],
+    logins: [],
+  }
+  const vineyards: Record<string, unknown>[] = empty ? [] : [CRICOVA]
 
   // Пользователь уже входил на этом устройстве: сессия восстанавливается
   // по refresh-cookie
-  await page.addInitScript(() =>
-    localStorage.setItem('vitiguard.signedIn', '1'),
-  )
+  if (!guest)
+    await page.addInitScript(() =>
+      localStorage.setItem('vitiguard.signedIn', '1'),
+    )
   await page.route(
     /^https:\/\/(tile\.openstreetmap\.org|server\.arcgisonline\.com)\//,
     (route) => route.fulfill({ contentType: 'image/png', body: PNG }),
@@ -102,6 +122,28 @@ export async function mockApi(page: Page): Promise<Api> {
     const path = new URL(request.url()).pathname.replace('/api/v1', '')
     const method = request.method()
 
+    if (path === '/auth/register') {
+      const body = request.postDataJSON() as Record<string, unknown>
+      api.registered.push(body)
+      return json(
+        route,
+        {
+          id: 'user-1',
+          email: body.email,
+          full_name: body.full_name,
+          role: body.role,
+          is_active: true,
+          telegram_linked: false,
+          created_at: '2026-06-01T00:00:00Z',
+          updated_at: '2026-06-01T00:00:00Z',
+        },
+        201,
+      )
+    }
+    if (path === '/auth/login') {
+      api.logins.push(request.postDataJSON())
+      return json(route, { access_token: 'access', token_type: 'bearer' })
+    }
     if (path === '/auth/refresh') {
       return json(route, { access_token: 'access', token_type: 'bearer' })
     }
