@@ -1,4 +1,24 @@
+import { readFile } from 'node:fs/promises'
 import type { Page, Route } from '@playwright/test'
+
+const MODEL_FILE = new URL('./fixtures/classifier.onnx', import.meta.url)
+
+export const CLASSIFIER = {
+  name: 'tiny_test_classifier',
+  classes: [
+    'healthy',
+    'black_rot',
+    'esca',
+    'leaf_blight',
+    'downy_mildew',
+    'powdery_mildew',
+  ],
+  image_size: 32,
+  mean: [0, 0, 0],
+  std: [1, 1, 1],
+  version: 'e2e0000000000001',
+  size_bytes: 271,
+}
 
 export const CRICOVA = {
   id: 'vineyard-1',
@@ -265,6 +285,17 @@ export async function mockApi(
     }
     if (/^\/diagnoses\/[^/]+\/(image|overlays\/lesion)$/.test(path)) {
       return route.fulfill({ contentType: 'image/png', body: PNG })
+    }
+    // Классификатор для диагностики без сети: крошечная настоящая модель
+    // ONNX (e2e/fixtures), зелёный снимок она относит к милдью
+    if (path === '/ai/models/classifier') {
+      return json(route, CLASSIFIER)
+    }
+    if (path === '/ai/models/classifier/file') {
+      return route.fulfill({
+        contentType: 'application/octet-stream',
+        body: await readFile(MODEL_FILE),
+      })
     }
     const report = /^\/vineyards\/([^/]+)\/report\.pdf$/.exec(path)
     if (report) {
