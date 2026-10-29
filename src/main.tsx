@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { App } from '@/app/App'
 import { AppProviders } from '@/app/AppProviders'
 import { initSession, signInWithTelegram } from '@/app/session'
-import '@/i18n'
+import { i18nReady } from '@/i18n'
 import { initMonitoring } from '@/lib/monitoring'
 import { initTelegram } from '@/lib/telegram'
 import { applyTheme, readStoredTheme, watchSystemTheme } from '@/theme'
@@ -21,6 +21,10 @@ void initTelegram().then(
 )
 applyTheme(readStoredTheme())
 watchSystemTheme()
+
+// Тексты выбранного языка — до первого рисования; если фрагмент языка не
+// загрузился (нет сети и нет кэша), приложение всё равно рисуется
+await i18nReady.catch(() => undefined)
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

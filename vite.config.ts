@@ -105,11 +105,18 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        // У фрагмента с SDK Sentry — узнаваемое имя: его исключает предзагрузка
-        chunkFileNames: (chunk) =>
-          chunk.moduleIds.some((id) => id.includes('/@sentry/'))
-            ? 'assets/sentry-[hash].js'
-            : 'assets/[name]-[hash].js',
+        // У фрагмента с SDK Sentry — узнаваемое имя: его исключает предзагрузка.
+        // Общий фрагмент библиотек (роутер, запросы, i18next) сборщик назвал бы
+        // по первому попавшемуся модулю (например, «telegram») — здесь «vendor»
+        chunkFileNames: (chunk) => {
+          if (chunk.moduleIds.some((id) => id.includes('/@sentry/')))
+            return 'assets/sentry-[hash].js'
+          if (
+            chunk.moduleIds.some((id) => id.includes('/node_modules/i18next/'))
+          )
+            return 'assets/vendor-[hash].js'
+          return 'assets/[name]-[hash].js'
+        },
       },
     },
   },

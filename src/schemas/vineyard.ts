@@ -1,19 +1,20 @@
-import { z } from 'zod'
+import * as z from 'zod/mini'
 
 // Сообщения — ключи перевода (validation.*), текст подставляет Field
 export const vineyardSchema = z.object({
   name: z
     .string()
-    .trim()
-    .min(1, 'validation.vineyardNameRequired')
-    .max(255, 'validation.vineyardNameMax'),
+    .check(
+      z.trim(),
+      z.minLength(1, 'validation.vineyardNameRequired'),
+      z.maxLength(255, 'validation.vineyardNameMax'),
+    ),
   // '' — сорт не указан
   varietyId: z.string(),
   // '' — год не указан; иначе от 1900 до текущего года, как проверяет бэкенд
-  plantingYear: z
-    .string()
-    .trim()
-    .refine((value) => {
+  plantingYear: z.string().check(
+    z.trim(),
+    z.refine((value) => {
       if (value === '') return true
       const year = Number(value)
       return (
@@ -22,6 +23,7 @@ export const vineyardSchema = z.object({
         year <= new Date().getFullYear()
       )
     }, 'validation.plantingYear'),
+  ),
 })
 
 export type VineyardValues = z.infer<typeof vineyardSchema>
