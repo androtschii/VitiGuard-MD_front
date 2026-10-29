@@ -1,5 +1,6 @@
 dist
 coverage
+storybook-static
 package-lock.json
 
 # Данные карты: минифицированный GeoJSON, форматирование раздуло бы его вдвое

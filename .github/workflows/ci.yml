@@ -29,6 +29,8 @@ jobs:
       - run: npm run format:check
       - run: npm run test:coverage
       - run: npm run build
+      # Документация компонентов (pr-099) собирается вместе с приложением
+      - run: npm run build-storybook
 
   e2e:
     name: Сценарии в браузере

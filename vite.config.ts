@@ -160,6 +160,8 @@ export default defineConfig({
         'src/test/**',
         'src/**/*.test.{ts,tsx}',
         'src/workers/**',
+        // Истории Storybook — документация, их рисует сборка Storybook в CI
+        'src/**/*.stories.tsx',
       ],
       reporter: ['text-summary', 'html'],
       thresholds: {
