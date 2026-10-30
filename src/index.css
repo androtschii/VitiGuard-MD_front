@@ -339,9 +339,7 @@ html:has(dialog[open]) {
     transition: transform 0.25s cubic-bezier(0.3, 1.5, 0.5, 1);
   }
 
-  .delete-button:hover:enabled .delete-lid,
-  .delete-button:focus-visible .delete-lid,
-  .delete-button[aria-busy] .delete-lid {
+  .delete-button:is(:hover:enabled, :focus-visible, [aria-busy]) .delete-lid {
     transform: rotate(22deg) translateY(-1px);
   }
 
