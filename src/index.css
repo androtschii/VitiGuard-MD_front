@@ -205,6 +205,10 @@ html:has(dialog[open]) {
     animation: nav-tilt 0.6s ease-in-out;
   }
 
+  .sidebar-pill {
+    animation: sidebar-slide 0.4s cubic-bezier(0.7, 0, 0.3, 1);
+  }
+
   .nav-icon {
     transition: transform 0.3s cubic-bezier(0.7, 0, 0.3, 1);
   }
@@ -317,6 +321,12 @@ html:has(dialog[open]) {
 
   .grape-fill-bubble {
     animation: grape-bubble 2.4s ease-in infinite;
+  }
+}
+
+@keyframes sidebar-slide {
+  from {
+    transform: translateY(var(--pill-from));
   }
 }
 
