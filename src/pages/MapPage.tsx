@@ -4,6 +4,7 @@ import { toMultiPolygon, useCreateVineyard } from '@/api/vineyards'
 import { useNavItems } from '@/app/navigation'
 import { NdviToggle } from '@/components/molecules/NdviToggle'
 import { OsmToggle } from '@/components/molecules/OsmToggle'
+import { WineriesToggle } from '@/components/molecules/WineriesToggle'
 import { DrawPolygonControl } from '@/components/organisms/DrawPolygonControl'
 import { MapRiskLegend } from '@/components/organisms/MapRiskLegend'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
@@ -16,6 +17,7 @@ import { MapView } from '@/components/organisms/MapView'
 import { NdviLayer } from '@/components/organisms/NdviLayer'
 import { NdviTimeline } from '@/components/organisms/NdviTimeline'
 import { OsmVineyardsLayer } from '@/components/organisms/OsmVineyardsLayer'
+import { WineriesLayer } from '@/components/organisms/WineriesLayer'
 import { VineyardFilters } from '@/components/organisms/VineyardFilters'
 import { VineyardForm } from '@/components/organisms/VineyardForm'
 import { VineyardPopups } from '@/components/organisms/VineyardPopups'
@@ -39,6 +41,7 @@ export function MapPage() {
         <VineyardsLayer />
         <NdviLayer />
         <OsmVineyardsLayer />
+        <WineriesLayer />
         <VineyardPopups />
         <MapRiskLegend />
         {/* Панель инструментов: поиск и рисование — столбиком под подложками */}
@@ -79,6 +82,7 @@ export function MapPage() {
               <NdviToggle />
               <NdviTimeline />
               <OsmToggle />
+              <WineriesToggle />
             </>
           }
         />

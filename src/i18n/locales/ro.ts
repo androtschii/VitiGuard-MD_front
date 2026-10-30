@@ -872,6 +872,101 @@ export const ro: Messages = {
     rejected_many: 'Serverul nu a acceptat {{count}} de notițe din coadă.',
     rejected_other: 'Serverul nu a acceptat {{count}} de notițe din coadă.',
   },
+  wineries: {
+    toggle: 'Vinării și magazine',
+    kinds: { winery: 'Vinărie', shop: 'Magazin' },
+    website: 'Site',
+    approximate:
+      'Adresa exactă nu este confirmată: harta arată orașul. Verificați pe site.',
+  },
+  assistant: {
+    open: 'Deschide asistentul',
+    title: 'Asistentul VitiGuard',
+    greeting:
+      'Întrebați cu ce să tratați via, ce vin să alegeți și de unde să-l cumpărați.',
+    inputLabel: 'Întrebarea dvs.',
+    placeholder: 'De exemplu: cu ce stropesc contra păianjenului',
+    send: 'Întreabă',
+    unknown:
+      'Deocamdată știu să răspund despre tratamente, alegerea vinului și de unde îl puteți cumpăra. Apăsați unul dintre butoanele de mai jos.',
+    chips: {
+      spray: 'Cu ce stropesc',
+      wine: 'Ce vin aleg',
+      buy: 'De unde cumpăr vin',
+    },
+    keywords: {
+      spray:
+        'stropi, trata, boal, dăunăt, daunat, parazit, mană, mana, făinare, fainare, păianjen, paianjen, molie, putregai, filoxer, fungicid',
+      wine: 'vin, băutur, bautur',
+      buy: 'cumpăr, cumpar, magazin, vinări, crama, cramă, unde',
+    },
+    spray: {
+      intro:
+        'Abordări generale. Mai întâi stabiliți ce este pe viță: verificarea după fotografie vă poate ajuta.',
+      note: 'Alegeți produsul și doza după Registrul de stat și etichetă, iar perioada de pauză notați-o în jurnalul tratamentelor. Dacă aveți dubii, întrebați un agronom.',
+    },
+    pests: {
+      downy: {
+        name: 'Mană',
+        advice:
+          'Produse de contact, de exemplu cuprice, înainte de ploaie; sistemice în primele zile după infectare.',
+      },
+      powdery: {
+        name: 'Făinare',
+        advice:
+          'Produse pe bază de sulf sau fungicide sistemice. Pe caniculă nu se lucrează cu sulf: poate arde frunzele.',
+      },
+      botrytis: {
+        name: 'Putregai cenușiu',
+        advice:
+          'Rărirea frunzelor din jurul strugurilor și botriticide înainte de închiderea ciorchinilor și la începutul maturării.',
+      },
+      moth: {
+        name: 'Molia strugurilor',
+        advice:
+          'Momentul îl arată capcanele cu feromoni; produse biologice cu Bacillus thuringiensis sau insecticide permise la ieșirea omizilor.',
+      },
+      mites: {
+        name: 'Păianjenul roșu',
+        advice:
+          'Acaricide doar la o populare vizibilă: tratamentele inutile distrug acarienii prădători. Sulful limitează parțial.',
+      },
+      phylloxera: {
+        name: 'Filoxera',
+        advice:
+          'Stropirea nu rezolvă problema: protecția principală este plantarea pe portaltoi rezistenți.',
+      },
+    },
+    wine: {
+      intro: 'Asocieri cu soiuri moldovenești. Sunt un reper, nu o regulă:',
+      note: 'Alcoolul se vinde doar persoanelor majore. Consumați cu moderație.',
+    },
+    wines: {
+      meat: {
+        dish: 'Carne roșie și grătar',
+        wine: 'Fetească Neagră, Rară Neagră, Cabernet Sauvignon',
+      },
+      fish: {
+        dish: 'Pește și salate',
+        wine: 'Fetească Albă, Viorica, Sauvignon Blanc',
+      },
+      cheese: { dish: 'Brânzeturi', wine: 'Fetească Regală, rose sec' },
+      dessert: { dish: 'Deserturi', wine: 'muscat dulce, vin de gheață' },
+      party: { dish: 'Sărbătoare', wine: 'spumant, de exemplu de la Cricova' },
+    },
+    buy: {
+      intro:
+        'Vinării din apropierea Chișinăului. Puteți cumpăra la fața locului sau de pe site-urile lor:',
+      nearby: 'Cele mai apropiate vinării și magazine:',
+      km: '{{value}} km',
+      locate: 'Caută lângă mine',
+      locateFailed: 'Poziția nu a putut fi determinată.',
+      map: 'Arată pe hartă',
+      failed: 'Lista nu s-a încărcat.',
+      source:
+        'Date OpenStreetMap: programul și disponibilitatea verificați-le la vânzător.',
+    },
+  },
   treatments: {
     open: 'Tratamente și plan',
     title: 'Tratamente și plan: {{name}}',

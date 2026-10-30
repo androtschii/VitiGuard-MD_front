@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import type { ReactNode } from 'react'
 import { AlertsBell } from '@/components/molecules/AlertsBell'
 import { OfflineBanner } from '@/components/molecules/OfflineBanner'
+import { Assistant } from '@/components/organisms/Assistant'
 import { BottomNav } from '@/components/organisms/BottomNav'
 import { Footer } from '@/components/organisms/Footer'
 import { Header } from '@/components/organisms/Header'
@@ -66,6 +67,7 @@ export function DashboardTemplate({
       <div className="contents print:hidden">
         <Footer />
         <BottomNav items={navItems} />
+        <Assistant />
       </div>
     </div>
   )

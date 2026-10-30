@@ -857,6 +857,104 @@ export const en: Messages = {
     rejected_many: 'The server did not accept {{count}} queued notes.',
     rejected_other: 'The server did not accept {{count}} queued notes.',
   },
+  wineries: {
+    toggle: 'Wineries and shops',
+    kinds: { winery: 'Winery', shop: 'Shop' },
+    website: 'Website',
+    approximate:
+      'Exact address not confirmed: the map shows the town. Check the website.',
+  },
+  assistant: {
+    open: 'Open the assistant',
+    title: 'VitiGuard assistant',
+    greeting:
+      'Ask what to treat the vines with, which wine to choose and where to buy it.',
+    inputLabel: 'Your question',
+    placeholder: 'For example: what to spray against mites',
+    send: 'Ask',
+    unknown:
+      'For now I can answer about treatments, choosing a wine and where to buy it. Tap one of the buttons below.',
+    chips: {
+      spray: 'What to spray',
+      wine: 'Which wine to choose',
+      buy: 'Where to buy wine',
+    },
+    keywords: {
+      spray:
+        'spray, treat, disease, pest, parasite, mildew, mite, moth, rot, phylloxera, fungicide',
+      wine: 'wine, drink, pair',
+      buy: 'buy, shop, store, winery, where',
+    },
+    spray: {
+      intro:
+        'General approaches. First work out what is on the vine: the photo check can help.',
+      note: 'Choose the product and dose from the state register and the label, and record the waiting period in the treatment log. If in doubt, ask an agronomist.',
+    },
+    pests: {
+      downy: {
+        name: 'Downy mildew',
+        advice:
+          'Contact products such as copper before rain; systemic ones in the first days after infection.',
+      },
+      powdery: {
+        name: 'Powdery mildew',
+        advice:
+          'Sulfur-based products or systemic fungicides. Do not use sulfur in strong heat: it can burn the leaves.',
+      },
+      botrytis: {
+        name: 'Grey mould',
+        advice:
+          'Thin the leaves around the clusters and use botryticides before bunch closure and at the start of ripening.',
+      },
+      moth: {
+        name: 'Grape moth',
+        advice:
+          'Pheromone traps show the timing; Bacillus thuringiensis biologicals or permitted insecticides as the larvae hatch.',
+      },
+      mites: {
+        name: 'Spider mite',
+        advice:
+          'Acaricides only with visible infestation: needless sprays kill predatory mites. Sulfur partly holds them back.',
+      },
+      phylloxera: {
+        name: 'Phylloxera',
+        advice:
+          'Spraying does not solve it: the main protection is planting on resistant rootstock.',
+      },
+    },
+    wine: {
+      intro: 'Pairings with Moldovan varieties. A guide, not a rule:',
+      note: 'Alcohol is sold to adults only. Drink in moderation.',
+    },
+    wines: {
+      meat: {
+        dish: 'Red meat and grill',
+        wine: 'Fetească Neagră, Rară Neagră, Cabernet Sauvignon',
+      },
+      fish: {
+        dish: 'Fish and salads',
+        wine: 'Fetească Albă, Viorica, Sauvignon Blanc',
+      },
+      cheese: { dish: 'Cheese', wine: 'Fetească Regală, dry rosé' },
+      dessert: { dish: 'Desserts', wine: 'sweet muscat, ice wine' },
+      party: {
+        dish: 'Celebration',
+        wine: 'sparkling wine, for example from Cricova',
+      },
+    },
+    buy: {
+      intro:
+        'Wineries near Chișinău. You can buy on site or from their websites:',
+      nearby: 'The wineries and shops nearest to you:',
+      km: '{{value}} km',
+      locate: 'Find near me',
+      locateFailed: 'Could not get the location.',
+      map: 'Show on the map',
+      failed: 'Could not load the list.',
+      source:
+        'OpenStreetMap data: check opening hours and stock with the seller.',
+    },
+  },
   treatments: {
     open: 'Treatments & plan',
     title: 'Treatments and plan: {{name}}',

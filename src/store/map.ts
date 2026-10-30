@@ -33,6 +33,9 @@ type MapState = {
   setShowOsm: (showOsm: boolean) => void
   osmTooFar: boolean
   setOsmTooFar: (osmTooFar: boolean) => void
+  // Винодельни и винные магазины
+  showWineries: boolean
+  setShowWineries: (showWineries: boolean) => void
   // Картограммы NDVI поверх участков пользователя
   showNdvi: boolean
   setShowNdvi: (showNdvi: boolean) => void
@@ -57,6 +60,8 @@ export const useMapStore = create<MapState>()((set) => ({
     }
     set({ basemap })
   },
+  showWineries: false,
+  setShowWineries: (showWineries) => set({ showWineries }),
   isDrawing: false,
   setDrawing: (isDrawing) => set({ isDrawing }),
   selection: null,
