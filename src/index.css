@@ -330,6 +330,10 @@ html:has(dialog[open]) {
     animation: risk-pulse 1.6s ease-out 3;
   }
 
+  .phenology-now {
+    animation: phenology-now 2s ease-out infinite;
+  }
+
   .hero-berry {
     transform-box: fill-box;
     transform-origin: center;
@@ -485,6 +489,17 @@ html:has(dialog[open]) {
 
   to {
     box-shadow: 0 0 0 8px transparent;
+  }
+}
+
+@keyframes phenology-now {
+  from {
+    box-shadow: 0 0 0 0
+      color-mix(in srgb, var(--color-brand-500) 60%, transparent);
+  }
+
+  to {
+    box-shadow: 0 0 0 10px transparent;
   }
 }
 

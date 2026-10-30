@@ -210,6 +210,18 @@ describe('VineyardCard', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
+  it('открывает окно фаз развития', async () => {
+    const { user } = renderCard()
+
+    await user.click(screen.getByRole('button', { name: 'Фазы развития' }))
+
+    expect(
+      screen.getByRole('dialog', { name: 'Фазы развития: Криково' }),
+    ).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Закрыть' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+
   it('открывает окно заметок с обхода', async () => {
     const { user } = renderCard()
 

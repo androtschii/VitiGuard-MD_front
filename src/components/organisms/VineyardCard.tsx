@@ -13,6 +13,7 @@ import { Button } from '@/components/atoms/Button'
 import { DownloadButton } from '@/components/molecules/DownloadButton'
 import { ExportDataDialog } from '@/components/organisms/ExportDataDialog'
 import { FieldNotesDialog } from '@/components/organisms/FieldNotesDialog'
+import { PhenologyDialog } from '@/components/organisms/PhenologyDialog'
 import { RiskSummary } from '@/components/organisms/RiskSummary'
 import { TreatmentsDialog } from '@/components/organisms/TreatmentsDialog'
 import { VegetationDialog } from '@/components/organisms/VegetationDialog'
@@ -40,6 +41,7 @@ export function VineyardCard({
   const [isTreatmentsOpen, setIsTreatmentsOpen] = useState(false)
   const [isExportOpen, setIsExportOpen] = useState(false)
   const [isNotesOpen, setIsNotesOpen] = useState(false)
+  const [isPhenologyOpen, setIsPhenologyOpen] = useState(false)
   const [isPdfLoading, setIsPdfLoading] = useState(false)
   const [pdfError, setPdfError] = useState<string | null>(null)
 
@@ -188,6 +190,21 @@ export function VineyardCard({
             vineyardName={vineyard.name}
             open={isNotesOpen}
             onClose={() => setIsNotesOpen(false)}
+          />
+        )}
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={() => setIsPhenologyOpen(true)}
+        >
+          {t('phenology.open')}
+        </Button>
+        {isPhenologyOpen && (
+          <PhenologyDialog
+            vineyardId={vineyard.id}
+            vineyardName={vineyard.name}
+            open={isPhenologyOpen}
+            onClose={() => setIsPhenologyOpen(false)}
           />
         )}
         <DownloadButton
