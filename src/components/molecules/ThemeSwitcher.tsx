@@ -12,7 +12,7 @@ export function ThemeSwitcher() {
   const inTelegram = useTelegramStore((state) => state.webApp !== null)
 
   return (
-    <div className="flex items-center">
+    <div className="fill-hover flex items-center rounded-md text-ink transition">
       <label htmlFor={id} className="sr-only">
         {t('theme.label')}
       </label>
@@ -20,7 +20,7 @@ export function ThemeSwitcher() {
         id={id}
         value={theme}
         onChange={(event) => setTheme(event.target.value as Theme)}
-        className="rounded-md border border-line-strong bg-surface px-2 py-1 text-sm text-ink"
+        className="cursor-pointer rounded-md border border-line-strong bg-transparent px-2 py-1 text-sm text-inherit transition"
       >
         {THEMES.map((value) => (
           <option key={value} value={value}>

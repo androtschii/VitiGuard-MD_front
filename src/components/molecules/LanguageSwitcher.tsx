@@ -8,7 +8,7 @@ export function LanguageSwitcher() {
   const current = i18n.resolvedLanguage ?? 'ru'
 
   return (
-    <div className="flex items-center gap-1.5">
+    <div className="fill-hover flex items-center gap-1.5 rounded-md text-ink transition">
       <label htmlFor={id} className="sr-only">
         {t('common.language')}
       </label>
@@ -16,7 +16,7 @@ export function LanguageSwitcher() {
         id={id}
         value={current}
         onChange={(event) => void i18n.changeLanguage(event.target.value)}
-        className="rounded-md border border-line-strong bg-surface px-2 py-1 text-sm text-ink"
+        className="cursor-pointer rounded-md border border-line-strong bg-transparent px-2 py-1 text-sm text-inherit transition"
       >
         {LANGUAGES.map((language) => (
           // Название языка — на самом языке: так его найдёт тот, кто не читает текущий

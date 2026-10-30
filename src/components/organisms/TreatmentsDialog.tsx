@@ -412,7 +412,7 @@ export function TreatmentsDialog({
                           <Button
                             size="sm"
                             variant="ghost"
-                            className="min-h-7 text-xs text-danger hover:bg-red-50 dark:hover:bg-red-950"
+                            className="min-h-7 text-xs text-danger [--fill-ink:var(--color-white)] [--fill:var(--color-red-700)]"
                             aria-label={t('treatments.deleteTreatment', {
                               date: format(item.applied_on),
                             })}

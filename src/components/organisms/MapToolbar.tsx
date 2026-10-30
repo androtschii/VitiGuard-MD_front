@@ -37,7 +37,7 @@ export function MapToolbar({ tools, layers }: MapToolbarProps) {
   )
 
   const buttonClass =
-    'inline-flex items-center gap-1.5 rounded-md border border-line bg-surface px-3 py-1.5 text-sm font-medium text-ink shadow-sm transition hover:bg-muted'
+    'fill-hover inline-flex items-center gap-1.5 rounded-md border border-line bg-surface px-3 py-1.5 text-sm font-medium text-ink shadow-sm transition'
 
   if (isHidden) {
     return (
@@ -72,7 +72,7 @@ export function MapToolbar({ tools, layers }: MapToolbarProps) {
         onToggle={(event) => setIsLayersOpen(event.currentTarget.open)}
         className="group flex flex-col gap-2"
       >
-        <summary className="flex cursor-pointer list-none items-center justify-between rounded-md border border-line bg-surface px-3 py-2 text-sm font-medium text-ink shadow-sm hover:bg-muted [&::-webkit-details-marker]:hidden">
+        <summary className="fill-hover flex cursor-pointer list-none items-center justify-between rounded-md border border-line bg-surface px-3 py-2 text-sm font-medium text-ink shadow-sm transition [&::-webkit-details-marker]:hidden">
           {t('map.tools.layers')}
           {chevron}
         </summary>

@@ -9,9 +9,9 @@ import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
 
 const primary =
-  'inline-flex h-8 items-center rounded-md bg-brand-700 px-3 text-sm font-medium text-white transition hover:bg-brand-800 hover:shadow-md active:translate-y-px'
+  'fill-hover inline-flex h-8 items-center rounded-md bg-brand-700 px-3 text-sm font-medium text-white transition [--fill:var(--color-brand-900)] active:translate-y-px'
 const secondary =
-  'inline-flex h-8 items-center rounded-md border border-line-strong bg-surface px-3 text-sm font-medium text-ink transition hover:bg-muted hover:shadow-md active:translate-y-px'
+  'fill-hover inline-flex h-8 items-center rounded-md border border-line-strong bg-surface px-3 text-sm font-medium text-ink transition active:translate-y-px'
 
 // Главная — сводка хозяйства (pr-053) и переходы к разделам
 export function HomePage() {
