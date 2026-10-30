@@ -180,8 +180,8 @@ html:has(dialog[open]) {
   overflow: hidden;
 }
 
-/* Плавная заливка кнопок при наведении: слой под текстом проявляется слева
-   направо и уходит в ту же сторону. Цвет слоя задаёт --fill, цвет текста поверх
+/* Плавная заливка кнопок при наведении: слой под текстом растёт слева
+   направо и возвращается обратно. Цвет слоя задаёт --fill, цвет текста поверх
    него — --fill-ink. Слой обрезает clip-path, а не overflow: иначе обрезался бы
    счётчик на колокольчике. В @layer, чтобы утилиты вроде sticky имели приоритет */
 @layer components {
@@ -197,12 +197,12 @@ html:has(dialog[open]) {
     z-index: -1;
     border-radius: inherit;
     background: var(--fill, var(--color-brand-700));
-    clip-path: inset(0 0 0 100%);
+    clip-path: inset(0 100% 0 0);
   }
 
   .fill-hover-soft {
-    --fill: var(--muted-strong);
-    --fill-ink: var(--ink);
+    --fill: var(--color-brand-700);
+    --fill-ink: var(--color-white);
   }
 
   /* Цвет выпадающего списка не должен меняться вместе с заливкой поля */

@@ -60,7 +60,7 @@ export function Sidebar({ items }: SidebarProps) {
                   'nav-tab flex h-11 items-center gap-3 rounded-lg px-3 text-sm font-medium transition motion-safe:hover:translate-x-1',
                   item.current
                     ? 'font-semibold text-accent'
-                    : 'text-ink-soft hover:bg-muted hover:text-ink',
+                    : 'fill-hover text-ink-soft',
                 )}
               >
                 <NavIcon href={item.href} />

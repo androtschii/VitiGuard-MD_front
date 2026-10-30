@@ -210,6 +210,18 @@ describe('VineyardCard', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
+  it('открывает окно заметок с обхода', async () => {
+    const { user } = renderCard()
+
+    await user.click(screen.getByRole('button', { name: 'Заметки с обхода' }))
+
+    expect(
+      screen.getByRole('dialog', { name: 'Заметки с обхода: Криково' }),
+    ).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Закрыть' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+
   it('скачивает PDF-отчёт участка', async () => {
     let requestedPdf = false
     server.use(
