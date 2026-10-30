@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { Logo } from '@/components/atoms/Logo'
+import { GrapeFill } from '@/components/atoms/GrapeFill'
 
 export function LoadingScreen() {
   const { t } = useTranslation()
@@ -9,7 +9,7 @@ export function LoadingScreen() {
         role="status"
         className="flex flex-col items-center gap-4 text-ink-muted"
       >
-        <Logo className="size-20 motion-safe:animate-breathe" />
+        <GrapeFill className="size-24" />
         <span>{t('common.loading')}</span>
       </div>
     </main>

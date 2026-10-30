@@ -6,6 +6,7 @@ import {
   useStoredModel,
 } from '@/api/offlineModel'
 import { Button } from '@/components/atoms/Button'
+import { DownloadButton } from '@/components/molecules/DownloadButton'
 import { useOnlineStatus } from '@/lib/useOnlineStatus'
 
 // Модель для диагностики без сети (pr-072): скачать, обновить или удалить
@@ -59,14 +60,15 @@ export function OfflineModelCard() {
       )}
       <div className="flex flex-wrap gap-2">
         {(!model || isOutdated) && (
-          <Button
+          <DownloadButton
             size="sm"
             isLoading={download.isPending}
+            failed={download.isError}
             disabled={!isOnline}
             onClick={() => download.mutate()}
           >
             {model ? t('offlineModel.update') : t('offlineModel.download')}
-          </Button>
+          </DownloadButton>
         )}
         {model && (
           <Button

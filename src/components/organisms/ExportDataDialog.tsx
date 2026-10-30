@@ -8,6 +8,7 @@ import {
 } from '@/api/reports'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
+import { DownloadButton } from '@/components/molecules/DownloadButton'
 import { Field } from '@/components/molecules/Field'
 import { Modal } from '@/components/organisms/Modal'
 
@@ -74,15 +75,16 @@ export function ExportDataDialog({
           >
             {t('reports.cancel')}
           </Button>
-          <Button
+          <DownloadButton
             type="submit"
             form="export-data-form"
             variant="primary"
             isLoading={isLoading}
-            disabled={Boolean(validationError) || isLoading}
+            failed={serverError !== null}
+            disabled={Boolean(validationError)}
           >
             {t('reports.download')}
-          </Button>
+          </DownloadButton>
         </div>
       }
     >
@@ -104,7 +106,7 @@ export function ExportDataDialog({
                 value="xlsx"
                 checked={format === 'xlsx'}
                 onChange={() => setFormat('xlsx')}
-                className="accent-primary"
+                className="accent-accent"
               />
               {t('reports.formatXlsx')}
             </label>
@@ -115,7 +117,7 @@ export function ExportDataDialog({
                 value="csv"
                 checked={format === 'csv'}
                 onChange={() => setFormat('csv')}
-                className="accent-primary"
+                className="accent-accent"
               />
               {t('reports.formatCsv')}
             </label>

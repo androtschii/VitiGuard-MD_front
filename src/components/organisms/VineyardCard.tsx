@@ -10,6 +10,7 @@ import {
 } from '@/api/vineyards'
 import { useCurrentWeather } from '@/api/weather'
 import { Button } from '@/components/atoms/Button'
+import { DownloadButton } from '@/components/molecules/DownloadButton'
 import { ExportDataDialog } from '@/components/organisms/ExportDataDialog'
 import { RiskSummary } from '@/components/organisms/RiskSummary'
 import { TreatmentsDialog } from '@/components/organisms/TreatmentsDialog'
@@ -172,15 +173,15 @@ export function VineyardCard({
             onClose={() => setIsTreatmentsOpen(false)}
           />
         )}
-        <Button
+        <DownloadButton
           size="sm"
           variant="secondary"
           isLoading={isPdfLoading}
-          disabled={isPdfLoading}
+          failed={pdfError !== null}
           onClick={() => void handleDownloadPdf()}
         >
           {t('reports.pdf')}
-        </Button>
+        </DownloadButton>
         {pdfError && (
           <p role="alert" className="text-danger">
             {pdfError}
