@@ -256,6 +256,10 @@ html:has(dialog[open]) {
   opacity: 0;
 }
 
+.delete-label {
+  display: inline-block;
+}
+
 /* Сок в грозди на экране загрузки: без движения — половина уровня */
 .grape-fill-level {
   transform: translateY(32px);
@@ -328,6 +332,22 @@ html:has(dialog[open]) {
 
   .risk-pulse {
     animation: risk-pulse 1.6s ease-out 3;
+  }
+
+  .delete-lid {
+    transform-origin: 13px 4px;
+    transition: transform 0.25s cubic-bezier(0.3, 1.5, 0.5, 1);
+  }
+
+  .delete-button:hover:enabled .delete-lid,
+  .delete-button:focus-visible .delete-lid,
+  .delete-button[aria-busy] .delete-lid {
+    transform: rotate(22deg) translateY(-1px);
+  }
+
+  .delete-button[aria-busy] .delete-label {
+    transform-origin: left center;
+    animation: delete-eat 0.6s cubic-bezier(0.7, 0, 0.3, 1) both;
   }
 
   .phenology-now {
@@ -489,6 +509,13 @@ html:has(dialog[open]) {
 
   to {
     box-shadow: 0 0 0 8px transparent;
+  }
+}
+
+@keyframes delete-eat {
+  to {
+    opacity: 0;
+    transform: translateX(-0.75rem) scale(0.2);
   }
 }
 

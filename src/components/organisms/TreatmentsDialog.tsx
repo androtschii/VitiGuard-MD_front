@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
 import { Select } from '@/components/atoms/Select'
+import { DeleteButton } from '@/components/molecules/DeleteButton'
 import { Field } from '@/components/molecules/Field'
 import { Modal } from '@/components/organisms/Modal'
 import { dayTime, localToday } from '@/lib/riskSeries'
@@ -447,17 +448,15 @@ export function TreatmentsDialog({
                             </Button>
                           </span>
                         ) : (
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="min-h-7 text-xs text-danger [--fill-ink:var(--color-white)] [--fill:var(--color-red-700)]"
+                          <DeleteButton
+                            className="min-h-7 text-xs"
                             aria-label={t('treatments.deleteTreatment', {
                               date: format(item.applied_on),
                             })}
                             onClick={() => setConfirmingId(item.id)}
                           >
                             {t('treatments.delete')}
-                          </Button>
+                          </DeleteButton>
                         )}
                       </td>
                     </tr>

@@ -10,6 +10,7 @@ import {
 } from '@/api/vineyards'
 import { useCurrentWeather } from '@/api/weather'
 import { Button } from '@/components/atoms/Button'
+import { DeleteButton } from '@/components/molecules/DeleteButton'
 import { DownloadButton } from '@/components/molecules/DownloadButton'
 import { ExportDataDialog } from '@/components/organisms/ExportDataDialog'
 import { FieldNotesDialog } from '@/components/organisms/FieldNotesDialog'
@@ -287,14 +288,12 @@ export function VineyardCard({
             )}
           </div>
         ) : (
-          <Button
-            size="sm"
-            variant="ghost"
-            className="self-start text-danger"
+          <DeleteButton
+            className="self-start"
             onClick={() => setIsConfirming(true)}
           >
             {t('vineyard.card.delete')}
-          </Button>
+          </DeleteButton>
         )}
       </div>
     </div>

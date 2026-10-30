@@ -22,9 +22,59 @@
         document.documentElement.classList.toggle('dark', dark)
       } catch {}
     </script>
+    <!-- Заставка видна, пока грузится код приложения: React заменит её при первой отрисовке -->
+    <style>
+      html {
+        background: #fafaf9;
+      }
+      html.dark {
+        background: #0c0a09;
+      }
+      .splash {
+        display: grid;
+        place-items: center;
+        min-height: 100svh;
+      }
+      .splash svg {
+        width: 5rem;
+        fill: #622ac3;
+      }
+      html.dark .splash svg {
+        fill: #a68af0;
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        .splash circle {
+          animation: splash-berry 1.2s ease-in-out infinite both;
+        }
+        @keyframes splash-berry {
+          0%,
+          100% {
+            opacity: 0.25;
+          }
+          50% {
+            opacity: 1;
+          }
+        }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="splash" aria-hidden="true">
+        <svg viewBox="0 0 82 72">
+          <circle cx="14" cy="12" r="8" style="animation-delay: 0ms" />
+          <circle cx="32" cy="12" r="8" style="animation-delay: 90ms" />
+          <circle cx="50" cy="12" r="8" style="animation-delay: 180ms" />
+          <circle cx="68" cy="12" r="8" style="animation-delay: 270ms" />
+          <circle cx="23" cy="28" r="8" style="animation-delay: 360ms" />
+          <circle cx="41" cy="28" r="8" style="animation-delay: 450ms" />
+          <circle cx="59" cy="28" r="8" style="animation-delay: 540ms" />
+          <circle cx="32" cy="44" r="8" style="animation-delay: 630ms" />
+          <circle cx="50" cy="44" r="8" style="animation-delay: 720ms" />
+          <circle cx="41" cy="60" r="8" style="animation-delay: 810ms" />
+        </svg>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

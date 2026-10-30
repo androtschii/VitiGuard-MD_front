@@ -10,6 +10,7 @@ import {
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
 import { Select } from '@/components/atoms/Select'
+import { DeleteButton } from '@/components/molecules/DeleteButton'
 import { Field } from '@/components/molecules/Field'
 import { Modal } from '@/components/organisms/Modal'
 import { cn } from '@/lib/cn'
@@ -176,17 +177,14 @@ export function PhenologyDialog({
                   {day.format(dayTime(item.observed_on))} ·{' '}
                   {t(`phenology.stages.${item.stage}`)}
                 </span>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  className="text-danger [--fill-ink:var(--color-white)] [--fill:var(--color-red-700)]"
+                <DeleteButton
                   aria-label={t('phenology.deleteOne', {
                     date: day.format(dayTime(item.observed_on)),
                   })}
                   onClick={() => remove.mutate(item.id)}
                 >
                   {t('phenology.delete')}
-                </Button>
+                </DeleteButton>
               </li>
             ))}
           </ul>

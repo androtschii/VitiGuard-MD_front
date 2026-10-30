@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
 import { Textarea } from '@/components/atoms/Textarea'
+import { DeleteButton } from '@/components/molecules/DeleteButton'
 import { Field } from '@/components/molecules/Field'
 import { Modal } from '@/components/organisms/Modal'
 import { dayTime, localToday } from '@/lib/riskSeries'
@@ -224,15 +225,12 @@ export function FieldNotesDialog({
                   {item.text || t('notes.photoOnly')}
                 </p>
               </div>
-              <Button
-                size="sm"
-                variant="ghost"
-                className="text-danger [--fill-ink:var(--color-white)] [--fill:var(--color-red-700)]"
+              <DeleteButton
                 aria-label={t('notes.deleteQueued')}
                 onClick={() => removeQueued.mutate(item.id)}
               >
                 {t('notes.delete')}
-              </Button>
+              </DeleteButton>
             </li>
           ))}
           {items.map((note, index) => (
@@ -264,10 +262,7 @@ export function FieldNotesDialog({
                   />
                 )}
               </div>
-              <Button
-                size="sm"
-                variant="ghost"
-                className="text-danger [--fill-ink:var(--color-white)] [--fill:var(--color-red-700)]"
+              <DeleteButton
                 aria-label={t('notes.deleteNote', {
                   date: format(note.noted_on),
                 })}
@@ -275,7 +270,7 @@ export function FieldNotesDialog({
                 onClick={() => remove.mutate(note.id)}
               >
                 {t('notes.delete')}
-              </Button>
+              </DeleteButton>
             </li>
           ))}
         </ul>
