@@ -28,6 +28,8 @@ export function OfflineModelCard() {
   const model = stored.data
   const isOutdated =
     model && server.data && server.data.version !== model.version
+  // Скачивать нечего: на сервере нет файла модели (ответ 503) или он недоступен
+  const isUnavailable = isOnline && !model && server.isError
 
   return (
     <section
@@ -49,9 +51,11 @@ export function OfflineModelCard() {
                   version: model.version.slice(0, 8),
                   size: megabytes(model.size_bytes),
                 })
-            : t('offlineModel.missing', {
-                size: server.data ? megabytes(server.data.size_bytes) : '16',
-              })}
+            : isUnavailable
+              ? t('offlineModel.unavailable')
+              : t('offlineModel.missing', {
+                  size: server.data ? megabytes(server.data.size_bytes) : '16',
+                })}
       </p>
       {(download.isError || remove.isError) && (
         <p role="alert" className="text-danger">
@@ -64,7 +68,7 @@ export function OfflineModelCard() {
             size="sm"
             isLoading={download.isPending}
             failed={download.isError}
-            disabled={!isOnline}
+            disabled={!isOnline || isUnavailable}
             onClick={() => download.mutate()}
           >
             {model ? t('offlineModel.update') : t('offlineModel.download')}

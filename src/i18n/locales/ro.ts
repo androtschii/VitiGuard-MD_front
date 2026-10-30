@@ -145,6 +145,8 @@ export const ro: Messages = {
     title: 'Diagnostic fără rețea',
     missing:
       'Descărcați modelul (circa {{size}} MB) pentru a determina boala direct pe telefon, în câmp, fără semnal.',
+    unavailable:
+      'Modelul nu este încă disponibil pe server. Îl veți putea descărca atunci când va apărea.',
     downloading: 'Se descarcă modelul… {{progress}}',
     ready:
       'Modelul este pe dispozitiv (versiunea {{version}}, {{size}} MB): fără rețea fotografia va fi analizată de el.',

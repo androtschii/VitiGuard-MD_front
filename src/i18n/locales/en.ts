@@ -143,6 +143,8 @@ export const en: Messages = {
     title: 'Diagnosis without a network',
     missing:
       'Download the model (about {{size}} MB) to identify diseases right on your phone in the field, with no signal.',
+    unavailable:
+      'The model is not available on the server yet. You can download it once it appears.',
     downloading: 'Downloading the model… {{progress}}',
     ready:
       'The model is on this device (version {{version}}, {{size}} MB): without a network it will analyse photos.',

@@ -83,6 +83,22 @@ describe('OfflineModelCard', () => {
     ).toBeDisabled()
   })
 
+  it('объясняет, что на сервере нет модели, и не даёт её скачать', async () => {
+    server.use(
+      http.get('/api/v1/ai/models/classifier', () =>
+        HttpResponse.json({ detail: 'нет модели' }, { status: 503 }),
+      ),
+    )
+    renderWithQueryClient(<OfflineModelCard />)
+
+    expect(
+      await screen.findByText(/Модель пока недоступна на сервере/),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: 'Скачать модель' }),
+    ).toBeDisabled()
+  })
+
   it('сообщает, если модель не сохранилась', async () => {
     server.use(
       http.get('/api/v1/ai/models/classifier/file', () =>

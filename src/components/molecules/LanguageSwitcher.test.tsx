@@ -26,7 +26,8 @@ describe('LanguageSwitcher', () => {
 
     await userEvent.selectOptions(screen.getByLabelText('Язык'), 'ro')
 
-    expect(screen.getByLabelText('Limba')).toHaveValue('ro')
+    // Перевод загружается по требованию, поэтому подпись меняется не сразу
+    expect(await screen.findByLabelText('Limba')).toHaveValue('ro')
     expect(screen.getByRole('button', { name: 'Înainte' })).toBeInTheDocument()
     expect(localStorage.getItem(LANGUAGE_STORAGE_KEY)).toBe('ro')
     expect(document.documentElement.lang).toBe('ro')
