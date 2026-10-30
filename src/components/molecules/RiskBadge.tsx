@@ -31,6 +31,7 @@ export function RiskBadge({ level, label }: RiskBadgeProps) {
       className={cn(
         'inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium',
         STYLES[level],
+        level === 'high' && 'risk-pulse',
       )}
     >
       <svg

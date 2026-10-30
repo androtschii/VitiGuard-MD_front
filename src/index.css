@@ -266,6 +266,77 @@ html:has(dialog[open]) {
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  .stagger {
+    animation-delay: calc(var(--i, 0) * 60ms);
+  }
+
+  .modal,
+  .modal::backdrop {
+    opacity: 0;
+    transition:
+      opacity 0.2s ease,
+      transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1),
+      overlay 0.25s allow-discrete,
+      display 0.25s allow-discrete;
+  }
+
+  .modal {
+    transform: translateY(12px) scale(0.97);
+  }
+
+  .modal[open],
+  .modal[open]::backdrop {
+    opacity: 1;
+  }
+
+  .modal[open] {
+    transform: none;
+  }
+
+  @starting-style {
+    .modal[open],
+    .modal[open]::backdrop {
+      opacity: 0;
+    }
+
+    .modal[open] {
+      transform: translateY(12px) scale(0.97);
+    }
+  }
+
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--color-brand-400) 25%, transparent),
+      transparent
+    );
+    animation: skeleton-sweep 1.4s ease-in-out infinite;
+  }
+
+  .ring-segment {
+    animation: ring-draw 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .risk-pulse {
+    animation: risk-pulse 1.6s ease-out 3;
+  }
+
+  .hero-berry {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: hero-berry 5s ease-in-out infinite;
+    animation-delay: calc(var(--i) * -380ms);
+  }
+
   .nav-tabs {
     transform-origin: 50% 133%;
     animation: nav-tilt 0.6s ease-in-out;
@@ -387,6 +458,39 @@ html:has(dialog[open]) {
 
   .grape-fill-bubble {
     animation: grape-bubble 2.4s ease-in infinite;
+  }
+}
+
+@keyframes skeleton-sweep {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes ring-draw {
+  from {
+    stroke-dasharray: 0 100;
+  }
+}
+
+@keyframes risk-pulse {
+  from {
+    box-shadow: 0 0 0 0
+      color-mix(in srgb, var(--color-red-600) 45%, transparent);
+  }
+
+  to {
+    box-shadow: 0 0 0 8px transparent;
+  }
+}
+
+@keyframes hero-berry {
+  50% {
+    transform: translateY(-5px) scale(1.06);
   }
 }
 

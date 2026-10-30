@@ -278,6 +278,7 @@ export const en: Messages = {
   },
   home: {
     title: 'Farm overview',
+    ringTitle: 'Plots by risk',
     stats: {
       vineyards: 'Plots',
       area: 'Total area',

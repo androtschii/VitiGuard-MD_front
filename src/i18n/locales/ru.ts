@@ -272,6 +272,7 @@ export const ru = {
   },
   home: {
     title: 'Обзор хозяйства',
+    ringTitle: 'Участки по риску',
     stats: {
       vineyards: 'Участков',
       area: 'Общая площадь',

@@ -50,7 +50,7 @@ export function Modal({
         if (event.target === event.currentTarget) onClose()
       }}
       className={cn(
-        'm-auto w-full rounded-lg bg-surface p-0 shadow-xl backdrop:bg-stone-900/50',
+        'modal m-auto w-full rounded-lg bg-surface p-0 shadow-xl backdrop:bg-stone-900/50',
         size === 'lg' ? 'max-w-3xl' : 'max-w-lg',
       )}
     >

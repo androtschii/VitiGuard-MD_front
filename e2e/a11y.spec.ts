@@ -28,6 +28,18 @@ const PUBLIC_PAGES: [string, string][] = [
 ]
 
 async function audit(page: Page) {
+  // Контраст считается по итоговому виду, а не посреди проявления элемента
+  await page.evaluate(() =>
+    Promise.allSettled(
+      document
+        .getAnimations()
+        .filter(
+          (animation) =>
+            animation.effect?.getComputedTiming().iterations !== Infinity,
+        )
+        .map((animation) => animation.finished),
+    ),
+  )
   const result = await new AxeBuilder({ page })
     .withTags(WCAG)
     // Холст карты MapLibre axe не разбирает: подписи и управление карты

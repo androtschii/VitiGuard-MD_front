@@ -285,6 +285,7 @@ export const ro: Messages = {
   },
   home: {
     title: 'Prezentarea gospodăriei',
+    ringTitle: 'Parcele după risc',
     stats: {
       vineyards: 'Parcele',
       area: 'Suprafața totală',

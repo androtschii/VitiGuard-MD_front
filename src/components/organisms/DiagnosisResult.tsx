@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import type { Diagnosis } from '@/api/diagnosis'
+import { CountUp } from '@/components/atoms/CountUp'
+import { Ring } from '@/components/atoms/Ring'
 import { cn } from '@/lib/cn'
 import { DiseaseInfo } from './DiseaseInfo'
 
@@ -17,24 +19,49 @@ export function DiagnosisResult({ diagnosis }: DiagnosisResultProps) {
 
   return (
     <div className="flex flex-col gap-4 motion-safe:animate-rise">
-      <div>
-        <p className="text-sm text-ink-subtle">{t('diagnosis.verdict')}</p>
-        <p
-          className={cn(
-            'text-2xl font-semibold',
-            // Зелёный — растительность, как участки на карте; болезнь — красный
-            isHealthy
-              ? 'text-emerald-700 dark:text-emerald-400'
-              : 'text-danger',
-          )}
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <p className="text-sm text-ink-subtle">{t('diagnosis.verdict')}</p>
+          <p
+            className={cn(
+              'text-2xl font-semibold',
+              // Зелёный — растительность, как участки на карте; болезнь — красный
+              isHealthy
+                ? 'text-emerald-700 dark:text-emerald-400'
+                : 'text-danger',
+            )}
+          >
+            {t(`diseases.${diagnosis.disease}`)}
+          </p>
+          <p className="text-sm text-ink-muted">
+            {t('diagnosis.confidence', {
+              value: percent.format(diagnosis.confidence),
+            })}
+          </p>
+        </div>
+        <Ring
+          className="size-20"
+          segments={[
+            {
+              percent: diagnosis.confidence * 100,
+              className: diagnosis.low_confidence
+                ? 'stroke-amber-500'
+                : isHealthy
+                  ? 'stroke-emerald-600 dark:stroke-emerald-400'
+                  : 'stroke-red-600 dark:stroke-red-400',
+            },
+          ]}
         >
-          {t(`diseases.${diagnosis.disease}`)}
-        </p>
-        <p className="text-sm text-ink-muted">
-          {t('diagnosis.confidence', {
-            value: percent.format(diagnosis.confidence),
-          })}
-        </p>
+          <span
+            aria-hidden="true"
+            className="text-sm font-semibold text-ink tabular-nums"
+          >
+            <CountUp
+              value={diagnosis.confidence}
+              format={(value) => percent.format(value)}
+            />
+          </span>
+        </Ring>
       </div>
 
       {diagnosis.low_confidence && (
