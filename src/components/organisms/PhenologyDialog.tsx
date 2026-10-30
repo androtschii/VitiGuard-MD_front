@@ -7,14 +7,18 @@ import {
   useSavePhenology,
   type Stage,
 } from '@/api/phenology'
+import { harvestAllowedFrom, useTreatments } from '@/api/treatments'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
 import { Select } from '@/components/atoms/Select'
 import { DeleteButton } from '@/components/molecules/DeleteButton'
 import { Field } from '@/components/molecules/Field'
 import { Modal } from '@/components/organisms/Modal'
+import { WeatherEventsSection } from '@/components/organisms/WeatherEventsSection'
 import { cn } from '@/lib/cn'
 import { dayTime, localToday } from '@/lib/riskSeries'
+
+const HARVEST_STAGE: Stage = 38
 
 type PhenologyDialogProps = {
   vineyardId: string
@@ -85,6 +89,13 @@ export function PhenologyDialog({
   const [observedOn, setObservedOn] = useState(today)
   const [stage, setStage] = useState<Stage>(4)
 
+  // Журнал обработок нужен, только когда отмечают сбор
+  const isHarvest = stage === HARVEST_STAGE
+  const treatments = useTreatments(vineyardId, open && isHarvest)
+  const harvestFrom = isHarvest
+    ? harvestAllowedFrom(treatments.data ?? [], observedOn)
+    : null
+
   const items = observations.data ?? []
   const year = today.slice(0, 4)
   const latest = items.find((item) => item.observed_on.startsWith(year))
@@ -140,6 +151,16 @@ export function PhenologyDialog({
               )}
             </Field>
           </div>
+          {harvestFrom && (
+            <p
+              role="alert"
+              className="rounded-md border border-amber-300 bg-amber-50 p-3 text-amber-900 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-200"
+            >
+              {t('phenology.harvestBlocked', {
+                date: day.format(dayTime(harvestFrom)),
+              })}
+            </p>
+          )}
           {save.isError && (
             <p role="alert" className="text-danger">
               {save.error.message}
@@ -189,6 +210,8 @@ export function PhenologyDialog({
             ))}
           </ul>
         )}
+
+        <WeatherEventsSection vineyardId={vineyardId} />
       </div>
     </Modal>
   )

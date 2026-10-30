@@ -4,6 +4,7 @@ import { AlertsBell } from '@/components/molecules/AlertsBell'
 import { OfflineBanner } from '@/components/molecules/OfflineBanner'
 import { Assistant } from '@/components/organisms/Assistant'
 import { BottomNav } from '@/components/organisms/BottomNav'
+import { CommandPalette } from '@/components/organisms/CommandPalette'
 import { Footer } from '@/components/organisms/Footer'
 import { Header } from '@/components/organisms/Header'
 import { NotesSync } from '@/components/organisms/NotesSync'
@@ -41,6 +42,7 @@ export function DashboardTemplate({
         <Header
           actions={
             <>
+              <CommandPalette items={navItems} />
               <AlertsBell />
               {headerActions}
             </>

@@ -87,8 +87,8 @@ describe('PhenologyDialog', () => {
     await screen.findByText('Отметок пока нет.')
 
     await userEvent.selectOptions(screen.getByLabelText(/Фаза/), '35')
-    await userEvent.clear(screen.getByLabelText(/День/))
-    await userEvent.type(screen.getByLabelText(/День/), '2026-01-02')
+    await userEvent.clear(screen.getAllByLabelText(/День/)[0])
+    await userEvent.type(screen.getAllByLabelText(/День/)[0], '2026-01-02')
     await userEvent.click(
       screen.getByRole('button', { name: 'Отметить фазу', hidden: true }),
     )
@@ -120,6 +120,24 @@ describe('PhenologyDialog', () => {
       screen.getByRole('button', { name: /Удалить отметку/, hidden: true }),
     )
     expect(await screen.findByText(/Нельзя удалить/)).toBeInTheDocument()
+  })
+
+  it('предупреждает, если сбор попадает на срок ожидания', async () => {
+    serve([])
+    server.use(
+      http.get('/api/v1/vineyards/plot-1/treatments', () =>
+        HttpResponse.json([{ applied_on: '2999-01-01', waiting_days: 21 }]),
+      ),
+    )
+    renderDialog()
+    await screen.findByText('Отметок пока нет.')
+    expect(screen.queryByText(/Срок ожидания ещё идёт/)).toBeNull()
+
+    await userEvent.selectOptions(screen.getByLabelText(/Фаза/), '38')
+
+    expect(
+      await screen.findByText(/Срок ожидания ещё идёт/),
+    ).toBeInTheDocument()
   })
 
   it('сообщает, что отметки не загрузились', async () => {
