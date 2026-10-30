@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+  harvestAllowedFrom,
   useCreateTreatment,
   useDeleteTreatment,
   useTreatmentPlan,
@@ -44,6 +45,7 @@ export function TreatmentsDialog({
   const [appliedOn, setAppliedOn] = useState(today)
   const [fungicide, setFungicide] = useState<Fungicide>('contact')
   const [product, setProduct] = useState('')
+  const [waitingDays, setWaitingDays] = useState('')
   const [dateError, setDateError] = useState<string | null>(null)
   // Удаление в два касания, как у участка: на телефоне кнопку легко задеть
   const [confirmingId, setConfirmingId] = useState<string | null>(null)
@@ -60,11 +62,13 @@ export function TreatmentsDialog({
         applied_on: appliedOn,
         fungicide,
         product: product.trim() || null,
+        waiting_days: waitingDays === '' ? null : Number(waitingDays),
       },
       {
         onSuccess: () => {
           setIsAdding(false)
           setProduct('')
+          setWaitingDays('')
           setAppliedOn(today)
           setDateError(null)
         },
@@ -74,6 +78,7 @@ export function TreatmentsDialog({
 
   const items = treatments.data ?? []
   const planData = plan.data
+  const harvestFrom = harvestAllowedFrom(items, today)
   const recommendations = planData?.recommendations ?? []
 
   return (
@@ -298,6 +303,23 @@ export function TreatmentsDialog({
                     />
                   )}
                 </Field>
+
+                <Field
+                  label={t('treatments.waitingLabel')}
+                  hint={t('treatments.waitingHint')}
+                >
+                  {(control) => (
+                    <Input
+                      type="number"
+                      inputMode="numeric"
+                      min={0}
+                      max={365}
+                      value={waitingDays}
+                      onChange={(e) => setWaitingDays(e.target.value)}
+                      {...control}
+                    />
+                  )}
+                </Field>
               </div>
 
               {createMutation.isError && (
@@ -324,6 +346,12 @@ export function TreatmentsDialog({
                 </Button>
               </div>
             </form>
+          )}
+
+          {harvestFrom && (
+            <p className="rounded-lg border border-accent/30 bg-accent-soft px-3 py-2 font-medium text-accent">
+              {t('treatments.harvestFrom', { date: format(harvestFrom) })}
+            </p>
           )}
 
           {/* Список обработок */}
@@ -354,6 +382,9 @@ export function TreatmentsDialog({
                     <th scope="col" className="py-1 pr-2">
                       {t('treatments.columns.product')}
                     </th>
+                    <th scope="col" className="py-1 pr-2">
+                      {t('treatments.columns.waiting')}
+                    </th>
                     <th scope="col" className="py-1 text-right">
                       {t('treatments.columns.actions')}
                     </th>
@@ -370,6 +401,13 @@ export function TreatmentsDialog({
                       </td>
                       <td className="py-1.5 pr-2 text-ink-soft">
                         {item.product || '—'}
+                      </td>
+                      <td className="py-1.5 pr-2 whitespace-nowrap text-ink-soft">
+                        {item.waiting_days === null
+                          ? '—'
+                          : t('treatments.waitingValue', {
+                              count: item.waiting_days,
+                            })}
                       </td>
                       <td className="py-1.5 text-right whitespace-nowrap">
                         {confirmingId === item.id ? (

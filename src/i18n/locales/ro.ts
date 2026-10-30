@@ -890,11 +890,17 @@ export const ro: Messages = {
     fungicideLabel: 'Tipul fungicidului',
     productLabel: 'Denumirea produsului',
     productPlaceholder: 'De exemplu, Ridomil Gold',
+    waitingLabel: 'Pauză până la recoltare, zile',
+    waitingHint: 'Este indicată pe eticheta produsului',
+    harvestFrom:
+      'Recoltarea — nu mai devreme de {{date}}: este în curs pauza după tratament.',
+    waitingValue: '{{count}} zile',
     deleteTreatment: 'Șterge înregistrarea tratamentului din {{date}}',
     confirmDeleteTreatment: 'Confirmă ștergerea înregistrării din {{date}}',
     confirmDelete: 'Ștergi înregistrarea?',
     delete: 'Șterge',
     columns: {
+      waiting: 'Pauză',
       date: 'Data',
       fungicide: 'Tip fungicid',
       product: 'Produs',

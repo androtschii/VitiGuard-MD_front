@@ -867,11 +867,17 @@ export const ru = {
     fungicideLabel: 'Тип препарата',
     productLabel: 'Название препарата',
     productPlaceholder: 'Например, Ридомил Голд',
+    waitingLabel: 'Срок ожидания до сбора, дней',
+    waitingHint: 'Указан на этикетке препарата',
+    harvestFrom:
+      'Сбор урожая — не раньше {{date}}: идёт срок ожидания после обработки.',
+    waitingValue: '{{count}} дн.',
     deleteTreatment: 'Удалить запись об обработке от {{date}}',
     confirmDeleteTreatment: 'Подтвердить удаление записи от {{date}}',
     confirmDelete: 'Удалить запись?',
     delete: 'Удалить',
     columns: {
+      waiting: 'Ожидание',
       date: 'Дата',
       fungicide: 'Тип препарата',
       product: 'Препарат',

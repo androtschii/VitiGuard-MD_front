@@ -875,11 +875,17 @@ export const en: Messages = {
     fungicideLabel: 'Fungicide type',
     productLabel: 'Product name',
     productPlaceholder: 'E.g., Ridomil Gold',
+    waitingLabel: 'Pre-harvest interval, days',
+    waitingHint: 'Shown on the product label',
+    harvestFrom:
+      'Do not harvest before {{date}}: the pre-harvest interval is still running.',
+    waitingValue: '{{count}} d',
     deleteTreatment: 'Delete treatment log from {{date}}',
     confirmDeleteTreatment: 'Confirm deleting the record from {{date}}',
     confirmDelete: 'Delete this record?',
     delete: 'Delete',
     columns: {
+      waiting: 'PHI',
       date: 'Date',
       fungicide: 'Fungicide type',
       product: 'Product',

@@ -17,6 +17,7 @@ const sampleTreatments: Treatment[] = [
     applied_on: '2026-06-05',
     fungicide: 'contact',
     product: 'Купроксат',
+    waiting_days: 21,
     created_at: '2026-06-05T08:00:00Z',
     updated_at: '2026-06-05T08:00:00Z',
   },
@@ -26,6 +27,7 @@ const sampleTreatments: Treatment[] = [
     applied_on: '2026-06-01',
     fungicide: 'systemic',
     product: null,
+    waiting_days: null,
     created_at: '2026-06-01T08:00:00Z',
     updated_at: '2026-06-01T08:00:00Z',
   },
@@ -154,6 +156,7 @@ describe('TreatmentsDialog', () => {
             applied_on: '2026-06-09',
             fungicide: 'systemic',
             product: 'Ридомил Голд',
+            waiting_days: 14,
             created_at: '2026-06-09T08:00:00Z',
             updated_at: '2026-06-09T08:00:00Z',
           },
@@ -176,6 +179,9 @@ describe('TreatmentsDialog', () => {
     fireEvent.change(screen.getByLabelText(/Название препарата/), {
       target: { value: 'Ридомил Голд' },
     })
+    fireEvent.change(screen.getByLabelText(/Срок ожидания/), {
+      target: { value: '14' },
+    })
 
     await user.click(screen.getByRole('button', { name: 'Записать' }))
 
@@ -183,7 +189,35 @@ describe('TreatmentsDialog', () => {
       applied_on: '2026-06-09',
       fungicide: 'systemic',
       product: 'Ридомил Голд',
+      waiting_days: 14,
     })
+  })
+
+  it('показывает, когда можно начинать сбор', async () => {
+    renderDialog()
+
+    expect(
+      await screen.findByText(/Сбор урожая — не раньше/),
+    ).toHaveTextContent(/26 июн/)
+    expect(screen.getByText('21 дн.')).toBeInTheDocument()
+  })
+
+  it('без срока ожидания поле уходит пустым', async () => {
+    let createdPayload: unknown = null
+    server.use(
+      http.post(TREATMENTS_URL, async ({ request }) => {
+        createdPayload = await request.json()
+        return HttpResponse.json(sampleTreatments[1], { status: 201 })
+      }),
+    )
+    const user = renderDialog([])
+    await screen.findByText('Обработок пока не записано.')
+
+    await user.click(screen.getByRole('button', { name: 'Записать обработку' }))
+    await user.click(screen.getByRole('button', { name: 'Записать' }))
+
+    expect(createdPayload).toMatchObject({ waiting_days: null })
+    expect(screen.queryByText(/Сбор урожая/)).toBeNull()
   })
 
   it('отклоняет дату обработки в будущем', async () => {
