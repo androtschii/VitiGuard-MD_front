@@ -6,7 +6,9 @@ import { MapContext } from '@/lib/mapContext'
 import { useMapStore } from '@/store/map'
 import { WineriesLayer } from './WineriesLayer'
 
-type Handler = (event?: { features?: { properties: object }[] }) => void
+type Handler = (event?: {
+  features?: { properties: object; geometry: object }[]
+}) => void
 
 function fakeMap() {
   const handlers: Record<string, Handler> = {}
@@ -35,7 +37,7 @@ function renderLayer(map: ReturnType<typeof fakeMap>['map']) {
 
 describe('WineriesLayer', () => {
   afterEach(() => {
-    useMapStore.setState({ showWineries: false })
+    useMapStore.setState({ showWineries: false, wineRoute: [] })
   })
 
   it('выключенный слой карту не трогает', () => {
@@ -70,6 +72,7 @@ describe('WineriesLayer', () => {
               phone: '+37322',
               website: 'https://cricova.md',
             },
+            geometry: { type: 'Point', coordinates: [28.8, 47.1] },
           },
         ],
       }),
@@ -104,12 +107,54 @@ describe('WineriesLayer', () => {
         features: [
           {
             properties: { name: 'Novak', kind: 'shop', approximate: true },
+            geometry: { type: 'Point', coordinates: [28.8, 47.1] },
           },
         ],
       }),
     )
     expect(screen.getByText(/Точный адрес/)).toBeInTheDocument()
     expect(screen.getByRole('region')).toHaveTextContent('Магазин')
+  })
+
+  it('добавляет винодельню в маршрут один раз и не больше предела', async () => {
+    useMapStore.setState({ showWineries: true })
+    const { map, handlers } = fakeMap()
+    renderLayer(map)
+    const open = (name: string) =>
+      act(() =>
+        handlers.click?.({
+          features: [
+            {
+              properties: { name, kind: 'winery' },
+              geometry: { type: 'Point', coordinates: [28.8, 47.1] },
+            },
+          ],
+        }),
+      )
+
+    open('Криково')
+    await userEvent.click(screen.getByRole('button', { name: 'В маршрут' }))
+
+    expect(useMapStore.getState().wineRoute).toEqual([
+      { name: 'Криково', lat: 47.1, lon: 28.8 },
+    ])
+    expect(screen.getByRole('button', { name: 'В маршруте' })).toBeDisabled()
+    useMapStore.getState().addRouteStop({ name: 'Криково', lat: 1, lon: 1 })
+    expect(useMapStore.getState().wineRoute).toHaveLength(1)
+
+    act(() =>
+      useMapStore.setState({
+        wineRoute: Array.from({ length: 8 }, (_, index) => ({
+          name: String(index),
+          lat: 47,
+          lon: 28,
+        })),
+      }),
+    )
+    open('Новая')
+    expect(screen.getByRole('button', { name: 'В маршрут' })).toBeDisabled()
+    useMapStore.getState().addRouteStop({ name: 'Новая', lat: 1, lon: 1 })
+    expect(useMapStore.getState().wineRoute).toHaveLength(8)
   })
 
   it('убирает слой при выключении и переживает удалённую карту', () => {

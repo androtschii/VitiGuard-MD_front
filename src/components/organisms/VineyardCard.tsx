@@ -14,6 +14,7 @@ import { DeleteButton } from '@/components/molecules/DeleteButton'
 import { DownloadButton } from '@/components/molecules/DownloadButton'
 import { ExportDataDialog } from '@/components/organisms/ExportDataDialog'
 import { FieldNotesDialog } from '@/components/organisms/FieldNotesDialog'
+import { HarvestDialog } from '@/components/organisms/HarvestDialog'
 import { PhenologyDialog } from '@/components/organisms/PhenologyDialog'
 import { RiskSummary } from '@/components/organisms/RiskSummary'
 import { TreatmentsDialog } from '@/components/organisms/TreatmentsDialog'
@@ -43,6 +44,7 @@ export function VineyardCard({
   const [isExportOpen, setIsExportOpen] = useState(false)
   const [isNotesOpen, setIsNotesOpen] = useState(false)
   const [isPhenologyOpen, setIsPhenologyOpen] = useState(false)
+  const [isHarvestOpen, setIsHarvestOpen] = useState(false)
   const [isPdfLoading, setIsPdfLoading] = useState(false)
   const [pdfError, setPdfError] = useState<string | null>(null)
 
@@ -206,6 +208,22 @@ export function VineyardCard({
             vineyardName={vineyard.name}
             open={isPhenologyOpen}
             onClose={() => setIsPhenologyOpen(false)}
+          />
+        )}
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={() => setIsHarvestOpen(true)}
+        >
+          {t('harvest.open')}
+        </Button>
+        {isHarvestOpen && (
+          <HarvestDialog
+            vineyardId={vineyard.id}
+            vineyardName={vineyard.name}
+            areaHa={vineyard.area_ha}
+            open={isHarvestOpen}
+            onClose={() => setIsHarvestOpen(false)}
           />
         )}
         <DownloadButton

@@ -18,6 +18,7 @@ import { NdviLayer } from '@/components/organisms/NdviLayer'
 import { NdviTimeline } from '@/components/organisms/NdviTimeline'
 import { OsmVineyardsLayer } from '@/components/organisms/OsmVineyardsLayer'
 import { WineriesLayer } from '@/components/organisms/WineriesLayer'
+import { WineRouteLine, WineRoutePanel } from '@/components/organisms/WineRoute'
 import { VineyardFilters } from '@/components/organisms/VineyardFilters'
 import { VineyardForm } from '@/components/organisms/VineyardForm'
 import { VineyardPopups } from '@/components/organisms/VineyardPopups'
@@ -42,6 +43,7 @@ export function MapPage() {
         <NdviLayer />
         <OsmVineyardsLayer />
         <WineriesLayer />
+        <WineRouteLine />
         <VineyardPopups />
         <MapRiskLegend />
         {/* Панель инструментов: поиск и рисование — столбиком под подложками */}
@@ -74,6 +76,7 @@ export function MapPage() {
               <MeasureControl />
               <TrackControl />
               <MapExportControl />
+              <WineRoutePanel />
             </>
           }
           layers={

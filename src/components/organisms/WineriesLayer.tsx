@@ -1,9 +1,15 @@
+import type { Point } from 'geojson'
 import type { LayerSpecification, MapLayerMouseEvent } from 'maplibre-gl'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { WINERIES_URL, type WineryProperties } from '@/api/wineries'
+import {
+  WINERIES_URL,
+  type Winery,
+  type WineryProperties,
+} from '@/api/wineries'
 import { Button } from '@/components/atoms/Button'
 import { useMap } from '@/lib/mapContext'
+import { MAX_STOPS } from '@/lib/wineRoute'
 import { useMapStore } from '@/store/map'
 
 const SOURCE = 'wineries'
@@ -26,7 +32,9 @@ export function WineriesLayer() {
   const { t } = useTranslation()
   const map = useMap()
   const isEnabled = useMapStore((state) => state.showWineries)
-  const [selected, setSelected] = useState<WineryProperties | null>(null)
+  const route = useMapStore((state) => state.wineRoute)
+  const addStop = useMapStore((state) => state.addRouteStop)
+  const [selected, setSelected] = useState<Winery | null>(null)
 
   useEffect(() => {
     if (!map || !isEnabled) return
@@ -34,9 +42,17 @@ export function WineriesLayer() {
     map.addLayer(layer)
 
     const onClick = (event: MapLayerMouseEvent) => {
-      const properties = event.features?.[0]?.properties as
-        WineryProperties | undefined
-      setSelected(properties ?? null)
+      const feature = event.features?.[0]
+      setSelected(
+        feature
+          ? {
+              ...(feature.properties as WineryProperties),
+              // Координаты самой точки, а не места клика рядом с ней
+              lon: (feature.geometry as Point).coordinates[0],
+              lat: (feature.geometry as Point).coordinates[1],
+            }
+          : null,
+      )
     }
     const onEnter = () => {
       map.getCanvas().style.cursor = 'pointer'
@@ -66,7 +82,7 @@ export function WineriesLayer() {
   return (
     <section
       aria-label={selected.name}
-      className="absolute bottom-8 left-2 z-10 flex w-64 max-w-[calc(100%-1rem)] flex-col gap-1 rounded-lg border border-line bg-surface p-3 text-sm text-ink shadow-lg motion-safe:animate-rise"
+      className="absolute right-2 bottom-8 z-10 flex w-64 max-w-[calc(100%-1rem)] flex-col gap-1 rounded-lg border border-line bg-surface p-3 text-sm text-ink shadow-lg motion-safe:animate-rise"
     >
       <div className="flex items-start justify-between gap-2">
         <h2 className="font-semibold">{selected.name}</h2>
@@ -102,6 +118,27 @@ export function WineriesLayer() {
           {t('wineries.website')}
         </a>
       )}
+      <Button
+        size="sm"
+        variant="secondary"
+        disabled={
+          route.length >= MAX_STOPS ||
+          route.some((stop) => stop.name === selected.name)
+        }
+        onClick={() =>
+          addStop({
+            name: selected.name,
+            lat: selected.lat,
+            lon: selected.lon,
+          })
+        }
+      >
+        {t(
+          route.some((stop) => stop.name === selected.name)
+            ? 'wineRoute.added'
+            : 'wineRoute.add',
+        )}
+      </Button>
     </section>
   )
 }
