@@ -39,6 +39,7 @@ export function BottomNav({ items }: BottomNavProps) {
           <li key={item.href} className="flex-1">
             <Link
               to={item.href}
+              viewTransition
               aria-current={item.current ? 'page' : undefined}
               className={cn(
                 'nav-tab flex h-16 flex-col items-center justify-center gap-1 text-[11px] font-medium',

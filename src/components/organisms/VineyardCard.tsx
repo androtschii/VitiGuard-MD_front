@@ -176,6 +176,7 @@ export function VineyardCard({
           <TreatmentsDialog
             vineyardId={vineyard.id}
             vineyardName={vineyard.name}
+            areaHa={vineyard.area_ha}
             open={isTreatmentsOpen}
             onClose={() => setIsTreatmentsOpen(false)}
           />

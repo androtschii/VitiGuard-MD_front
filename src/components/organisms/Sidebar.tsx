@@ -55,6 +55,7 @@ export function Sidebar({ items }: SidebarProps) {
             <li key={item.href} className="relative">
               <Link
                 to={item.href}
+                viewTransition
                 aria-current={item.current ? 'page' : undefined}
                 className={cn(
                   'nav-tab flex h-11 items-center gap-3 rounded-lg px-3 text-sm font-medium transition motion-safe:hover:translate-x-1',

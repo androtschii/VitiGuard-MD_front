@@ -14,11 +14,13 @@ import { Select } from '@/components/atoms/Select'
 import { DeleteButton } from '@/components/molecules/DeleteButton'
 import { Field } from '@/components/molecules/Field'
 import { Modal } from '@/components/organisms/Modal'
+import { SprayCalculator } from '@/components/organisms/SprayCalculator'
 import { dayTime, localToday } from '@/lib/riskSeries'
 
 type TreatmentsDialogProps = {
   vineyardId: string
   vineyardName: string
+  areaHa?: number
   open: boolean
   onClose: () => void
 }
@@ -26,6 +28,7 @@ type TreatmentsDialogProps = {
 export function TreatmentsDialog({
   vineyardId,
   vineyardName,
+  areaHa = 0,
   open,
   onClose,
 }: TreatmentsDialogProps) {
@@ -466,6 +469,8 @@ export function TreatmentsDialog({
             </div>
           )}
         </section>
+
+        <SprayCalculator areaHa={areaHa} />
 
         <p className="text-xs text-ink-subtle">{t('treatments.note')}</p>
       </div>
