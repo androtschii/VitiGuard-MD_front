@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { isBasemap, type Basemap } from '@/lib/basemaps'
 import { NDVI_OPACITY } from '@/lib/ndviLayer'
+import { MAX_STOPS, type RouteStop } from '@/lib/wineRoute'
 import { NO_FILTER, type VineyardFilter } from '@/lib/vineyardFilter'
 
 export const BASEMAP_STORAGE_KEY = 'vitiguard.basemap'
@@ -33,6 +34,14 @@ type MapState = {
   setShowOsm: (showOsm: boolean) => void
   osmTooFar: boolean
   setOsmTooFar: (osmTooFar: boolean) => void
+  // Винодельни и винные магазины
+  showWineries: boolean
+  setShowWineries: (showWineries: boolean) => void
+  // Винный маршрут на день
+  wineRoute: RouteStop[]
+  addRouteStop: (stop: RouteStop) => void
+  removeRouteStop: (name: string) => void
+  clearRoute: () => void
   // Картограммы NDVI поверх участков пользователя
   showNdvi: boolean
   setShowNdvi: (showNdvi: boolean) => void
@@ -57,6 +66,21 @@ export const useMapStore = create<MapState>()((set) => ({
     }
     set({ basemap })
   },
+  showWineries: false,
+  setShowWineries: (showWineries) => set({ showWineries }),
+  wineRoute: [],
+  addRouteStop: (stop) =>
+    set(({ wineRoute }) =>
+      wineRoute.length >= MAX_STOPS ||
+      wineRoute.some((item) => item.name === stop.name)
+        ? {}
+        : { wineRoute: [...wineRoute, stop] },
+    ),
+  removeRouteStop: (name) =>
+    set(({ wineRoute }) => ({
+      wineRoute: wineRoute.filter((item) => item.name !== name),
+    })),
+  clearRoute: () => set({ wineRoute: [] }),
   isDrawing: false,
   setDrawing: (isDrawing) => set({ isDrawing }),
   selection: null,

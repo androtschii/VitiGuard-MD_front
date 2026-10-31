@@ -143,6 +143,8 @@ export const en: Messages = {
     title: 'Diagnosis without a network',
     missing:
       'Download the model (about {{size}} MB) to identify diseases right on your phone in the field, with no signal.',
+    unavailable:
+      'The model is not available on the server yet. You can download it once it appears.',
     downloading: 'Downloading the model… {{progress}}',
     ready:
       'The model is on this device (version {{version}}, {{size}} MB): without a network it will analyse photos.',
@@ -276,6 +278,7 @@ export const en: Messages = {
   },
   home: {
     title: 'Farm overview',
+    ringTitle: 'Plots by risk',
     stats: {
       vineyards: 'Plots',
       area: 'Total area',
@@ -827,6 +830,224 @@ export const en: Messages = {
     disclaimer:
       'Agronomic models estimate conditions for the disease from the weather, not its presence: the agronomist decides on treatment.',
   },
+  notes: {
+    open: 'Field notes',
+    title: 'Field notes: {{name}}',
+    description:
+      'Text, a photo and a point on the plot. With no network the note waits on the phone and sends itself.',
+    textLabel: 'What you noticed',
+    textPlaceholder: 'For example: spots on the lower leaves, row 12',
+    photoLabel: 'Photo',
+    locate: 'Mark my location',
+    located: 'Location marked',
+    locateFailed: 'Could not get the location',
+    save: 'Save note',
+    emptyError: 'Write some text or add a photo',
+    empty: 'No notes yet.',
+    loadFailed: 'Could not load the notes.',
+    waiting: 'Waiting for network',
+    photoOnly: 'Photo note',
+    photoAlt: 'Note photo from {{date}}',
+    onMap: 'On the map',
+    delete: 'Delete',
+    deleteNote: 'Delete the note from {{date}}',
+    deleteQueued: 'Remove the note from the queue',
+    rejected_one: 'The server did not accept {{count}} queued note.',
+    rejected_few: 'The server did not accept {{count}} queued notes.',
+    rejected_many: 'The server did not accept {{count}} queued notes.',
+    rejected_other: 'The server did not accept {{count}} queued notes.',
+  },
+  wineries: {
+    toggle: 'Wineries and shops',
+    kinds: { winery: 'Winery', shop: 'Shop' },
+    website: 'Website',
+    approximate:
+      'Exact address not confirmed: the map shows the town. Check the website.',
+  },
+  assistant: {
+    open: 'Open the assistant',
+    title: 'VitiGuard assistant',
+    greeting:
+      'Ask what to treat the vines with, which wine to choose and where to buy it.',
+    inputLabel: 'Your question',
+    placeholder: 'For example: what to spray against mites',
+    send: 'Ask',
+    unknown:
+      'For now I can answer about treatments, choosing a wine and where to buy it. Tap one of the buttons below.',
+    chips: {
+      spray: 'What to spray',
+      wine: 'Which wine to choose',
+      buy: 'Where to buy wine',
+    },
+    keywords: {
+      spray:
+        'spray, treat, disease, pest, parasite, mildew, mite, moth, rot, phylloxera, fungicide',
+      wine: 'wine, drink, pair',
+      buy: 'buy, shop, store, winery, where',
+    },
+    spray: {
+      intro:
+        'General approaches. First work out what is on the vine: the photo check can help.',
+      note: 'Choose the product and dose from the state register and the label, and record the waiting period in the treatment log. If in doubt, ask an agronomist.',
+    },
+    pests: {
+      downy: {
+        name: 'Downy mildew',
+        advice:
+          'Contact products such as copper before rain; systemic ones in the first days after infection.',
+      },
+      powdery: {
+        name: 'Powdery mildew',
+        advice:
+          'Sulfur-based products or systemic fungicides. Do not use sulfur in strong heat: it can burn the leaves.',
+      },
+      botrytis: {
+        name: 'Grey mould',
+        advice:
+          'Thin the leaves around the clusters and use botryticides before bunch closure and at the start of ripening.',
+      },
+      moth: {
+        name: 'Grape moth',
+        advice:
+          'Pheromone traps show the timing; Bacillus thuringiensis biologicals or permitted insecticides as the larvae hatch.',
+      },
+      mites: {
+        name: 'Spider mite',
+        advice:
+          'Acaricides only with visible infestation: needless sprays kill predatory mites. Sulfur partly holds them back.',
+      },
+      phylloxera: {
+        name: 'Phylloxera',
+        advice:
+          'Spraying does not solve it: the main protection is planting on resistant rootstock.',
+      },
+    },
+    wine: {
+      intro: 'Pairings with Moldovan varieties. A guide, not a rule:',
+      note: 'Alcohol is sold to adults only. Drink in moderation.',
+    },
+    wines: {
+      meat: {
+        dish: 'Red meat and grill',
+        wine: 'Fetească Neagră, Rară Neagră, Cabernet Sauvignon',
+      },
+      fish: {
+        dish: 'Fish and salads',
+        wine: 'Fetească Albă, Viorica, Sauvignon Blanc',
+      },
+      cheese: { dish: 'Cheese', wine: 'Fetească Regală, dry rosé' },
+      dessert: { dish: 'Desserts', wine: 'sweet muscat, ice wine' },
+      party: {
+        dish: 'Celebration',
+        wine: 'sparkling wine, for example from Cricova',
+      },
+    },
+    buy: {
+      intro:
+        'Wineries near Chișinău. You can buy on site or from their websites:',
+      nearby: 'The wineries and shops nearest to you:',
+      km: '{{value}} km',
+      locate: 'Find near me',
+      locateFailed: 'Could not get the location.',
+      map: 'Show on the map',
+      failed: 'Could not load the list.',
+      source:
+        'OpenStreetMap data: check opening hours and stock with the seller.',
+    },
+  },
+  palette: {
+    open: 'Quick search',
+    title: 'Quick search',
+    placeholder: 'Section, plot or action',
+    sections: 'Section',
+    plots: 'Plot',
+    actions: 'Action',
+    wineries: 'Show wineries on the map',
+    empty: 'Nothing found',
+  },
+  weatherEvents: {
+    title: 'Weather events',
+    date: 'Day',
+    kind: 'What happened',
+    severity: 'Damage',
+    note: 'Note',
+    save: 'Record event',
+    empty: 'No events yet.',
+    loadFailed: 'Could not load the log.',
+    delete: 'Delete',
+    deleteOne: 'Delete the event from {{date}}',
+    kinds: {
+      frost: 'Frost',
+      hail: 'Hail',
+      wind: 'Strong wind',
+      drought: 'Drought',
+      heat: 'Heat',
+    },
+    severities: { 1: 'Slight', 2: 'Noticeable', 3: 'Severe' },
+  },
+  harvest: {
+    open: 'Harvest',
+    title: 'Harvest: {{name}}',
+    description: 'Forecast from bunch counts and actual yield by season.',
+    countTitle: 'Field count',
+    vines: 'Vines on the plot',
+    bunches: 'Bunches per vine',
+    bunchGrams: 'Bunch weight, g',
+    counted: 'From the count: {{kg}} kg',
+    useCounted: 'Use as forecast',
+    season: 'Season',
+    estimated: 'Forecast, kg',
+    actual: 'Actual, kg',
+    brix: 'Sugar, °Brix',
+    save: 'Save',
+    empty: 'No records yet.',
+    loadFailed: 'Could not load the records.',
+    estimatedShort: 'Forecast',
+    actualShort: 'Actual',
+    value: '{{kg}} kg · {{perHa}} t/ha',
+    brixValue: '{{value}} °Brix',
+    delete: 'Delete',
+    deleteOne: 'Delete the {{season}} harvest',
+  },
+  wineRoute: {
+    title: 'Wine route',
+    add: 'Add to route',
+    added: 'In the route',
+    remove: 'Remove {{name}} from the route',
+    length: 'About {{km}} km in a straight line, more by road',
+    navigate: 'Open in navigation',
+    addMore: 'Add another winery: tap a point on the map.',
+    clear: 'Clear the route',
+  },
+  phenology: {
+    harvestBlocked:
+      'The waiting period is still running: per the treatment log, harvest no earlier than {{date}}.',
+    open: 'Growth stages',
+    title: 'Growth stages: {{name}}',
+    description:
+      'Record what the vine is doing now: a season log on the Eichhorn–Lorenz scale.',
+    current: 'Now: {{stage}}',
+    noCurrent: 'No stages recorded this season yet',
+    date: 'Day',
+    stage: 'Stage',
+    save: 'Record stage',
+    empty: 'No records yet.',
+    loadFailed: 'Could not load the records.',
+    delete: 'Delete',
+    deleteOne: 'Delete the record from {{date}}',
+    stages: {
+      1: 'winter bud',
+      4: 'budburst',
+      12: 'shoots about 10 cm',
+      19: 'start of flowering',
+      23: 'flowering, 50% caps off',
+      27: 'fruit set',
+      31: 'pea-size berries',
+      35: 'veraison',
+      38: 'harvest',
+      43: 'start of leaf fall',
+    },
+  },
   treatments: {
     open: 'Treatments & plan',
     title: 'Treatments and plan: {{name}}',
@@ -873,11 +1094,17 @@ export const en: Messages = {
     fungicideLabel: 'Fungicide type',
     productLabel: 'Product name',
     productPlaceholder: 'E.g., Ridomil Gold',
+    waitingLabel: 'Pre-harvest interval, days',
+    waitingHint: 'Shown on the product label',
+    harvestFrom:
+      'Do not harvest before {{date}}: the pre-harvest interval is still running.',
+    waitingValue: '{{count}} d',
     deleteTreatment: 'Delete treatment log from {{date}}',
     confirmDeleteTreatment: 'Confirm deleting the record from {{date}}',
     confirmDelete: 'Delete this record?',
     delete: 'Delete',
     columns: {
+      waiting: 'PHI',
       date: 'Date',
       fungicide: 'Fungicide type',
       product: 'Product',

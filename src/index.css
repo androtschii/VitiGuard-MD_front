@@ -133,6 +133,18 @@ h1 {
   font-family: var(--font-brand);
 }
 
+/* Строки заголовков выравниваются по длине, абзацы не кончаются одним словом */
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p,
+li {
+  text-wrap: pretty;
+}
+
 /* Ссылки в подписи источников карты (OpenStreetMap, geoBoundaries) отличаются
    от текста не только цветом: WCAG 1.4.1, ссылка внутри текста (pr-094) */
 .maplibregl-map .maplibregl-ctrl-attrib a {
@@ -166,6 +178,495 @@ h1 {
 /* Страница под модальным окном не прокручивается */
 html:has(dialog[open]) {
   overflow: hidden;
+}
+
+/* Плавная заливка кнопок при наведении: слой под текстом растёт слева
+   направо и возвращается обратно. Цвет слоя задаёт --fill, цвет текста поверх
+   него — --fill-ink. Слой обрезает clip-path, а не overflow: иначе обрезался бы
+   счётчик на колокольчике. В @layer, чтобы утилиты вроде sticky имели приоритет */
+@layer components {
+  .fill-hover {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .fill-hover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: var(--fill, var(--color-brand-700));
+    clip-path: inset(0 100% 0 0);
+  }
+
+  .fill-hover-soft {
+    --fill: var(--color-brand-700);
+    --fill-ink: var(--color-white);
+  }
+
+  /* Цвет выпадающего списка не должен меняться вместе с заливкой поля */
+  .fill-hover option {
+    background: var(--surface);
+    color: var(--ink);
+  }
+}
+
+@media (hover: hover) {
+  .fill-hover:hover:not(:disabled) {
+    border-color: var(--fill, var(--color-brand-700));
+    box-shadow: 0 6px 16px -8px var(--fill, var(--color-brand-700));
+    color: var(--fill-ink, var(--color-white));
+  }
+
+  .fill-hover:hover:not(:disabled)::before {
+    clip-path: inset(0);
+  }
+
+  .fill-hover:hover:not(:disabled) select {
+    border-color: var(--fill, var(--color-brand-700));
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .fill-hover::before {
+    transition: clip-path 0.4s cubic-bezier(0.7, 0, 0.3, 1);
+  }
+}
+
+/* Нижняя панель: значки движутся по частям, панель наклоняется к разделу.
+   Запуск — у текущего раздела при открытии страницы, у остальных при наведении
+   и фокусе */
+.nav-icon-check {
+  stroke-dasharray: 1;
+}
+
+/* Кнопка скачивания: галочка нарисована штрихом и до конца загрузки скрыта */
+.download-check {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.download-icon[data-state='done'] .download-check {
+  stroke-dashoffset: 0;
+}
+
+.download-icon[data-state='done'] .download-arrow,
+.download-icon[data-state='done'] .download-line {
+  opacity: 0;
+}
+
+.delete-label {
+  display: inline-block;
+}
+
+/* Сок в грозди на экране загрузки: без движения — половина уровня */
+.grape-fill-level {
+  transform: translateY(32px);
+}
+
+.grape-fill-bubble {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .stagger {
+    animation-delay: calc(var(--i, 0) * 60ms);
+  }
+
+  .modal,
+  .modal::backdrop {
+    opacity: 0;
+    transition:
+      opacity 0.2s ease,
+      transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1),
+      overlay 0.25s allow-discrete,
+      display 0.25s allow-discrete;
+  }
+
+  .modal {
+    transform: translateY(12px) scale(0.97);
+  }
+
+  .modal[open],
+  .modal[open]::backdrop {
+    opacity: 1;
+  }
+
+  .modal[open] {
+    transform: none;
+  }
+
+  @starting-style {
+    .modal[open],
+    .modal[open]::backdrop {
+      opacity: 0;
+    }
+
+    .modal[open] {
+      transform: translateY(12px) scale(0.97);
+    }
+  }
+
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--color-brand-400) 25%, transparent),
+      transparent
+    );
+    animation: skeleton-sweep 1.4s ease-in-out infinite;
+  }
+
+  .ring-segment {
+    animation: ring-draw 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .risk-pulse {
+    animation: risk-pulse 1.6s ease-out 3;
+  }
+
+  .delete-lid {
+    transform-origin: 13px 4px;
+    transition: transform 0.25s cubic-bezier(0.3, 1.5, 0.5, 1);
+  }
+
+  .delete-button:is(:hover:enabled, :focus-visible, [aria-busy]) .delete-lid {
+    transform: rotate(22deg) translateY(-1px);
+  }
+
+  .delete-button[aria-busy] .delete-label {
+    transform-origin: left center;
+    animation: delete-eat 0.6s cubic-bezier(0.7, 0, 0.3, 1) both;
+  }
+
+  .phenology-now {
+    animation: phenology-now 2s ease-out infinite;
+  }
+
+  .hero-berry {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: hero-berry 5s ease-in-out infinite;
+    animation-delay: calc(var(--i) * -380ms);
+  }
+
+  .nav-tabs {
+    transform-origin: 50% 133%;
+    animation: nav-tilt 0.6s ease-in-out;
+  }
+
+  .sidebar-pill {
+    animation: sidebar-slide 0.4s cubic-bezier(0.7, 0, 0.3, 1);
+  }
+
+  .nav-icon {
+    transition: transform 0.3s cubic-bezier(0.7, 0, 0.3, 1);
+  }
+
+  .nav-icon-roof {
+    --nav-part: nav-roof;
+  }
+
+  .nav-icon-map {
+    --nav-part: nav-map;
+
+    transform-origin: 12px 12px;
+  }
+
+  .nav-icon-bar {
+    --nav-part: nav-bar;
+
+    transform-origin: 12px 20px;
+  }
+
+  .nav-icon-bar-2 {
+    animation-delay: 0.08s;
+  }
+
+  .nav-icon-bar-3 {
+    animation-delay: 0.16s;
+  }
+
+  .nav-icon-leaf {
+    --nav-part: nav-leaf;
+
+    transform-origin: 5px 19px;
+  }
+
+  .nav-icon-hands {
+    --nav-part: nav-hands;
+
+    transform-origin: 12px 12px;
+  }
+
+  .nav-icon-head {
+    --nav-part: nav-head;
+
+    transform-origin: 12px 20px;
+  }
+
+  .nav-icon-check {
+    --nav-part: nav-check;
+  }
+
+  .nav-tab:is([aria-current='page'], :focus-visible) .nav-icon {
+    transform: translateY(-2px);
+  }
+
+  .nav-tab:is([aria-current='page'], :focus-visible) .nav-icon * {
+    animation: var(--nav-part, none) 0.9s cubic-bezier(0.7, 0, 0.3, 1);
+  }
+
+  .nav-tab[aria-current='page'] .nav-tab-label {
+    animation: nav-label 0.45s cubic-bezier(0.7, 0, 0.3, 1);
+  }
+
+  /* На сенсорном экране :hover «залипает» после касания */
+  @media (hover: hover) {
+    .nav-tab:hover .nav-icon {
+      transform: translateY(-2px);
+    }
+
+    .nav-tab:hover .nav-icon * {
+      animation: var(--nav-part, none) 0.9s cubic-bezier(0.7, 0, 0.3, 1);
+    }
+
+    button:hover:enabled .download-icon[data-state='idle'] .download-arrow {
+      animation: download-nudge 0.6s ease-in-out;
+    }
+  }
+
+  .download-arrow,
+  .download-line {
+    transform-origin: 8px 14px;
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .download-icon[data-state='loading'] .download-arrow {
+    animation: download-drop 0.9s cubic-bezier(0.7, 0, 0.3, 1) infinite;
+  }
+
+  .download-icon[data-state='loading'] .download-line {
+    animation: download-dip 0.9s cubic-bezier(0.7, 0, 0.3, 1) infinite;
+  }
+
+  .download-icon[data-state='done'] .download-arrow {
+    transform: scale(0);
+  }
+
+  /* Перелёт кривой — та же упругость, что у галочки в образце */
+  .download-icon[data-state='done'] .download-check {
+    transition: stroke-dashoffset 0.5s cubic-bezier(0.3, 1.6, 0.5, 1);
+  }
+
+  .grape-fill-level {
+    animation: grape-fill 3.2s cubic-bezier(0.4, 0, 0.4, 1) infinite;
+  }
+
+  .grape-fill-wave {
+    animation: grape-wave 1.4s linear infinite;
+  }
+
+  .grape-fill-bubble {
+    animation: grape-bubble 2.4s ease-in infinite;
+  }
+}
+
+@keyframes skeleton-sweep {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes ring-draw {
+  from {
+    stroke-dasharray: 0 100;
+  }
+}
+
+@keyframes risk-pulse {
+  from {
+    box-shadow: 0 0 0 0
+      color-mix(in srgb, var(--color-red-600) 45%, transparent);
+  }
+
+  to {
+    box-shadow: 0 0 0 8px transparent;
+  }
+}
+
+@keyframes delete-eat {
+  to {
+    opacity: 0;
+    transform: translateX(-0.75rem) scale(0.2);
+  }
+}
+
+@keyframes phenology-now {
+  from {
+    box-shadow: 0 0 0 0
+      color-mix(in srgb, var(--color-brand-500) 60%, transparent);
+  }
+
+  to {
+    box-shadow: 0 0 0 10px transparent;
+  }
+}
+
+@keyframes hero-berry {
+  50% {
+    transform: translateY(-5px) scale(1.06);
+  }
+}
+
+@keyframes sidebar-slide {
+  from {
+    transform: translateY(var(--pill-from));
+  }
+}
+
+@keyframes nav-tilt {
+  50% {
+    transform: rotateY(var(--nav-tilt)) rotateX(3deg);
+  }
+}
+
+@keyframes nav-label {
+  from {
+    transform: translateY(0.5em);
+  }
+}
+
+@keyframes nav-roof {
+  33% {
+    transform: translateY(-3px);
+  }
+
+  67% {
+    transform: translateY(1px);
+  }
+}
+
+@keyframes nav-map {
+  50% {
+    transform: scaleX(0.72);
+  }
+}
+
+@keyframes nav-bar {
+  50% {
+    transform: scaleY(0.35);
+  }
+}
+
+@keyframes nav-leaf {
+  33% {
+    transform: rotate(14deg);
+  }
+
+  67% {
+    transform: rotate(-14deg);
+  }
+}
+
+@keyframes nav-hands {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes nav-head {
+  50% {
+    transform: rotate(-30deg);
+  }
+}
+
+@keyframes nav-check {
+  from {
+    stroke-dashoffset: 1;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes download-nudge {
+  40% {
+    transform: translateY(-3px);
+  }
+
+  70% {
+    transform: translateY(1.5px);
+  }
+}
+
+@keyframes download-drop {
+  30% {
+    transform: translateY(-3px);
+  }
+
+  65% {
+    transform: translateY(2px);
+  }
+}
+
+@keyframes download-dip {
+  60% {
+    transform: none;
+  }
+
+  70% {
+    transform: translateY(1.5px) scaleX(0.85);
+  }
+}
+
+@keyframes grape-fill {
+  0% {
+    transform: translateY(82px);
+  }
+
+  75%,
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes grape-wave {
+  to {
+    transform: translateX(-50px);
+  }
+}
+
+@keyframes grape-bubble {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+
+  20% {
+    opacity: 0.8;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-46px);
+  }
 }
 
 /* Печатная версия дашборда: на бумаге всегда светлая тема, без анимаций, а

@@ -14,7 +14,7 @@ export function AlertsBell() {
     <Link
       to="/alerts"
       aria-label={count ? t('alerts.bellUnread', { count }) : t('alerts.bell')}
-      className="relative inline-flex size-9 items-center justify-center rounded-md text-ink-soft transition hover:bg-muted"
+      className="fill-hover relative inline-flex size-9 items-center justify-center rounded-md text-ink-soft transition"
     >
       <svg
         viewBox="0 0 24 24"

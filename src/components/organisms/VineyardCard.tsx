@@ -10,7 +10,12 @@ import {
 } from '@/api/vineyards'
 import { useCurrentWeather } from '@/api/weather'
 import { Button } from '@/components/atoms/Button'
+import { DeleteButton } from '@/components/molecules/DeleteButton'
+import { DownloadButton } from '@/components/molecules/DownloadButton'
 import { ExportDataDialog } from '@/components/organisms/ExportDataDialog'
+import { FieldNotesDialog } from '@/components/organisms/FieldNotesDialog'
+import { HarvestDialog } from '@/components/organisms/HarvestDialog'
+import { PhenologyDialog } from '@/components/organisms/PhenologyDialog'
 import { RiskSummary } from '@/components/organisms/RiskSummary'
 import { TreatmentsDialog } from '@/components/organisms/TreatmentsDialog'
 import { VegetationDialog } from '@/components/organisms/VegetationDialog'
@@ -37,6 +42,9 @@ export function VineyardCard({
   const [isVegetationOpen, setIsVegetationOpen] = useState(false)
   const [isTreatmentsOpen, setIsTreatmentsOpen] = useState(false)
   const [isExportOpen, setIsExportOpen] = useState(false)
+  const [isNotesOpen, setIsNotesOpen] = useState(false)
+  const [isPhenologyOpen, setIsPhenologyOpen] = useState(false)
+  const [isHarvestOpen, setIsHarvestOpen] = useState(false)
   const [isPdfLoading, setIsPdfLoading] = useState(false)
   const [pdfError, setPdfError] = useState<string | null>(null)
 
@@ -175,12 +183,58 @@ export function VineyardCard({
         <Button
           size="sm"
           variant="secondary"
+          onClick={() => setIsNotesOpen(true)}
+        >
+          {t('notes.open')}
+        </Button>
+        {isNotesOpen && (
+          <FieldNotesDialog
+            vineyardId={vineyard.id}
+            vineyardName={vineyard.name}
+            open={isNotesOpen}
+            onClose={() => setIsNotesOpen(false)}
+          />
+        )}
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={() => setIsPhenologyOpen(true)}
+        >
+          {t('phenology.open')}
+        </Button>
+        {isPhenologyOpen && (
+          <PhenologyDialog
+            vineyardId={vineyard.id}
+            vineyardName={vineyard.name}
+            open={isPhenologyOpen}
+            onClose={() => setIsPhenologyOpen(false)}
+          />
+        )}
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={() => setIsHarvestOpen(true)}
+        >
+          {t('harvest.open')}
+        </Button>
+        {isHarvestOpen && (
+          <HarvestDialog
+            vineyardId={vineyard.id}
+            vineyardName={vineyard.name}
+            areaHa={vineyard.area_ha}
+            open={isHarvestOpen}
+            onClose={() => setIsHarvestOpen(false)}
+          />
+        )}
+        <DownloadButton
+          size="sm"
+          variant="secondary"
           isLoading={isPdfLoading}
-          disabled={isPdfLoading}
+          failed={pdfError !== null}
           onClick={() => void handleDownloadPdf()}
         >
           {t('reports.pdf')}
-        </Button>
+        </DownloadButton>
         {pdfError && (
           <p role="alert" className="text-danger">
             {pdfError}
@@ -252,14 +306,12 @@ export function VineyardCard({
             )}
           </div>
         ) : (
-          <Button
-            size="sm"
-            variant="ghost"
-            className="self-start text-danger"
+          <DeleteButton
+            className="self-start"
             onClick={() => setIsConfirming(true)}
           >
             {t('vineyard.card.delete')}
-          </Button>
+          </DeleteButton>
         )}
       </div>
     </div>

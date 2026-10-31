@@ -6,6 +6,7 @@ import {
   useStoredModel,
 } from '@/api/offlineModel'
 import { Button } from '@/components/atoms/Button'
+import { DownloadButton } from '@/components/molecules/DownloadButton'
 import { useOnlineStatus } from '@/lib/useOnlineStatus'
 
 // Модель для диагностики без сети (pr-072): скачать, обновить или удалить
@@ -27,6 +28,8 @@ export function OfflineModelCard() {
   const model = stored.data
   const isOutdated =
     model && server.data && server.data.version !== model.version
+  // Скачивать нечего: на сервере нет файла модели (ответ 503) или он недоступен
+  const isUnavailable = isOnline && !model && server.isError
 
   return (
     <section
@@ -48,9 +51,11 @@ export function OfflineModelCard() {
                   version: model.version.slice(0, 8),
                   size: megabytes(model.size_bytes),
                 })
-            : t('offlineModel.missing', {
-                size: server.data ? megabytes(server.data.size_bytes) : '16',
-              })}
+            : isUnavailable
+              ? t('offlineModel.unavailable')
+              : t('offlineModel.missing', {
+                  size: server.data ? megabytes(server.data.size_bytes) : '16',
+                })}
       </p>
       {(download.isError || remove.isError) && (
         <p role="alert" className="text-danger">
@@ -59,14 +64,15 @@ export function OfflineModelCard() {
       )}
       <div className="flex flex-wrap gap-2">
         {(!model || isOutdated) && (
-          <Button
+          <DownloadButton
             size="sm"
             isLoading={download.isPending}
-            disabled={!isOnline}
+            failed={download.isError}
+            disabled={!isOnline || isUnavailable}
             onClick={() => download.mutate()}
           >
             {model ? t('offlineModel.update') : t('offlineModel.download')}
-          </Button>
+          </DownloadButton>
         )}
         {model && (
           <Button

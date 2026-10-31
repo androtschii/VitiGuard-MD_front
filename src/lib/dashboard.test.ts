@@ -68,6 +68,7 @@ describe('summarize', () => {
       areaHa: 0,
       high: 0,
       medium: 0,
+      low: 0,
       rows: [],
     })
   })

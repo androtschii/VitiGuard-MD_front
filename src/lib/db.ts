@@ -1,11 +1,11 @@
 // Одна база IndexedDB приложения: скачанная модель (pr-072), очередь
-// проверок, сделанных без сети (pr-076), и треки обходов (pr-084). Новое
+// проверок, сделанных без сети (pr-076), треки обходов (pr-084) и заметки с обхода. Новое
 // хранилище — новая версия базы
 
 const NAME = 'vitiguard'
-const VERSION = 3
+const VERSION = 4
 
-export type StoreName = 'models' | 'outbox' | 'tracks'
+export type StoreName = 'models' | 'outbox' | 'tracks' | 'notes'
 
 function open() {
   return new Promise<IDBDatabase>((resolve, reject) => {
@@ -18,6 +18,8 @@ function open() {
         db.createObjectStore('outbox', { keyPath: 'id', autoIncrement: true })
       if (!db.objectStoreNames.contains('tracks'))
         db.createObjectStore('tracks', { keyPath: 'id', autoIncrement: true })
+      if (!db.objectStoreNames.contains('notes'))
+        db.createObjectStore('notes', { keyPath: 'id', autoIncrement: true })
     }
     request.onsuccess = () => resolve(request.result)
     request.onerror = () => reject(request.error ?? new Error('IndexedDB'))

@@ -36,7 +36,7 @@ export function SegmentedControl<T extends string>({
             'has-focus-visible:outline-2 has-focus-visible:outline-brand-500',
             value === option.value
               ? 'bg-brand-700 text-white'
-              : 'text-ink-soft hover:bg-muted',
+              : 'fill-hover fill-hover-soft text-ink-soft',
           )}
         >
           <input

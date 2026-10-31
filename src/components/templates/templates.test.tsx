@@ -17,8 +17,8 @@ describe('AuthTemplate', () => {
       screen.getByRole('form', { name: 'Форма входа' }),
     ).toBeInTheDocument()
     expect(screen.getByText('Нет аккаунта?')).toBeInTheDocument()
-    expect(screen.getByLabelText('Язык')).toBeInTheDocument()
-    expect(screen.getByLabelText('Тема')).toBeInTheDocument()
+    expect(screen.getByRole('radiogroup', { name: 'Язык' })).toBeInTheDocument()
+    expect(screen.getByRole('radiogroup', { name: 'Тема' })).toBeInTheDocument()
   })
 
   it('без footer не оставляет пустой абзац', () => {

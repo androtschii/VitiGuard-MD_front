@@ -8,19 +8,20 @@ describe('ThemeSwitcher', () => {
   it('предлагает три режима, по умолчанию — как в системе', () => {
     render(<ThemeSwitcher />)
 
-    const select = screen.getByLabelText('Тема')
-    expect(select).toHaveValue('system')
+    expect(screen.getByRole('radio', { name: 'Как в системе' })).toBeChecked()
     expect(
-      screen.getAllByRole('option').map((option) => option.textContent),
+      screen
+        .getAllByRole('radio')
+        .map((radio) => radio.getAttribute('aria-label')),
     ).toEqual(['Как в системе', 'Светлая', 'Тёмная'])
   })
 
   it('включает тёмную тему', async () => {
     render(<ThemeSwitcher />)
 
-    await userEvent.selectOptions(screen.getByLabelText('Тема'), 'dark')
+    await userEvent.click(screen.getByRole('radio', { name: 'Тёмная' }))
 
-    expect(screen.getByLabelText('Тема')).toHaveValue('dark')
+    expect(screen.getByRole('radio', { name: 'Тёмная' })).toBeChecked()
     expect(document.documentElement).toHaveClass('dark')
   })
 })
@@ -34,6 +35,8 @@ describe('ThemeSwitcher в Telegram', () => {
     useTelegramStore.setState({ webApp: {} as TelegramWebApp })
     render(<ThemeSwitcher />)
 
-    expect(screen.getAllByRole('option')[0]).toHaveTextContent('Как в Telegram')
+    expect(
+      screen.getByRole('radio', { name: 'Как в Telegram' }),
+    ).toBeInTheDocument()
   })
 })

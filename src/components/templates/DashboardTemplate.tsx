@@ -2,9 +2,12 @@ import { useTranslation } from 'react-i18next'
 import type { ReactNode } from 'react'
 import { AlertsBell } from '@/components/molecules/AlertsBell'
 import { OfflineBanner } from '@/components/molecules/OfflineBanner'
+import { Assistant } from '@/components/organisms/Assistant'
 import { BottomNav } from '@/components/organisms/BottomNav'
+import { CommandPalette } from '@/components/organisms/CommandPalette'
 import { Footer } from '@/components/organisms/Footer'
 import { Header } from '@/components/organisms/Header'
+import { NotesSync } from '@/components/organisms/NotesSync'
 import { OutboxStatus } from '@/components/organisms/OutboxStatus'
 import { Sidebar, type NavItem } from '@/components/organisms/Sidebar'
 
@@ -39,6 +42,7 @@ export function DashboardTemplate({
         <Header
           actions={
             <>
+              <CommandPalette items={navItems} />
               <AlertsBell />
               {headerActions}
             </>
@@ -46,6 +50,7 @@ export function DashboardTemplate({
         />
         <OfflineBanner />
         <OutboxStatus />
+        <NotesSync />
       </div>
       <div className="relative flex flex-1">
         <div className="contents print:hidden">
@@ -64,6 +69,7 @@ export function DashboardTemplate({
       <div className="contents print:hidden">
         <Footer />
         <BottomNav items={navItems} />
+        <Assistant />
       </div>
     </div>
   )

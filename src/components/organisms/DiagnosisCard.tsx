@@ -8,6 +8,7 @@ import {
 } from '@/api/diagnoses'
 import { useMe } from '@/api/users'
 import { Button } from '@/components/atoms/Button'
+import { DownloadButton } from '@/components/molecules/DownloadButton'
 import { ReviewDialog } from '@/components/organisms/ReviewDialog'
 import { cn } from '@/lib/cn'
 import { diagnosisPdf, reportFileName } from '@/lib/diagnosisReport'
@@ -160,16 +161,17 @@ export function DiagnosisCard({ record }: DiagnosisCardProps) {
               )}
               {photo && (
                 <>
-                  <Button
+                  <DownloadButton
                     size="sm"
                     variant="secondary"
                     aria-label={t('report.save')}
                     isLoading={busy === 'pdf'}
+                    failed={failed === 'pdf'}
                     disabled={busy !== null}
                     onClick={() => void run('pdf', photo)}
                   >
                     PDF
-                  </Button>
+                  </DownloadButton>
                   <Button
                     size="sm"
                     variant="secondary"

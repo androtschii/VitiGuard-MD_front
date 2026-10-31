@@ -36,4 +36,35 @@ describe('BottomNav', () => {
     // Значок у раздела без своего значка — запасной, но он есть
     expect(links[5]?.querySelector('path')).toHaveAttribute('d')
   })
+
+  it.each([
+    ['к текущему разделу', 0, 3, '-4.00deg'],
+    ['без текущего раздела', -1, 3, '0deg'],
+    ['с единственным разделом', 0, 1, '0deg'],
+  ])('наклон: %s', (_, current, count, tilt) => {
+    const sections = items.slice(0, count).map(({ label, href }, index) => ({
+      label,
+      href,
+      current: index === current,
+    }))
+    renderWithRouter(<BottomNav items={sections} />)
+
+    expect(screen.getByRole('list').style.getPropertyValue('--nav-tilt')).toBe(
+      tilt,
+    )
+  })
+
+  it.each([
+    ['/', '.nav-icon-roof'],
+    ['/map', '.nav-icon-map'],
+    ['/regions', '.nav-icon-bar'],
+    ['/diagnosis', '.nav-icon-leaf'],
+    ['/history', '.nav-icon-hands'],
+    ['/profile', '.nav-icon-head'],
+    ['/admin', '.nav-icon-check'],
+  ])('у значка %s есть подвижная часть', (href, part) => {
+    renderWithRouter(<BottomNav items={[{ label: 'Раздел', href }]} />)
+
+    expect(screen.getByRole('link').querySelector(part)).not.toBeNull()
+  })
 })

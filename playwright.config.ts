@@ -25,7 +25,7 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      testIgnore: 'pwa.spec.ts',
+      testIgnore: /pwa.*\.spec\.ts$/,
       use: {
         ...devices['Desktop Chrome'],
         baseURL: `http://localhost:${PORT}`,
@@ -33,7 +33,7 @@ export default defineConfig({
     },
     {
       name: 'pwa',
-      testMatch: 'pwa.spec.ts',
+      testMatch: /pwa.*\.spec\.ts$/,
       use: {
         ...devices['Desktop Chrome'],
         baseURL: `http://localhost:${PREVIEW_PORT}`,

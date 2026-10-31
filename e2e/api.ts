@@ -1,4 +1,24 @@
+import { readFile } from 'node:fs/promises'
 import type { Page, Route } from '@playwright/test'
+
+const MODEL_FILE = new URL('./fixtures/classifier.onnx', import.meta.url)
+
+export const CLASSIFIER = {
+  name: 'tiny_test_classifier',
+  classes: [
+    'healthy',
+    'black_rot',
+    'esca',
+    'leaf_blight',
+    'downy_mildew',
+    'powdery_mildew',
+  ],
+  image_size: 32,
+  mean: [0, 0, 0],
+  std: [1, 1, 1],
+  version: 'e2e0000000000001',
+  size_bytes: 271,
+}
 
 export const CRICOVA = {
   id: 'vineyard-1',
@@ -77,6 +97,18 @@ export type Api = {
   ndviImages: string[]
   // Параметры запросов диагностики
   diagnoses: Record<string, string>[]
+  // Тела запросов регистрации и входа
+  registered: unknown[]
+  logins: unknown[]
+  // Скачанные PDF-отчёты участков
+  reports: string[]
+}
+
+type MockOptions = {
+  // Гость: на устройстве ещё не входили, сессию восстанавливать не по чему
+  guest?: boolean
+  // Новый пользователь: участков пока нет
+  empty?: boolean
 }
 
 const json = (route: Route, body: unknown, status = 200) =>
@@ -84,15 +116,32 @@ const json = (route: Route, body: unknown, status = 200) =>
 
 // Подмена API бэкенда и плиток подложки: сценарии не зависят ни от сервера,
 // ни от сети
-export async function mockApi(page: Page): Promise<Api> {
-  const api: Api = { created: [], ndviImages: [], diagnoses: [] }
-  const vineyards = [CRICOVA]
+export async function mockApi(
+  page: Page,
+  { guest = false, empty = false }: MockOptions = {},
+): Promise<Api> {
+  const api: Api = {
+    created: [],
+    ndviImages: [],
+    diagnoses: [],
+    registered: [],
+    logins: [],
+    reports: [],
+  }
+  // Проверки, сохранённые в этом сценарии: история показывает их, а пока их
+  // нет — готовую проверку CHECK
+  const saved: (typeof CHECK)[] = []
+  const vineyards: Record<string, unknown>[] = empty ? [] : [CRICOVA]
 
   // Пользователь уже входил на этом устройстве: сессия восстанавливается
   // по refresh-cookie
-  await page.addInitScript(() =>
-    localStorage.setItem('vitiguard.signedIn', '1'),
-  )
+  if (!guest)
+    await page.addInitScript(() =>
+      localStorage.setItem('vitiguard.signedIn', '1'),
+    )
+  // Канал уведомлений открывается и молчит: без подмены прокси Vite пытался
+  // бы достучаться до сервера на порту 8000
+  await page.routeWebSocket(/\/api\/v1\/ws\/alerts/, () => {})
   await page.route(
     /^https:\/\/(tile\.openstreetmap\.org|server\.arcgisonline\.com)\//,
     (route) => route.fulfill({ contentType: 'image/png', body: PNG }),
@@ -102,6 +151,28 @@ export async function mockApi(page: Page): Promise<Api> {
     const path = new URL(request.url()).pathname.replace('/api/v1', '')
     const method = request.method()
 
+    if (path === '/auth/register') {
+      const body = request.postDataJSON() as Record<string, unknown>
+      api.registered.push(body)
+      return json(
+        route,
+        {
+          id: 'user-1',
+          email: body.email,
+          full_name: body.full_name,
+          role: body.role,
+          is_active: true,
+          telegram_linked: false,
+          created_at: '2026-06-01T00:00:00Z',
+          updated_at: '2026-06-01T00:00:00Z',
+        },
+        201,
+      )
+    }
+    if (path === '/auth/login') {
+      api.logins.push(request.postDataJSON())
+      return json(route, { access_token: 'access', token_type: 'bearer' })
+    }
     if (path === '/auth/refresh') {
       return json(route, { access_token: 'access', token_type: 'bearer' })
     }
@@ -177,9 +248,18 @@ export async function mockApi(page: Page): Promise<Api> {
       })
     }
     if (path === '/ai/diagnose') {
-      api.diagnoses.push(
-        Object.fromEntries(new URL(request.url()).searchParams.entries()),
+      const params = Object.fromEntries(
+        new URL(request.url()).searchParams.entries(),
       )
+      api.diagnoses.push(params)
+      if (params.save === 'true')
+        saved.push({
+          ...CHECK,
+          id: `saved-${saved.length + 1}`,
+          created_at: new Date().toISOString(),
+          vineyard_id: params.vineyard_id ?? null,
+          vineyard_name: params.vineyard_id ? CRICOVA.name : null,
+        } as typeof CHECK)
       const overlay = `data:image/png;base64,${PNG.toString('base64')}`
       return json(route, {
         model: CHECK.model,
@@ -194,9 +274,10 @@ export async function mockApi(page: Page): Promise<Api> {
       })
     }
     if (path === '/diagnoses') {
+      const items = saved.length ? [...saved].reverse() : [CHECK]
       return json(route, {
-        items: [CHECK],
-        total: 1,
+        items,
+        total: items.length,
         page: 1,
         size: 12,
         pages: 1,
@@ -204,6 +285,28 @@ export async function mockApi(page: Page): Promise<Api> {
     }
     if (/^\/diagnoses\/[^/]+\/(image|overlays\/lesion)$/.test(path)) {
       return route.fulfill({ contentType: 'image/png', body: PNG })
+    }
+    // Классификатор для диагностики без сети: крошечная настоящая модель
+    // ONNX (e2e/fixtures), зелёный снимок она относит к милдью
+    if (path === '/ai/models/classifier') {
+      return json(route, CLASSIFIER)
+    }
+    if (path === '/ai/models/classifier/file') {
+      return route.fulfill({
+        contentType: 'application/octet-stream',
+        body: await readFile(MODEL_FILE),
+      })
+    }
+    const report = /^\/vineyards\/([^/]+)\/report\.pdf$/.exec(path)
+    if (report) {
+      api.reports.push(report[1] ?? '')
+      return route.fulfill({
+        contentType: 'application/pdf',
+        headers: {
+          'content-disposition': `attachment; filename="vitiguard-report-${report[1]}.pdf"`,
+        },
+        body: Buffer.from('%PDF-1.4\n%%EOF\n'),
+      })
     }
     if (path === '/varieties') return json(route, [])
     if (path === '/osm/vineyards') {

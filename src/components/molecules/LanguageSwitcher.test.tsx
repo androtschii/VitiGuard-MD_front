@@ -18,15 +18,20 @@ describe('LanguageSwitcher', () => {
   it('показывает текущий язык', () => {
     renderWithPagination()
 
-    expect(screen.getByLabelText('Язык')).toHaveValue('ru')
+    expect(screen.getByRole('radiogroup', { name: 'Язык' })).toBeVisible()
+    expect(screen.getByRole('radio', { name: 'Русский' })).toBeChecked()
   })
 
   it('переводит интерфейс на румынский и запоминает выбор', async () => {
     renderWithPagination()
 
-    await userEvent.selectOptions(screen.getByLabelText('Язык'), 'ro')
+    await userEvent.click(screen.getByRole('radio', { name: 'Română' }))
 
-    expect(screen.getByLabelText('Limba')).toHaveValue('ro')
+    // Перевод загружается по требованию, поэтому подпись меняется не сразу
+    expect(
+      await screen.findByRole('radiogroup', { name: 'Limba' }),
+    ).toBeVisible()
+    expect(screen.getByRole('radio', { name: 'Română' })).toBeChecked()
     expect(screen.getByRole('button', { name: 'Înainte' })).toBeInTheDocument()
     expect(localStorage.getItem(LANGUAGE_STORAGE_KEY)).toBe('ro')
     expect(document.documentElement.lang).toBe('ro')
@@ -35,10 +40,10 @@ describe('LanguageSwitcher', () => {
   it('переводит интерфейс на английский', async () => {
     renderWithPagination()
 
-    await userEvent.selectOptions(screen.getByLabelText('Язык'), 'en')
+    await userEvent.click(screen.getByRole('radio', { name: 'English' }))
 
     expect(
-      screen.getByRole('navigation', { name: 'Pages' }),
+      await screen.findByRole('navigation', { name: 'Pages' }),
     ).toBeInTheDocument()
     expect(document.documentElement.lang).toBe('en')
   })

@@ -145,6 +145,8 @@ export const ro: Messages = {
     title: 'Diagnostic fără rețea',
     missing:
       'Descărcați modelul (circa {{size}} MB) pentru a determina boala direct pe telefon, în câmp, fără semnal.',
+    unavailable:
+      'Modelul nu este încă disponibil pe server. Îl veți putea descărca atunci când va apărea.',
     downloading: 'Se descarcă modelul… {{progress}}',
     ready:
       'Modelul este pe dispozitiv (versiunea {{version}}, {{size}} MB): fără rețea fotografia va fi analizată de el.',
@@ -283,6 +285,7 @@ export const ro: Messages = {
   },
   home: {
     title: 'Prezentarea gospodăriei',
+    ringTitle: 'Parcele după risc',
     stats: {
       vineyards: 'Parcele',
       area: 'Suprafața totală',
@@ -842,6 +845,222 @@ export const ro: Messages = {
     disclaimer:
       'Modelele agronomice estimează condițiile pentru boală după vreme, nu prezența bolii: decizia privind tratamentul o ia agronomul.',
   },
+  notes: {
+    open: 'Notițe din teren',
+    title: 'Notițe din teren: {{name}}',
+    description:
+      'Text, fotografie și punct pe parcelă. Fără rețea, notița așteaptă pe telefon și se trimite singură.',
+    textLabel: 'Ce ați observat',
+    textPlaceholder: 'De exemplu: pete pe etajul inferior, rândul 12',
+    photoLabel: 'Fotografie',
+    locate: 'Marchează poziția mea',
+    located: 'Poziția a fost marcată',
+    locateFailed: 'Poziția nu a putut fi determinată',
+    save: 'Salvează notița',
+    emptyError: 'Scrieți un text sau adăugați o fotografie',
+    empty: 'Încă nu există notițe.',
+    loadFailed: 'Notițele nu s-au încărcat.',
+    waiting: 'Așteaptă rețeaua',
+    photoOnly: 'Notiță cu fotografie',
+    photoAlt: 'Fotografia notiței din {{date}}',
+    onMap: 'Pe hartă',
+    delete: 'Șterge',
+    deleteNote: 'Șterge notița din {{date}}',
+    deleteQueued: 'Scoate notița din coadă',
+    rejected_one: 'Serverul nu a acceptat {{count}} notiță din coadă.',
+    rejected_few: 'Serverul nu a acceptat {{count}} notițe din coadă.',
+    rejected_many: 'Serverul nu a acceptat {{count}} de notițe din coadă.',
+    rejected_other: 'Serverul nu a acceptat {{count}} de notițe din coadă.',
+  },
+  wineries: {
+    toggle: 'Vinării și magazine',
+    kinds: { winery: 'Vinărie', shop: 'Magazin' },
+    website: 'Site',
+    approximate:
+      'Adresa exactă nu este confirmată: harta arată orașul. Verificați pe site.',
+  },
+  assistant: {
+    open: 'Deschide asistentul',
+    title: 'Asistentul VitiGuard',
+    greeting:
+      'Întrebați cu ce să tratați via, ce vin să alegeți și de unde să-l cumpărați.',
+    inputLabel: 'Întrebarea dvs.',
+    placeholder: 'De exemplu: cu ce stropesc contra păianjenului',
+    send: 'Întreabă',
+    unknown:
+      'Deocamdată știu să răspund despre tratamente, alegerea vinului și de unde îl puteți cumpăra. Apăsați unul dintre butoanele de mai jos.',
+    chips: {
+      spray: 'Cu ce stropesc',
+      wine: 'Ce vin aleg',
+      buy: 'De unde cumpăr vin',
+    },
+    keywords: {
+      spray:
+        'stropi, trata, boal, dăunăt, daunat, parazit, mană, mana, făinare, fainare, păianjen, paianjen, molie, putregai, filoxer, fungicid',
+      wine: 'vin, băutur, bautur',
+      buy: 'cumpăr, cumpar, magazin, vinări, crama, cramă, unde',
+    },
+    spray: {
+      intro:
+        'Abordări generale. Mai întâi stabiliți ce este pe viță: verificarea după fotografie vă poate ajuta.',
+      note: 'Alegeți produsul și doza după Registrul de stat și etichetă, iar perioada de pauză notați-o în jurnalul tratamentelor. Dacă aveți dubii, întrebați un agronom.',
+    },
+    pests: {
+      downy: {
+        name: 'Mană',
+        advice:
+          'Produse de contact, de exemplu cuprice, înainte de ploaie; sistemice în primele zile după infectare.',
+      },
+      powdery: {
+        name: 'Făinare',
+        advice:
+          'Produse pe bază de sulf sau fungicide sistemice. Pe caniculă nu se lucrează cu sulf: poate arde frunzele.',
+      },
+      botrytis: {
+        name: 'Putregai cenușiu',
+        advice:
+          'Rărirea frunzelor din jurul strugurilor și botriticide înainte de închiderea ciorchinilor și la începutul maturării.',
+      },
+      moth: {
+        name: 'Molia strugurilor',
+        advice:
+          'Momentul îl arată capcanele cu feromoni; produse biologice cu Bacillus thuringiensis sau insecticide permise la ieșirea omizilor.',
+      },
+      mites: {
+        name: 'Păianjenul roșu',
+        advice:
+          'Acaricide doar la o populare vizibilă: tratamentele inutile distrug acarienii prădători. Sulful limitează parțial.',
+      },
+      phylloxera: {
+        name: 'Filoxera',
+        advice:
+          'Stropirea nu rezolvă problema: protecția principală este plantarea pe portaltoi rezistenți.',
+      },
+    },
+    wine: {
+      intro: 'Asocieri cu soiuri moldovenești. Sunt un reper, nu o regulă:',
+      note: 'Alcoolul se vinde doar persoanelor majore. Consumați cu moderație.',
+    },
+    wines: {
+      meat: {
+        dish: 'Carne roșie și grătar',
+        wine: 'Fetească Neagră, Rară Neagră, Cabernet Sauvignon',
+      },
+      fish: {
+        dish: 'Pește și salate',
+        wine: 'Fetească Albă, Viorica, Sauvignon Blanc',
+      },
+      cheese: { dish: 'Brânzeturi', wine: 'Fetească Regală, rose sec' },
+      dessert: { dish: 'Deserturi', wine: 'muscat dulce, vin de gheață' },
+      party: { dish: 'Sărbătoare', wine: 'spumant, de exemplu de la Cricova' },
+    },
+    buy: {
+      intro:
+        'Vinării din apropierea Chișinăului. Puteți cumpăra la fața locului sau de pe site-urile lor:',
+      nearby: 'Cele mai apropiate vinării și magazine:',
+      km: '{{value}} km',
+      locate: 'Caută lângă mine',
+      locateFailed: 'Poziția nu a putut fi determinată.',
+      map: 'Arată pe hartă',
+      failed: 'Lista nu s-a încărcat.',
+      source:
+        'Date OpenStreetMap: programul și disponibilitatea verificați-le la vânzător.',
+    },
+  },
+  palette: {
+    open: 'Căutare rapidă',
+    title: 'Căutare rapidă',
+    placeholder: 'Secțiune, parcelă sau acțiune',
+    sections: 'Secțiune',
+    plots: 'Parcelă',
+    actions: 'Acțiune',
+    wineries: 'Arată vinăriile pe hartă',
+    empty: 'Nu s-a găsit nimic',
+  },
+  weatherEvents: {
+    title: 'Evenimente meteo',
+    date: 'Ziua',
+    kind: 'Ce s-a întâmplat',
+    severity: 'Daune',
+    note: 'Notiță',
+    save: 'Notează evenimentul',
+    empty: 'Încă nu există evenimente.',
+    loadFailed: 'Jurnalul nu s-a încărcat.',
+    delete: 'Șterge',
+    deleteOne: 'Șterge evenimentul din {{date}}',
+    kinds: {
+      frost: 'Îngheț',
+      hail: 'Grindină',
+      wind: 'Vânt puternic',
+      drought: 'Secetă',
+      heat: 'Caniculă',
+    },
+    severities: { 1: 'Ușoare', 2: 'Vizibile', 3: 'Puternice' },
+  },
+  harvest: {
+    open: 'Recoltă',
+    title: 'Recoltă: {{name}}',
+    description:
+      'Prognoza după numărarea ciorchinilor și recolta reală pe sezoane.',
+    countTitle: 'Numărare în teren',
+    vines: 'Butuci pe parcelă',
+    bunches: 'Ciorchini pe butuc',
+    bunchGrams: 'Greutatea ciorchinelui, g',
+    counted: 'După numărare: {{kg}} kg',
+    useCounted: 'Pune în prognoză',
+    season: 'Sezon',
+    estimated: 'Prognoză, kg',
+    actual: 'Real, kg',
+    brix: 'Zahăr, °Brix',
+    save: 'Salvează',
+    empty: 'Încă nu există înregistrări.',
+    loadFailed: 'Înregistrările nu s-au încărcat.',
+    estimatedShort: 'Prognoză',
+    actualShort: 'Real',
+    value: '{{kg}} kg · {{perHa}} t/ha',
+    brixValue: '{{value}} °Brix',
+    delete: 'Șterge',
+    deleteOne: 'Șterge recolta {{season}}',
+  },
+  wineRoute: {
+    title: 'Traseu vinicol',
+    add: 'În traseu',
+    added: 'Este în traseu',
+    remove: 'Scoate {{name}} din traseu',
+    length: 'Circa {{km}} km în linie dreaptă, pe drumuri va fi mai mult',
+    navigate: 'Deschide în navigator',
+    addMore: 'Adăugați încă o vinărie: apăsați pe un punct de pe hartă.',
+    clear: 'Golește traseul',
+  },
+  phenology: {
+    harvestBlocked:
+      'Perioada de pauză nu s-a încheiat: după jurnalul tratamentelor, recoltarea nu mai devreme de {{date}}.',
+    open: 'Fenofaze',
+    title: 'Fenofaze: {{name}}',
+    description:
+      'Notați ce se întâmplă acum cu via: jurnalul sezonului pe scara Eichhorn–Lorenz.',
+    current: 'Acum: {{stage}}',
+    noCurrent: 'În acest sezon nu sunt notate fenofaze',
+    date: 'Ziua',
+    stage: 'Fenofaza',
+    save: 'Notează fenofaza',
+    empty: 'Încă nu există notări.',
+    loadFailed: 'Notările nu s-au încărcat.',
+    delete: 'Șterge',
+    deleteOne: 'Șterge notarea din {{date}}',
+    stages: {
+      1: 'mugure de iarnă',
+      4: 'dezmugurire',
+      12: 'lăstari de circa 10 cm',
+      19: 'începutul înfloritului',
+      23: 'înflorit, 50 % din căpăcele',
+      27: 'legarea boabelor',
+      31: 'boabe cât un bob de mazăre',
+      35: 'pârgă',
+      38: 'recoltare',
+      43: 'începutul căderii frunzelor',
+    },
+  },
   treatments: {
     open: 'Tratamente și plan',
     title: 'Tratamente și plan: {{name}}',
@@ -888,11 +1107,17 @@ export const ro: Messages = {
     fungicideLabel: 'Tipul fungicidului',
     productLabel: 'Denumirea produsului',
     productPlaceholder: 'De exemplu, Ridomil Gold',
+    waitingLabel: 'Pauză până la recoltare, zile',
+    waitingHint: 'Este indicată pe eticheta produsului',
+    harvestFrom:
+      'Recoltarea — nu mai devreme de {{date}}: este în curs pauza după tratament.',
+    waitingValue: '{{count}} zile',
     deleteTreatment: 'Șterge înregistrarea tratamentului din {{date}}',
     confirmDeleteTreatment: 'Confirmă ștergerea înregistrării din {{date}}',
     confirmDelete: 'Ștergi înregistrarea?',
     delete: 'Șterge',
     columns: {
+      waiting: 'Pauză',
       date: 'Data',
       fungicide: 'Tip fungicid',
       product: 'Produs',

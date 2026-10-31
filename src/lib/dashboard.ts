@@ -14,6 +14,7 @@ export type FarmSummary = {
   areaHa: number
   high: number
   medium: number
+  low: number
   rows: VineyardToday[]
 }
 
@@ -44,6 +45,7 @@ export function summarize(
     areaHa: vineyards.reduce((sum, vineyard) => sum + vineyard.area_ha, 0),
     high: rows.filter((row) => row.worst === 'high').length,
     medium: rows.filter((row) => row.worst === 'medium').length,
+    low: rows.filter((row) => row.worst === 'low').length,
     rows,
   }
 }
