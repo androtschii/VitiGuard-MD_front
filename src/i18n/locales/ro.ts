@@ -1032,6 +1032,16 @@ export const ro: Messages = {
     addMore: 'Adăugați încă o vinărie: apăsați pe un punct de pe hartă.',
     clear: 'Golește traseul',
   },
+  sprayCalculator: {
+    title: 'Calculator de soluție',
+    area: 'Suprafața, ha',
+    rate: 'Norma de pe etichetă, l sau kg/ha',
+    water: 'Apă, l/ha',
+    tank: 'Rezervor, l',
+    result:
+      'Produs: {{product}}, apă: {{water}} l; rezervoare: {{tanks}}, în fiecare: {{perTank}} de produs (în litri sau kilograme, ca în normă).',
+    note: 'Luați norma și consumul de apă de pe eticheta produsului și verificați în Registrul de stat. Calculul doar înmulțește cifrele dvs.',
+  },
   phenology: {
     harvestBlocked:
       'Perioada de pauză nu s-a încheiat: după jurnalul tratamentelor, recoltarea nu mai devreme de {{date}}.',

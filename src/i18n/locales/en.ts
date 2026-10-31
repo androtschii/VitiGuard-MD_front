@@ -1019,6 +1019,16 @@ export const en: Messages = {
     addMore: 'Add another winery: tap a point on the map.',
     clear: 'Clear the route',
   },
+  sprayCalculator: {
+    title: 'Spray calculator',
+    area: 'Area, ha',
+    rate: 'Label rate, l or kg/ha',
+    water: 'Water, l/ha',
+    tank: 'Tank, l',
+    result:
+      'Product: {{product}}, water: {{water}} l; tanks: {{tanks}}, in each: {{perTank}} of product (litres or kilograms, as in the rate).',
+    note: 'Take the rate and water volume from the product label and check the state register. The calculation only multiplies your numbers.',
+  },
   phenology: {
     harvestBlocked:
       'The waiting period is still running: per the treatment log, harvest no earlier than {{date}}.',

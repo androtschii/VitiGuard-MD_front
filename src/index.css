@@ -270,6 +270,24 @@ html:has(dialog[open]) {
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  /* Между страницами плавно меняется только содержимое: шапка и панель на месте */
+  main {
+    view-transition-name: page;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+
+  ::view-transition-old(page) {
+    animation: page-out 0.15s ease-in both;
+  }
+
+  ::view-transition-new(page) {
+    animation: page-in 0.25s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
   .stagger {
     animation-delay: calc(var(--i, 0) * 60ms);
   }
@@ -480,6 +498,19 @@ html:has(dialog[open]) {
 
   .grape-fill-bubble {
     animation: grape-bubble 2.4s ease-in infinite;
+  }
+}
+
+@keyframes page-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
   }
 }
 
