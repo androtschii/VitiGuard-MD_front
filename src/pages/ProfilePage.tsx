@@ -7,6 +7,7 @@ import { ThemeSwitcher } from '@/components/molecules/ThemeSwitcher'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { NotificationSettings } from '@/components/organisms/NotificationSettings'
 import { ProfileForm } from '@/components/organisms/ProfileForm'
+import { PushSettings } from '@/components/organisms/PushSettings'
 import { TelegramConnect } from '@/components/organisms/TelegramConnect'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
 
@@ -45,6 +46,7 @@ export function ProfilePage() {
             {t('notifications.title')}
           </h2>
           <NotificationSettings />
+          <PushSettings />
         </section>
         <section aria-labelledby="profile-telegram" className={card}>
           <h2

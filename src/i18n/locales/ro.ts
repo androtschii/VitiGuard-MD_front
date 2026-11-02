@@ -644,6 +644,17 @@ export const ro: Messages = {
     diseases: 'Semnele bolilor',
     check: 'Verifică frunza după fotografie',
   },
+  push: {
+    toggle: 'Notificări pe acest dispozitiv',
+    hint: 'Avertizările vin chiar și când aplicația este închisă.',
+    unsupported:
+      'Acest browser nu suportă notificări push. Pe iPhone adăugați aplicația pe ecranul principal.',
+    unavailable: 'Notificările push nu sunt configurate pe server.',
+    denied:
+      'Notificările sunt interzise în setările browserului pentru acest site.',
+    loadError: 'Notificările push nu au putut fi verificate.',
+    failed: 'Abonarea nu s-a modificat. Încercați din nou.',
+  },
   notifications: {
     title: 'Avertizări despre boli',
     question: 'Despre ce risc să fiți avertizat',

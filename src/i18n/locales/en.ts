@@ -630,6 +630,16 @@ export const en: Messages = {
     diseases: 'Disease signs',
     check: 'Check a leaf by photo',
   },
+  push: {
+    toggle: 'Notifications on this device',
+    hint: 'Alerts arrive even when the app is closed.',
+    unsupported:
+      'This browser does not support push notifications. On iPhone, add the app to the Home Screen.',
+    unavailable: 'Push notifications are not set up on the server.',
+    denied: 'Notifications are blocked in the browser settings for this site.',
+    loadError: 'Could not check push notifications.',
+    failed: 'Could not change the subscription. Try again.',
+  },
   notifications: {
     title: 'Disease alerts',
     question: 'Which risk to alert about',
