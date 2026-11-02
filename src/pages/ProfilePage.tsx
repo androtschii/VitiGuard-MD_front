@@ -7,6 +7,7 @@ import { ThemeSwitcher } from '@/components/molecules/ThemeSwitcher'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { NotificationSettings } from '@/components/organisms/NotificationSettings'
 import { ProfileForm } from '@/components/organisms/ProfileForm'
+import { PushSettings } from '@/components/organisms/PushSettings'
 import { TelegramConnect } from '@/components/organisms/TelegramConnect'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
 
@@ -19,8 +20,10 @@ export function ProfilePage() {
 
   return (
     <DashboardTemplate navItems={navItems} headerActions={<LogoutButton />}>
-      <div className="flex max-w-2xl flex-col gap-4">
-        <h1 className="text-xl font-semibold text-ink">{t('profile.title')}</h1>
+      <div className="grid max-w-6xl items-start gap-4 xl:grid-cols-2">
+        <h1 className="text-xl font-semibold text-ink xl:col-span-2">
+          {t('profile.title')}
+        </h1>
         <section aria-labelledby="profile-account" className={card}>
           <h2
             id="profile-account"
@@ -45,6 +48,7 @@ export function ProfilePage() {
             {t('notifications.title')}
           </h2>
           <NotificationSettings />
+          <PushSettings />
         </section>
         <section aria-labelledby="profile-telegram" className={card}>
           <h2

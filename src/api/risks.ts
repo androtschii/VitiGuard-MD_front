@@ -64,6 +64,32 @@ export function useRiskOutlook(id: string, enabled = true) {
   })
 }
 
+export type NextDayRisk = {
+  day: string
+  probability: number
+  threshold: number
+  high: boolean
+  model: string
+}
+
+// Уточнение моделью LightGBM на следующий день (backend/pr-076). null — вне
+// окна «трёх десяток» или мало погоды; без модели на сервере — ошибка 503,
+// и блок просто не показывается
+export function useNextDayRisk(id: string, enabled = true) {
+  return useQuery({
+    queryKey: [...risksKey(id), 'next-day'],
+    queryFn: async () => {
+      const { data } = await api.get<NextDayRisk | null>(
+        `/vineyards/${id}/risks/next-day`,
+      )
+      return data
+    },
+    staleTime: 30 * 60_000,
+    retry: false,
+    enabled,
+  })
+}
+
 // Пересчёт по свежей погоде и прогнозу идёт на сервере секунды и сразу
 // возвращает новый риск сезона
 export async function refreshRisks(id: string) {

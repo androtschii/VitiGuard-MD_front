@@ -36,7 +36,7 @@ export function HomePage() {
 
   return (
     <DashboardTemplate navItems={navItems} headerActions={<LogoutButton />}>
-      <div className="flex max-w-5xl flex-col gap-6">
+      <div className="flex flex-col gap-6">
         <div className="relative isolate flex flex-col gap-4 overflow-hidden rounded-2xl bg-linear-to-br from-brand-700 via-brand-800 to-brand-950 p-6 shadow-lg print:rounded-none print:bg-none print:p-0 print:shadow-none">
           <svg
             viewBox="0 0 200 190"

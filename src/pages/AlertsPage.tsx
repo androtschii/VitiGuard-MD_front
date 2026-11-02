@@ -21,7 +21,7 @@ export function AlertsPage() {
 
   return (
     <DashboardTemplate navItems={navItems} headerActions={<LogoutButton />}>
-      <div className="flex max-w-3xl flex-col gap-4">
+      <div className="flex max-w-5xl flex-col gap-4">
         <div>
           <h1 className="text-xl font-semibold text-ink">
             {t('alerts.title')}

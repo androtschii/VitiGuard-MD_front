@@ -52,6 +52,8 @@ export default defineConfig({
         clientsClaim: true,
         // Запросы к API Service Worker не перехватывает: данные всегда свежие
         navigateFallbackDenylist: [/^\/api\//],
+        // Обработчики push-уведомлений (pr-083) — в том же воркере
+        importScripts: ['push-sw.js'],
         // Плитки подложки — по мере просмотра (pr-070): виденная часть карты
         // открывается и без сети. Заранее ничего не скачивается — правила
         // tile.openstreetmap.org запрещают массовую загрузку

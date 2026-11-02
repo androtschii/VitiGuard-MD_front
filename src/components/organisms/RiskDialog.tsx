@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   useRefreshRisks,
+  useNextDayRisk,
   useRiskOutlook,
   useRisks,
   type RiskEntry,
@@ -170,6 +171,7 @@ export function RiskDialog({
   })
   const entries = risks.data ?? []
   const outlook = useRiskOutlook(vineyardId, open && entries.length > 0)
+  const nextDay = useNextDayRisk(vineyardId, open && entries.length > 0)
   const today = localToday()
   const days = dailyRisk(entries)
   const now = days.find((item) => item.day === today)
@@ -283,6 +285,39 @@ export function RiskDialog({
                     </span>
                   </div>
                 </div>
+              </section>
+            )}
+
+            {nextDay.data && (
+              <section
+                aria-label={t('risk.nextDayTitle')}
+                className="flex flex-col gap-1 rounded-lg border border-line bg-surface p-3"
+              >
+                <h4 className="font-semibold text-ink">
+                  {t('risk.nextDayTitle')}
+                </h4>
+                <p className="text-ink-soft">
+                  {t('risk.nextDayValue', {
+                    date: format(nextDay.data.day),
+                    value: Math.round(nextDay.data.probability * 100),
+                  })}{' '}
+                  <span
+                    className={
+                      nextDay.data.high
+                        ? 'font-semibold text-danger'
+                        : 'font-medium text-ink'
+                    }
+                  >
+                    {t(
+                      nextDay.data.high
+                        ? 'risk.nextDayHigh'
+                        : 'risk.nextDayLow',
+                    )}
+                  </span>
+                </p>
+                <p className="text-xs text-ink-muted">
+                  {t('risk.nextDayNote')}
+                </p>
               </section>
             )}
 

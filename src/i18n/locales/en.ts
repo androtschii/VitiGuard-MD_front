@@ -630,6 +630,16 @@ export const en: Messages = {
     diseases: 'Disease signs',
     check: 'Check a leaf by photo',
   },
+  push: {
+    toggle: 'Notifications on this device',
+    hint: 'Alerts arrive even when the app is closed.',
+    unsupported:
+      'This browser does not support push notifications. On iPhone, add the app to the Home Screen.',
+    unavailable: 'Push notifications are not set up on the server.',
+    denied: 'Notifications are blocked in the browser settings for this site.',
+    loadError: 'Could not check push notifications.',
+    failed: 'Could not change the subscription. Try again.',
+  },
   notifications: {
     title: 'Disease alerts',
     question: 'Which risk to alert about',
@@ -806,6 +816,12 @@ export const en: Messages = {
     gublerToday: 'Gubler-Thomas powdery mildew index — {{index}}.',
     plan: 'What to do: today and the week ahead (weather forecast)',
     outlookTitle: '7-day outbreak probability',
+    nextDayTitle: 'Machine learning model: tomorrow',
+    nextDayValue: 'Downy mildew infection on {{date}}: {{value}}%.',
+    nextDayHigh: 'Above the model threshold.',
+    nextDayLow: 'Below the model threshold.',
+    nextDayNote:
+      'LightGBM on the last two weeks of weather, trained on the 2015-2025 archive for Moldovan districts. It refines the agronomic models rather than replacing them.',
     outlookMembers: 'ICON-EPS ensemble: {{count}} members',
     outlookWeek: 'For the week',
     offSeasonShort: 'off-season',

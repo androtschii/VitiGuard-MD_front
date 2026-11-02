@@ -67,7 +67,7 @@ export function FarmOverview() {
   return (
     <div className="flex flex-col gap-6">
       <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto]">
-        <dl className="grid grid-cols-2 gap-3">
+        <dl className="grid grid-cols-2 gap-3 2xl:grid-cols-4">
           <StatTile
             index={0}
             label={t('home.stats.vineyards')}
