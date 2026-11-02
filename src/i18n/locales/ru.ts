@@ -808,6 +808,12 @@ export const ru = {
     gublerToday: 'Индекс оидиума Gubler-Thomas — {{index}}.',
     plan: 'Что делать: сегодня и неделя вперёд (по прогнозу погоды)',
     outlookTitle: 'Вероятность вспышки на 7 дней',
+    nextDayTitle: 'Модель машинного обучения: завтра',
+    nextDayValue: 'Заражение милдью {{date}}: {{value}} %.',
+    nextDayHigh: 'Выше порога модели.',
+    nextDayLow: 'Ниже порога модели.',
+    nextDayNote:
+      'LightGBM по погоде последних двух недель, обучена на архиве 2015-2025 по районам Молдовы. Это уточнение к агромоделям, а не замена им.',
     outlookMembers: 'Ансамбль ICON-EPS: {{count}} вариантов',
     outlookWeek: 'За неделю',
     offSeasonShort: 'вне сезона',

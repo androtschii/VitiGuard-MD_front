@@ -259,6 +259,34 @@ describe('RiskDialog', () => {
     ).toBeInTheDocument()
   })
 
+  it.each([
+    [0.9, 'Выше порога модели.'],
+    [0.2, 'Ниже порога модели.'],
+  ])(
+    'показывает прогноз модели на завтра: %s',
+    async (probability, verdict) => {
+      server.use(
+        http.get(`${URL}/next-day`, () =>
+          HttpResponse.json({
+            day: '2026-06-11',
+            probability,
+            threshold: 0.8,
+            high: probability >= 0.8,
+            model: 'lightgbm',
+          }),
+        ),
+      )
+      renderDialog()
+
+      const region = await screen.findByRole('region', {
+        name: 'Модель машинного обучения: завтра',
+      })
+      expect(region).toHaveTextContent(`${Math.round(probability * 100)} %`)
+      expect(region).toHaveTextContent('Заражение милдью')
+      expect(region).toHaveTextContent(verdict)
+    },
+  )
+
   it('вне сезона показывает «вне сезона» вместо процентов вспышки', async () => {
     server.use(
       http.get(`${URL}/outlook`, () =>

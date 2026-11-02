@@ -56,6 +56,9 @@ export const handlers = [
       powdery_week: null,
     }),
   ),
+  http.get('/api/v1/vineyards/:id/risks/next-day', () =>
+    HttpResponse.json(null),
+  ),
   http.get('/api/v1/vineyards/:id/treatments', () => HttpResponse.json([])),
   http.get('/api/v1/vineyards/:id/treatments/plan', () =>
     HttpResponse.json({

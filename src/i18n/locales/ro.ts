@@ -832,6 +832,12 @@ export const ro: Messages = {
     gublerToday: 'Indicele de făinare Gubler-Thomas — {{index}}.',
     plan: 'Ce trebuie făcut: azi și săptămâna următoare (după prognoza meteo)',
     outlookTitle: 'Probabilitatea focarului pe 7 zile',
+    nextDayTitle: 'Modelul de învățare automată: mâine',
+    nextDayValue: 'Infecție cu mană pe {{date}}: {{value}} %.',
+    nextDayHigh: 'Peste pragul modelului.',
+    nextDayLow: 'Sub pragul modelului.',
+    nextDayNote:
+      'LightGBM după vremea ultimelor două săptămâni, antrenat pe arhiva 2015-2025 a raioanelor Moldovei. Este o precizare la agromodele, nu un înlocuitor.',
     outlookMembers: 'Ansamblul ICON-EPS: {{count}} variante',
     outlookWeek: 'Pe săptămână',
     offSeasonShort: 'în afara sezonului',
