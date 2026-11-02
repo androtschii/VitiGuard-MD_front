@@ -23,8 +23,8 @@ export function TipsPage() {
 
   return (
     <DashboardTemplate navItems={navItems} headerActions={<LogoutButton />}>
-      <div className="flex max-w-3xl flex-col gap-4">
-        <div>
+      <div className="grid max-w-6xl items-start gap-4 xl:grid-cols-2">
+        <div className="xl:col-span-2">
           <h1 className="text-xl font-semibold text-ink">{t('tips.title')}</h1>
           <p className="text-sm text-ink-muted">{t('tips.intro')}</p>
         </div>
