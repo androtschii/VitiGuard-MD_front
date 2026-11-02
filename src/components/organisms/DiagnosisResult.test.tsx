@@ -29,6 +29,16 @@ describe('DiagnosisResult', () => {
     expect(screen.getByText('Здоровый лист')).toHaveClass('text-emerald-700')
   })
 
+  it('на снимке не лист винограда — диагноз не показывается', () => {
+    render(<DiagnosisResult diagnosis={{ ...diagnosis, grape_leaf: false }} />)
+
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'Похоже, на фото не лист винограда',
+    )
+    expect(screen.queryByText('Оидиум')).not.toBeInTheDocument()
+    expect(screen.queryByRole('list')).not.toBeInTheDocument()
+  })
+
   it('предупреждает, когда модель не уверена', () => {
     render(
       <DiagnosisResult

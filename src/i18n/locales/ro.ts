@@ -427,6 +427,9 @@ export const ro: Messages = {
       'Determinat pe dispozitiv fără rețea: același clasificator ca pe server, dar fără hartă termică și mască a leziunilor.',
     verdict: 'Diagnostic',
     confidence: 'Încrederea modelului: {{value}}',
+    notALeafTitle: 'Se pare că în fotografie nu este o frunză de viță',
+    notALeaf:
+      'Modelul recunoaște doar bolile viței de vie. Fotografiați o singură frunză de viță de aproape, la lumina zilei, astfel încât să ocupe aproape tot cadrul. O astfel de fotografie nu se salvează în istoric.',
     lowConfidence:
       'Modelul nu este sigur de răspuns. Refotografiați frunza de aproape, la lumina zilei: o singură frunză, fără reflexe și umbre.',
     probabilities: 'Probabilități',

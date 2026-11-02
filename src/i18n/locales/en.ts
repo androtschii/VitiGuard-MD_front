@@ -415,6 +415,9 @@ export const en: Messages = {
       'Determined on this device without a network: the same classifier as on the server, but without the heatmap and lesion mask.',
     verdict: 'Diagnosis',
     confidence: 'Model confidence: {{value}}',
+    notALeafTitle: 'This does not look like a grape leaf',
+    notALeaf:
+      'The model only recognises grapevine diseases. Take a close-up of a single grape leaf in daylight so that it fills most of the frame. Such a photo is not saved to the history.',
     lowConfidence:
       'The model is not sure. Retake the photo close up in daylight: one leaf, no glare or shadows.',
     probabilities: 'Probabilities',

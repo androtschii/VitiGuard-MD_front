@@ -24,6 +24,9 @@ export type Diagnosis = {
   confidence: number
   // Уверенность ниже порога сервера: ответ стоит перепроверить
   low_confidence: boolean
+  // Похоже ли фото на лист винограда (backend ml/pr-021); нет поля — сервер
+  // без отсева, снимок считается листом
+  grape_leaf?: boolean
   top: DiseaseProbability[]
   // Наложения поверх фото — прозрачные PNG (data URL) в пропорциях фото
   // (backend/pr-046, pr-047); null, если модели нет на сервере
