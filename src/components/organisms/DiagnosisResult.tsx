@@ -17,6 +17,22 @@ export function DiagnosisResult({ diagnosis }: DiagnosisResultProps) {
   })
   const isHealthy = diagnosis.disease === 'healthy'
 
+  // Модель знает только болезни винограда и на любом снимке выбрала бы одну
+  // из них: для чужого снимка диагноз не показывается
+  if (diagnosis.grape_leaf === false) {
+    return (
+      <div
+        role="alert"
+        className="flex flex-col gap-1 rounded-md border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900 motion-safe:animate-rise dark:border-amber-700 dark:bg-amber-950 dark:text-amber-200"
+      >
+        <p className="text-base font-semibold">
+          {t('diagnosis.notALeafTitle')}
+        </p>
+        <p>{t('diagnosis.notALeaf')}</p>
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col gap-4 motion-safe:animate-rise">
       <div className="flex items-center justify-between gap-4">
