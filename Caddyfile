@@ -1,0 +1,30 @@
+# Сайт и API на одном домене (pr-100): клиент ходит на /api/v1 без CORS,
+# как в разработке через прокси Vite
+{$SITE_ADDRESS} {
+	encode zstd gzip
+
+	# API и WebSocket предупреждений. /metrics, /healthz, /readyz наружу не
+	# открываются: их опрашивают изнутри сети Docker
+	handle /api/* {
+		reverse_proxy api:8000
+	}
+
+	handle {
+		root * /srv
+		header {
+			X-Content-Type-Options nosniff
+			Referrer-Policy strict-origin-when-cross-origin
+			# X-Frame-Options не ставится: веб-версия Telegram открывает
+			# мини-приложение во фрейме
+		}
+		# Файлы сборки с хэшем в имени не меняются — кэш на год
+		@hashed path /assets/*
+		header @hashed Cache-Control "public, max-age=31536000, immutable"
+		# Service Worker и страница проверяются при каждом заходе: иначе
+		# новая версия сайта не дошла бы до пользователя
+		@fresh path / /index.html /sw.js /registerSW.js /manifest.webmanifest
+		header @fresh Cache-Control "no-cache"
+		try_files {path} /index.html
+		file_server
+	}
+}
