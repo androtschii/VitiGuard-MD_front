@@ -186,7 +186,7 @@ export function CommandPalette({ items }: { items: NavItem[] }) {
         aria-keyshortcuts="Control+K"
         title={t('palette.open')}
         onClick={() => setIsOpen(true)}
-        className="fill-hover hidden h-8 items-center gap-2 rounded-lg border border-line-strong px-2 text-xs text-ink-soft transition sm:inline-flex"
+        className="fill-hover inline-flex h-8 min-w-8 items-center justify-center gap-2 rounded-lg border border-line-strong px-2 text-xs text-ink-soft transition"
       >
         <svg
           viewBox="0 0 24 24"
@@ -199,7 +199,7 @@ export function CommandPalette({ items }: { items: NavItem[] }) {
         >
           <path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4" />
         </svg>
-        <kbd className="font-sans">Ctrl K</kbd>
+        <kbd className="hidden font-sans sm:inline">Ctrl K</kbd>
       </button>
       {isOpen && (
         <Modal open onClose={() => setIsOpen(false)} title={t('palette.title')}>

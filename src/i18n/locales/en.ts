@@ -9,6 +9,7 @@ export const en: Messages = {
     noData: 'No data',
     logout: 'Log out',
     language: 'Language',
+    menu: 'Menu',
   },
   theme: {
     label: 'Theme',

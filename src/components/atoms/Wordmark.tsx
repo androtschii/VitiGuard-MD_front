@@ -19,13 +19,15 @@ export function Wordmark({
   return (
     <span className={cn('inline-flex items-center gap-2.5', className)}>
       <Logo
-        className={cn(large ? 'size-20 motion-safe:animate-grow-in' : 'size-8')}
+        className={cn(
+          large ? 'size-14 motion-safe:animate-grow-in sm:size-20' : 'size-8',
+        )}
       />
       <span className="flex flex-col items-start leading-none">
         <span
           className={cn(
             'font-brand tracking-tight text-brand-ink',
-            large ? 'text-5xl' : 'text-xl',
+            large ? 'text-4xl sm:text-5xl' : 'text-xl',
           )}
         >
           <span className="font-bold">Viti</span>
