@@ -145,6 +145,69 @@ li {
   text-wrap: pretty;
 }
 
+/* Выпадающий список Select в цветах темы. Системный список в тёмной теме
+   Windows рисуется со светло-голубой подсветкой и выбивается из интерфейса.
+   Сам элемент остаётся нативным <select>: формы, клавиатура и дикторы
+   работают как прежде, а браузеры без base-select показывают системный список */
+@supports (appearance: base-select) {
+  .select-themed,
+  .select-themed::picker(select) {
+    appearance: base-select;
+  }
+
+  .select-themed {
+    align-items: center;
+  }
+
+  .select-themed::picker-icon {
+    display: none;
+  }
+
+  .select-themed::picker(select) {
+    margin-block: 0.25rem;
+    padding: 0.25rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 0.5rem;
+    background-color: var(--surface);
+    color: var(--ink);
+    box-shadow: 0 10px 30px -10px rgb(0 0 0 / 35%);
+  }
+
+  .select-themed option {
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+  }
+
+  .select-themed option:disabled {
+    color: var(--ink-faint);
+  }
+
+  .select-themed option:hover,
+  .select-themed option:focus-visible {
+    outline: none;
+    background-color: var(--muted);
+  }
+
+  .select-themed option:checked {
+    background-color: var(--color-brand-50);
+    color: var(--color-brand-700);
+    font-weight: 600;
+  }
+
+  .dark .select-themed option:checked {
+    background-color: rgb(98 42 195 / 30%);
+    color: var(--color-brand-300);
+  }
+
+  .select-themed option::checkmark {
+    order: 1;
+    margin-left: auto;
+    color: var(--color-brand-500);
+  }
+}
+
 /* Ссылки в подписи источников карты (OpenStreetMap, geoBoundaries) отличаются
    от текста не только цветом: WCAG 1.4.1, ссылка внутри текста (pr-094) */
 .maplibregl-map .maplibregl-ctrl-attrib a {

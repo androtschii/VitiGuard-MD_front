@@ -9,6 +9,7 @@ export const ro: Messages = {
     noData: 'Nu există date',
     logout: 'Ieșire',
     language: 'Limba',
+    menu: 'Meniu',
   },
   theme: {
     label: 'Tema',

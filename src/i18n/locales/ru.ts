@@ -7,6 +7,7 @@ export const ru = {
     noData: 'Нет данных',
     logout: 'Выйти',
     language: 'Язык',
+    menu: 'Меню',
   },
   theme: {
     label: 'Тема',
