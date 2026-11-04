@@ -888,20 +888,26 @@ export const en: Messages = {
     open: 'Open the assistant',
     title: 'VitiGuard assistant',
     greeting:
-      'Ask what to treat the vines with, which wine to choose and where to buy it.',
+      'Ask where the disease risk is today, what to do this week, what the leaf checks showed, or about diseases, treatments and wine.',
     inputLabel: 'Your question',
     placeholder: 'For example: what to spray against mites',
     send: 'Ask',
     unknown:
-      'For now I can answer about treatments, choosing a wine and where to buy it. Tap one of the buttons below.',
+      'So far I can answer about the risk and treatment plan for your plots, recent checks, diseases, treatments and wine. Tap one of the buttons below.',
     chips: {
+      risk: 'Risk today',
+      plan: 'Treatment plan',
+      history: 'My checks',
       spray: 'What to spray',
       wine: 'Which wine to choose',
       buy: 'Where to buy wine',
     },
     keywords: {
-      spray:
-        'spray, treat, disease, pest, parasite, mildew, mite, moth, rot, phylloxera, fungicide',
+      risk: 'risk, danger, threat',
+      plan: 'plan, when to spray, when should i spray, protected',
+      history: 'history, recent, my checks, last check',
+      disease: 'mildew, oidium, rot, esca, blight, leaf spot, disease',
+      spray: 'spray, treat, pest, parasite, mite, moth, phylloxera, fungicide',
       wine: 'wine, drink, pair',
       buy: 'buy, shop, store, winery, where',
     },
@@ -973,6 +979,42 @@ export const en: Messages = {
       failed: 'Could not load the list.',
       source:
         'OpenStreetMap data: check opening hours and stock with the seller.',
+    },
+    diseaseWords: {
+      downy_mildew: 'downy, peronospora',
+      powdery_mildew: 'powdery, oidium',
+      black_rot: 'black rot',
+      esca: 'esca',
+      leaf_blight: 'blight, leaf spot',
+    },
+    diseaseList:
+      'Disease guide: type the name — downy mildew, powdery mildew, black rot, esca or leaf blight.',
+    diseaseCheck: 'Check a leaf by photo',
+    risk: {
+      intro: 'Disease risk today:',
+      none: 'no estimate for today',
+      noneHint:
+        'There is no estimate out of season or if the plot risk has not been recalculated yet.',
+      empty: 'No plots yet: draw them on the map.',
+      failed: 'Could not load the risk. Check your connection.',
+      map: 'Open the map',
+    },
+    plan: {
+      intro: 'Treatment plan for the week:',
+      quiet: 'no treatments needed this week',
+      protected: 'protected from {{disease}} until {{date}}',
+      downy: 'downy mildew',
+      powdery: 'powdery mildew',
+      more: 'More plots: {{count}} — each has its plan in its card on the map.',
+      failed: 'Could not load the plan. Check your connection.',
+    },
+    history: {
+      intro: 'Recent leaf checks:',
+      expert: 'agronomist: {{disease}}',
+      empty:
+        'No saved checks yet. Check a leaf by photo in the Diagnosis section.',
+      failed: 'Could not load the checks. Check your connection.',
+      open: 'Full history',
     },
   },
   palette: {

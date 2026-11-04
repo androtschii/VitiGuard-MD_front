@@ -4,7 +4,18 @@ import { Link } from 'react-router'
 import { nearestWineries, useWineries } from '@/api/wineries'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
-import { matchTopic, type AssistantTopic } from '@/lib/assistant'
+import {
+  DiseaseAnswer,
+  HistoryAnswer,
+  PlanAnswer,
+  RiskAnswer,
+} from '@/components/organisms/AssistantFarmAnswers'
+import {
+  matchDisease,
+  matchTopic,
+  type AssistantTopic,
+  type InfoDisease,
+} from '@/lib/assistant'
 import { useMapStore } from '@/store/map'
 
 const PESTS = [
@@ -16,14 +27,33 @@ const PESTS = [
   'phylloxera',
 ] as const
 const WINES = ['meat', 'fish', 'cheese', 'dessert', 'party'] as const
-const TOPICS: AssistantTopic[] = ['spray', 'wine', 'buy']
+const TOPICS: AssistantTopic[] = [
+  'risk',
+  'plan',
+  'history',
+  'spray',
+  'wine',
+  'buy',
+]
+const INFO_DISEASES: InfoDisease[] = [
+  'downy_mildew',
+  'powdery_mildew',
+  'black_rot',
+  'esca',
+  'leaf_blight',
+]
 
 // Без точки — сами винодельни, с точкой — всё ближайшее
 const CHISINAU = { lat: 47.0105, lon: 28.8638 }
 
 type Message =
   | { id: number; from: 'user'; text: string }
-  | { id: number; from: 'bot'; topic: AssistantTopic | null }
+  | {
+      id: number
+      from: 'bot'
+      topic: AssistantTopic | null
+      disease?: InfoDisease | null
+    }
 
 function SprayAnswer() {
   const { t } = useTranslation()
@@ -140,8 +170,9 @@ function BuyAnswer({ onLeave }: { onLeave: () => void }) {
   )
 }
 
-// Встроенный помощник: подсказывает, чем обрабатывать лозу, какое вино выбрать
-// и где его купить. Ответы готовые, поэтому работает и без сети
+// Встроенный помощник: риск и план обработок своих участков, последние
+// проверки, справка о болезнях, обработки, вино и где его купить. Справочные
+// ответы готовые и работают без сети, данные хозяйства — с сервера
 export function Assistant() {
   const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
@@ -157,11 +188,15 @@ export function Assistant() {
       log.scrollTop = last.offsetTop - log.offsetTop
   }, [messages])
 
-  const ask = (text: string, topic: AssistantTopic | null) => {
+  const ask = (
+    text: string,
+    topic: AssistantTopic | null,
+    disease: InfoDisease | null = null,
+  ) => {
     setMessages((current) => [
       ...current,
       { id: current.length, from: 'user', text },
-      { id: current.length + 1, from: 'bot', topic },
+      { id: current.length + 1, from: 'bot', topic, disease },
     ])
   }
 
@@ -169,14 +204,22 @@ export function Assistant() {
     event.preventDefault()
     const text = question.trim()
     if (!text) return
-    ask(
-      text,
-      matchTopic(text, {
-        spray: t('assistant.keywords.spray'),
-        wine: t('assistant.keywords.wine'),
-        buy: t('assistant.keywords.buy'),
-      }),
-    )
+    const topic = matchTopic(text, {
+      risk: t('assistant.keywords.risk'),
+      plan: t('assistant.keywords.plan'),
+      history: t('assistant.keywords.history'),
+      disease: t('assistant.keywords.disease'),
+      spray: t('assistant.keywords.spray'),
+      wine: t('assistant.keywords.wine'),
+      buy: t('assistant.keywords.buy'),
+    })
+    const words = Object.fromEntries(
+      INFO_DISEASES.map((disease) => [
+        disease,
+        t(`assistant.diseaseWords.${disease}`),
+      ]),
+    ) as Record<InfoDisease, string>
+    ask(text, topic, topic === 'disease' ? matchDisease(text, words) : null)
     setQuestion('')
   }
 
@@ -228,6 +271,17 @@ export function Assistant() {
                   key={message.id}
                   className="rounded-xl rounded-tl-sm bg-muted px-3 py-2 motion-safe:animate-rise"
                 >
+                  {message.topic === 'risk' && <RiskAnswer onLeave={close} />}
+                  {message.topic === 'plan' && <PlanAnswer onLeave={close} />}
+                  {message.topic === 'history' && (
+                    <HistoryAnswer onLeave={close} />
+                  )}
+                  {message.topic === 'disease' && (
+                    <DiseaseAnswer
+                      disease={message.disease ?? null}
+                      onLeave={close}
+                    />
+                  )}
                   {message.topic === 'spray' && <SprayAnswer />}
                   {message.topic === 'wine' && <WineAnswer />}
                   {message.topic === 'buy' && <BuyAnswer onLeave={close} />}

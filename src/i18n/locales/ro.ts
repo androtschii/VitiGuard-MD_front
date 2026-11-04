@@ -904,20 +904,28 @@ export const ro: Messages = {
     open: 'Deschide asistentul',
     title: 'Asistentul VitiGuard',
     greeting:
-      'Întrebați cu ce să tratați via, ce vin să alegeți și de unde să-l cumpărați.',
+      'Întrebați unde este azi risc de boli, ce e de făcut săptămâna aceasta, ce au arătat verificările frunzelor sau despre boli, tratamente și vin.',
     inputLabel: 'Întrebarea dvs.',
     placeholder: 'De exemplu: cu ce stropesc contra păianjenului',
     send: 'Întreabă',
     unknown:
-      'Deocamdată știu să răspund despre tratamente, alegerea vinului și de unde îl puteți cumpăra. Apăsați unul dintre butoanele de mai jos.',
+      'Deocamdată pot răspunde despre riscul și planul de tratamente ale parcelelor, ultimele verificări, boli, tratamente și vin. Apăsați unul dintre butoanele de mai jos.',
     chips: {
+      risk: 'Riscul de azi',
+      plan: 'Planul de tratamente',
+      history: 'Verificările mele',
       spray: 'Cu ce stropesc',
       wine: 'Ce vin aleg',
       buy: 'De unde cumpăr vin',
     },
     keywords: {
+      risk: 'risc, pericol',
+      plan: 'plan, când să stropesc, cand sa stropesc, protejat',
+      history: 'istoric, ultimele, verificările mele, verificarile mele',
+      disease:
+        'mană, mana, făinare, fainare, oidium, putregai, esca, pătare, patare, boal',
       spray:
-        'stropi, trata, boal, dăunăt, daunat, parazit, mană, mana, făinare, fainare, păianjen, paianjen, molie, putregai, filoxer, fungicid',
+        'stropi, trata, dăunăt, daunat, parazit, păianjen, paianjen, molie, filoxer, fungicid',
       wine: 'vin, băutur, bautur',
       buy: 'cumpăr, cumpar, magazin, vinări, crama, cramă, unde',
     },
@@ -986,6 +994,42 @@ export const ro: Messages = {
       failed: 'Lista nu s-a încărcat.',
       source:
         'Date OpenStreetMap: programul și disponibilitatea verificați-le la vânzător.',
+    },
+    diseaseWords: {
+      downy_mildew: 'mană, mana, peronospor',
+      powdery_mildew: 'făinare, fainare, oidium',
+      black_rot: 'putregai negru',
+      esca: 'esca',
+      leaf_blight: 'pătare, patare',
+    },
+    diseaseList:
+      'Informații despre boli: scrieți denumirea — mană, făinare, putregai negru, esca sau pătarea frunzelor.',
+    diseaseCheck: 'Verificați frunza după fotografie',
+    risk: {
+      intro: 'Riscul de boli pentru azi:',
+      none: 'nu există evaluare pentru azi',
+      noneHint:
+        'Evaluarea lipsește în afara sezonului sau dacă riscul parcelei nu a fost încă recalculat.',
+      empty: 'Încă nu aveți parcele: desenați-le pe hartă.',
+      failed: 'Riscul nu s-a încărcat. Verificați conexiunea.',
+      map: 'Deschide harta',
+    },
+    plan: {
+      intro: 'Planul de tratamente pentru săptămână:',
+      quiet: 'nu sunt necesare tratamente săptămâna aceasta',
+      protected: 'protejată de {{disease}} până la {{date}}',
+      downy: 'mană',
+      powdery: 'făinare',
+      more: 'Alte parcele: {{count}} — planul fiecăreia este în fișa ei de pe hartă.',
+      failed: 'Planul nu s-a încărcat. Verificați conexiunea.',
+    },
+    history: {
+      intro: 'Ultimele verificări ale frunzelor:',
+      expert: 'agronom: {{disease}}',
+      empty:
+        'Încă nu există verificări salvate. Verificați o frunză după fotografie în secțiunea „Diagnostic”.',
+      failed: 'Verificările nu s-au încărcat. Verificați conexiunea.',
+      open: 'Tot istoricul',
     },
   },
   palette: {
