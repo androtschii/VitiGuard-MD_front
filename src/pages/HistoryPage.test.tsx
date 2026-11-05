@@ -130,4 +130,34 @@ describe('HistoryPage', () => {
       'Не удалось загрузить историю',
     )
   })
+
+  it('на телефоне фильтры — за кнопкой со счётчиком, сбрасываются одной кнопкой', async () => {
+    const requests = serveHistory()
+    const user = userEvent.setup()
+    renderPage()
+    await screen.findByText('2 проверки')
+    const toggle = screen.getByRole('button', { name: 'Фильтры' })
+
+    expect(toggle).toHaveAttribute('aria-expanded', 'false')
+    expect(screen.getByRole('form', { name: 'Фильтры истории' })).toHaveClass(
+      'hidden',
+    )
+    await user.click(toggle)
+    expect(toggle).toHaveAttribute('aria-expanded', 'true')
+    expect(screen.getByRole('form', { name: 'Фильтры истории' })).toHaveClass(
+      'grid',
+    )
+
+    await user.selectOptions(screen.getByLabelText('Диагноз'), 'esca')
+    expect(
+      screen.getByRole('button', { name: 'Фильтры (1)' }),
+    ).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Сбросить фильтры' }))
+    await waitFor(() => expect(requests.at(-1)?.get('disease')).toBeNull())
+    expect(screen.getByLabelText('Диагноз')).toHaveValue('')
+    expect(
+      screen.queryByRole('button', { name: 'Сбросить фильтры' }),
+    ).toBeNull()
+  })
 })

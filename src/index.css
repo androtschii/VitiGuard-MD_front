@@ -145,6 +145,25 @@ li {
   text-wrap: pretty;
 }
 
+/* Поле даты открывает календарь нажатием в любом месте (Input), поэтому всё
+   поле — с курсором-рукой; значок календаря — приглушённым цветом текста
+   темы, а не системным чёрным */
+input[type='date'],
+input[type='time'],
+input[type='month'] {
+  cursor: pointer;
+}
+
+input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 150ms;
+}
+
+input:hover::-webkit-calendar-picker-indicator {
+  opacity: 1;
+}
+
 /* Выпадающий список Select в цветах темы. Системный список в тёмной теме
    Windows рисуется со светло-голубой подсветкой и выбивается из интерфейса.
    Сам элемент остаётся нативным <select>: формы, клавиатура и дикторы
