@@ -5,13 +5,16 @@ import { DISEASES } from '@/api/diagnosis'
 import { useDiagnoses, type DiagnosisFilters } from '@/api/diagnoses'
 import { useVineyards } from '@/api/vineyards'
 import { useNavItems } from '@/app/navigation'
+import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
 import { Select } from '@/components/atoms/Select'
 import { CardSkeleton } from '@/components/molecules/CardSkeleton'
+import { EmptyState } from '@/components/molecules/EmptyState'
 import { Pagination } from '@/components/molecules/Pagination'
 import { DiagnosisCard } from '@/components/organisms/DiagnosisCard'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
+import { cn } from '@/lib/cn'
 
 // История проверок по фото (pr-045) с фильтрами по болезни, участку и
 // датам (pr-046)
@@ -23,7 +26,11 @@ export function HistoryPage() {
   const [page, setPage] = useState(1)
   const history = useDiagnoses(filters, page)
   const { data: vineyards = [] } = useVineyards()
-  const isFiltered = Object.values(filters).some(Boolean)
+  const active = Object.values(filters).filter(Boolean).length
+  const isFiltered = active > 0
+  // На телефоне четыре поля занимали полэкрана: фильтры свёрнуты в кнопку
+  const [filtersOpen, setFiltersOpen] = useState(false)
+  const formId = useId()
 
   // Новые условия — с первой страницы
   const change = (patch: DiagnosisFilters) => {
@@ -40,12 +47,29 @@ export function HistoryPage() {
         {t('history.intro')}
       </p>
 
+      <div className="mb-3 flex flex-wrap items-center gap-2 sm:hidden">
+        <Button
+          variant="secondary"
+          size="sm"
+          aria-expanded={filtersOpen}
+          aria-controls={formId}
+          onClick={() => setFiltersOpen((open) => !open)}
+        >
+          {active
+            ? t('history.filtersButtonActive', { count: active })
+            : t('history.filtersButton')}
+        </Button>
+      </div>
       <form
+        id={formId}
         aria-label={t('history.filters')}
         onSubmit={(event) => event.preventDefault()}
-        className="mb-4 grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4"
+        className={cn(
+          'mb-4 grid-cols-2 gap-3 text-sm sm:grid lg:grid-cols-4',
+          filtersOpen ? 'grid' : 'hidden',
+        )}
       >
-        <div className="flex flex-col gap-1">
+        <div className="col-span-2 flex flex-col gap-1 sm:col-span-1">
           <label htmlFor={ids.disease} className="text-ink-soft">
             {t('history.disease')}
           </label>
@@ -66,7 +90,7 @@ export function HistoryPage() {
             ))}
           </Select>
         </div>
-        <div className="flex flex-col gap-1">
+        <div className="col-span-2 flex flex-col gap-1 sm:col-span-1">
           <label htmlFor={ids.plot} className="text-ink-soft">
             {t('history.plot')}
           </label>
@@ -107,6 +131,20 @@ export function HistoryPage() {
             onChange={(event) => change({ dateTo: event.target.value })}
           />
         </div>
+        {isFiltered && (
+          <div className="col-span-2 lg:col-span-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setFilters({})
+                setPage(1)
+              }}
+            >
+              {t('history.resetFilters')}
+            </Button>
+          </div>
+        )}
       </form>
 
       <div aria-live="polite">
@@ -117,18 +155,22 @@ export function HistoryPage() {
             {t('history.loadError')}
           </p>
         ) : history.data.total === 0 ? (
-          <p className="text-sm text-ink-muted">
-            {isFiltered ? (
-              t('history.nothingFound')
-            ) : (
-              <>
-                {t('history.empty')}{' '}
-                <Link to="/diagnosis" className="text-accent underline">
+          isFiltered ? (
+            <EmptyState icon="search" title={t('history.nothingFound')} />
+          ) : (
+            <EmptyState
+              icon="leaf"
+              title={t('history.empty')}
+              action={
+                <Link
+                  to="/diagnosis"
+                  className="inline-flex min-h-9 items-center rounded-lg bg-brand-700 px-4 text-sm font-medium text-white transition hover:bg-brand-800"
+                >
                   {t('history.check')}
                 </Link>
-              </>
-            )}
-          </p>
+              }
+            />
+          )
         ) : (
           <>
             <p className="mb-3 text-sm text-ink-muted">

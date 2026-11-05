@@ -5,6 +5,7 @@ import { useNavItems } from '@/app/navigation'
 import { Button } from '@/components/atoms/Button'
 import { AlertItem } from '@/components/molecules/AlertItem'
 import { CardSkeleton } from '@/components/molecules/CardSkeleton'
+import { EmptyState } from '@/components/molecules/EmptyState'
 import { Pagination } from '@/components/molecules/Pagination'
 import { SegmentedControl } from '@/components/molecules/SegmentedControl'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
@@ -59,9 +60,11 @@ export function AlertsPage() {
               {t('alerts.loadError')}
             </p>
           ) : alerts.data.total === 0 ? (
-            <p className="text-sm text-ink-muted">
-              {unread ? t('alerts.noneUnread') : t('alerts.none')}
-            </p>
+            <EmptyState
+              icon="bell"
+              title={unread ? t('alerts.noneUnread') : t('alerts.none')}
+              hint={t('alerts.emptyHint')}
+            />
           ) : (
             <>
               <ul

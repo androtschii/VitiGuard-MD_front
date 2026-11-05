@@ -80,7 +80,53 @@ describe('FarmOverview', () => {
     renderOverview()
 
     expect(await screen.findByText(/Сегодня вне сезона/)).toBeInTheDocument()
-    expect(tile('В высоком риске')).toHaveTextContent('—')
+    expect(tile('Риск болезней')).toHaveTextContent('Вне сезона')
+    expect(tile('Риск болезней')).toHaveTextContent('с апреля по сентябрь')
+    expect(tile('Последняя проверка')).toHaveTextContent('Пока нет')
+    // Кольцо уровней без единой оценки ничего не говорит
+    expect(screen.queryByText('Участки по риску')).toBeNull()
+    // Одна колонка риска вместо двух, одна из которых пустая
+    expect(
+      screen.getByRole('columnheader', { name: 'Риск сегодня' }),
+    ).toBeVisible()
+    expect(screen.queryByRole('columnheader', { name: 'Оидиум' })).toBeNull()
+    expect(screen.getByRole('cell', { name: 'вне сезона' })).toBeVisible()
+  })
+
+  it('вне сезона показывает последнюю проверку листа', async () => {
+    serve([vineyard('a', 'Криково', 2.25)])
+    server.use(
+      http.get('/api/v1/diagnoses', () =>
+        HttpResponse.json({
+          items: [
+            {
+              id: 'd1',
+              created_at: '2026-10-24T09:00:00Z',
+              updated_at: '2026-10-24T09:00:00Z',
+              vineyard_id: 'a',
+              vineyard_name: 'Криково',
+              model: 'efficientnet_b0',
+              model_version: '1',
+              disease: 'black_rot',
+              confidence: 0.93,
+              top: [],
+              severity: null,
+              overlays: [],
+              location: null,
+              review: null,
+            },
+          ],
+          total: 1,
+          page: 1,
+          size: 12,
+          pages: 1,
+        }),
+      ),
+    )
+    renderOverview()
+
+    expect(await screen.findByText('Чёрная гниль')).toBeInTheDocument()
+    expect(tile('Последняя проверка')).toHaveTextContent('24 октября · Криково')
   })
 
   it('без участков зовёт на карту', async () => {

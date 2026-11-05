@@ -133,7 +133,7 @@ export function DiagnosisCard({ record }: DiagnosisCardProps) {
             {review.comment && <p>{review.comment}</p>}
           </div>
         )}
-        <div className="mt-auto flex flex-wrap gap-2 pt-2">
+        <div className="mt-auto flex flex-wrap gap-1.5 pt-2">
           {isConfirming ? (
             <>
               <Button
@@ -165,6 +165,7 @@ export function DiagnosisCard({ record }: DiagnosisCardProps) {
                     size="sm"
                     variant="secondary"
                     aria-label={t('report.save')}
+                    className="px-2.5"
                     isLoading={busy === 'pdf'}
                     failed={failed === 'pdf'}
                     disabled={busy !== null}
@@ -175,20 +176,48 @@ export function DiagnosisCard({ record }: DiagnosisCardProps) {
                   <Button
                     size="sm"
                     variant="secondary"
+                    title={t('share.open')}
+                    className="px-2.5"
                     isLoading={busy === 'share'}
                     disabled={busy !== null}
                     onClick={() => void run('share', photo)}
                   >
-                    {t('share.open')}
+                    <svg
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                      className="size-4"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M18 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM6 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM18 16a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM8.6 13.5l6.8 4M15.4 6.5l-6.8 4" />
+                    </svg>
+                    <span className="sr-only">{t('share.open')}</span>
                   </Button>
                 </>
               )}
               <Button
                 size="sm"
                 variant="secondary"
+                title={t('history.delete')}
+                className="px-2.5"
                 onClick={() => setIsConfirming(true)}
               >
-                {t('history.delete')}
+                <svg
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  className="size-4"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M4 7h16M10 11v6M14 11v6M6 7l1 12h10l1-12M9 7V4h6v3" />
+                </svg>
+                <span className="sr-only">{t('history.delete')}</span>
               </Button>
             </>
           )}

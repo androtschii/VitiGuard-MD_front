@@ -1,10 +1,12 @@
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
+import { useDiagnoses } from '@/api/diagnoses'
 import { useTodayRisks } from '@/api/risks'
 import { useVineyards } from '@/api/vineyards'
 import { CountUp } from '@/components/atoms/CountUp'
 import { Ring } from '@/components/atoms/Ring'
 import { CardSkeleton } from '@/components/molecules/CardSkeleton'
+import { EmptyState } from '@/components/molecules/EmptyState'
 import { RiskBadge } from '@/components/molecules/RiskBadge'
 import { StatTile } from '@/components/molecules/StatTile'
 import { summarize } from '@/lib/dashboard'
@@ -15,6 +17,8 @@ export function FarmOverview() {
   const { t, i18n } = useTranslation()
   const vineyards = useVineyards()
   const risks = useTodayRisks()
+  // Вне сезона вместо пустых плиток риска — последняя проверка листа
+  const checks = useDiagnoses({}, 1)
 
   if (vineyards.isPending) return <CardSkeleton />
   if (vineyards.isError) {
@@ -33,6 +37,11 @@ export function FarmOverview() {
   const hasRisks = summary.rows.some((row) => row.risk)
   const unknown = summary.count - summary.high - summary.medium - summary.low
   const share = (value: number) => (value / summary.count) * 100
+  const lastCheck = checks.data?.items[0]
+  const checkDay = new Intl.DateTimeFormat(i18n.language, {
+    day: 'numeric',
+    month: 'long',
+  })
   const levels = [
     {
       key: 'high',
@@ -83,22 +92,54 @@ export function FarmOverview() {
               />
             }
           />
-          <StatTile
-            index={2}
-            label={t('home.stats.high')}
-            tone={summary.high > 0 ? 'high' : undefined}
-            value={hasRisks ? <CountUp value={summary.high} /> : '—'}
-            hint={t('home.stats.today')}
-          />
-          <StatTile
-            index={3}
-            label={t('home.stats.medium')}
-            tone={summary.medium > 0 ? 'medium' : undefined}
-            value={hasRisks ? <CountUp value={summary.medium} /> : '—'}
-            hint={t('home.stats.today')}
-          />
+          {hasRisks ? (
+            <>
+              <StatTile
+                index={2}
+                label={t('home.stats.high')}
+                tone={summary.high > 0 ? 'high' : undefined}
+                value={<CountUp value={summary.high} />}
+                hint={t('home.stats.today')}
+              />
+              <StatTile
+                index={3}
+                label={t('home.stats.medium')}
+                tone={summary.medium > 0 ? 'medium' : undefined}
+                value={<CountUp value={summary.medium} />}
+                hint={t('home.stats.today')}
+              />
+            </>
+          ) : (
+            <>
+              <StatTile
+                index={2}
+                label={t('home.stats.risk')}
+                value={t('home.stats.offSeason')}
+                hint={t('home.stats.seasonHint')}
+              />
+              <StatTile
+                index={3}
+                label={t('home.stats.lastCheck')}
+                value={
+                  lastCheck
+                    ? t(`diseases.${lastCheck.disease}`)
+                    : t('home.stats.noChecks')
+                }
+                hint={
+                  lastCheck
+                    ? [
+                        checkDay.format(new Date(lastCheck.created_at)),
+                        lastCheck.vineyard_name,
+                      ]
+                        .filter(Boolean)
+                        .join(' · ')
+                    : t('home.stats.noChecksHint')
+                }
+              />
+            </>
+          )}
         </dl>
-        {summary.count > 0 && (
+        {summary.count > 0 && hasRisks && (
           <section
             aria-labelledby="home-ring"
             className="stagger flex items-center gap-5 rounded-lg border border-line bg-surface p-4 shadow-sm [--i:4] motion-safe:animate-rise"
@@ -142,12 +183,18 @@ export function FarmOverview() {
           {t('home.plots')}
         </h2>
         {summary.count === 0 ? (
-          <p className="text-sm text-ink-muted">
-            {t('home.noVineyards')}{' '}
-            <Link to="/map" className="text-accent underline">
-              {t('home.openMap')}
-            </Link>
-          </p>
+          <EmptyState
+            icon="map"
+            title={t('home.noVineyards')}
+            action={
+              <Link
+                to="/map"
+                className="inline-flex min-h-9 items-center rounded-lg bg-brand-700 px-4 text-sm font-medium text-white transition hover:bg-brand-800"
+              >
+                {t('home.openMap')}
+              </Link>
+            }
+          />
         ) : (
           <>
             {!hasRisks && (
@@ -163,10 +210,20 @@ export function FarmOverview() {
                     <th className="px-3 py-2 text-right font-medium">
                       {t('home.columns.area')}
                     </th>
-                    <th className="px-3 py-2 font-medium">{t('risk.downy')}</th>
-                    <th className="px-3 py-2 font-medium">
-                      {t('risk.powdery')}
-                    </th>
+                    {hasRisks ? (
+                      <>
+                        <th className="px-3 py-2 font-medium">
+                          {t('risk.downy')}
+                        </th>
+                        <th className="px-3 py-2 font-medium">
+                          {t('risk.powdery')}
+                        </th>
+                      </>
+                    ) : (
+                      <th className="px-3 py-2 font-medium">
+                        {t('home.columns.risk')}
+                      </th>
+                    )}
                   </tr>
                 </thead>
                 <tbody>
@@ -192,8 +249,13 @@ export function FarmOverview() {
                           </td>
                         </>
                       ) : (
-                        <td colSpan={2} className="px-3 py-2 text-ink-subtle">
-                          {t('home.noEstimate')}
+                        <td
+                          colSpan={hasRisks ? 2 : 1}
+                          className="px-3 py-2 text-ink-subtle"
+                        >
+                          {hasRisks
+                            ? t('home.noEstimate')
+                            : t('risk.offSeasonShort')}
                         </td>
                       )}
                     </tr>
