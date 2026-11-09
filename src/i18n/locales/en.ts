@@ -370,6 +370,25 @@ export const en: Messages = {
       requestNew: 'Request a new link',
     },
   },
+  vine: {
+    tabs: { label: 'What to check', leaf: 'Leaf', row: 'Vine row' },
+    title: 'Trunks and bunches in a photo',
+    intro:
+      'Photograph the row from the side and the model will mark vine trunks and grape bunches. It is the same model that runs on the harvesting robot: trunks are obstacles, bunches are targets.',
+    photo: 'Row photo',
+    input: 'Choose a row photo',
+    photoAlt: 'Photo of a vineyard row',
+    analyze: 'Find trunks and bunches',
+    analyzing: 'Looking for trunks and bunches…',
+    tips: 'Shoot from the side at bunch height so that two or three vines fit in the frame.',
+    result: 'What the model found',
+    empty: 'Choose a row photo and press “Find trunks and bunches”.',
+    nothing: 'No trunks or bunches found in the photo.',
+    labels: { trunk: 'Trunk', bunch: 'Bunch' },
+    count: { trunk: 'Trunks: {{count}}', bunch: 'Bunches: {{count}}' },
+    threshold: 'Confidence from {{value}} %',
+    model: 'Model {{name}}. The number on a box is the confidence in percent.',
+  },
   diagnosis: {
     location: {
       taken: 'Taken at {{latitude}}, {{longitude}} (photo GPS)',

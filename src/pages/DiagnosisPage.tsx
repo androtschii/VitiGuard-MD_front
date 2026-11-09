@@ -7,6 +7,7 @@ import { useNavItems } from '@/app/navigation'
 import { Button } from '@/components/atoms/Button'
 import { Card } from '@/components/atoms/Card'
 import { Spinner } from '@/components/atoms/Spinner'
+import { DiagnosisTabs } from '@/components/molecules/DiagnosisTabs'
 import { DiagnosisOverlay } from '@/components/organisms/DiagnosisOverlay'
 import { DiagnosisResult } from '@/components/organisms/DiagnosisResult'
 import { OfflineModelCard } from '@/components/organisms/OfflineModelCard'
@@ -54,6 +55,7 @@ export function DiagnosisPage() {
 
   return (
     <DashboardTemplate navItems={navItems} headerActions={<LogoutButton />}>
+      <DiagnosisTabs />
       <h1 className="mb-1 text-xl font-semibold text-ink">
         {t('diagnosis.title')}
       </h1>

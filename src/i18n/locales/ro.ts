@@ -379,6 +379,27 @@ export const ro: Messages = {
       requestNew: 'Solicitați un link nou',
     },
   },
+  vine: {
+    tabs: { label: 'Ce verificăm', leaf: 'Frunză', row: 'Rând de viță' },
+    title: 'Tulpini și ciorchini în fotografie',
+    intro:
+      'Fotografiați rândul din lateral — modelul va marca tulpinile și ciorchinii. Este același model care rulează pe robotul de recoltare: tulpinile sunt obstacole, ciorchinii sunt ținte.',
+    photo: 'Fotografia rândului',
+    input: 'Alegeți fotografia rândului',
+    photoAlt: 'Fotografia unui rând de viță',
+    analyze: 'Găsește tulpini și ciorchini',
+    analyzing: 'Căutăm tulpini și ciorchini…',
+    tips: 'Fotografiați din lateral, la înălțimea ciorchinilor, ca în cadru să intre doi-trei butuci.',
+    result: 'Ce a găsit modelul',
+    empty:
+      'Alegeți fotografia rândului și apăsați „Găsește tulpini și ciorchini”.',
+    nothing: 'Nu au fost găsite tulpini sau ciorchini.',
+    labels: { trunk: 'Tulpină', bunch: 'Ciorchine' },
+    count: { trunk: 'Tulpini: {{count}}', bunch: 'Ciorchini: {{count}}' },
+    threshold: 'Încredere de la {{value}} %',
+    model:
+      'Modelul {{name}}. Numărul de pe chenar este încrederea în procente.',
+  },
   diagnosis: {
     location: {
       taken:

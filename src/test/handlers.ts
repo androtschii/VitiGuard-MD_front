@@ -2,6 +2,7 @@ import { http, HttpResponse } from 'msw'
 import type { AccessToken } from '@/api/auth'
 import type { Diagnosis } from '@/api/diagnosis'
 import type { ApiInfo } from '@/api/info'
+import type { VineResult } from '@/api/vine'
 
 export const apiInfo: ApiInfo = {
   name: 'VitiGuard MD API',
@@ -31,7 +32,22 @@ export const diagnosis: Diagnosis = {
   lesion: { mask: 'data:image/png;base64,bWFzaw==', severity: 0.18 },
 }
 
+export const vine: VineResult = {
+  model: 'vine_yolo11n',
+  version: '3f1c9a0b7d2e4f60',
+  image_width: 1280,
+  image_height: 720,
+  trunks: 2,
+  bunches: 1,
+  detections: [
+    { label: 'trunk', confidence: 0.81, box: [0.14, 0.68, 0.19, 1] },
+    { label: 'bunch', confidence: 0.74, box: [0.77, 0.27, 0.82, 0.33] },
+    { label: 'trunk', confidence: 0.3, box: [0.94, 0.8, 1, 1] },
+  ],
+}
+
 export const handlers = [
+  http.post('/api/v1/ai/vine/detect', () => HttpResponse.json(vine)),
   http.post('/api/v1/ai/diagnose', () => HttpResponse.json(diagnosis)),
   http.get('/api/v1/varieties', () =>
     HttpResponse.json([
