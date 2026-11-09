@@ -26,6 +26,9 @@ export function useNavItems(): NavItem[] {
   return visible.map((section) => ({
     label: t(section.labelKey),
     href: section.href,
-    current: pathname === section.href,
+    // Ряд лозы — вкладка диагностики: раздел остаётся выделенным
+    current:
+      pathname === section.href ||
+      (section.href === '/diagnosis' && pathname === '/diagnosis/vine'),
   }))
 }

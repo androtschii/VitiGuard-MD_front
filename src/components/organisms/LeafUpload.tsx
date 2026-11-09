@@ -17,11 +17,20 @@ type LeafUploadProps = {
   onSelect: (file: File) => void
   // Кадрированная копия выбранного фото
   onCrop?: (file: File) => void
+  // Подписи для фото не листа, а ряда лозы
+  inputLabel?: string
+  previewAlt?: string
 }
 
 // Выбор фото листа: перетаскиванием или через диалог выбора файла. На
 // сенсорном экране перетаскивать нечего — там отдельная кнопка камеры (pr-049)
-export function LeafUpload({ file, onSelect, onCrop }: LeafUploadProps) {
+export function LeafUpload({
+  file,
+  onSelect,
+  onCrop,
+  inputLabel,
+  previewAlt,
+}: LeafUploadProps) {
   const { t } = useTranslation()
   const inputId = useId()
   const cameraId = useId()
@@ -67,7 +76,7 @@ export function LeafUpload({ file, onSelect, onCrop }: LeafUploadProps) {
           <>
             <img
               src={previewUrl}
-              alt={t('diagnosis.preview')}
+              alt={previewAlt ?? t('diagnosis.preview')}
               className="max-h-72 rounded-md object-contain motion-safe:animate-rise"
             />
             <span className="font-medium text-accent">
@@ -105,7 +114,7 @@ export function LeafUpload({ file, onSelect, onCrop }: LeafUploadProps) {
           type="file"
           accept={LEAF_PHOTO_TYPES.join(',')}
           aria-describedby={hintId}
-          aria-label={t('diagnosis.input')}
+          aria-label={inputLabel ?? t('diagnosis.input')}
           className="sr-only"
           onChange={(event) => {
             pick(event.target.files?.[0])

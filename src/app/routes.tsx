@@ -37,6 +37,11 @@ export const routes: RouteObject[] = [
             path: '/diagnosis',
             lazy: page(() => import('@/pages/DiagnosisPage'), 'DiagnosisPage'),
           },
+          // Стволы и грозди на фото ряда (sprint-32)
+          {
+            path: '/diagnosis/vine',
+            lazy: page(() => import('@/pages/VinePage'), 'VinePage'),
+          },
           // Быстрая диагностика для мини-приложения Telegram (pr-088)
           {
             path: '/diagnosis/quick',
