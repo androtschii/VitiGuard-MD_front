@@ -45,6 +45,9 @@ describe('VinePage', () => {
     expect(boxes).toHaveLength(3)
     expect(boxes[0]).toHaveAttribute('title', 'Ствол, 81 %')
     expect(boxes[0]).toHaveStyle({ left: '14%', top: '68%' })
+    // Рамка появляется, когда до неё доходит линия: задержка — верхний край
+    expect(boxes[0]).toHaveClass('vine-box')
+    expect(boxes[0]?.style.getPropertyValue('--vine-delay')).toBe('0.680')
     expect(boxes[1]).toHaveAttribute('title', 'Гроздь, 74 %')
     expect(screen.getByText(/Модель vine_yolo11n/)).toBeVisible()
 

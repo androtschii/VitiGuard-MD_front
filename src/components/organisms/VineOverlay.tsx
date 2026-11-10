@@ -11,7 +11,8 @@ type VineOverlayProps = {
   detections: VineDetection[]
 }
 
-// Рамки — в долях снимка, поэтому лежат на месте при любом размере фото
+// Рамки — в долях снимка, поэтому лежат на месте при любом размере фото.
+// Ключ — класс и рамка: при фильтрации оставшиеся рамки не появляются заново
 export function VineOverlay({ photoUrl, detections }: VineOverlayProps) {
   const { t } = useTranslation()
   return (
@@ -21,17 +22,21 @@ export function VineOverlay({ photoUrl, detections }: VineOverlayProps) {
         alt={t('vine.photoAlt')}
         className="block h-auto w-full"
       />
-      {detections.map((item, index) => {
+      <div
+        aria-hidden="true"
+        className="vine-scan pointer-events-none absolute inset-x-0 top-full h-0.5 bg-linear-to-r from-transparent via-accent to-transparent opacity-0 shadow-[0_0_12px_2px] shadow-accent/60"
+      />
+      {detections.map((item) => {
         const [x1, y1, x2, y2] = item.box
         const name = t(`vine.labels.${item.label}`)
         const percent = Math.round(item.confidence * 100)
         return (
           <div
-            key={index}
+            key={`${item.label}-${item.box.join()}`}
             data-testid="vine-box"
             title={`${name}, ${percent} %`}
             className={cn(
-              'pointer-events-none absolute rounded-sm border-2',
+              'vine-box pointer-events-none absolute rounded-sm border-2',
               VINE_COLORS[item.label].box,
             )}
             style={{
@@ -39,6 +44,7 @@ export function VineOverlay({ photoUrl, detections }: VineOverlayProps) {
               top: percentOf(y1),
               width: percentOf(x2 - x1),
               height: percentOf(y2 - y1),
+              ['--vine-delay' as string]: y1.toFixed(3),
             }}
           >
             <span
