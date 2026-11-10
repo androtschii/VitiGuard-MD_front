@@ -836,6 +836,7 @@ html:has(dialog[open]) {
   .vine-scan {
     animation: vine-scan 0.9s cubic-bezier(0.4, 0, 0.2, 1) both;
   }
+
   .vine-box {
     animation: vine-box-in 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both;
     animation-delay: calc(var(--vine-delay, 0) * 0.9s);
@@ -843,14 +844,16 @@ html:has(dialog[open]) {
 }
 
 @keyframes vine-scan {
-  from {
+  0% {
     top: 0;
     opacity: 1;
   }
+
   85% {
     opacity: 1;
   }
-  to {
+
+  100% {
     top: 100%;
     opacity: 0;
   }
