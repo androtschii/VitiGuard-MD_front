@@ -36,5 +36,4 @@ npm run build
 
 ## Документация
 
-- [docs/roadmap.md](docs/roadmap.md) — план работ
 - [docs/decisions.md](docs/decisions.md) — принятые технические решения
