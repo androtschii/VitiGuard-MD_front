@@ -191,6 +191,9 @@ export const ro: Messages = {
     about:
       'Conectați botul @VitiGuard_bot: primește fotografii ale frunzelor pentru diagnostic direct din chat, trimite avertizări despre risc pe parcele, iar mini-aplicația se deschide fără parolă.',
     connect: 'Conectează Telegram',
+    waiting:
+      'Se va deschide chatul cu botul — apăsați «Start». Site-ul va marca conectarea singur.',
+    notOpened: 'Telegram nu s-a deschis?',
     open: 'Deschideți botul și apăsați «Start»',
     expires:
       '— linkul este valabil {{minutes}} minute și funcționează o singură dată.',
