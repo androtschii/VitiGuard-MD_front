@@ -26,6 +26,22 @@ export const en: Messages = {
     regions: 'Districts',
     diagnosis: 'Diagnosis',
     admin: 'Admin',
+    review: 'Reviews',
+  },
+  reviewQueue: {
+    title: 'Growers’ checks',
+    intro:
+      'Leaf photos taken by growers. Confirm the model’s diagnosis or correct it — the photo owner will see your conclusion.',
+    tabs: 'Which checks to show',
+    waiting: 'Awaiting review',
+    done: 'Reviewed',
+    count: 'Checks: {{count}}',
+    owner: 'Grower: {{name}}',
+    emptyWaiting: 'All checks have been reviewed.',
+    emptyWaitingHint: 'New photos from growers will appear here.',
+    emptyDone: 'No conclusions yet.',
+    forbidden:
+      'The review queue is available to agronomists and administrators.',
   },
   map: {
     tools: {

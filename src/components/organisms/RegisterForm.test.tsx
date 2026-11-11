@@ -28,14 +28,11 @@ async function submit(user: ReturnType<typeof userEvent.setup>) {
 }
 
 describe('RegisterForm', () => {
-  it('по умолчанию выбрана роль «Виноградарь», администратора в списке нет', () => {
+  it('роль не выбирается: её назначает администратор', () => {
     render(<RegisterForm onSubmit={vi.fn()} />)
-    const role = screen.getByRole('combobox', { name: /Роль/ })
 
-    expect(role).toHaveValue('user')
-    expect(
-      screen.getAllByRole('option').map((option) => option.textContent),
-    ).toEqual(['Виноградарь', 'Агроном'])
+    expect(screen.queryByRole('combobox')).toBeNull()
+    expect(screen.queryByText(/Роль/)).toBeNull()
   })
 
   it('поля подсказывают браузеру, что вводится новый пароль', () => {
@@ -79,20 +76,18 @@ describe('RegisterForm', () => {
     expect(onSubmit).not.toHaveBeenCalled()
   })
 
-  it('отправляет значения вместе с выбранной ролью', async () => {
+  it('отправляет введённые значения', async () => {
     const onSubmit = vi.fn().mockResolvedValue(undefined)
     render(<RegisterForm onSubmit={onSubmit} />)
-    const user = await fill()
 
-    await user.selectOptions(screen.getByRole('combobox'), 'agronomist')
-    await submit(user)
+    await submit(await fill())
 
     expect(onSubmit).toHaveBeenCalledOnce()
     expect(onSubmit.mock.calls[0]?.[0]).toMatchObject({
       fullName: 'Андрей Бахов',
       email: 'grower@example.md',
-      role: 'agronomist',
     })
+    expect(onSubmit.mock.calls[0]?.[0]).not.toHaveProperty('role')
   })
 
   it('занятый email показывается у поля email', async () => {

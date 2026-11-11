@@ -6,7 +6,6 @@ const valid = {
   email: 'grower@example.md',
   password: 'secret123',
   confirmPassword: 'secret123',
-  role: 'user',
 }
 
 function firstMessage(overrides: Record<string, unknown>) {
@@ -60,12 +59,9 @@ describe('registerSchema', () => {
     ).toBe(true)
   })
 
-  it('роль администратора выбрать нельзя', () => {
-    expect(registerSchema.safeParse({ ...valid, role: 'admin' }).success).toBe(
-      false,
-    )
-    expect(
-      registerSchema.safeParse({ ...valid, role: 'agronomist' }).success,
-    ).toBe(true)
+  it('роль в форму не входит: лишнее поле отбрасывается', () => {
+    const result = registerSchema.parse({ ...valid, role: 'admin' })
+
+    expect(result).not.toHaveProperty('role')
   })
 })

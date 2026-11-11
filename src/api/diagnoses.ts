@@ -33,6 +33,8 @@ export type DiagnosisRecord = {
     reviewed_at: string
     reviewer: string | null
   } | null
+  // Кто снял фото: приходит только в очереди агронома
+  owner_name?: string | null
 }
 
 export type DiagnosisFilters = {
@@ -65,6 +67,24 @@ export function useDiagnoses(filters: DiagnosisFilters, page: number) {
     queryKey: [...diagnosesKey, filters, page],
     queryFn: () => fetchDiagnoses(filters, page),
     // При смене страницы прежняя видна, пока грузится следующая
+    placeholderData: keepPreviousData,
+  })
+}
+
+// Очередь агронома: проверки всех виноградарей (backend: /diagnoses/review-queue)
+export async function fetchReviewQueue(reviewed: boolean, page: number) {
+  const { data } = await api.get<Page<DiagnosisRecord>>(
+    '/diagnoses/review-queue',
+    { params: { reviewed, page, size: PAGE_SIZE } },
+  )
+  return data
+}
+
+export function useReviewQueue(reviewed: boolean, page: number) {
+  return useQuery({
+    // Внутри ключа истории: заключение агронома обновляет и очередь
+    queryKey: [...diagnosesKey, 'queue', reviewed, page],
+    queryFn: () => fetchReviewQueue(reviewed, page),
     placeholderData: keepPreviousData,
   })
 }
