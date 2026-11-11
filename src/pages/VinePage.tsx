@@ -8,6 +8,7 @@ import { Spinner } from '@/components/atoms/Spinner'
 import { DiagnosisTabs } from '@/components/molecules/DiagnosisTabs'
 import { LeafUpload } from '@/components/organisms/LeafUpload'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
+import { SaveOptions } from '@/components/organisms/SaveOptions'
 import { VineOverlay } from '@/components/organisms/VineOverlay'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
 import { cn } from '@/lib/cn'
@@ -30,6 +31,8 @@ export function VinePage() {
     bunch: true,
   })
   const [threshold, setThreshold] = useState(MIN_CONFIDENCE)
+  const [save, setSave] = useState(true)
+  const [vineyardId, setVineyardId] = useState('')
 
   const visible = useMemo(
     () =>
@@ -57,12 +60,20 @@ export function VinePage() {
               detect.reset()
             }}
           />
+          <SaveOptions
+            save={save}
+            onSaveChange={setSave}
+            vineyardId={vineyardId}
+            onVineyardChange={setVineyardId}
+          />
           <Button
             className="w-full"
             disabled={!file}
             isLoading={detect.isPending}
             // Кнопка без фото недоступна
-            onClick={() => detect.mutate(file as File)}
+            onClick={() =>
+              detect.mutate({ image: file as File, save, vineyardId })
+            }
           >
             {t('vine.analyze')}
           </Button>
@@ -131,6 +142,11 @@ export function VinePage() {
                 <VineOverlay photoUrl={photoUrl} detections={visible} />
                 {detect.data.detections.length === 0 && (
                   <p className="text-sm text-ink-muted">{t('vine.nothing')}</p>
+                )}
+                {detect.data.id && (
+                  <p role="status" className="text-sm text-accent">
+                    {t('vine.saved')}
+                  </p>
                 )}
                 <p className="text-xs text-ink-subtle">
                   {t('vine.model', { name: detect.data.model })}

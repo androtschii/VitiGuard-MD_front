@@ -5,6 +5,7 @@ import { MemoryRouter } from 'react-router'
 import { describe, expect, it } from 'vitest'
 import { sidebarLink } from '@/test/nav'
 import { renderWithQueryClient } from '@/test/render'
+import { vine } from '@/test/handlers'
 import { server } from '@/test/server'
 import { VinePage } from './VinePage'
 
@@ -104,5 +105,60 @@ describe('VinePage', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'Модель лозы не загружена на сервер',
     )
+  })
+
+  it('сохраняет анализ в историю с участком и сообщает об этом', async () => {
+    const asked: { save: string | null; vineyard: string | null }[] = []
+    server.use(
+      http.get('/api/v1/vineyards', () =>
+        HttpResponse.json({
+          items: [{ id: 'plot-1', name: 'Криково' }],
+          total: 1,
+          page: 1,
+          size: 100,
+          pages: 1,
+        }),
+      ),
+      http.post('/api/v1/ai/vine/detect', ({ request }) => {
+        const query = new URL(request.url).searchParams
+        asked.push({
+          save: query.get('save'),
+          vineyard: query.get('vineyard_id'),
+        })
+        return HttpResponse.json({ ...vine, id: 'check-1' })
+      }),
+    )
+    const user = renderPage()
+    await user.selectOptions(
+      await screen.findByRole('combobox', { name: 'Участок' }),
+      await screen.findByRole('option', { name: 'Криково' }),
+    )
+
+    await detect(user)
+
+    expect(await screen.findByText('Анализ сохранён в историю.')).toBeVisible()
+    expect(asked).toEqual([{ save: 'true', vineyard: 'plot-1' }])
+  })
+
+  it('без отметки «сохранить» анализ в историю не попадает', async () => {
+    const asked: (string | null)[] = []
+    server.use(
+      http.post('/api/v1/ai/vine/detect', ({ request }) => {
+        asked.push(new URL(request.url).searchParams.get('save'))
+        return HttpResponse.json(vine)
+      }),
+    )
+    const user = renderPage()
+    await user.click(
+      screen.getByRole('checkbox', {
+        name: 'Сохранить фото и результат в историю',
+      }),
+    )
+
+    await detect(user)
+
+    await screen.findAllByTestId('vine-box')
+    expect(asked).toEqual([null])
+    expect(screen.queryByText('Анализ сохранён в историю.')).toBeNull()
   })
 })
