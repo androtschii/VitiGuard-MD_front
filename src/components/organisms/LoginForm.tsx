@@ -9,16 +9,21 @@ import { loginSchema, type LoginValues } from '@/schemas/auth'
 
 type LoginFormProps = {
   onSubmit: (values: LoginValues) => Promise<void>
+  // Email аккаунта из переключателя: остаётся ввести пароль
+  defaultEmail?: string
 }
 
-export function LoginForm({ onSubmit }: LoginFormProps) {
+export function LoginForm({ onSubmit, defaultEmail }: LoginFormProps) {
   const { t } = useTranslation()
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm<LoginValues>({ resolver: zodResolver(loginSchema) })
+  } = useForm<LoginValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: defaultEmail ? { email: defaultEmail } : undefined,
+  })
 
   const submit = handleSubmit(async (values) => {
     try {

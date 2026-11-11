@@ -28,6 +28,14 @@ export const ro: Messages = {
     admin: 'Administrare',
     review: 'Verificări',
   },
+  account: {
+    menu: 'Meniul profilului',
+    profile: 'Profil',
+    switch: 'Schimbați contul',
+    add: 'Intrați în alt cont',
+    forget: 'Eliminați din listă',
+    forgetNamed: 'Eliminați {{email}} din listă',
+  },
   reviewQueue: {
     title: 'Verificările viticultorilor',
     intro:
@@ -195,6 +203,11 @@ export const ro: Messages = {
     unblock: 'Deblochează',
     blockUser: 'Blochează {{email}}',
     unblockUser: 'Deblochează {{email}}',
+    reset: 'Resetați parola',
+    resetUser: 'Trimiteți lui {{email}} link pentru schimbarea parolei',
+    resetSent: 'Link trimis',
+    passwords:
+      'Parolele sunt păstrate doar criptat și nu le vede nimeni, nici administratorul. «Resetați parola» trimite utilizatorului un link pentru schimbarea parolei.',
     empty: 'Nu s-a găsit nimeni.',
     roles: {
       user: 'Utilizator',

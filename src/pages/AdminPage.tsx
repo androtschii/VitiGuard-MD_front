@@ -1,6 +1,6 @@
 import { useDeferredValue, useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useAdminUsers, useUpdateUser } from '@/api/admin'
+import { useAdminUsers, useSendPasswordReset, useUpdateUser } from '@/api/admin'
 import { useMe, type CurrentUser, type UserRole } from '@/api/users'
 import { useNavItems } from '@/app/navigation'
 import { Button } from '@/components/atoms/Button'
@@ -25,6 +25,7 @@ export function AdminPage() {
   const [page, setPage] = useState(1)
   const users = useAdminUsers(query, page)
   const update = useUpdateUser()
+  const reset = useSendPasswordReset()
   const date = new Intl.DateTimeFormat(i18n.resolvedLanguage, {
     dateStyle: 'medium',
   })
@@ -100,6 +101,19 @@ export function AdminPage() {
               {user.is_active ? t('admin.block') : t('admin.unblock')}
             </Button>
           )}
+          {user.is_active && !isSelf(user) && (
+            <Button
+              size="sm"
+              variant="ghost"
+              disabled={reset.isPending}
+              aria-label={t('admin.resetUser', { email: user.email })}
+              onClick={() => reset.mutate(user.id)}
+            >
+              {reset.isSuccess && reset.variables === user.id
+                ? t('admin.resetSent')
+                : t('admin.reset')}
+            </Button>
+          )}
         </span>
       ),
     },
@@ -112,6 +126,9 @@ export function AdminPage() {
       </h1>
       <p className="mb-4 max-w-2xl text-sm text-ink-muted">
         {t('admin.intro')}
+      </p>
+      <p className="mb-4 max-w-2xl text-xs text-ink-subtle">
+        {t('admin.passwords')}
       </p>
       <div className="mb-3 flex max-w-sm flex-col gap-1">
         <label htmlFor={searchId} className="text-sm text-ink-soft">
@@ -141,6 +158,11 @@ export function AdminPage() {
             isLoading={users.isPending}
             emptyMessage={t('admin.empty')}
           />
+          {reset.isError && (
+            <p role="alert" className="mt-2 text-sm text-danger">
+              {reset.error.message}
+            </p>
+          )}
           {update.isError && (
             <p role="alert" className="mt-2 text-sm text-danger">
               {update.error.message}

@@ -1,19 +1,6 @@
-import { useTranslation } from 'react-i18next'
-import { useLogout } from '@/api/auth'
-import { Button } from '@/components/atoms/Button'
+import { AccountMenu } from '@/components/organisms/AccountMenu'
 
+// Шапка кабинета: меню профиля с переключением аккаунтов и выходом
 export function LogoutButton() {
-  const { t } = useTranslation()
-  const { mutate: logout, isPending } = useLogout()
-
-  return (
-    <Button
-      variant="secondary"
-      size="sm"
-      isLoading={isPending}
-      onClick={() => logout()}
-    >
-      {t('common.logout')}
-    </Button>
-  )
+  return <AccountMenu />
 }

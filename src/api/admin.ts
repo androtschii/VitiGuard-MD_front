@@ -31,6 +31,14 @@ export type UserChange = {
   is_active?: boolean
 }
 
+// Пароль виден никому, в том числе администратору: он отправляет
+// пользователю ссылку на смену пароля (backend: /admin/users/{id}/password-reset)
+export function useSendPasswordReset() {
+  return useMutation({
+    mutationFn: (id: string) => api.post(`/admin/users/${id}/password-reset`),
+  })
+}
+
 export function useUpdateUser() {
   const queryClient = useQueryClient()
   return useMutation({
