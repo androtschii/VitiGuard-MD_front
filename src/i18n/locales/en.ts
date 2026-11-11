@@ -188,6 +188,9 @@ export const en: Messages = {
     about:
       'Connect @VitiGuard_bot: it diagnoses leaf photos sent right in the chat, sends risk alerts for your plots, and the mini app opens without a password.',
     connect: 'Connect Telegram',
+    waiting:
+      'A chat with the bot will open — press “Start” there. The site will mark the connection by itself.',
+    notOpened: 'Telegram did not open?',
     open: 'Open the bot and press “Start”',
     expires: '— the link is valid for {{minutes}} minutes and works once.',
     linked:
