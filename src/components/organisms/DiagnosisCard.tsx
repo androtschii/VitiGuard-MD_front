@@ -110,6 +110,11 @@ export function DiagnosisCard({ record }: DiagnosisCardProps) {
             value: percent.format(record.confidence),
           })}
         </p>
+        {record.owner_name && (
+          <p className="text-ink">
+            {t('reviewQueue.owner', { name: record.owner_name })}
+          </p>
+        )}
         <p className="text-ink-soft">
           {record.vineyard_name ?? t('history.noPlot')}
         </p>
@@ -198,27 +203,30 @@ export function DiagnosisCard({ record }: DiagnosisCardProps) {
                   </Button>
                 </>
               )}
-              <Button
-                size="sm"
-                variant="secondary"
-                title={t('history.delete')}
-                className="px-2.5"
-                onClick={() => setIsConfirming(true)}
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                  className="size-4"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+              {/* Чужую проверку из очереди агронома удалить нельзя */}
+              {!record.owner_name && (
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  title={t('history.delete')}
+                  className="px-2.5"
+                  onClick={() => setIsConfirming(true)}
                 >
-                  <path d="M4 7h16M10 11v6M14 11v6M6 7l1 12h10l1-12M9 7V4h6v3" />
-                </svg>
-                <span className="sr-only">{t('history.delete')}</span>
-              </Button>
+                  <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    className="size-4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M4 7h16M10 11v6M14 11v6M6 7l1 12h10l1-12M9 7V4h6v3" />
+                  </svg>
+                  <span className="sr-only">{t('history.delete')}</span>
+                </Button>
+              )}
             </>
           )}
         </div>

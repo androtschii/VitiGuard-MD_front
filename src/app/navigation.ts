@@ -13,6 +13,8 @@ const sections = [
   { labelKey: 'nav.profile', href: '/profile' },
 ] as const
 
+// Очередь проверок — агроному и администратору: они подтверждают диагнозы
+const reviewSection = { labelKey: 'nav.review', href: '/review' } as const
 // Раздел администратора виден только администратору (pr-091)
 const adminSection = { labelKey: 'nav.admin', href: '/admin' } as const
 
@@ -20,8 +22,10 @@ export function useNavItems(): NavItem[] {
   const { t } = useTranslation()
   const { pathname } = useLocation()
   const { data: me } = useMe()
-  const visible =
-    me?.role === 'admin' ? [...sections, adminSection] : [...sections]
+  const visible: { labelKey: string; href: string }[] = [...sections]
+  if (me?.role === 'agronomist' || me?.role === 'admin')
+    visible.push(reviewSection)
+  if (me?.role === 'admin') visible.push(adminSection)
 
   return visible.map((section) => ({
     label: t(section.labelKey),

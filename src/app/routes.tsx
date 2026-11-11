@@ -74,6 +74,14 @@ export const routes: RouteObject[] = [
             path: '/profile',
             lazy: page(() => import('@/pages/ProfilePage'), 'ProfilePage'),
           },
+          // Очередь агронома: виноградарю сервер отвечает 403
+          {
+            path: '/review',
+            lazy: page(
+              () => import('@/pages/ReviewQueuePage'),
+              'ReviewQueuePage',
+            ),
+          },
           // Только администратору: остальным сервер отвечает 403 (pr-091)
           {
             path: '/admin',

@@ -63,6 +63,7 @@ describe('routes', () => {
       '/alerts',
       '/tips',
       '/profile',
+      '/review',
       '/admin',
       '/login',
       '/register',

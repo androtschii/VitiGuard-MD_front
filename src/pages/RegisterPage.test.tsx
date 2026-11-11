@@ -18,7 +18,6 @@ async function fillAndSubmit(user: ReturnType<typeof userEvent.setup>) {
   await user.type(screen.getByLabelText(/Email/), 'grower@example.md')
   await user.type(screen.getByLabelText(/^Пароль/), 'secret123')
   await user.type(screen.getByLabelText(/Повторите пароль/), 'secret123')
-  await user.selectOptions(screen.getByLabelText(/^Роль/), 'agronomist')
   await user.click(screen.getByRole('button', { name: 'Зарегистрироваться' }))
 }
 
@@ -40,7 +39,6 @@ describe('RegisterPage', () => {
       email: 'grower@example.md',
       password: 'secret123',
       full_name: 'Андрей Бахов',
-      role: 'agronomist',
     })
   })
 

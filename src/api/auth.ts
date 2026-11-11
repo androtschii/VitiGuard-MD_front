@@ -49,17 +49,18 @@ export type RegisteredUser = {
   id: string
   email: string
   full_name: string | null
-  role: 'user' | 'agronomist'
+  role: 'user' | 'agronomist' | 'admin'
 }
 
-// Подтверждение пароля нужно только форме, серверу его не отправляем
+// Подтверждение пароля нужно только форме, серверу его не отправляем.
+// Роль не отправляется: регистрация создаёт виноградаря, роли агронома и
+// администратора назначает администратор
 export async function register(values: RegisterValues) {
-  const { fullName, email, password, role } = values
+  const { fullName, email, password } = values
   const { data } = await api.post<RegisteredUser>('/auth/register', {
     email,
     password,
     full_name: fullName,
-    role,
   })
   return data
 }

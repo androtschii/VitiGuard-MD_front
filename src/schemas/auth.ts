@@ -34,13 +34,6 @@ export const loginSchema = z.object({
 
 export type LoginValues = z.infer<typeof loginSchema>
 
-// Роли, которые пользователь выбирает при регистрации. Роль администратора
-// сюда не входит: её назначает только администратор, самому себе её не выдать
-export const registrationRoles = [
-  { value: 'user' },
-  { value: 'agronomist' },
-] as const
-
 export const registerSchema = z
   .object({
     fullName: z
@@ -51,7 +44,6 @@ export const registerSchema = z
     confirmPassword: z
       .string()
       .check(z.minLength(1, 'validation.confirmRequired')),
-    role: z.enum(['user', 'agronomist']),
   })
   .check(passwordsMatch)
 

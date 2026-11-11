@@ -4,13 +4,8 @@ import { useForm } from 'react-hook-form'
 import { ApiError } from '@/api/client'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
-import { Select } from '@/components/atoms/Select'
 import { Field } from '@/components/molecules/Field'
-import {
-  registerSchema,
-  registrationRoles,
-  type RegisterValues,
-} from '@/schemas/auth'
+import { registerSchema, type RegisterValues } from '@/schemas/auth'
 
 type RegisterFormProps = {
   onSubmit: (values: RegisterValues) => Promise<void>
@@ -25,7 +20,6 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
     formState: { errors, isSubmitting },
   } = useForm<RegisterValues>({
     resolver: zodResolver(registerSchema),
-    defaultValues: { role: 'user' },
   })
 
   const submit = handleSubmit(async (values) => {
@@ -98,17 +92,6 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
             {...control}
             {...register('confirmPassword')}
           />
-        )}
-      </Field>
-      <Field label={t('auth.role')} error={errors.role?.message} required>
-        {(control) => (
-          <Select {...control} {...register('role')}>
-            {registrationRoles.map((role) => (
-              <option key={role.value} value={role.value}>
-                {t(`auth.roles.${role.value}`)}
-              </option>
-            ))}
-          </Select>
         )}
       </Field>
       {errors.root && (

@@ -26,6 +26,22 @@ export const ro: Messages = {
     regions: 'Raioane',
     diagnosis: 'Diagnostic',
     admin: 'Administrare',
+    review: 'Verificări',
+  },
+  reviewQueue: {
+    title: 'Verificările viticultorilor',
+    intro:
+      'Fotografiile frunzelor făcute de viticultori. Confirmați diagnosticul modelului sau corectați-l — concluzia o va vedea proprietarul fotografiei.',
+    tabs: 'Ce verificări să arate',
+    waiting: 'Așteaptă concluzia',
+    done: 'Cu concluzie',
+    count: 'Verificări: {{count}}',
+    owner: 'Viticultor: {{name}}',
+    emptyWaiting: 'Toate verificările au fost văzute.',
+    emptyWaitingHint: 'Fotografiile noi ale viticultorilor vor apărea aici.',
+    emptyDone: 'Încă nu sunt concluzii.',
+    forbidden:
+      'Coada de verificări este disponibilă agronomului și administratorului.',
   },
   map: {
     tools: {
