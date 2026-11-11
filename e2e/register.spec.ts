@@ -17,9 +17,6 @@ test('от регистрации до нарисованного участка
     .getByRole('textbox', { name: 'Пароль', exact: true })
     .fill('vinograd2026')
   await page.getByLabel('Повторите пароль').fill('vinograd2026')
-  await page
-    .getByRole('combobox', { name: 'Роль', exact: true })
-    .selectOption({ label: 'Виноградарь' })
   await page.getByRole('button', { name: 'Зарегистрироваться' }).click()
 
   await expect(page.getByText(/Аккаунт создан/)).toBeVisible()
@@ -28,7 +25,6 @@ test('от регистрации до нарисованного участка
       full_name: 'Ион Попеску',
       email: 'ion@example.md',
       password: 'vinograd2026',
-      role: 'user',
     },
   ])
 
