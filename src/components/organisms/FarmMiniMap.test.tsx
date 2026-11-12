@@ -108,7 +108,9 @@ describe('схема для главной', () => {
     // На широте 47° градус долготы короче градуса широты
     expect(view.height).toBeGreaterThan(200)
     expect(view.project([27, 48])).toEqual([0, 0])
-    expect(svgPath(country, view)).toMatch(/^M0\.0 293\.3L300\.0 293\.3L300\.0 0\.0/)
+    expect(svgPath(country, view)).toMatch(
+      /^M0\.0 293\.3L300\.0 293\.3L300\.0 0\.0/,
+    )
     expect(svgPath({ type: 'Point', coordinates: [28, 47] }, view)).toBe('')
     const multi = { type: 'MultiPolygon', coordinates: [country.coordinates] }
     expect(svgPath(multi as never, view)).toContain('Z')
