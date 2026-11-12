@@ -4,7 +4,9 @@ import { useNavItems } from '@/app/navigation'
 import { PrintButton } from '@/components/molecules/PrintButton'
 import { AlertsSummary } from '@/components/organisms/AlertsSummary'
 import { FarmOverview } from '@/components/organisms/FarmOverview'
+import { FarmMiniMap } from '@/components/organisms/FarmMiniMap'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
+import { NdviSeason } from '@/components/organisms/NdviSeason'
 import { WeatherToday } from '@/components/organisms/WeatherToday'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
 
@@ -85,6 +87,10 @@ export function HomePage() {
         <AlertsSummary />
         <WeatherToday />
         <FarmOverview />
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+          <FarmMiniMap />
+          <NdviSeason />
+        </div>
       </div>
     </DashboardTemplate>
   )

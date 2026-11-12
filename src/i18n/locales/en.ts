@@ -402,6 +402,17 @@ export const en: Messages = {
       requestNew: 'Request a new link',
     },
   },
+  miniMap: {
+    title: 'Plots on the map of Moldova',
+    open: 'Open the map',
+    label: 'Map of Moldova, plots marked: {{count}}',
+  },
+  ndviSeason: {
+    title: 'NDVI this season',
+    plot: 'Plot for the chart',
+    empty:
+      'No Sentinel-2 images for the plot yet: they appear after the calculation on the map.',
+  },
   weatherToday: {
     title: 'Weather now at “{{name}}”',
     humidity: 'humidity {{value}} %',
