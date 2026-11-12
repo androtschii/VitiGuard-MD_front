@@ -13,6 +13,7 @@ import { EmptyState } from '@/components/molecules/EmptyState'
 import { Pagination } from '@/components/molecules/Pagination'
 import { DiagnosisCard } from '@/components/organisms/DiagnosisCard'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
+import { VineHistory } from '@/components/organisms/VineHistory'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
 import { cn } from '@/lib/cn'
 
@@ -31,6 +32,8 @@ export function HistoryPage() {
   // На телефоне четыре поля занимали полэкрана: фильтры свёрнуты в кнопку
   const [filtersOpen, setFiltersOpen] = useState(false)
   const formId = useId()
+  // Листья и ряды лозы — разные проверки: у ряда нет болезни и фильтров
+  const [kind, setKind] = useState<'leaf' | 'vine'>('leaf')
 
   // Новые условия — с первой страницы
   const change = (patch: DiagnosisFilters) => {
@@ -46,151 +49,179 @@ export function HistoryPage() {
       <p className="mb-4 max-w-2xl text-sm text-ink-muted">
         {t('history.intro')}
       </p>
-
-      <div className="mb-3 flex flex-wrap items-center gap-2 sm:hidden">
-        <Button
-          variant="secondary"
-          size="sm"
-          aria-expanded={filtersOpen}
-          aria-controls={formId}
-          onClick={() => setFiltersOpen((open) => !open)}
-        >
-          {active
-            ? t('history.filtersButtonActive', { count: active })
-            : t('history.filtersButton')}
-        </Button>
-      </div>
-      <form
-        id={formId}
-        aria-label={t('history.filters')}
-        onSubmit={(event) => event.preventDefault()}
-        className={cn(
-          'mb-4 grid-cols-2 gap-3 text-sm sm:grid lg:grid-cols-4',
-          filtersOpen ? 'grid' : 'hidden',
-        )}
+      <div
+        role="tablist"
+        aria-label={t('vineHistory.tabs')}
+        className="mb-4 inline-flex rounded-lg border border-line bg-muted/60 p-1"
       >
-        <div className="col-span-2 flex flex-col gap-1 sm:col-span-1">
-          <label htmlFor={ids.disease} className="text-ink-soft">
-            {t('history.disease')}
-          </label>
-          <Select
-            id={ids.disease}
-            value={filters.disease ?? ''}
-            onChange={(event) =>
-              change({
-                disease: event.target.value as DiagnosisFilters['disease'],
-              })
-            }
+        {(['leaf', 'vine'] as const).map((value) => (
+          <button
+            key={value}
+            type="button"
+            role="tab"
+            aria-selected={kind === value}
+            onClick={() => setKind(value)}
+            className={cn(
+              'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+              kind === value
+                ? 'bg-surface text-ink shadow-sm'
+                : 'text-ink-muted hover:text-ink',
+            )}
           >
-            <option value="">{t('history.any')}</option>
-            {DISEASES.map((disease) => (
-              <option key={disease} value={disease}>
-                {t(`diseases.${disease}`)}
-              </option>
-            ))}
-          </Select>
-        </div>
-        <div className="col-span-2 flex flex-col gap-1 sm:col-span-1">
-          <label htmlFor={ids.plot} className="text-ink-soft">
-            {t('history.plot')}
-          </label>
-          <Select
-            id={ids.plot}
-            value={filters.vineyardId ?? ''}
-            onChange={(event) => change({ vineyardId: event.target.value })}
-          >
-            <option value="">{t('history.any')}</option>
-            {vineyards.map((vineyard) => (
-              <option key={vineyard.id} value={vineyard.id}>
-                {vineyard.name}
-              </option>
-            ))}
-          </Select>
-        </div>
-        <div className="flex flex-col gap-1">
-          <label htmlFor={ids.from} className="text-ink-soft">
-            {t('history.from')}
-          </label>
-          <Input
-            id={ids.from}
-            type="date"
-            value={filters.dateFrom ?? ''}
-            max={filters.dateTo || undefined}
-            onChange={(event) => change({ dateFrom: event.target.value })}
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <label htmlFor={ids.to} className="text-ink-soft">
-            {t('history.to')}
-          </label>
-          <Input
-            id={ids.to}
-            type="date"
-            value={filters.dateTo ?? ''}
-            min={filters.dateFrom || undefined}
-            onChange={(event) => change({ dateTo: event.target.value })}
-          />
-        </div>
-        {isFiltered && (
-          <div className="col-span-2 lg:col-span-4">
+            {t(`vineHistory.${value}`)}
+          </button>
+        ))}
+      </div>
+      {kind === 'vine' ? (
+        <VineHistory />
+      ) : (
+        <>
+          <div className="mb-3 flex flex-wrap items-center gap-2 sm:hidden">
             <Button
-              variant="ghost"
+              variant="secondary"
               size="sm"
-              onClick={() => {
-                setFilters({})
-                setPage(1)
-              }}
+              aria-expanded={filtersOpen}
+              aria-controls={formId}
+              onClick={() => setFiltersOpen((open) => !open)}
             >
-              {t('history.resetFilters')}
+              {active
+                ? t('history.filtersButtonActive', { count: active })
+                : t('history.filtersButton')}
             </Button>
           </div>
-        )}
-      </form>
-
-      <div aria-live="polite">
-        {history.isPending ? (
-          <CardSkeleton />
-        ) : history.isError ? (
-          <p role="alert" className="text-sm text-danger">
-            {t('history.loadError')}
-          </p>
-        ) : history.data.total === 0 ? (
-          isFiltered ? (
-            <EmptyState icon="search" title={t('history.nothingFound')} />
-          ) : (
-            <EmptyState
-              icon="leaf"
-              title={t('history.empty')}
-              action={
-                <Link
-                  to="/diagnosis"
-                  className="inline-flex min-h-9 items-center rounded-lg bg-brand-700 px-4 text-sm font-medium text-white transition hover:bg-brand-800"
-                >
-                  {t('history.check')}
-                </Link>
-              }
-            />
-          )
-        ) : (
-          <>
-            <p className="mb-3 text-sm text-ink-muted">
-              {t('history.count', { count: history.data.total })}
-            </p>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-              {history.data.items.map((record) => (
-                <DiagnosisCard key={record.id} record={record} />
-              ))}
+          <form
+            id={formId}
+            aria-label={t('history.filters')}
+            onSubmit={(event) => event.preventDefault()}
+            className={cn(
+              'mb-4 grid-cols-2 gap-3 text-sm sm:grid lg:grid-cols-4',
+              filtersOpen ? 'grid' : 'hidden',
+            )}
+          >
+            <div className="col-span-2 flex flex-col gap-1 sm:col-span-1">
+              <label htmlFor={ids.disease} className="text-ink-soft">
+                {t('history.disease')}
+              </label>
+              <Select
+                id={ids.disease}
+                value={filters.disease ?? ''}
+                onChange={(event) =>
+                  change({
+                    disease: event.target.value as DiagnosisFilters['disease'],
+                  })
+                }
+              >
+                <option value="">{t('history.any')}</option>
+                {DISEASES.map((disease) => (
+                  <option key={disease} value={disease}>
+                    {t(`diseases.${disease}`)}
+                  </option>
+                ))}
+              </Select>
             </div>
-            <div className="mt-4">
-              <Pagination
-                page={page}
-                pageCount={history.data.pages}
-                onPageChange={setPage}
+            <div className="col-span-2 flex flex-col gap-1 sm:col-span-1">
+              <label htmlFor={ids.plot} className="text-ink-soft">
+                {t('history.plot')}
+              </label>
+              <Select
+                id={ids.plot}
+                value={filters.vineyardId ?? ''}
+                onChange={(event) => change({ vineyardId: event.target.value })}
+              >
+                <option value="">{t('history.any')}</option>
+                {vineyards.map((vineyard) => (
+                  <option key={vineyard.id} value={vineyard.id}>
+                    {vineyard.name}
+                  </option>
+                ))}
+              </Select>
+            </div>
+            <div className="flex flex-col gap-1">
+              <label htmlFor={ids.from} className="text-ink-soft">
+                {t('history.from')}
+              </label>
+              <Input
+                id={ids.from}
+                type="date"
+                value={filters.dateFrom ?? ''}
+                max={filters.dateTo || undefined}
+                onChange={(event) => change({ dateFrom: event.target.value })}
               />
             </div>
-          </>
-        )}
-      </div>
+            <div className="flex flex-col gap-1">
+              <label htmlFor={ids.to} className="text-ink-soft">
+                {t('history.to')}
+              </label>
+              <Input
+                id={ids.to}
+                type="date"
+                value={filters.dateTo ?? ''}
+                min={filters.dateFrom || undefined}
+                onChange={(event) => change({ dateTo: event.target.value })}
+              />
+            </div>
+            {isFiltered && (
+              <div className="col-span-2 lg:col-span-4">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setFilters({})
+                    setPage(1)
+                  }}
+                >
+                  {t('history.resetFilters')}
+                </Button>
+              </div>
+            )}
+          </form>
+
+          <div aria-live="polite">
+            {history.isPending ? (
+              <CardSkeleton />
+            ) : history.isError ? (
+              <p role="alert" className="text-sm text-danger">
+                {t('history.loadError')}
+              </p>
+            ) : history.data.total === 0 ? (
+              isFiltered ? (
+                <EmptyState icon="search" title={t('history.nothingFound')} />
+              ) : (
+                <EmptyState
+                  icon="leaf"
+                  title={t('history.empty')}
+                  action={
+                    <Link
+                      to="/diagnosis"
+                      className="inline-flex min-h-9 items-center rounded-lg bg-brand-700 px-4 text-sm font-medium text-white transition hover:bg-brand-800"
+                    >
+                      {t('history.check')}
+                    </Link>
+                  }
+                />
+              )
+            ) : (
+              <>
+                <p className="mb-3 text-sm text-ink-muted">
+                  {t('history.count', { count: history.data.total })}
+                </p>
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+                  {history.data.items.map((record) => (
+                    <DiagnosisCard key={record.id} record={record} />
+                  ))}
+                </div>
+                <div className="mt-4">
+                  <Pagination
+                    page={page}
+                    pageCount={history.data.pages}
+                    onPageChange={setPage}
+                  />
+                </div>
+              </>
+            )}
+          </div>
+        </>
+      )}
     </DashboardTemplate>
   )
 }

@@ -411,7 +411,16 @@ export const ro: Messages = {
       requestNew: 'Solicitați un link nou',
     },
   },
+  vineHistory: {
+    tabs: 'Ce verificări să arate',
+    leaf: 'Frunze',
+    vine: 'Rânduri de viță',
+    empty: 'Încă nu există analize salvate ale rândurilor.',
+    emptyHint:
+      'Fotografiați un rând pe pagina «Diagnostic → Rând de viță» cu bifa «Salvați în istoric».',
+  },
   vine: {
+    saved: 'Analiza a fost salvată în istoric.',
     tabs: { label: 'Ce verificăm', leaf: 'Frunză', row: 'Rând de viță' },
     title: 'Tulpini și ciorchini în fotografie',
     intro:
