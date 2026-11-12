@@ -176,7 +176,9 @@ export function DiagnosisCard({ record }: DiagnosisCardProps) {
                     disabled={busy !== null}
                     onClick={() => void run('pdf', photo)}
                   >
-                    PDF
+                    {/* На телефоне карточка узкая: подпись прячется, значок
+                        и название для диктора остаются, кнопки помещаются в строку */}
+                    <span className="hidden sm:inline">PDF</span>
                   </DownloadButton>
                   <Button
                     size="sm"
