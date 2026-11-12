@@ -402,7 +402,16 @@ export const en: Messages = {
       requestNew: 'Request a new link',
     },
   },
+  vineHistory: {
+    tabs: 'Which checks to show',
+    leaf: 'Leaves',
+    vine: 'Vine rows',
+    empty: 'No saved row analyses yet.',
+    emptyHint:
+      'Photograph a row on “Diagnosis → Vine row” with “Save to history” ticked.',
+  },
   vine: {
+    saved: 'The analysis has been saved to history.',
     tabs: { label: 'What to check', leaf: 'Leaf', row: 'Vine row' },
     title: 'Trunks and bunches in a photo',
     intro:
