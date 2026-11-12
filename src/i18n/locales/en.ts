@@ -402,6 +402,14 @@ export const en: Messages = {
       requestNew: 'Request a new link',
     },
   },
+  weatherToday: {
+    title: 'Weather now at “{{name}}”',
+    humidity: 'humidity {{value}} %',
+    rain: 'rain {{value}} mm',
+    wet: 'Wet and warm — conditions for downy mildew infection. Check the daily risk on the plot map.',
+    calm: 'No conditions for downy mildew infection right now.',
+    unavailable: 'Could not get the weather right now.',
+  },
   vineHistory: {
     tabs: 'Which checks to show',
     leaf: 'Leaves',

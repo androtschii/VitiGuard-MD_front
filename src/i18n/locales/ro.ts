@@ -411,6 +411,14 @@ export const ro: Messages = {
       requestNew: 'Solicitați un link nou',
     },
   },
+  weatherToday: {
+    title: 'Vremea acum la parcela «{{name}}»',
+    humidity: 'umiditate {{value}} %',
+    rain: 'precipitații {{value}} mm',
+    wet: 'Umed și cald — condiții pentru infecția cu mană. Vedeți riscul pe zile pe harta parcelei.',
+    calm: 'Acum nu sunt condiții pentru infecția cu mană.',
+    unavailable: 'Vremea nu a putut fi obținută acum.',
+  },
   vineHistory: {
     tabs: 'Ce verificări să arate',
     leaf: 'Frunze',

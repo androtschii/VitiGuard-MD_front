@@ -20,7 +20,7 @@ describe('App', () => {
       screen.getByRole('heading', { name: 'Обзор хозяйства' }),
     ).toBeInTheDocument()
     await waitFor(
-      () => expect(screen.getByText(/API 0\.1\.0/)).toBeInTheDocument(),
+      () => expect(screen.getByText(/Участков пока нет/)).toBeInTheDocument(),
       LAZY_PAGE,
     )
   }, 30_000)
