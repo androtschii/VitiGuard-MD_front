@@ -28,6 +28,14 @@ export const en: Messages = {
     admin: 'Admin',
     review: 'Reviews',
   },
+  account: {
+    menu: 'Profile menu',
+    profile: 'Profile',
+    switch: 'Switch account',
+    add: 'Sign in to another account',
+    forget: 'Remove from list',
+    forgetNamed: 'Remove {{email}} from list',
+  },
   reviewQueue: {
     title: 'Growers’ checks',
     intro:
@@ -192,6 +200,11 @@ export const en: Messages = {
     unblock: 'Unblock',
     blockUser: 'Block {{email}}',
     unblockUser: 'Unblock {{email}}',
+    reset: 'Reset password',
+    resetUser: 'Send {{email}} a password change link',
+    resetSent: 'Link sent',
+    passwords:
+      'Passwords are stored only in encrypted form and are not visible to anyone, including the administrator. “Reset password” sends the user a link to change it.',
     empty: 'Nobody found.',
     roles: {
       user: 'User',

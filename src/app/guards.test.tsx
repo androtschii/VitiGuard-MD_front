@@ -192,11 +192,12 @@ describe('маршруты приложения', () => {
     ).toBeInTheDocument()
   })
 
-  it('кнопка «Выйти» на главной возвращает на вход', async () => {
+  it('«Выйти» в меню профиля возвращает на вход', async () => {
     useSessionStore.getState().setAccessToken('token')
     const { router, user } = renderAt('/', routes)
 
-    await user.click(screen.getByRole('button', { name: 'Выйти' }))
+    await user.click(screen.getByRole('button', { name: 'Меню профиля' }))
+    await user.click(screen.getByRole('menuitem', { name: 'Выйти' }))
 
     expect(
       await screen.findByRole('heading', { name: 'Вход' }),

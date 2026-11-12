@@ -23,7 +23,9 @@ describe('MapPage', () => {
     ).toBeInTheDocument()
     expect(sidebarLink('Карта')).toHaveAttribute('aria-current', 'page')
     expect(sidebarLink('Главная')).not.toHaveAttribute('aria-current')
-    expect(screen.getByRole('button', { name: 'Выйти' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: 'Меню профиля' }),
+    ).toBeInTheDocument()
   })
 
   it('сохраняет нарисованный участок под введённым названием', async () => {

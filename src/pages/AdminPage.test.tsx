@@ -183,4 +183,52 @@ describe('AdminPage', () => {
       'Пользователь не найден',
     )
   })
+
+  it('отправляет ссылку для смены пароля, а пароль не показывает', async () => {
+    const sent: string[] = []
+    const { user } = setup([ADMIN, account('user-1', 'ion@example.md')])
+    server.use(
+      http.post('/api/v1/admin/users/:id/password-reset', ({ params }) => {
+        sent.push(String(params.id))
+        return new HttpResponse(null, { status: 202 })
+      }),
+    )
+
+    expect(
+      await screen.findByText(/Пароли хранятся только в зашифрованном виде/),
+    ).toBeVisible()
+    const reset = await screen.findByRole('button', {
+      name: 'Отправить ion@example.md ссылку для смены пароля',
+    })
+    // Себе ссылку администратор не отправляет: для этого есть «Забыли пароль?»
+    expect(
+      screen.queryByRole('button', { name: /admin@vitiguard\.md ссылку/ }),
+    ).toBeNull()
+    await user.click(reset)
+
+    expect(await screen.findByText('Ссылка отправлена')).toBeVisible()
+    expect(sent).toEqual(['user-1'])
+  })
+
+  it('сообщает, если ссылку отправить не удалось', async () => {
+    const { user } = setup([ADMIN, account('user-1', 'ion@example.md')])
+    server.use(
+      http.post('/api/v1/admin/users/:id/password-reset', () =>
+        HttpResponse.json(
+          { detail: 'Пользователь заблокирован: сначала разблокируйте его' },
+          { status: 400 },
+        ),
+      ),
+    )
+
+    await user.click(
+      await screen.findByRole('button', {
+        name: 'Отправить ion@example.md ссылку для смены пароля',
+      }),
+    )
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'Пользователь заблокирован',
+    )
+  })
 })

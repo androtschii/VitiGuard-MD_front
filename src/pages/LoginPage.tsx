@@ -7,6 +7,8 @@ import { AuthTemplate } from '@/components/templates/AuthTemplate'
 type LoginLocationState = {
   registered?: boolean
   passwordReset?: boolean
+  // Аккаунт, выбранный в переключателе меню профиля
+  email?: string
 } | null
 
 function getNotice(state: LoginLocationState) {
@@ -48,6 +50,7 @@ export function LoginPage() {
         </p>
       )}
       <LoginForm
+        defaultEmail={(location.state as LoginLocationState)?.email}
         onSubmit={async (values) => {
           // После входа GuestRoute сам перенаправит на нужную страницу
           await mutateAsync(values)
