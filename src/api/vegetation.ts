@@ -60,6 +60,8 @@ export function useVegetation(id: string, refreshing = false) {
   return useQuery({
     queryKey: vegetationKey(id),
     queryFn: () => fetchVegetation(id),
+    // Пока участок не выбран (на главной до загрузки списка), запроса нет
+    enabled: id !== '',
     refetchInterval: refreshing ? 30_000 : false,
   })
 }

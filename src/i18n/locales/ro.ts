@@ -411,6 +411,17 @@ export const ro: Messages = {
       requestNew: 'Solicitați un link nou',
     },
   },
+  miniMap: {
+    title: 'Parcelele pe schema Moldovei',
+    open: 'Deschideți harta',
+    label: 'Schema Moldovei, parcele marcate: {{count}}',
+  },
+  ndviSeason: {
+    title: 'NDVI pe sezon',
+    plot: 'Parcela pentru grafic',
+    empty:
+      'Încă nu există imagini Sentinel-2 pentru parcelă: vor apărea după calcul pe hartă.',
+  },
   weatherToday: {
     title: 'Vremea acum la parcela «{{name}}»',
     humidity: 'umiditate {{value}} %',

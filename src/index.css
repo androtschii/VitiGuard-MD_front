@@ -865,3 +865,24 @@ html:has(dialog[open]) {
     transform: scale(1.25);
   }
 }
+
+/* Мини-карта на главной: отметки участков мягко «дышат» по очереди */
+@media (prefers-reduced-motion: no-preference) {
+  .mini-map-pulse {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: mini-map-pulse 2.4s ease-out infinite both;
+  }
+}
+
+@keyframes mini-map-pulse {
+  0% {
+    opacity: 0.9;
+    transform: scale(0.6);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.8);
+  }
+}
