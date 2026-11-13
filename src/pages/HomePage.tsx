@@ -87,7 +87,8 @@ export function HomePage() {
         <AlertsSummary />
         <WeatherToday />
         <FarmOverview />
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+        {/* Схема и график — для экрана: печатная версия главной — только сводка */}
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] print:hidden">
           <FarmMiniMap />
           <NdviSeason />
         </div>
