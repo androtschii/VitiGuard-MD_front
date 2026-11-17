@@ -436,7 +436,7 @@ html:has(dialog[open]) {
 
   .delete-lid {
     transform-origin: 13px 4px;
-    transition: transform 0.25s cubic-bezier(0.3, 1.5, 0.5, 1);
+    transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
   }
 
   .delete-button:is(:hover:enabled, :focus-visible, [aria-busy]) .delete-lid {
@@ -565,9 +565,9 @@ html:has(dialog[open]) {
     transform: scale(0);
   }
 
-  /* Перелёт кривой — та же упругость, что у галочки в образце */
+  /* Галочка дорисовывается с плавным замедлением, без отскока */
   .download-icon[data-state='done'] .download-check {
-    transition: stroke-dashoffset 0.5s cubic-bezier(0.3, 1.6, 0.5, 1);
+    transition: stroke-dashoffset 0.5s cubic-bezier(0.25, 1, 0.5, 1);
   }
 
   .grape-fill-level {
