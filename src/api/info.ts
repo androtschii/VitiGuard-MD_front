@@ -5,6 +5,8 @@ export type ApiInfo = {
   name: string
   version: string
   environment: string
+  // Включён ли демо-вход (только стенд на компьютере разработчика)
+  demo_login?: boolean
 }
 
 export async function fetchApiInfo() {
