@@ -37,7 +37,7 @@ export function SlidingChoice<Value extends string>({
         <span
           aria-hidden="true"
           data-testid="sliding-pill"
-          className="absolute inset-y-0.5 left-0.5 rounded-md bg-brand-700 shadow-sm motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-[cubic-bezier(0.3,1.3,0.5,1)]"
+          className="absolute inset-y-0.5 left-0.5 rounded-md bg-brand-700 shadow-sm motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-[cubic-bezier(0.25,1,0.5,1)]"
           style={{
             width: `calc((100% - 0.25rem) / ${options.length})`,
             transform: `translateX(${index * 100}%)`,

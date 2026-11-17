@@ -2,19 +2,10 @@ import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { delay, http, HttpResponse } from 'msw'
 import { afterEach, describe, expect, it } from 'vitest'
-import { apiInfo } from '@/test/handlers'
 import { renderWithQueryClient } from '@/test/render'
 import { server } from '@/test/server'
 import { useSessionStore } from '@/store/session'
 import { DemoLogin } from './DemoLogin'
-
-function info(demo: boolean) {
-  server.use(
-    http.get('/api/v1/info', () =>
-      HttpResponse.json({ ...apiInfo, demo_login: demo }),
-    ),
-  )
-}
 
 afterEach(() => {
   useSessionStore.getState().clear()
@@ -22,7 +13,6 @@ afterEach(() => {
 
 describe('DemoLogin', () => {
   it('входит в выбранную роль одним нажатием', async () => {
-    info(true)
     const roles: string[] = []
     server.use(
       http.post('/api/v1/auth/demo', async ({ request }) => {
@@ -31,10 +21,10 @@ describe('DemoLogin', () => {
       }),
     )
     const user = userEvent.setup()
-    renderWithQueryClient(<DemoLogin />)
+    renderWithQueryClient(<DemoLogin enabled />)
 
     expect(
-      await screen.findByRole('heading', { name: 'Демо-вход' }),
+      await screen.findByRole('heading', { name: 'Демо-аккаунты' }),
     ).toBeVisible()
     expect(screen.getByRole('button', { name: 'Виноградарь' })).toBeVisible()
     expect(screen.getByRole('button', { name: 'Администратор' })).toBeVisible()
@@ -45,14 +35,12 @@ describe('DemoLogin', () => {
   })
 
   it('без включённого демо-входа ничего не показывает', async () => {
-    info(false)
-    const { container } = renderWithQueryClient(<DemoLogin />)
+    const { container } = renderWithQueryClient(<DemoLogin enabled={false} />)
     await new Promise((resolve) => setTimeout(resolve, 50))
     expect(container).toBeEmptyDOMElement()
   })
 
   it('показывает ошибку, если аккаунта роли нет', async () => {
-    info(true)
     server.use(
       http.post('/api/v1/auth/demo', () =>
         HttpResponse.json(
@@ -62,7 +50,7 @@ describe('DemoLogin', () => {
       ),
     )
     const user = userEvent.setup()
-    renderWithQueryClient(<DemoLogin />)
+    renderWithQueryClient(<DemoLogin enabled />)
 
     await user.click(await screen.findByRole('button', { name: 'Виноградарь' }))
 
@@ -72,7 +60,6 @@ describe('DemoLogin', () => {
   })
 
   it('пока идёт вход, нажатая кнопка ждёт, остальные недоступны', async () => {
-    info(true)
     server.use(
       http.post('/api/v1/auth/demo', async () => {
         await delay(200)
@@ -80,7 +67,7 @@ describe('DemoLogin', () => {
       }),
     )
     const user = userEvent.setup()
-    renderWithQueryClient(<DemoLogin />)
+    renderWithQueryClient(<DemoLogin enabled />)
 
     await user.click(await screen.findByRole('button', { name: 'Агроном' }))
 

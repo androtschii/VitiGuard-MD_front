@@ -385,7 +385,7 @@ export const ro: Messages = {
         'Parola a fost schimbată. Autentificați-vă cu parola nouă.',
     },
     demo: {
-      title: 'Intrare demo',
+      title: 'Conturi demo',
       hint: 'Intrați fără parolă într-un cont pregătit cu date — pentru prezentare.',
     },
     register: {

@@ -4,4 +4,6 @@ interface ImportMetaEnv {
   readonly VITE_API_URL?: string
   // Адрес проекта Sentry (pr-092); без него мониторинг выключен
   readonly VITE_SENTRY_DSN?: string
+  // Кнопки демо-входа на странице входа: только стенд для показа
+  readonly VITE_DEMO_LOGIN?: string
 }

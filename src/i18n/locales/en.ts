@@ -376,7 +376,7 @@ export const en: Messages = {
       passwordChanged: 'Password changed. Sign in with your new password.',
     },
     demo: {
-      title: 'Demo sign-in',
+      title: 'Demo accounts',
       hint: 'Sign in without a password to a ready account with data — for demos.',
     },
     register: {

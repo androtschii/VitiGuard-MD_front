@@ -1,18 +1,23 @@
 import { useTranslation } from 'react-i18next'
 import { useDemoLogin, type DemoRole } from '@/api/auth'
-import { useApiInfo } from '@/api/info'
 import { Button } from '@/components/atoms/Button'
 
 const ROLES: DemoRole[] = ['user', 'agronomist', 'admin']
 
-// Кнопки входа в роль одним нажатием — для показа проекта. Видны, только если
-// сервер сообщил, что демо-вход включён: в production его нет
-export function DemoLogin() {
+type DemoLoginProps = {
+  // Включается при сборке стенда (.env.local): страница входа гостя не ходит
+  // на сервер заранее. Разрешён ли демо-вход, всё равно решает сервер
+  enabled?: boolean
+}
+
+// Кнопки входа в роль одним нажатием — для показа проекта
+export function DemoLogin({
+  enabled = import.meta.env.VITE_DEMO_LOGIN === 'true',
+}: DemoLoginProps) {
   const { t } = useTranslation()
-  const info = useApiInfo()
   const demo = useDemoLogin()
 
-  if (!info.data?.demo_login) return null
+  if (!enabled) return null
 
   return (
     <section
