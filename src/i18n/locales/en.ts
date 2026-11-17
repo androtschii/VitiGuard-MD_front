@@ -375,6 +375,10 @@ export const en: Messages = {
       accountCreated: 'Account created. Sign in with your email and password.',
       passwordChanged: 'Password changed. Sign in with your new password.',
     },
+    demo: {
+      title: 'Demo accounts',
+      hint: 'Sign in without a password to a ready account with data — for demos.',
+    },
     register: {
       title: 'Sign up',
       submit: 'Sign up',

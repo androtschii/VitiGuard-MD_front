@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { Link, useLocation } from 'react-router'
 import { useLogin } from '@/api/auth'
+import { DemoLogin } from '@/components/organisms/DemoLogin'
 import { LoginForm } from '@/components/organisms/LoginForm'
 import { AuthTemplate } from '@/components/templates/AuthTemplate'
 
@@ -61,6 +62,7 @@ export function LoginPage() {
           {t('auth.login.forgotPassword')}
         </Link>
       </p>
+      <DemoLogin />
     </AuthTemplate>
   )
 }

@@ -26,6 +26,23 @@ export function useLogin() {
   })
 }
 
+export type DemoRole = 'user' | 'agronomist' | 'admin'
+
+// Демо-вход в роль без пароля (backend: /auth/demo); сервер разрешает его
+// только на стенде, где он явно включён
+export async function demoLogin(role: DemoRole) {
+  const { data } = await api.post<AccessToken>('/auth/demo', { role })
+  return data
+}
+
+export function useDemoLogin() {
+  return useMutation({
+    mutationFn: demoLogin,
+    onSuccess: ({ access_token }) =>
+      useSessionStore.getState().setAccessToken(access_token),
+  })
+}
+
 // Новый access-токен по refresh-cookie; тело запроса пустое
 export async function refreshAccessToken() {
   const { data } = await api.post<AccessToken>('/auth/refresh')

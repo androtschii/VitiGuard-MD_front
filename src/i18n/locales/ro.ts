@@ -384,6 +384,10 @@ export const ro: Messages = {
       passwordChanged:
         'Parola a fost schimbată. Autentificați-vă cu parola nouă.',
     },
+    demo: {
+      title: 'Conturi demo',
+      hint: 'Intrați fără parolă într-un cont pregătit cu date — pentru prezentare.',
+    },
     register: {
       title: 'Înregistrare',
       submit: 'Înregistrați-vă',
