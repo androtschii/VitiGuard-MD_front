@@ -4,6 +4,7 @@ export const ro: Messages = {
   common: {
     loading: 'Se încarcă…',
     close: 'Închide',
+    cancel: 'Anulare',
     mainNavigation: 'Navigare principală',
     skipToContent: 'Salt la conținut',
     noData: 'Nu există date',
@@ -189,6 +190,8 @@ export const ro: Messages = {
   },
   admin: {
     title: 'Utilizatori și roluri',
+    forbidden:
+      'Secțiunea de administrare este disponibilă doar administratorului.',
     intro:
       'Agronomul confirmă diagnosticele și dă recomandări, administratorul gestionează utilizatorii. Utilizatorul blocat iese imediat de pe toate dispozitivele.',
     search: 'Căutare după email și nume',
@@ -525,6 +528,8 @@ export const ro: Messages = {
       'Modelul recunoaște doar bolile viței de vie. Fotografiați o singură frunză de viță de aproape, la lumina zilei, astfel încât să ocupe aproape tot cadrul. O astfel de fotografie nu se salvează în istoric.',
     lowConfidence:
       'Modelul nu este sigur de răspuns. Refotografiați frunza de aproape, la lumina zilei: o singură frunză, fără reflexe și umbre.',
+    uncertain: 'Nu s-a putut determina cu certitudine',
+    mostLikely: 'Cel mai probabil: {{disease}}',
     probabilities: 'Probabilități',
     model: 'Model: {{name}}',
     disclaimer:
@@ -672,7 +677,7 @@ export const ro: Messages = {
     bellUnread_few: 'Avertizări: {{count}} necitite',
     bellUnread_many: 'Avertizări: {{count}} de necitite',
     bellUnread_other: 'Avertizări: {{count}} de necitite',
-    text: '{{disease}}: risc ridicat pe parcela „{{plot}}”',
+    text: '{{disease}}: risc {{level}} pe parcela „{{plot}}”',
     today: 'azi',
     tomorrow: 'mâine',
     forecast: 'după prognoza meteo',

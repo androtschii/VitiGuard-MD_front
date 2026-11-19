@@ -4,6 +4,7 @@ export const en: Messages = {
   common: {
     loading: 'Loading…',
     close: 'Close',
+    cancel: 'Cancel',
     mainNavigation: 'Main navigation',
     skipToContent: 'Skip to content',
     noData: 'No data',
@@ -77,8 +78,8 @@ export const en: Messages = {
     },
   },
   draw: {
-    start: 'Draw a parcel',
-    hint: 'Click on the map to mark the corners of the parcel. To finish, click the first point or press Enter; Esc cancels drawing.',
+    start: 'Draw a vineyard',
+    hint: 'Click on the map to mark the corners of the vineyard. To finish, click the first point or press Enter; Esc cancels drawing.',
     cancel: 'Cancel',
     area: 'Area: {{area}} ha',
     editHint:
@@ -86,12 +87,12 @@ export const en: Messages = {
     remove: 'Remove outline',
   },
   vineyard: {
-    formLabel: 'New parcel',
-    name: 'Parcel name',
+    formLabel: 'New vineyard',
+    name: 'Vineyard name',
     namePlaceholder: 'For example, Cricova, north slope',
-    create: 'Save parcel',
-    created: 'Parcel “{{name}}” saved',
-    saveFailed: 'Could not save the parcel',
+    create: 'Save vineyard',
+    created: 'Vineyard “{{name}}” saved',
+    saveFailed: 'Could not save the vineyard',
     area: 'Area: {{area}} ha',
     addedOn: 'Added on {{date}}',
     variety: 'Variety',
@@ -106,19 +107,19 @@ export const en: Messages = {
       weatherNow:
         '{{temperature}} °C, humidity {{humidity}} %, precipitation {{precipitation}} mm',
       weatherFailed: 'Weather is not available right now',
-      surroundings: 'Around the plot',
+      surroundings: 'Around the vineyard',
       nearby: 'OpenStreetMap vineyards within 1 km: {{count}}',
       nearest: 'The nearest is {{distance}} m away',
       overlap: 'Matches OpenStreetMap mapping by {{value}} %',
       download: 'Download boundaries:',
       downloadFailed: 'Could not download the boundaries',
-      delete: 'Delete plot',
-      confirmDelete: 'Delete the plot? This cannot be undone.',
+      delete: 'Delete vineyard',
+      confirmDelete: 'Delete the vineyard? This cannot be undone.',
       cancel: 'Cancel',
     },
   },
   search: {
-    label: 'Search for a parcel or coordinates',
+    label: 'Search for a vineyard or coordinates',
     placeholder: 'Name or 47.14, 28.86',
     point: 'Go to point {{lat}}, {{lon}}',
     nothing: 'Nothing found',
@@ -155,7 +156,7 @@ export const en: Messages = {
     delete: 'Delete',
   },
   filter: {
-    label: 'Parcel filter',
+    label: 'Vineyard filter',
     variety: 'Variety',
     all: 'All varieties',
     none: 'No variety',
@@ -182,10 +183,12 @@ export const en: Messages = {
   },
   network: {
     offline:
-      'No network: showing data that is already loaded. Photo analysis, risk recalculation and saving plots will work once the network is back.',
+      'No network: showing data that is already loaded. Photo analysis, risk recalculation and saving vineyards will work once the network is back.',
   },
   admin: {
     title: 'Users and roles',
+    forbidden:
+      'The administration section is only available to administrators.',
     intro:
       'An agronomist confirms diagnoses and gives advice, an administrator manages users. A blocked user is signed out of all devices at once.',
     search: 'Search by email or name',
@@ -215,7 +218,7 @@ export const en: Messages = {
   telegram: {
     title: 'Telegram',
     about:
-      'Connect @VitiGuard_bot: it diagnoses leaf photos sent right in the chat, sends risk alerts for your plots, and the mini app opens without a password.',
+      'Connect @VitiGuard_bot: it diagnoses leaf photos sent right in the chat, sends risk alerts for your vineyards, and the mini app opens without a password.',
     connect: 'Connect Telegram',
     waiting:
       'A chat with the bot will open — press “Start” there. The site will mark the connection by itself.',
@@ -311,7 +314,7 @@ export const en: Messages = {
   },
   home: {
     title: 'Farm overview',
-    ringTitle: 'Plots by risk',
+    ringTitle: 'Vineyards by risk',
     stats: {
       risk: 'Disease risk',
       offSeason: 'Off season',
@@ -319,21 +322,21 @@ export const en: Messages = {
       lastCheck: 'Last check',
       noChecks: 'None yet',
       noChecksHint: 'check a leaf by photo in Diagnosis',
-      vineyards: 'Plots',
+      vineyards: 'Vineyards',
       area: 'Total area',
       high: 'At high risk',
       medium: 'At medium risk',
       today: 'today, the worse of downy and powdery mildew',
     },
-    plots: 'Risk by plot today',
+    plots: 'Risk by vineyard today',
     columns: {
       risk: 'Risk today',
-      name: 'Plot',
+      name: 'Vineyard',
       area: 'Area, ha',
     },
     noEstimate: 'no estimate today',
-    noVineyards: 'No plots yet — draw the first one on the map.',
-    loadError: 'Could not load the plots. Reload the page.',
+    noVineyards: 'No vineyards yet — draw the first one on the map.',
+    loadError: 'Could not load the vineyards. Reload the page.',
     description:
       'Vineyard health monitoring for Moldova: disease diagnosis from leaf photos, satellite indices and infection risk forecasts.',
     openMap: 'Open map',
@@ -407,21 +410,21 @@ export const en: Messages = {
     },
   },
   miniMap: {
-    title: 'Plots on the map of Moldova',
+    title: 'Vineyards on the map of Moldova',
     open: 'Open the map',
-    label: 'Map of Moldova, plots marked: {{count}}',
+    label: 'Map of Moldova, vineyards marked: {{count}}',
   },
   ndviSeason: {
     title: 'NDVI this season',
-    plot: 'Plot for the chart',
+    plot: 'Vineyard for the chart',
     empty:
-      'No Sentinel-2 images for the plot yet: they appear after the calculation on the map.',
+      'No Sentinel-2 images for the vineyard yet: they appear after the calculation on the map.',
   },
   weatherToday: {
     title: 'Weather now at “{{name}}”',
     humidity: 'humidity {{value}} %',
     rain: 'rain {{value}} mm',
-    wet: 'Wet and warm — conditions for downy mildew infection. Check the daily risk on the plot map.',
+    wet: 'Wet and warm — conditions for downy mildew infection. Check the daily risk on the vineyard map.',
     calm: 'No conditions for downy mildew infection right now.',
     unavailable: 'Could not get the weather right now.',
   },
@@ -456,8 +459,8 @@ export const en: Messages = {
   diagnosis: {
     location: {
       taken: 'Taken at {{latitude}}, {{longitude}} (photo GPS)',
-      onPlot: '— on the plot “{{name}}”.',
-      offPlot: '— outside your plots.',
+      onPlot: '— on the vineyard “{{name}}”.',
+      offPlot: '— outside your vineyards.',
     },
     title: 'Leaf photo diagnosis',
     intro:
@@ -511,6 +514,8 @@ export const en: Messages = {
       'The model only recognises grapevine diseases. Take a close-up of a single grape leaf in daylight so that it fills most of the frame. Such a photo is not saved to the history.',
     lowConfidence:
       'The model is not sure. Retake the photo close up in daylight: one leaf, no glare or shadows.',
+    uncertain: 'Could not determine with confidence',
+    mostLikely: 'Most likely: {{disease}}',
     probabilities: 'Probabilities',
     model: 'Model: {{name}}',
     disclaimer:
@@ -529,10 +534,10 @@ export const en: Messages = {
   history: {
     title: 'Check history',
     intro:
-      'Saved leaf checks: the photo, the model diagnosis and the plot. They show where and when a disease was found.',
+      'Saved leaf checks: the photo, the model diagnosis and the vineyard. They show where and when a disease was found.',
     save: 'Save the photo and result to history',
-    plot: 'Plot',
-    noPlot: 'No plot',
+    plot: 'Vineyard',
+    noPlot: 'No vineyard',
     filtersButton: 'Filters',
     filtersButtonActive: 'Filters ({{count}})',
     resetFilters: 'Reset filters',
@@ -641,7 +646,7 @@ export const en: Messages = {
     downyIncubation:
       'Downy mildew spots may appear soon: check the undersides of the leaves.',
     downySymptoms:
-      'Downy mildew spots are expected: inspect the plot and remove infected leaves.',
+      'Downy mildew spots are expected: inspect the vineyard and remove infected leaves.',
     powderyHigh:
       'High powdery mildew risk: spray sulphur or a systemic product, open up the canopy.',
     powderyMedium: 'Powdery mildew risk is rising: inspect leaves and bunches.',
@@ -650,13 +655,13 @@ export const en: Messages = {
   alerts: {
     title: 'Alerts',
     intro:
-      'High disease risk on your plots for today and the next two days — from the risk recalculation every 6 hours.',
+      'High disease risk on your vineyards for today and the next two days — from the risk recalculation every 6 hours.',
     bell: 'Alerts',
     bellUnread_one: 'Alerts: {{count}} unread',
     bellUnread_few: 'Alerts: {{count}} unread',
     bellUnread_many: 'Alerts: {{count}} unread',
     bellUnread_other: 'Alerts: {{count}} unread',
-    text: '{{disease}}: high risk on plot “{{plot}}”',
+    text: '{{disease}}: {{level}} risk on vineyard “{{plot}}”',
     today: 'today',
     tomorrow: 'tomorrow',
     forecast: 'weather forecast',
@@ -667,7 +672,7 @@ export const en: Messages = {
     all: 'All',
     none: 'No alerts yet.',
     emptyHint:
-      'Alerts appear after the risk is recalculated every 6 hours: a high risk of downy or powdery mildew from the weather on the plot.',
+      'Alerts appear after the risk is recalculated every 6 hours: a high risk of downy or powdery mildew from the weather on the vineyard.',
     noneUnread: 'No unread alerts.',
     loadError: 'Could not load the alerts. Reload the page.',
     showAll_one: 'All alerts ({{count}})',
@@ -688,7 +693,7 @@ export const en: Messages = {
         close:
           'If the spots are small, move closer instead of zooming in: you will get more detail.',
         both: 'Downy mildew shows on the underside (white down): when in doubt, photograph the underside too.',
-        gps: 'Enable location for the camera: the plot is filled in from the photo coordinates.',
+        gps: 'Enable location for the camera: the vineyard is filled in from the photo coordinates.',
       },
     },
     risk: {
@@ -696,7 +701,7 @@ export const en: Messages = {
       items: {
         high: 'High — the weather favoured infection or spots are expected: see “What to do” in the “Risk by day” window.',
         medium:
-          'Medium — risk is rising (downy mildew incubation, powdery mildew index from 30): inspect the plot.',
+          'Medium — risk is rising (downy mildew incubation, powdery mildew index from 30): inspect the vineyard.',
         low: 'Low — no dangerous conditions; routine inspection.',
         forecast:
           'Days after today use the weather forecast and are refined at every recalculation.',
@@ -707,7 +712,7 @@ export const en: Messages = {
       items: {
         model:
           'Download the model on the “Diagnosis” page in advance — without a network the phone will analyse the photo.',
-        map: 'Open the map of the plots you need while online: the viewed basemap will be kept.',
+        map: 'Open the map of the vineyards you need while online: the viewed basemap will be kept.',
         install:
           'Install the app on your phone (“Add to Home screen”) — it will open without a network.',
         sync: 'Offline checks are not saved to history: repeat the analysis with saving once you are online.',
@@ -776,7 +781,7 @@ export const en: Messages = {
       conditions:
         'Disease risk rises after rain, with dew and in a dense canopy.',
       control:
-        'Inspect the vines once a week and after rain; weather-based risk is on the plot map.',
+        'Inspect the vines once a week and after rain; weather-based risk is on the vineyard map.',
     },
     black_rot: {
       symptoms:
@@ -828,11 +833,11 @@ export const en: Messages = {
   regions: {
     title: 'District statistics',
     intro:
-      'Vineyards mapped in OpenStreetMap and your plots by district of Moldova. A vineyard belongs to the district that contains its middle.',
+      'Vineyards mapped in OpenStreetMap and your vineyards by district of Moldova. A vineyard belongs to the district that contains its middle.',
     summary: {
       osmCount: 'Vineyards in OpenStreetMap',
       osmArea: 'Their area',
-      mine: 'My plots',
+      mine: 'My vineyards',
     },
     ha: '{{value}} ha',
     mineValue: '{{count}} · {{area}} ha',
@@ -844,7 +849,7 @@ export const en: Messages = {
       osmCount: 'OSM vineyards',
       osmArea: 'Their area, ha',
       share: 'District share',
-      mine: 'My plots, pcs · ha',
+      mine: 'My vineyards, pcs · ha',
     },
     source:
       'Source: OpenStreetMap (ODbL), district boundaries by geoBoundaries. OpenStreetMap is not fully mapped, so the real vineyard area is larger.',
@@ -861,7 +866,7 @@ export const en: Messages = {
     chartLabel:
       'NDVI and NDRE chart: {{count}} images from {{from}} to {{to}}; values are in the table below the chart',
     summary:
-      'Latest NDVI {{ndvi}} ({{date}}). Clear images: {{clear}}, covered by clouds over the plot: {{cloudy}}.',
+      'Latest NDVI {{ndvi}} ({{date}}). Clear images: {{clear}}, covered by clouds over the vineyard: {{cloudy}}.',
     empty:
       'No indices yet. Press “Update from new images” — the calculation takes a few minutes.',
     refresh: 'Update from new images',
@@ -870,11 +875,11 @@ export const en: Messages = {
     table: 'Table of values',
     columns: {
       date: 'Date',
-      cloud: 'Clouds over the plot',
+      cloud: 'Clouds over the vineyard',
     },
   },
   risk: {
-    weatherChart: 'Season weather at the plot',
+    weatherChart: 'Season weather at the vineyard',
     temperatureChartLabel:
       'Mean daily temperature over the season; triangles mark downy mildew infection days',
     temperatureShort: 'Temperature',
@@ -885,13 +890,13 @@ export const en: Messages = {
     precipitationLegend: 'Daily precipitation, mm',
     weatherHint:
       'Downy mildew infects leaves after at least 10 mm of rain above 10 °C. Days after today use the forecast.',
-    mapLegend: 'Plot colour — today’s risk',
+    mapLegend: 'Vineyard colour — today’s risk',
     mapLegendWorst: 'The worse of downy and powdery mildew',
     section: 'Disease risk',
     open: 'Risk by day',
     title: 'Disease risk: {{name}}',
     description:
-      'From the weather at the plot: the “three tens” rule and the Goidanich model for downy mildew, the Gubler-Thomas index for powdery mildew. Days after today use the weather forecast.',
+      'From the weather at the vineyard: the “three tens” rule and the Goidanich model for downy mildew, the Gubler-Thomas index for powdery mildew. Days after today use the weather forecast.',
     downy: 'Downy mildew',
     powdery: 'Powdery mildew',
     levels: {
@@ -949,7 +954,7 @@ export const en: Messages = {
     open: 'Field notes',
     title: 'Field notes: {{name}}',
     description:
-      'Text, a photo and a point on the plot. With no network the note waits on the phone and sends itself.',
+      'Text, a photo and a point on the vineyard. With no network the note waits on the phone and sends itself.',
     textLabel: 'What you noticed',
     textPlaceholder: 'For example: spots on the lower leaves, row 12',
     photoLabel: 'Photo',
@@ -988,7 +993,7 @@ export const en: Messages = {
     placeholder: 'For example: what to spray against mites',
     send: 'Ask',
     unknown:
-      'So far I can answer about the risk and treatment plan for your plots, recent checks, diseases, treatments and wine. Tap one of the buttons below.',
+      'So far I can answer about the risk and treatment plan for your vineyards, recent checks, diseases, treatments and wine. Tap one of the buttons below.',
     chips: {
       risk: 'Risk today',
       plan: 'Treatment plan',
@@ -1089,8 +1094,8 @@ export const en: Messages = {
       intro: 'Disease risk today:',
       none: 'no estimate for today',
       noneHint:
-        'There is no estimate out of season or if the plot risk has not been recalculated yet.',
-      empty: 'No plots yet: draw them on the map.',
+        'There is no estimate out of season or if the vineyard risk has not been recalculated yet.',
+      empty: 'No vineyards yet: draw them on the map.',
       failed: 'Could not load the risk. Check your connection.',
       map: 'Open the map',
     },
@@ -1100,7 +1105,7 @@ export const en: Messages = {
       protected: 'protected from {{disease}} until {{date}}',
       downy: 'downy mildew',
       powdery: 'powdery mildew',
-      more: 'More plots: {{count}} — each has its plan in its card on the map.',
+      more: 'More vineyards: {{count}} — each has its plan in its card on the map.',
       failed: 'Could not load the plan. Check your connection.',
     },
     history: {
@@ -1115,9 +1120,9 @@ export const en: Messages = {
   palette: {
     open: 'Quick search',
     title: 'Quick search',
-    placeholder: 'Section, plot or action',
+    placeholder: 'Section, vineyard or action',
     sections: 'Section',
-    plots: 'Plot',
+    plots: 'Vineyard',
     actions: 'Action',
     wineries: 'Show wineries on the map',
     empty: 'Nothing found',
@@ -1147,7 +1152,7 @@ export const en: Messages = {
     title: 'Harvest: {{name}}',
     description: 'Forecast from bunch counts and actual yield by season.',
     countTitle: 'Field count',
-    vines: 'Vines on the plot',
+    vines: 'Vines on the vineyard',
     bunches: 'Bunches per vine',
     bunchGrams: 'Bunch weight, g',
     counted: 'From the count: {{kg}} kg',
@@ -1219,17 +1224,17 @@ export const en: Messages = {
     open: 'Treatments & plan',
     title: 'Treatments and plan: {{name}}',
     description:
-      'Weekly protection and treatment plan along with the plot spray log.',
+      'Weekly protection and treatment plan along with the vineyard spray log.',
     planTitle: 'Weekly plan',
     protectionStatus: 'Protection status',
     protectedUntil: 'Protected until {{date}}',
     notProtected: 'Not protected',
     noRecommendations:
-      'No treatment recommendations: the plot is protected or there are no infection conditions.',
+      'No treatment recommendations: the vineyard is protected or there are no infection conditions.',
     actions: {
       protect: 'Preventive treatment',
       cure: 'Curative treatment',
-      inspect: 'Plot inspection',
+      inspect: 'Vineyard inspection',
     },
     fungicides: {
       contact: 'Contact (copper, mancozeb)',
@@ -1313,7 +1318,7 @@ export const en: Messages = {
     passwordsMismatch: 'Passwords do not match',
     confirmRequired: 'Repeat your password',
     nameRequired: 'Enter your name',
-    vineyardNameRequired: 'Enter the parcel name',
+    vineyardNameRequired: 'Enter the vineyard name',
     vineyardNameMax: 'At most 255 characters',
     plantingYear: 'Planting year — from 1900 to the current year',
   },

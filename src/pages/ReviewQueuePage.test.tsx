@@ -88,9 +88,9 @@ describe('ReviewQueuePage', () => {
     renderPage()
 
     expect(await screen.findByText('Все проверки просмотрены.')).toBeVisible()
-    // Администратору видны и очередь, и админка
+    // Администратору видны и очередь, и администрирование
     expect(sidebarLink('Проверки')).toBeInTheDocument()
-    expect(sidebarLink('Админка')).toBeInTheDocument()
+    expect(sidebarLink('Администрирование')).toBeInTheDocument()
   })
 
   it('виноградарю объясняет, что очередь не для него', async () => {

@@ -2,6 +2,7 @@ import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { ApiError } from '@/api/client'
+import { useMapStore } from '@/store/map'
 import { renderWithQueryClient } from '@/test/render'
 import { VineyardForm } from './VineyardForm'
 
@@ -80,14 +81,21 @@ describe('VineyardForm', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent(message)
   })
 
-  it('кнопка удаления убирает контур', async () => {
+  it('кнопка отмены убирает контур', async () => {
     const { onCancel } = renderForm()
 
-    await userEvent.click(
-      screen.getByRole('button', { name: 'Удалить контур' }),
-    )
+    await userEvent.click(screen.getByRole('button', { name: 'Отмена' }))
 
     expect(onCancel).toHaveBeenCalledOnce()
+  })
+
+  it('при открытии формы сбрасывает выбранный участок', () => {
+    useMapStore.getState().select({ id: 'v-1', lngLat: [28.8, 47.1] })
+    expect(useMapStore.getState().selection).not.toBeNull()
+
+    renderForm()
+
+    expect(useMapStore.getState().selection).toBeNull()
   })
 
   it('передаёт выбранный сорт и год посадки', async () => {

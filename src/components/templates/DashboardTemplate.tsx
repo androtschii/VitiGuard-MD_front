@@ -60,7 +60,7 @@ export function DashboardTemplate({
           id="content"
           // Снизу — запас под кнопку помощника: она висит поверх страницы,
           // и без отступа последние кнопки и подписи уходили под неё
-          className="min-w-0 flex-1 p-4 pb-24 motion-safe:animate-rise lg:p-6 lg:pb-20 print:p-0"
+          className="min-w-0 flex-1 p-4 pb-36 motion-safe:animate-rise lg:p-6 lg:pb-24 print:p-0"
         >
           <p className="mb-4 hidden border-b border-line pb-2 text-xs text-ink-muted print:block">
             {t('print.header', { date: printed })}

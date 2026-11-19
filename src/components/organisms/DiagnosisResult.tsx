@@ -38,17 +38,30 @@ export function DiagnosisResult({ diagnosis }: DiagnosisResultProps) {
       <div className="flex items-center justify-between gap-4">
         <div>
           <p className="text-sm text-ink-subtle">{t('diagnosis.verdict')}</p>
-          <p
-            className={cn(
-              'text-2xl font-semibold',
-              // Зелёный — растительность, как участки на карте; болезнь — красный
-              isHealthy
-                ? 'text-emerald-700 dark:text-emerald-400'
-                : 'text-danger',
-            )}
-          >
-            {t(`diseases.${diagnosis.disease}`)}
-          </p>
+          {diagnosis.low_confidence ? (
+            <>
+              <p className="text-2xl font-semibold text-ink">
+                {t('diagnosis.uncertain')}
+              </p>
+              <p className="text-sm text-ink-muted">
+                {t('diagnosis.mostLikely', {
+                  disease: t(`diseases.${diagnosis.disease}`),
+                })}
+              </p>
+            </>
+          ) : (
+            <p
+              className={cn(
+                'text-2xl font-semibold',
+                // Зелёный — растительность, как участки на карте; болезнь — красный
+                isHealthy
+                  ? 'text-emerald-700 dark:text-emerald-400'
+                  : 'text-danger',
+              )}
+            >
+              {t(`diseases.${diagnosis.disease}`)}
+            </p>
+          )}
           <p className="text-sm text-ink-muted">
             {t('diagnosis.confidence', {
               value: percent.format(diagnosis.confidence),

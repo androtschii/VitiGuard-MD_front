@@ -4,15 +4,42 @@ import type { TimePoint } from '@/lib/timeSeriesChart'
 export type NdviPoint = TimePoint & { ndvi: number }
 export type PairPoint = TimePoint & { a: number; b: number }
 
-// Снимки без облаков над участком, по дате
+// Сортирует точки по дате и сводит точки с одинаковой календарной датой (в UTC),
+// усредняя значение NDVI: на графике исключаются вертикальные скачки и дубли
+export function aggregateNdviByDate(points: NdviPoint[]): NdviPoint[] {
+  if (points.length === 0) return []
+  const sorted = [...points].sort((left, right) => left.time - right.time)
+  const groups: { time: number; sum: number; count: number }[] = []
+
+  for (const point of sorted) {
+    const day = new Date(point.time).toISOString().slice(0, 10)
+    const current = groups[groups.length - 1]
+    const currentDay = current
+      ? new Date(current.time).toISOString().slice(0, 10)
+      : null
+
+    if (current && currentDay === day) {
+      current.sum += point.ndvi
+      current.count += 1
+    } else {
+      groups.push({ time: point.time, sum: point.ndvi, count: 1 })
+    }
+  }
+
+  return groups.map((group) => ({
+    time: group.time,
+    ndvi: Math.round((group.sum / group.count) * 10_000) / 10_000,
+  }))
+}
+
+// Снимки без облаков над участком, отсортированные по дате со средним за день
 export function clearNdvi(observations: VegetationObservation[]): NdviPoint[] {
-  return observations
-    .flatMap((item) =>
-      item.ndvi
-        ? [{ time: Date.parse(item.acquired_at), ndvi: item.ndvi.mean }]
-        : [],
-    )
-    .sort((left, right) => left.time - right.time)
+  const points = observations.flatMap((item) =>
+    item.ndvi
+      ? [{ time: Date.parse(item.acquired_at), ndvi: item.ndvi.mean }]
+      : [],
+  )
+  return aggregateNdviByDate(points)
 }
 
 // Значение на линии ряда в момент time: между снимками — по прямой, как её

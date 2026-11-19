@@ -36,7 +36,7 @@ export function BottomNav({ items }: BottomNavProps) {
         style={{ '--nav-tilt': tiltFor(items) } as CSSProperties}
       >
         {items.map((item) => (
-          <li key={item.href} className="flex-1">
+          <li key={item.href} className="min-w-0 flex-1">
             <Link
               to={item.href}
               viewTransition
@@ -47,7 +47,12 @@ export function BottomNav({ items }: BottomNavProps) {
               )}
             >
               <NavIcon href={item.href} />
-              <span className="nav-tab-label">{item.label}</span>
+              <span
+                className="nav-tab-label max-w-full truncate px-0.5"
+                title={item.label}
+              >
+                {item.label}
+              </span>
             </Link>
           </li>
         ))}

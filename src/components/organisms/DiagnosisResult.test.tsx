@@ -46,6 +46,11 @@ describe('DiagnosisResult', () => {
       />,
     )
 
+    const title = screen.getByText('Не удалось уверенно определить')
+    expect(title).toHaveClass('text-ink')
+    expect(title).not.toHaveClass('text-danger')
+    expect(title).not.toHaveClass('text-emerald-700')
+    expect(screen.getByText('Вероятнее всего: Оидиум')).toBeInTheDocument()
     expect(screen.getByText(/Модель не уверена в ответе/)).toBeInTheDocument()
     expect(screen.getByText(/Уверенность модели: 41\s%/)).toBeInTheDocument()
   })

@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import type {
   ForgotPasswordValues,
   LoginValues,
@@ -19,10 +19,13 @@ export async function login(values: LoginValues) {
 }
 
 export function useLogin() {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: login,
-    onSuccess: ({ access_token }) =>
-      useSessionStore.getState().setAccessToken(access_token),
+    onSuccess: ({ access_token }) => {
+      queryClient.clear()
+      useSessionStore.getState().setAccessToken(access_token)
+    },
   })
 }
 
@@ -36,10 +39,13 @@ export async function demoLogin(role: DemoRole) {
 }
 
 export function useDemoLogin() {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: demoLogin,
-    onSuccess: ({ access_token }) =>
-      useSessionStore.getState().setAccessToken(access_token),
+    onSuccess: ({ access_token }) => {
+      queryClient.clear()
+      useSessionStore.getState().setAccessToken(access_token)
+    },
   })
 }
 
@@ -54,11 +60,15 @@ export async function logout() {
 }
 
 export function useLogout() {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: logout,
     // Сессия на устройстве заканчивается, даже если сервер не ответил: токен
     // в памяти нельзя оставлять, а cookie по таймеру перестанет действовать
-    onSettled: () => useSessionStore.getState().clear(),
+    onSettled: () => {
+      queryClient.clear()
+      useSessionStore.getState().clear()
+    },
   })
 }
 
