@@ -141,6 +141,41 @@ describe('FarmOverview', () => {
     expect(screen.queryByRole('table')).toBeNull()
   })
 
+  it('агроном или администратор без участков видит карточку ожидания заключений со ссылкой на проверки', async () => {
+    serve([])
+    server.use(
+      http.get('/api/v1/users/me', () =>
+        HttpResponse.json({
+          id: 'u-agro',
+          email: 'agro@vitiguard.md',
+          full_name: 'Мария',
+          role: 'agronomist',
+          is_active: true,
+          created_at: '2026-06-01T00:00:00Z',
+          updated_at: '2026-06-01T00:00:00Z',
+        }),
+      ),
+      http.get('/api/v1/diagnoses/review-queue', () =>
+        HttpResponse.json({
+          items: [],
+          total: 7,
+          page: 1,
+          size: 12,
+          pages: 1,
+        }),
+      ),
+    )
+    renderOverview()
+
+    const heading = await screen.findByRole('heading', {
+      name: 'Ждут заключения: 7',
+    })
+    expect(heading).toBeInTheDocument()
+    const link = heading.closest('a')
+    expect(link).toHaveAttribute('href', '/review')
+    expect(screen.queryByText('Общая площадь')).toBeNull()
+  })
+
   it('сообщает об ошибке загрузки', async () => {
     server.use(
       http.get('/api/v1/vineyards', () =>

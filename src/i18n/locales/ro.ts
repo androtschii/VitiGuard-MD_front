@@ -28,6 +28,7 @@ export const ro: Messages = {
     diagnosis: 'Diagnostic',
     admin: 'Administrare',
     review: 'Verificări',
+    more: 'Mai mult',
   },
   account: {
     menu: 'Meniul profilului',
@@ -203,6 +204,7 @@ export const ro: Messages = {
     active: 'Activ',
     blocked: 'Blocat',
     block: 'Blochează',
+    confirmBlock: 'Blocați?',
     unblock: 'Deblochează',
     blockUser: 'Blochează {{email}}',
     unblockUser: 'Deblochează {{email}}',
@@ -342,6 +344,7 @@ export const ro: Messages = {
       area: 'Suprafață, ha',
     },
     noEstimate: 'fără estimare azi',
+    waitingReviews: 'Așteaptă concluzie: {{count}}',
     noVineyards: 'Încă nu aveți parcele — desenați prima pe hartă.',
     loadError: 'Parcelele nu s-au încărcat. Reîncărcați pagina.',
     description:
@@ -532,6 +535,7 @@ export const ro: Messages = {
     mostLikely: 'Cel mai probabil: {{disease}}',
     probabilities: 'Probabilități',
     model: 'Model: {{name}}',
+    openHistory: 'Deschide în istoric',
     disclaimer:
       'Rezultatul este un indiciu, nu concluzia agronomului: pe fotografiile din câmp modelul greșește mai des decât pe cele de laborator.',
   },

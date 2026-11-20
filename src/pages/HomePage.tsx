@@ -39,11 +39,11 @@ export function HomePage() {
   return (
     <DashboardTemplate navItems={navItems} headerActions={<LogoutButton />}>
       <div className="flex flex-col gap-6">
-        <div className="relative isolate flex flex-col gap-4 overflow-hidden rounded-2xl bg-linear-to-br from-brand-700 via-brand-800 to-brand-950 p-6 shadow-lg print:rounded-none print:bg-none print:p-0 print:shadow-none">
+        <div className="relative isolate flex flex-col gap-3 overflow-hidden rounded-2xl bg-linear-to-br from-brand-700 via-brand-800 to-brand-950 p-4 shadow-lg sm:gap-4 sm:p-6 print:rounded-none print:bg-none print:p-0 print:shadow-none">
           <svg
             viewBox="0 0 200 190"
             aria-hidden="true"
-            className="pointer-events-none absolute -top-4 -right-6 -z-10 h-56 opacity-25 sm:right-6 print:hidden"
+            className="pointer-events-none absolute -top-4 -right-6 -z-10 h-36 opacity-25 sm:right-6 sm:h-56 print:hidden"
           >
             {BERRIES.map(([cx, cy], index) => (
               <circle
@@ -58,7 +58,7 @@ export function HomePage() {
             ))}
           </svg>
           <div>
-            <h1 className="text-2xl font-semibold text-white print:text-ink">
+            <h1 className="text-xl font-semibold text-white sm:text-2xl print:text-ink">
               {t('home.title')}
             </h1>
             <p className="mt-1 max-w-xl text-sm text-brand-100 print:text-ink-muted">
@@ -66,11 +66,11 @@ export function HomePage() {
             </p>
           </div>
           <div className="flex flex-wrap gap-2 print:hidden">
-            <Link to="/map" className={primary}>
-              {t('home.openMap')}
-            </Link>
-            <Link to="/diagnosis" className={secondary}>
+            <Link to="/diagnosis" className={primary}>
               {t('home.openDiagnosis')}
+            </Link>
+            <Link to="/map" className={secondary}>
+              {t('home.openMap')}
             </Link>
             <Link to="/regions" className={secondary}>
               {t('home.openRegions')}
@@ -81,7 +81,6 @@ export function HomePage() {
             <Link to="/tips" className={secondary}>
               {t('home.openTips')}
             </Link>
-            <PrintButton className="h-9 border-white/40 bg-transparent text-white [--fill-ink:var(--color-brand-900)] [--fill:var(--color-white)]" />
           </div>
         </div>
         <AlertsSummary />
@@ -91,6 +90,9 @@ export function HomePage() {
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] print:hidden">
           <FarmMiniMap />
           <NdviSeason />
+        </div>
+        <div className="flex justify-end pt-2 print:hidden">
+          <PrintButton />
         </div>
       </div>
     </DashboardTemplate>

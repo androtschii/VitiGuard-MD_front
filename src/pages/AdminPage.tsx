@@ -24,6 +24,7 @@ export function AdminPage() {
   const [search, setSearch] = useState('')
   const query = useDeferredValue(search.trim())
   const [page, setPage] = useState(1)
+  const [confirmingId, setConfirmingId] = useState<string | null>(null)
   const users = useAdminUsers(query, page)
   const update = useUpdateUser()
   const reset = useSendPasswordReset()
@@ -32,6 +33,89 @@ export function AdminPage() {
   })
 
   const isSelf = (user: CurrentUser) => user.id === me.data?.id
+
+  const renderActions = (user: CurrentUser, isMobile = false) => (
+    <span className="flex flex-wrap items-center gap-2">
+      <span className={user.is_active ? 'text-ink' : 'text-danger'}>
+        {user.is_active ? t('admin.active') : t('admin.blocked')}
+      </span>
+      {!isSelf(user) && (
+        <>
+          {user.is_active ? (
+            confirmingId === user.id ? (
+              <>
+                <Button
+                  size="sm"
+                  variant="danger"
+                  disabled={update.isPending}
+                  onClick={() => {
+                    update.mutate({ id: user.id, is_active: false })
+                    setConfirmingId(null)
+                  }}
+                >
+                  {t('admin.confirmBlock')}
+                </Button>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  onClick={() => setConfirmingId(null)}
+                >
+                  {t('common.cancel')}
+                </Button>
+              </>
+            ) : (
+              <Button
+                size="sm"
+                variant="ghost"
+                disabled={update.isPending}
+                aria-label={
+                  isMobile
+                    ? undefined
+                    : t('admin.blockUser', { email: user.email })
+                }
+                onClick={() => setConfirmingId(user.id)}
+              >
+                {t('admin.block')}
+              </Button>
+            )
+          ) : (
+            <Button
+              size="sm"
+              variant="secondary"
+              disabled={update.isPending}
+              aria-label={
+                isMobile
+                  ? undefined
+                  : t('admin.unblockUser', { email: user.email })
+              }
+              onClick={() => {
+                update.mutate({ id: user.id, is_active: true })
+                setConfirmingId(null)
+              }}
+            >
+              {t('admin.unblock')}
+            </Button>
+          )}
+        </>
+      )}
+      {user.is_active && !isSelf(user) && (
+        <Button
+          size="sm"
+          variant="ghost"
+          disabled={reset.isPending}
+          aria-label={
+            isMobile ? undefined : t('admin.resetUser', { email: user.email })
+          }
+          onClick={() => reset.mutate(user.id)}
+        >
+          {reset.isSuccess && reset.variables === user.id
+            ? t('admin.resetSent')
+            : t('admin.reset')}
+        </Button>
+      )}
+    </span>
+  )
+
   const columns: Column<CurrentUser>[] = [
     {
       key: 'email',
@@ -79,44 +163,7 @@ export function AdminPage() {
     {
       key: 'access',
       header: t('admin.access'),
-      cell: (user) => (
-        <span className="flex flex-wrap items-center gap-2">
-          <span className={user.is_active ? 'text-ink' : 'text-danger'}>
-            {user.is_active ? t('admin.active') : t('admin.blocked')}
-          </span>
-          {!isSelf(user) && (
-            <Button
-              size="sm"
-              variant={user.is_active ? 'ghost' : 'secondary'}
-              disabled={update.isPending}
-              aria-label={t(
-                user.is_active ? 'admin.blockUser' : 'admin.unblockUser',
-                {
-                  email: user.email,
-                },
-              )}
-              onClick={() =>
-                update.mutate({ id: user.id, is_active: !user.is_active })
-              }
-            >
-              {user.is_active ? t('admin.block') : t('admin.unblock')}
-            </Button>
-          )}
-          {user.is_active && !isSelf(user) && (
-            <Button
-              size="sm"
-              variant="ghost"
-              disabled={reset.isPending}
-              aria-label={t('admin.resetUser', { email: user.email })}
-              onClick={() => reset.mutate(user.id)}
-            >
-              {reset.isSuccess && reset.variables === user.id
-                ? t('admin.resetSent')
-                : t('admin.reset')}
-            </Button>
-          )}
-        </span>
-      ),
+      cell: (user) => renderActions(user),
     },
   ]
 
@@ -167,14 +214,68 @@ export function AdminPage() {
         </p>
       ) : (
         <>
-          <DataTable
-            caption={t('admin.title')}
-            columns={columns}
-            rows={users.data?.items ?? []}
-            getRowKey={(user) => user.id}
-            isLoading={users.isPending}
-            emptyMessage={t('admin.empty')}
-          />
+          <div className="flex flex-col gap-3 sm:hidden">
+            {users.data?.items.map((user) => (
+              <article
+                key={user.id}
+                className="flex flex-col gap-3 rounded-xl border border-line bg-surface p-4 shadow-sm"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-ink">
+                      {user.full_name ?? '—'}
+                    </span>
+                    <span className="text-xs text-ink-muted">{user.email}</span>
+                  </div>
+                  <span className="text-xs text-ink-subtle">
+                    {date.format(new Date(user.created_at))}
+                  </span>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label
+                    htmlFor={`role-mobile-${user.id}`}
+                    className="text-xs text-ink-muted"
+                  >
+                    {t('admin.role')}
+                  </label>
+                  <Select
+                    id={`role-mobile-${user.id}`}
+                    aria-label={t('admin.role')}
+                    value={user.role}
+                    disabled={isSelf(user) || update.isPending}
+                    onChange={(event) =>
+                      update.mutate({
+                        id: user.id,
+                        role: event.target.value as UserRole,
+                      })
+                    }
+                  >
+                    {ROLES.map((role) => (
+                      <option key={role} value={role}>
+                        {t(`admin.roles.${role}`)}
+                      </option>
+                    ))}
+                  </Select>
+                </div>
+
+                <div className="border-t border-line pt-2">
+                  {renderActions(user, true)}
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="hidden sm:block">
+            <DataTable
+              caption={t('admin.title')}
+              columns={columns}
+              rows={users.data?.items ?? []}
+              getRowKey={(user) => user.id}
+              isLoading={users.isPending}
+              emptyMessage={t('admin.empty')}
+            />
+          </div>
           {reset.isError && (
             <p role="alert" className="mt-2 text-sm text-danger">
               {reset.error.message}

@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
-import { useDiagnoses } from '@/api/diagnoses'
+import { useDiagnoses, useReviewQueue } from '@/api/diagnoses'
 import { useTodayRisks } from '@/api/risks'
+import { useMe } from '@/api/users'
 import { useVineyards } from '@/api/vineyards'
 import { CountUp } from '@/components/atoms/CountUp'
 import { Ring } from '@/components/atoms/Ring'
@@ -17,6 +18,13 @@ export function FarmOverview() {
   const { t, i18n } = useTranslation()
   const vineyards = useVineyards()
   const risks = useTodayRisks()
+  const { data: me } = useMe()
+  const isExpert = me?.role === 'agronomist' || me?.role === 'admin'
+  // Очередь проверок для агронома и администратора: если участков нет,
+  // вместо «0 участков, 0 га» показываем размер очереди
+  const queue = useReviewQueue(false, 1, {
+    enabled: isExpert && (vineyards.data?.length ?? 0) === 0,
+  })
   // Вне сезона вместо пустых плиток риска — последняя проверка листа
   const checks = useDiagnoses({}, 1)
 
@@ -75,108 +83,136 @@ export function FarmOverview() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto]">
-        <dl className="grid grid-cols-2 gap-3 2xl:grid-cols-4">
-          <StatTile
-            index={0}
-            label={t('home.stats.vineyards')}
-            value={<CountUp value={summary.count} />}
-          />
-          <StatTile
-            index={1}
-            label={t('home.stats.area')}
-            value={
-              <CountUp
-                value={summary.areaHa}
-                format={(value) => t('regions.ha', { value: format(value, 1) })}
-              />
-            }
-          />
-          {hasRisks ? (
-            <>
-              <StatTile
-                index={2}
-                label={t('home.stats.high')}
-                tone={summary.high > 0 ? 'high' : undefined}
-                value={<CountUp value={summary.high} />}
-                hint={t('home.stats.today')}
-              />
-              <StatTile
-                index={3}
-                label={t('home.stats.medium')}
-                tone={summary.medium > 0 ? 'medium' : undefined}
-                value={<CountUp value={summary.medium} />}
-                hint={t('home.stats.today')}
-              />
-            </>
-          ) : (
-            <>
-              <StatTile
-                index={2}
-                label={t('home.stats.risk')}
-                value={t('home.stats.offSeason')}
-                hint={t('home.stats.seasonHint')}
-              />
-              <StatTile
-                index={3}
-                label={t('home.stats.lastCheck')}
-                value={
-                  lastCheck
-                    ? t(`diseases.${lastCheck.disease}`)
-                    : t('home.stats.noChecks')
-                }
-                hint={
-                  lastCheck
-                    ? [
-                        checkDay.format(new Date(lastCheck.created_at)),
-                        lastCheck.vineyard_name,
-                      ]
-                        .filter(Boolean)
-                        .join(' · ')
-                    : t('home.stats.noChecksHint')
-                }
-              />
-            </>
-          )}
-        </dl>
-        {summary.count > 0 && hasRisks && (
-          <section
-            aria-labelledby="home-ring"
-            className="stagger flex items-center gap-5 rounded-lg border border-line bg-surface p-4 shadow-sm [--i:4] motion-safe:animate-rise"
+      {summary.count === 0 && isExpert ? (
+        <section
+          aria-labelledby="expert-queue"
+          className="rounded-xl border border-line bg-surface p-5 shadow-sm motion-safe:animate-rise"
+        >
+          <Link
+            to="/review"
+            className="flex flex-wrap items-center justify-between gap-4 transition-colors hover:text-accent"
           >
-            <Ring
-              className="size-28"
-              segments={levels.map(({ count, ring }) => ({
-                percent: share(count),
-                className: ring,
-              }))}
-            >
-              <span className="text-2xl font-semibold text-ink tabular-nums">
-                <CountUp value={summary.count} />
-              </span>
-            </Ring>
             <div>
-              <h2
-                id="home-ring"
-                className="mb-2 text-sm font-semibold text-ink"
-              >
-                {t('home.ringTitle')}
+              <h2 id="expert-queue" className="text-lg font-semibold text-ink">
+                {t('home.waitingReviews', {
+                  count: queue.data?.total ?? 0,
+                })}
               </h2>
-              <ul className="flex flex-col gap-1 text-sm text-ink-soft">
-                {levels.map(({ key, label, count, dot }) => (
-                  <li key={key} className="flex items-center gap-2">
-                    <span
-                      aria-hidden="true"
-                      className={`size-2.5 rounded-full ${dot}`}
-                    />
-                    {`${label}: ${count}`}
-                  </li>
-                ))}
-              </ul>
+              <p className="mt-1 text-sm text-ink-muted">
+                {t('reviewQueue.intro')}
+              </p>
             </div>
-          </section>
-        )}
-      </div>
+            <span className="inline-flex items-center text-sm font-semibold whitespace-nowrap text-accent">
+              {t('review.open')} &rarr;
+            </span>
+          </Link>
+        </section>
+      ) : (
+        <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto]">
+          <dl className="grid grid-cols-2 gap-3 2xl:grid-cols-4">
+            <StatTile
+              index={0}
+              label={t('home.stats.vineyards')}
+              value={<CountUp value={summary.count} />}
+            />
+            <StatTile
+              index={1}
+              label={t('home.stats.area')}
+              value={
+                <CountUp
+                  value={summary.areaHa}
+                  format={(value) =>
+                    t('regions.ha', { value: format(value, 1) })
+                  }
+                />
+              }
+            />
+            {hasRisks ? (
+              <>
+                <StatTile
+                  index={2}
+                  label={t('home.stats.high')}
+                  tone={summary.high > 0 ? 'high' : undefined}
+                  value={<CountUp value={summary.high} />}
+                  hint={t('home.stats.today')}
+                />
+                <StatTile
+                  index={3}
+                  label={t('home.stats.medium')}
+                  tone={summary.medium > 0 ? 'medium' : undefined}
+                  value={<CountUp value={summary.medium} />}
+                  hint={t('home.stats.today')}
+                />
+              </>
+            ) : (
+              <>
+                <StatTile
+                  index={2}
+                  label={t('home.stats.risk')}
+                  value={t('home.stats.offSeason')}
+                  hint={t('home.stats.seasonHint')}
+                />
+                <StatTile
+                  index={3}
+                  label={t('home.stats.lastCheck')}
+                  value={
+                    lastCheck
+                      ? t(`diseases.${lastCheck.disease}`)
+                      : t('home.stats.noChecks')
+                  }
+                  hint={
+                    lastCheck
+                      ? [
+                          checkDay.format(new Date(lastCheck.created_at)),
+                          lastCheck.vineyard_name,
+                        ]
+                          .filter(Boolean)
+                          .join(' · ')
+                      : t('home.stats.noChecksHint')
+                  }
+                />
+              </>
+            )}
+          </dl>
+          {summary.count > 0 && hasRisks && (
+            <section
+              aria-labelledby="home-ring"
+              className="stagger flex items-center gap-5 rounded-lg border border-line bg-surface p-4 shadow-sm [--i:4] motion-safe:animate-rise"
+            >
+              <Ring
+                className="size-28"
+                segments={levels.map(({ count, ring }) => ({
+                  percent: share(count),
+                  className: ring,
+                }))}
+              >
+                <span className="text-2xl font-semibold text-ink tabular-nums">
+                  <CountUp value={summary.count} />
+                </span>
+              </Ring>
+              <div>
+                <h2
+                  id="home-ring"
+                  className="mb-2 text-sm font-semibold text-ink"
+                >
+                  {t('home.ringTitle')}
+                </h2>
+                <ul className="flex flex-col gap-1 text-sm text-ink-soft">
+                  {levels.map(({ key, label, count, dot }) => (
+                    <li key={key} className="flex items-center gap-2">
+                      <span
+                        aria-hidden="true"
+                        className={`size-2.5 rounded-full ${dot}`}
+                      />
+                      {`${label}: ${count}`}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </section>
+          )}
+        </div>
+      )}
 
       <section aria-labelledby="home-plots" className="flex flex-col gap-2">
         <h2 id="home-plots" className="text-base font-semibold text-ink">

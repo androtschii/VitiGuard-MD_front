@@ -74,7 +74,7 @@ export function QuickDiagnosisPage() {
         )}
         {diagnose.isSuccess && (
           <>
-            <DiagnosisResult diagnosis={diagnose.data} />
+            <DiagnosisResult diagnosis={diagnose.data} photo={file} />
             <p className="text-sm text-ink-soft">
               {t('quick.saved')}{' '}
               <Link to="/history" className="text-accent underline">

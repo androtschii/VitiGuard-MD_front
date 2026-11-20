@@ -1,16 +1,32 @@
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router'
 import type { Diagnosis } from '@/api/diagnosis'
+import { Button } from '@/components/atoms/Button'
 import { CountUp } from '@/components/atoms/CountUp'
 import { Ring } from '@/components/atoms/Ring'
+import { DownloadButton } from '@/components/molecules/DownloadButton'
 import { cn } from '@/lib/cn'
+import { diagnosisToRecord, useDiagnosisExport } from '@/lib/useDiagnosisExport'
 import { DiseaseInfo } from './DiseaseInfo'
 
 type DiagnosisResultProps = {
   diagnosis: Diagnosis
+  photo?: Blob | null
+  vineyardName?: string | null
 }
 
-export function DiagnosisResult({ diagnosis }: DiagnosisResultProps) {
+export function DiagnosisResult({
+  diagnosis,
+  photo,
+  vineyardName,
+}: DiagnosisResultProps) {
   const { t, i18n } = useTranslation()
+  const record = useMemo(
+    () => diagnosisToRecord(diagnosis, vineyardName),
+    [diagnosis, vineyardName],
+  )
+  const { busy, failed, isCopied, run } = useDiagnosisExport(record)
   const percent = new Intl.NumberFormat(i18n.language, {
     style: 'percent',
     maximumFractionDigits: 0,
@@ -139,6 +155,64 @@ export function DiagnosisResult({ diagnosis }: DiagnosisResultProps) {
         {t('diagnosis.model', { name: diagnosis.model })}
         <br />
         {t('diagnosis.disclaimer')}
+      </p>
+
+      <div className="flex flex-wrap items-center gap-2 border-t border-line pt-2">
+        {photo && (
+          <>
+            <DownloadButton
+              size="sm"
+              variant="secondary"
+              aria-label={t('report.save')}
+              className="px-2.5"
+              isLoading={busy === 'pdf'}
+              failed={failed === 'pdf'}
+              disabled={busy !== null}
+              onClick={() => void run('pdf', photo)}
+            >
+              PDF
+            </DownloadButton>
+            <Button
+              size="sm"
+              variant="secondary"
+              title={t('share.open')}
+              aria-label={t('share.open')}
+              className="px-2.5"
+              isLoading={busy === 'share'}
+              disabled={busy !== null}
+              onClick={() => void run('share', photo)}
+            >
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                className="size-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M18 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM6 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM18 16a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM8.6 13.5l6.8 4M15.4 6.5l-6.8 4" />
+              </svg>
+              <span className="sr-only">{t('share.open')}</span>
+            </Button>
+          </>
+        )}
+        <Link
+          to="/history"
+          className="hover:text-accent-hover text-sm font-medium text-accent underline"
+        >
+          {t('diagnosis.openHistory')}
+        </Link>
+      </div>
+
+      {failed && (
+        <p role="alert" className="text-xs text-danger">
+          {t(failed === 'pdf' ? 'report.failed' : 'share.failed')}
+        </p>
+      )}
+      <p role="status" className="text-xs text-accent empty:hidden">
+        {isCopied ? t('share.copied') : ''}
       </p>
     </div>
   )
