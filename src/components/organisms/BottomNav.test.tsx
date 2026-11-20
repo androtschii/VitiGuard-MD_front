@@ -61,6 +61,7 @@ describe('BottomNav', () => {
     ['/diagnosis', '.nav-icon-leaf'],
     ['/history', '.nav-icon-hands'],
     ['/profile', '.nav-icon-head'],
+    ['/review', '.nav-icon-check'],
     ['/admin', '.nav-icon-check'],
   ])('у значка %s есть подвижная часть', (href, part) => {
     renderWithRouter(<BottomNav items={[{ label: 'Раздел', href }]} />)

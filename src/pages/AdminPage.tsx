@@ -1,6 +1,7 @@
 import { useDeferredValue, useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAdminUsers, useSendPasswordReset, useUpdateUser } from '@/api/admin'
+import { ApiError } from '@/api/client'
 import { useMe, type CurrentUser, type UserRole } from '@/api/users'
 import { useNavItems } from '@/app/navigation'
 import { Button } from '@/components/atoms/Button'
@@ -118,6 +119,22 @@ export function AdminPage() {
       ),
     },
   ]
+
+  const forbidden =
+    users.error instanceof ApiError && users.error.status === 403
+
+  if (forbidden) {
+    return (
+      <DashboardTemplate navItems={navItems} headerActions={<LogoutButton />}>
+        <h1 className="mb-1 text-xl font-semibold text-ink">
+          {t('admin.title')}
+        </h1>
+        <p role="alert" className="text-sm text-danger">
+          {t('admin.forbidden')}
+        </p>
+      </DashboardTemplate>
+    )
+  }
 
   return (
     <DashboardTemplate navItems={navItems} headerActions={<LogoutButton />}>

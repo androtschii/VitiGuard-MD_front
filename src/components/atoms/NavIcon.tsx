@@ -42,6 +42,12 @@ const ICONS: Record<string, ReactNode> = {
       <path d="M4 20c1-4 4-6 8-6s7 2 8 6" />
     </>
   ),
+  '/review': (
+    <>
+      <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v0a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2" />
+      <path className="nav-icon-check" pathLength={1} d="M9 13l2 2 4-4" />
+    </>
+  ),
   '/admin': (
     <>
       <path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z" />

@@ -5,13 +5,12 @@ import type { ReactNode } from 'react'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { useSessionStore } from '@/store/session'
 import { server } from '@/test/server'
-import { refreshAccessToken, useLogin, useLogout } from './auth'
+import { refreshAccessToken, useDemoLogin, useLogin, useLogout } from './auth'
 
-function wrapper({ children }: { children: ReactNode }) {
-  const client = new QueryClient({
+function createTestClient() {
+  return new QueryClient({
     defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
   })
-  return <QueryClientProvider client={client}>{children}</QueryClientProvider>
 }
 
 describe('хуки сессии', () => {
@@ -19,7 +18,15 @@ describe('хуки сессии', () => {
     useSessionStore.setState(useSessionStore.getInitialState(), true)
   })
 
-  it('вход сохраняет access-токен в хранилище сессии', async () => {
+  it('вход сохраняет access-токен и очищает кэш запросов', async () => {
+    const client = createTestClient()
+    client.setQueryData(['users', 'me'], {
+      id: 'old-user',
+      email: 'old@example.md',
+    })
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <QueryClientProvider client={client}>{children}</QueryClientProvider>
+    )
     const { result } = renderHook(() => useLogin(), { wrapper })
 
     await act(() =>
@@ -30,9 +37,39 @@ describe('хуки сессии', () => {
       status: 'authenticated',
       accessToken: 'access',
     })
+    expect(client.getQueryData(['users', 'me'])).toBeUndefined()
+  })
+
+  it('демо-вход сохраняет access-токен и очищает кэш запросов', async () => {
+    server.use(
+      http.post('/api/v1/auth/demo', () =>
+        HttpResponse.json({ access_token: 'demo-token', token_type: 'bearer' }),
+      ),
+    )
+    const client = createTestClient()
+    client.setQueryData(['users', 'me'], {
+      id: 'old-user',
+      email: 'old@example.md',
+    })
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <QueryClientProvider client={client}>{children}</QueryClientProvider>
+    )
+    const { result } = renderHook(() => useDemoLogin(), { wrapper })
+
+    await act(() => result.current.mutateAsync('agronomist'))
+
+    expect(useSessionStore.getState()).toMatchObject({
+      status: 'authenticated',
+      accessToken: 'demo-token',
+    })
+    expect(client.getQueryData(['users', 'me'])).toBeUndefined()
   })
 
   it('неудачный вход токен не сохраняет', async () => {
+    const client = createTestClient()
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <QueryClientProvider client={client}>{children}</QueryClientProvider>
+    )
     server.use(
       http.post('/api/v1/auth/login', () =>
         HttpResponse.json({ detail: 'Неверный пароль' }, { status: 401 }),
@@ -49,13 +86,21 @@ describe('хуки сессии', () => {
     expect(useSessionStore.getState().accessToken).toBeNull()
   })
 
-  it('выход очищает сессию и сообщает серверу', async () => {
+  it('выход очищает сессию, сообщает серверу и очищает кэш запросов', async () => {
     let called = false
     server.use(
       http.post('/api/v1/auth/logout', () => {
         called = true
         return HttpResponse.json(null, { status: 204 })
       }),
+    )
+    const client = createTestClient()
+    client.setQueryData(['users', 'me'], {
+      id: 'prev-user',
+      email: 'prev@example.md',
+    })
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <QueryClientProvider client={client}>{children}</QueryClientProvider>
     )
     useSessionStore.getState().setAccessToken('token')
     const { result } = renderHook(() => useLogout(), { wrapper })
@@ -67,18 +112,25 @@ describe('хуки сессии', () => {
       status: 'anonymous',
       accessToken: null,
     })
+    expect(client.getQueryData(['users', 'me'])).toBeUndefined()
   })
 
-  it('выход очищает сессию, даже если сервер не ответил', async () => {
+  it('выход очищает сессию и кэш запросов, даже если сервер не ответил', async () => {
     server.use(http.post('/api/v1/auth/logout', () => HttpResponse.error()))
+    const client = createTestClient()
+    client.setQueryData(['users', 'me'], { id: 'prev-user' })
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <QueryClientProvider client={client}>{children}</QueryClientProvider>
+    )
     useSessionStore.getState().setAccessToken('token')
     const { result } = renderHook(() => useLogout(), { wrapper })
 
     await act(() => result.current.mutateAsync().catch(() => undefined))
 
-    await waitFor(() =>
-      expect(useSessionStore.getState().accessToken).toBeNull(),
-    )
+    await waitFor(() => {
+      expect(useSessionStore.getState().accessToken).toBeNull()
+      expect(client.getQueryData(['users', 'me'])).toBeUndefined()
+    })
   })
 
   it('refreshAccessToken шлёт пустой запрос и возвращает новый токен', async () => {

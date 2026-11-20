@@ -34,7 +34,18 @@ describe('ReviewDialog', () => {
     expect(
       screen.getByText(/Модель определила: Чёрная гниль/),
     ).toBeInTheDocument()
+    expect(screen.getByLabelText('Да, модель права')).not.toBeChecked()
+    expect(screen.getByLabelText('Нет, на фото другое')).not.toBeChecked()
+    expect(
+      screen.getByRole('button', { name: 'Сохранить заключение' }),
+    ).toBeDisabled()
+
+    await userEvent.click(screen.getByLabelText('Да, модель права'))
     expect(screen.getByLabelText('Да, модель права')).toBeChecked()
+    expect(
+      screen.getByRole('button', { name: 'Сохранить заключение' }),
+    ).toBeEnabled()
+
     await userEvent.click(
       screen.getByRole('button', { name: 'Сохранить заключение' }),
     )
@@ -45,6 +56,19 @@ describe('ReviewDialog', () => {
     expect(
       screen.queryByRole('button', { name: 'Отозвать заключение' }),
     ).toBeNull()
+  })
+
+  it('пока выбор не сделан, кнопка сохранения отключена и отправка формы не срабатывает', () => {
+    const { sent } = captureReview()
+    renderWithQueryClient(
+      <ReviewDialog record={record('r-1')} open onClose={vi.fn()} />,
+    )
+
+    const form = screen.getByLabelText('Да, модель права').closest('form')
+    if (!form) throw new Error('нет формы')
+    fireEvent.submit(form)
+
+    expect(sent).toEqual([])
   })
 
   it('исправляет диагноз с комментарием', async () => {

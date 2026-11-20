@@ -22,18 +22,19 @@ export function DemoLogin({
   return (
     <section
       aria-labelledby="demo-login"
-      className="mt-4 rounded-lg border border-dashed border-line-strong bg-muted/40 p-4"
+      className="mt-6 border-t border-line pt-4"
     >
       <h2 id="demo-login" className="text-sm font-medium text-ink">
         {t('auth.demo.title')}
       </h2>
       <p className="mt-1 text-xs text-ink-muted">{t('auth.demo.hint')}</p>
-      <div className="mt-3 grid gap-2 sm:grid-cols-3">
+      <div className="mt-3 flex flex-wrap gap-2">
         {ROLES.map((role) => (
           <Button
             key={role}
             size="sm"
             variant="secondary"
+            className="min-w-0 flex-1"
             isLoading={demo.isPending && demo.variables === role}
             disabled={demo.isPending}
             onClick={() => demo.mutate(role)}

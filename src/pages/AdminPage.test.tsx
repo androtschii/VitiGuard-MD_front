@@ -76,7 +76,10 @@ describe('AdminPage', () => {
     ])
 
     const role = await screen.findByLabelText('Роль ion@example.md')
-    expect(sidebarLink('Админка')).toHaveAttribute('aria-current', 'page')
+    expect(sidebarLink('Администрирование')).toHaveAttribute(
+      'aria-current',
+      'page',
+    )
     // Свою роль администратор не меняет
     expect(screen.getByLabelText('Роль admin@vitiguard.md')).toBeDisabled()
 
@@ -145,7 +148,7 @@ describe('AdminPage', () => {
     expect(await screen.findByText('Никого не найдено.')).toBeInTheDocument()
   })
 
-  it('без прав — ответ сервера', async () => {
+  it('без прав (403) — переведённый экран отказа без описания и поиска', async () => {
     server.use(
       http.get('/api/v1/admin/users', () =>
         HttpResponse.json({ detail: 'Недостаточно прав' }, { status: 403 }),
@@ -158,8 +161,28 @@ describe('AdminPage', () => {
     )
 
     expect(await screen.findByRole('alert')).toHaveTextContent(
-      'Недостаточно прав',
+      'Раздел администрирования доступен только администратору.',
     )
+    expect(
+      screen.getByRole('heading', { name: 'Пользователи и роли' }),
+    ).toBeVisible()
+    expect(screen.queryByLabelText('Поиск по email и имени')).toBeNull()
+    expect(screen.queryByText(/Агроном подтверждает диагнозы/)).toBeNull()
+  })
+
+  it('при другой ошибке показывает сообщение сервера', async () => {
+    server.use(
+      http.get('/api/v1/admin/users', () =>
+        HttpResponse.json({ detail: 'Сбой сервера' }, { status: 500 }),
+      ),
+    )
+    renderWithQueryClient(
+      <MemoryRouter initialEntries={['/admin']}>
+        <AdminPage />
+      </MemoryRouter>,
+    )
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('Сбой сервера')
   })
 
   it('показывает, если изменение не прошло', async () => {

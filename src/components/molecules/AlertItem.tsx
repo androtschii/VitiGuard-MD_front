@@ -40,6 +40,7 @@ export function AlertItem({ alert }: AlertItemProps) {
             disease: t(
               alert.disease === 'downy_mildew' ? 'risk.downy' : 'risk.powdery',
             ),
+            level: t(`risk.levels.${alert.level}`),
             plot: alert.vineyard_name,
           })}
         </p>

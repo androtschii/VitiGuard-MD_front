@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { ApiError } from '@/api/client'
@@ -8,6 +9,7 @@ import { Input } from '@/components/atoms/Input'
 import { Select } from '@/components/atoms/Select'
 import { Field } from '@/components/molecules/Field'
 import { vineyardSchema, type VineyardValues } from '@/schemas/vineyard'
+import { useMapStore } from '@/store/map'
 
 type VineyardFormProps = {
   areaHa: number
@@ -42,6 +44,10 @@ export function VineyardForm({
       ...defaultValues,
     },
   })
+
+  useEffect(() => {
+    useMapStore.getState().select(null)
+  }, [])
 
   const submit = handleSubmit(async (values) => {
     try {
@@ -115,7 +121,7 @@ export function VineyardForm({
           {submitLabel}
         </Button>
         <Button type="button" size="sm" variant="secondary" onClick={onCancel}>
-          {t('draw.remove')}
+          {t('common.cancel')}
         </Button>
       </div>
     </form>

@@ -27,24 +27,30 @@ export function ReviewDialog({ record, open, onClose }: ReviewDialogProps) {
     disease: useId(),
     comment: useId(),
   }
-  const initial = record.review?.disease ?? record.disease
-  const [isModelRight, setIsModelRight] = useState(initial === record.disease)
+  const [verdict, setVerdict] = useState<'model' | 'other' | null>(() => {
+    if (!record.review) return null
+    return record.review.disease === record.disease ? 'model' : 'other'
+  })
   const [disease, setDisease] = useState<Disease>(
-    initial === record.disease ? otherThan(record.disease) : initial,
+    record.review?.disease && record.review.disease !== record.disease
+      ? record.review.disease
+      : otherThan(record.disease),
   )
   const [comment, setComment] = useState(record.review?.comment ?? '')
   const review = useReviewDiagnosis()
   const withdraw = useDeleteReview()
 
-  const save = () =>
+  const save = () => {
+    if (!verdict) return
     review.mutate(
       {
         id: record.id,
-        disease: isModelRight ? record.disease : disease,
+        disease: verdict === 'model' ? record.disease : disease,
         comment: comment.trim() || null,
       },
       { onSuccess: onClose },
     )
+  }
 
   return (
     <Modal
@@ -65,7 +71,11 @@ export function ReviewDialog({ record, open, onClose }: ReviewDialogProps) {
               {t('review.withdraw')}
             </Button>
           )}
-          <Button isLoading={review.isPending} onClick={save}>
+          <Button
+            isLoading={review.isPending}
+            disabled={verdict === null || review.isPending}
+            onClick={save}
+          >
             {t('review.save')}
           </Button>
         </>
@@ -87,8 +97,8 @@ export function ReviewDialog({ record, open, onClose }: ReviewDialogProps) {
               id={ids.model}
               type="radio"
               name="verdict"
-              checked={isModelRight}
-              onChange={() => setIsModelRight(true)}
+              checked={verdict === 'model'}
+              onChange={() => setVerdict('model')}
               className="size-4 accent-brand-700"
             />
             {t('review.modelRight')}
@@ -98,14 +108,14 @@ export function ReviewDialog({ record, open, onClose }: ReviewDialogProps) {
               id={ids.other}
               type="radio"
               name="verdict"
-              checked={!isModelRight}
-              onChange={() => setIsModelRight(false)}
+              checked={verdict === 'other'}
+              onChange={() => setVerdict('other')}
               className="size-4 accent-brand-700"
             />
             {t('review.modelWrong')}
           </label>
         </fieldset>
-        {!isModelRight && (
+        {verdict === 'other' && (
           <div className="flex flex-col gap-1">
             <label htmlFor={ids.disease} className="text-ink-soft">
               {t('review.correct')}
