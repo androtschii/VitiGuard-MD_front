@@ -26,6 +26,7 @@ export const en: Messages = {
     map: 'Map',
     regions: 'Districts',
     diagnosis: 'Diagnosis',
+    models: 'About models',
     admin: 'Admin',
     review: 'Reviews',
   },
@@ -1305,6 +1306,143 @@ export const en: Messages = {
     exportFailed: 'Could not export data',
     periodInvalid: 'Period start is after end',
     periodTooLong: 'Period exceeds three years: export it in parts',
+  },
+  models: {
+    title: 'About machine learning models',
+    intro:
+      'Quality evaluation, architecture, test and field metrics, and limitations of the artificial intelligence models deployed in VitiGuard MD.',
+    classesLabel: 'Recognized conditions',
+    cards: {
+      leafClassifier: {
+        title: 'Leaf disease classifier',
+        purpose:
+          'Diagnosis of 6 grape leaf conditions from a photograph (input resolution 224×224 px).',
+        explanation:
+          'EfficientNet-B0 architecture was selected based on comparative testing with ResNet-50 and ViT-B/16: achieving comparable accuracy while being 6x more compact than ResNet-50 and nearly 3x faster on CPU. If confidence is below 0.6, the app reports: "Could not identify reliably". Server inference time is around 50 ms; fully autonomous offline execution in the browser is supported.',
+      },
+      leafFilter: {
+        title: 'Grape leaf verification',
+        purpose:
+          'Input gate to screen out irrelevant photos before running the disease classifier.',
+        explanation:
+          'Effectively filters non-leaf and random images: rejection rate of irrelevant photos (Imagenette test) is 99.7%, pass rate for actual field grape leaf photos is 95–99%.',
+      },
+      vineDetector: {
+        title: 'Row detector (trunks and grape clusters)',
+        purpose:
+          'Detection of vine trunks and grape clusters on trellis imagery (YOLO11n, version v002).',
+        explanation:
+          'Version v002 surpasses v001 in accuracy: overall mAP50 improved from 0.774 to 0.786, and mAP50-95 from 0.380 to 0.413. The mAP50-95 metric for vine trunks reached 0.303, and for clusters — 0.524.',
+      },
+      downyForecast: {
+        title: 'Downy mildew infection forecast for tomorrow',
+        purpose:
+          'LightGBM gradient boosting model for early warning of downy mildew outbreaks.',
+        explanation:
+          'Delivers PR-AUC of 0.65 versus 0.42 for the "same as today" heuristic baseline. On a 2 to 7 day horizon model predictive power does not exceed climatological frequency, so warnings are generated strictly for tomorrow.',
+      },
+    },
+    metrics: {
+      macroF1: 'Macro-F1',
+      macroF1Hint: 'Test set (laboratory)',
+      labAccuracy: 'Accuracy (laboratory)',
+      labAccuracyHint: '906 of 909 correct (99.67%)',
+      fieldAccuracy: 'Field accuracy',
+      fieldAccuracyHint: 'HERMOS (Turkey, unseen in training)',
+      speed: 'Inference latency',
+      speedHint: 'Server and offline in browser',
+      speedVal: '≈ 50 ms',
+      rejectedNonLeaf: 'Non-leaf rejection',
+      rejectedNonLeafHint: 'Imagenette benchmark (99.7%)',
+      passedLeaf: 'Leaf pass rate',
+      passedLeafHint: 'Field photos (95–99%)',
+      mAP50: 'mAP50',
+      mAP50Hint: 'Test v002 (was 0.774 in v001)',
+      mAP50_95: 'mAP50-95',
+      mAP50_95Hint: 'Test v002 (was 0.380 in v001)',
+      trunkMap: 'Trunks (mAP50-95)',
+      trunkMapHint: 'Trunk detection precision',
+      bunchMap: 'Clusters (mAP50-95)',
+      bunchMapHint: 'Cluster detection precision',
+      prAuc: 'PR-AUC (LightGBM)',
+      prAucHint: 'Forecast for tomorrow',
+      baselinePrAuc: 'Baseline PR-AUC',
+      baselinePrAucHint: 'Rule "same as today" (0.42)',
+      horizon: 'Forecast horizon',
+      horizonHint: 'At 2–7 days models do not beat climate norm',
+      horizonVal: '1 day',
+    },
+    limitations: {
+      title: 'Model limitations',
+      fieldError:
+        'The leaf classifier model was trained primarily on laboratory photos and makes more errors in real field conditions (accuracy around 40% on the HERMOS dataset). A confidence threshold of 0.6 and agronomist review are therefore established.',
+      smallBunches:
+        'The trellis detector may miss grape clusters in distant backgrounds, small scale, or heavy leaf occlusion.',
+      decisionSupport:
+        'All model outputs and recommendations are decision-support suggestions and do not replace a formal diagnosis by a certified agronomist.',
+    },
+  },
+  bioclimatic: {
+    panelTitle: 'BBCH phenology and agroclimate',
+    seasonComplete: 'Season completed',
+    retry: 'Retry',
+    progressToNext: 'To next stage ({{stage}})',
+    gddToNext: 'To next stage: {{gdd}} °C·days',
+    accumulatedGdd: 'Accumulated GDD: {{gdd}} °C·days',
+    loadFailed: 'Failed to load phenology data',
+    noWeatherData: 'No weather data available',
+    indicesTitle: 'Terroir bioclimatic indices',
+    gddValue: '{{value}} °C·days',
+    table: {
+      index: 'Index',
+      value: 'Value and class',
+      description: 'Agronomic interpretation',
+    },
+    indices: {
+      winkler: 'Winkler Index',
+      huglin: 'Huglin Index',
+      selyaninov: 'Selyaninov HTC',
+    },
+    classes: {
+      'Region I': 'Region I',
+      'Region II': 'Region II',
+      'Region III': 'Region III',
+      'Region IV': 'Region IV',
+      'Region V': 'Region V',
+      'Прохладный климат (Very Cool / Cool)': 'Cool climate (Very Cool / Cool)',
+      'Умеренный климат (Moderate)': 'Moderate climate (Moderate)',
+      'Тёплый климат (Warm)': 'Warm climate (Warm)',
+      'Жаркий климат (Hot)': 'Hot climate (Hot)',
+      'Очень жаркий климат (Very Hot)': 'Very hot climate (Very Hot)',
+      'HI-1 (Очень прохладный)': 'HI-1 (Very cool)',
+      'HI-2 (Прохладный)': 'HI-2 (Cool)',
+      'HI-3 (Умеренно-тёплый)': 'HI-3 (Moderate warm)',
+      'HI-4 (Тёплый)': 'HI-4 (Warm)',
+      'HI-5 (Очень тёплый)': 'HI-5 (Very warm)',
+      'HI-6 (Слишком жаркий)': 'HI-6 (Too hot)',
+      'Очень засушливая зона (острая аридность)':
+        'Very arid zone (acute aridity)',
+      'Засушливая зона': 'Arid zone',
+      'Слабозасушливая зона (умеренный дефицит)':
+        'Semiarid zone (moderate deficit)',
+      'Зона достаточного увлажнения': 'Sufficient moisture zone',
+      'Зона избыточного увлажнения': 'Excessive moisture zone',
+      'Недостаточно активных дней': 'Insufficient active days',
+      'Нулевая сумма температур': 'Zero temperature sum',
+    },
+  },
+  bbch: {
+    '0': 'Dormancy (winter bud)',
+    '9': 'Budburst (green tip)',
+    '15': 'Shoot development (5-6 leaves)',
+    '55': 'Inflorescences visible',
+    '65': 'Full flowering',
+    '71': 'Fruit set',
+    '75': 'Berries pea-sized',
+    '81': 'Beginning of ripening (veraison)',
+    '85': 'Berry softening',
+    '89': 'Harvest maturity',
+    '93': 'Beginning of leaf fall',
   },
   validation: {
     nameMax: 'At most 255 characters',

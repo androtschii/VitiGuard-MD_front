@@ -10,6 +10,7 @@ const sections = [
   { labelKey: 'nav.regions', href: '/regions' },
   { labelKey: 'nav.diagnosis', href: '/diagnosis' },
   { labelKey: 'nav.history', href: '/history' },
+  { labelKey: 'nav.models', href: '/models' },
   { labelKey: 'nav.profile', href: '/profile' },
 ] as const
 

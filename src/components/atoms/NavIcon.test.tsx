@@ -10,6 +10,7 @@ describe('NavIcon', () => {
     '/diagnosis',
     '/history',
     '/profile',
+    '/models',
     '/review',
     '/admin',
     '/other-fallback',

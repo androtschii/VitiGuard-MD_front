@@ -62,6 +62,11 @@ describe('VineyardCard', () => {
     expect(
       screen.getByText('Совпадает с разметкой OpenStreetMap на 42 %'),
     ).toBeInTheDocument()
+    expect(
+      await screen.findByRole('region', {
+        name: 'Фенология BBCH и агроклимат',
+      }),
+    ).toBeInTheDocument()
   })
 
   it('без района, ближайшего виноградника и совпадения строки не показывает', async () => {

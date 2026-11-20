@@ -1,5 +1,9 @@
 import { http, HttpResponse } from 'msw'
 import type { AccessToken } from '@/api/auth'
+import type {
+  PhenologyEstimate,
+  TerroirBioclimaticProfile,
+} from '@/api/bioclimatic'
 import type { Diagnosis } from '@/api/diagnosis'
 import type { ApiInfo } from '@/api/info'
 import type { VineResult } from '@/api/vine'
@@ -46,6 +50,51 @@ export const vine: VineResult = {
   ],
 }
 
+export const phenologyEstimate: PhenologyEstimate = {
+  current_bbch: 75,
+  current_stage_name: 'Смыкание ягод (размер «горошина»)',
+  accumulated_gdd: 820.5,
+  next_bbch: 81,
+  next_stage_name: 'Начало созревания (веaison)',
+  gdd_to_next: 160.0,
+  progress_percentage: 45.2,
+  is_season_complete: false,
+  variety_name: 'feteasca_regala',
+}
+
+export const terroirIndices: TerroirBioclimaticProfile = {
+  winkler: {
+    gdd_sum: 1720.5,
+    region_class: 'Region III',
+    region_title: 'Тёплый климат (Warm)',
+    suitable_varieties: [
+      'Cabernet Sauvignon',
+      'Merlot',
+      'Fetească Neagră',
+      'Rară Neagră',
+      'Syrah',
+    ],
+  },
+  huglin: {
+    hi_value: 2140.0,
+    thermal_class: 'HI-4 (Тёплый)',
+    thermal_description:
+      'Отлично вызревают позднеспелые красные сорта: Fetească Neagră, Cabernet Sauvignon, Rară Neagră.',
+  },
+  cool_night: {
+    ci_temperature: 13.2,
+    night_class: 'CI+1 (Прохладные ночи)',
+    aroma_color_potential:
+      'Прекрасный баланс созревания сахаров, фенолов и ароматических предшественников.',
+  },
+  selyaninov: {
+    htc_value: 0.85,
+    moisture_class: 'Слабозасушливая зона (умеренный дефицит)',
+    irrigation_need:
+      'Оптимальный лёгкий водный стресс для качества красных сортов; орошение по датчикам влажности почвы.',
+  },
+}
+
 export const handlers = [
   http.post('/api/v1/ai/vine/detect', () => HttpResponse.json(vine)),
   http.post('/api/v1/ai/diagnose', () => HttpResponse.json(diagnosis)),
@@ -74,6 +123,12 @@ export const handlers = [
   ),
   http.get('/api/v1/vineyards/:id/risks/next-day', () =>
     HttpResponse.json(null),
+  ),
+  http.get('/api/v1/vineyards/:id/bioclimatic/phenology-estimate', () =>
+    HttpResponse.json(phenologyEstimate),
+  ),
+  http.get('/api/v1/vineyards/:id/bioclimatic/indices', () =>
+    HttpResponse.json(terroirIndices),
   ),
   http.get('/api/v1/vineyards/:id/treatments', () => HttpResponse.json([])),
   http.get('/api/v1/vineyards/:id/treatments/plan', () =>
