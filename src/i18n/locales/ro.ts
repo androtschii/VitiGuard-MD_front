@@ -26,6 +26,7 @@ export const ro: Messages = {
     map: 'Harta',
     regions: 'Raioane',
     diagnosis: 'Diagnostic',
+    models: 'Despre modele',
     admin: 'Administrare',
     review: 'Verificări',
     more: 'Mai mult',
@@ -1327,6 +1328,144 @@ export const ro: Messages = {
     exportFailed: 'Nu s-au putut exporta datele',
     periodInvalid: 'Începutul perioadei este după sfârșit',
     periodTooLong: 'Perioada depășește trei ani: exportați-o pe părți',
+  },
+  models: {
+    title: 'Despre modelele de învățare automată',
+    intro:
+      'Calitate, arhitectură, metrici pe seturi de test și de câmp, precum și limitările modelelor de inteligență artificială aplicate în VitiGuard MD.',
+    classesLabel: 'Stări identificate',
+    cards: {
+      leafClassifier: {
+        title: 'Clasificator boli foliare',
+        purpose:
+          'Diagnosticarea a 6 stări ale frunzei de viță-de-vie din fotografie (rezoluție de intrare 224×224 px).',
+        explanation:
+          'Arhitectura EfficientNet-B0 a fost selectată prin comparație cu ResNet-50 și ViT-B/16: la o acuratețe comparabilă, este de 6 ori mai compactă decât ResNet-50 și de aproape 3 ori mai rapidă pe procesor. Dacă încrederea scade sub 0,6, sistemul afișează „Nu s-a putut determina cu certitudine”. Timpul de inferență pe server este de circa 50 ms; este suportată funcționarea complet autonomă în browser fără acces la rețea.',
+      },
+      leafFilter: {
+        title: 'Verificare „este frunză de viță”',
+        purpose:
+          'Filtru de intrare pentru eliminarea fotografiilor străine înainte de transmiterea către clasificatorul de boli.',
+        explanation:
+          'Filtrează eficient obiectele străine și cadrele accidentale: rata de respingere a fotografiilor irelevante (test Imagenette) este de 99,7 %, iar rata de trecere a fotografiilor reale de frunze din câmp este de 95–99 %.',
+      },
+      vineDetector: {
+        title: 'Detector rând (butuci și struguri)',
+        purpose:
+          'Detecția butucilor de viță și a ciorchinilor de struguri pe imaginile spalierului (YOLO11n, versiunea v002).',
+        explanation:
+          'Versiunea v002 depășește versiunea v001 în precizie: valoarea generală mAP50 a crescut de la 0,774 la 0,786, iar mAP50-95 de la 0,380 la 0,413. Metrica mAP50-95 pentru butuci a atins 0,303, iar pentru struguri — 0,524.',
+      },
+      downyForecast: {
+        title: 'Prognoză risc mană pentru mâine',
+        purpose:
+          'Model de gradient boosting LightGBM pentru avertizarea timpurie privind riscul de focar de mană.',
+        explanation:
+          'Atinge un PR-AUC de 0,65 față de 0,42 pentru regula euristică de bază „la fel ca azi”. Pe un orizont de 2 până la 7 zile puterea de prognoză nu depășește frecvența climatică, motiv pentru care alertele sunt calculate strict pentru ziua de mâine.',
+      },
+    },
+    metrics: {
+      macroF1: 'Macro-F1',
+      macroF1Hint: 'Set de test (laborator)',
+      labAccuracy: 'Acuratețe (laborator)',
+      labAccuracyHint: '906 din 909 corecte (99,67 %)',
+      fieldAccuracy: 'Acuratețe în câmp',
+      fieldAccuracyHint: 'HERMOS (Turcia, neantrenat)',
+      speed: 'Timp de inferență',
+      speedHint: 'Server și offline în browser',
+      speedVal: '≈ 50 ms',
+      rejectedNonLeaf: 'Respingere non-frunze',
+      rejectedNonLeafHint: 'Test Imagenette (99,7 %)',
+      passedLeaf: 'Permitere frunze',
+      passedLeafHint: 'Fotografii de câmp (95–99 %)',
+      mAP50: 'mAP50',
+      mAP50Hint: 'Test v002 (era 0,774 în v001)',
+      mAP50_95: 'mAP50-95',
+      mAP50_95Hint: 'Test v002 (era 0,380 în v001)',
+      trunkMap: 'Butuci (mAP50-95)',
+      trunkMapHint: 'Precizia detecției butucilor',
+      bunchMap: 'Struguri (mAP50-95)',
+      bunchMapHint: 'Precizia detecției strugurilor',
+      prAuc: 'PR-AUC (LightGBM)',
+      prAucHint: 'Prognoză pentru mâine',
+      baselinePrAuc: 'PR-AUC de bază',
+      baselinePrAucHint: 'Regula „la fel ca azi” (0,42)',
+      horizon: 'Orizont de prognoză',
+      horizonHint: 'La 2–7 zile modelele nu depășesc norma climatică',
+      horizonVal: '1 zi',
+    },
+    limitations: {
+      title: 'Limitările modelelor',
+      fieldError:
+        'Clasificatorul de frunze este antrenat în principal pe fotografii de laborator și greșește mai des în condiții reale de câmp (acuratețe în jur de 40 % pe setul HERMOS). De aceea este stabilit un prag de încredere de 0,6 și este prevăzută verificarea de către agronom.',
+      smallBunches:
+        'Detectorul de spalier poate omite ciorchinii aflați pe plan îndepărtat, la scară mică sau puternic umbriți de frunziș.',
+      decisionSupport:
+        'Toate concluziile și recomandările modelelor constituie sugestii consultative (sistem de suport al deciziilor) și nu înlocuiesc concluzia oficială a unui agronom calificat.',
+    },
+  },
+  bioclimatic: {
+    panelTitle: 'Fenologie BBCH și agroclimat',
+    seasonComplete: 'Sezon încheiat',
+    retry: 'Reîncearcă',
+    progressToNext: 'Până la următoarea fază ({{stage}})',
+    gddToNext: 'Până la următoarea fază: {{gdd}} °C·zile',
+    accumulatedGdd: 'Suma temperaturilor active: {{gdd}} °C·zile',
+    loadFailed: 'Nu s-au putut încărca datele fenologice',
+    noWeatherData: 'Nu există date meteorologice',
+    indicesTitle: 'Indici bioclimatici ai terroir-ului',
+    gddValue: '{{value}} °C·zile',
+    table: {
+      index: 'Indice',
+      value: 'Valoare și clasă',
+      description: 'Interpretare agronomică',
+    },
+    indices: {
+      winkler: 'Indicele Winkler',
+      huglin: 'Indicele Huglin',
+      selyaninov: 'GTC Seleaninov',
+    },
+    classes: {
+      'Region I': 'Region I',
+      'Region II': 'Region II',
+      'Region III': 'Region III',
+      'Region IV': 'Region IV',
+      'Region V': 'Region V',
+      'Прохладный климат (Very Cool / Cool)':
+        'Climat răcoros (Very Cool / Cool)',
+      'Умеренный климат (Moderate)': 'Climat temperat (Moderate)',
+      'Тёплый климат (Warm)': 'Climat cald (Warm)',
+      'Жаркий климат (Hot)': 'Climat foarte cald (Hot)',
+      'Очень жаркий климат (Very Hot)': 'Climat extrem de cald (Very Hot)',
+      'HI-1 (Очень прохладный)': 'HI-1 (Foarte răcoros)',
+      'HI-2 (Прохладный)': 'HI-2 (Răcoros)',
+      'HI-3 (Умеренно-тёплый)': 'HI-3 (Moderat cald)',
+      'HI-4 (Тёплый)': 'HI-4 (Cald)',
+      'HI-5 (Очень тёплый)': 'HI-5 (Foarte cald)',
+      'HI-6 (Слишком жаркий)': 'HI-6 (Prea cald)',
+      'Очень засушливая зона (острая аридность)':
+        'Zonă foarte aridă (ariditate acută)',
+      'Засушливая зона': 'Zonă aridă',
+      'Слабозасушливая зона (умеренный дефицит)':
+        'Zonă semiaridă (deficit moderat)',
+      'Зона достаточного увлажнения': 'Zonă de umiditate suficientă',
+      'Зона избыточного увлажнения': 'Zonă de umiditate excesivă',
+      'Недостаточно активных дней': 'Zile active insuficiente',
+      'Нулевая сумма температур': 'Sumă nulă de temperaturi',
+    },
+  },
+  bbch: {
+    '0': 'Repaus vegetativ (mugur de iarnă)',
+    '9': 'Dezmugurire (vârf verde)',
+    '15': 'Dezvoltarea lăstarilor și frunzelor (5-6 frunze)',
+    '55': 'Inflorescențe vizibile',
+    '65': 'Înflorire deplină',
+    '71': 'Legarea boabelor',
+    '75': 'Boabe de mărimea bobului de mazăre',
+    '81': 'Începutul coacerii (pârga)',
+    '85': 'Înmuierea boabelor',
+    '89': 'Maturitate deplină (recoltare)',
+    '93': 'Începutul căderii frunzelor',
   },
   validation: {
     nameMax: 'Cel mult 255 de caractere',

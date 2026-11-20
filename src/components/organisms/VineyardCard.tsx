@@ -16,6 +16,7 @@ import { ExportDataDialog } from '@/components/organisms/ExportDataDialog'
 import { FieldNotesDialog } from '@/components/organisms/FieldNotesDialog'
 import { HarvestDialog } from '@/components/organisms/HarvestDialog'
 import { PhenologyDialog } from '@/components/organisms/PhenologyDialog'
+import { PhenologyPanel } from '@/components/organisms/PhenologyPanel'
 import { RiskSummary } from '@/components/organisms/RiskSummary'
 import { TreatmentsDialog } from '@/components/organisms/TreatmentsDialog'
 import { VegetationDialog } from '@/components/organisms/VegetationDialog'
@@ -100,6 +101,8 @@ export function VineyardCard({
       </div>
 
       <RiskSummary vineyardId={vineyard.id} vineyardName={vineyard.name} />
+
+      <PhenologyPanel vineyardId={vineyard.id} />
 
       <section aria-label={t('vineyard.card.weather')}>
         <h3 className="text-xs font-semibold text-ink-subtle uppercase">

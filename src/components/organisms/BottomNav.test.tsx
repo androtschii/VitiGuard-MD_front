@@ -132,6 +132,7 @@ describe('BottomNav', () => {
     ['/diagnosis', '.nav-icon-leaf'],
     ['/history', '.nav-icon-hands'],
     ['/profile', '.nav-icon-head'],
+    ['/models', '.nav-icon-roof'],
     ['/review', '.nav-icon-check'],
     ['/admin', '.nav-icon-check'],
   ])('у значка %s есть подвижная часть', (href, part) => {

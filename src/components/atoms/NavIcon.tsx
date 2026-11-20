@@ -42,6 +42,13 @@ const ICONS: Record<string, ReactNode> = {
       <path d="M4 20c1-4 4-6 8-6s7 2 8 6" />
     </>
   ),
+  '/models': (
+    <>
+      <path className="nav-icon-roof" d="M12 2L2 7l10 5 10-5-10-5z" />
+      <path d="M2 17l10 5 10-5" />
+      <path d="M2 12l10 5 10-5" />
+    </>
+  ),
   '/review': (
     <>
       <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v0a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2" />
