@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  fetchLesionMask,
   useDeleteDiagnosis,
   useDiagnosisImage,
   type DiagnosisRecord,
@@ -11,16 +10,12 @@ import { Button } from '@/components/atoms/Button'
 import { DownloadButton } from '@/components/molecules/DownloadButton'
 import { ReviewDialog } from '@/components/organisms/ReviewDialog'
 import { cn } from '@/lib/cn'
-import { diagnosisPdf, reportFileName } from '@/lib/diagnosisReport'
-import { saveBlob } from '@/lib/mapImage'
-import { share, shareText } from '@/lib/share'
+import { useDiagnosisExport } from '@/lib/useDiagnosisExport'
 import { useObjectUrl } from '@/lib/useObjectUrl'
 
 type DiagnosisCardProps = {
   record: DiagnosisRecord
 }
-
-type CardAction = 'pdf' | 'share'
 
 // Проверка в галерее истории (pr-045): фото, диагноз, участок и дата
 export function DiagnosisCard({ record }: DiagnosisCardProps) {
@@ -30,9 +25,7 @@ export function DiagnosisCard({ record }: DiagnosisCardProps) {
   const remove = useDeleteDiagnosis()
   const [isConfirming, setIsConfirming] = useState(false)
   const [isReviewing, setIsReviewing] = useState(false)
-  const [busy, setBusy] = useState<CardAction | null>(null)
-  const [failed, setFailed] = useState<CardAction | null>(null)
-  const [isCopied, setIsCopied] = useState(false)
+  const { busy, failed, isCopied, run } = useDiagnosisExport(record)
   // Заключение дают агроном и администратор (pr-044)
   const { data: me } = useMe()
   const canReview = me?.role === 'agronomist' || me?.role === 'admin'
@@ -47,35 +40,6 @@ export function DiagnosisCard({ record }: DiagnosisCardProps) {
   })
   const isHealthy = record.disease === 'healthy'
   const photo = image.data
-
-  // Карточка в PDF — и для скачивания, и чтобы поделиться файлом
-  const run = async (action: CardAction, file: Blob) => {
-    setBusy(action)
-    setFailed(null)
-    setIsCopied(false)
-    try {
-      const lesion = record.overlays.includes('lesion')
-        ? await fetchLesionMask(record.id)
-        : null
-      const language = i18n.resolvedLanguage
-      const pdf = await diagnosisPdf(record, file, lesion, t, language)
-      const name = reportFileName(record)
-      if (action === 'pdf') {
-        saveBlob(pdf, name)
-      } else {
-        const outcome = await share(
-          t('report.title'),
-          shareText(record, t, language),
-          new File([pdf], name, { type: pdf.type }),
-        )
-        setIsCopied(outcome === 'copied')
-      }
-    } catch {
-      setFailed(action)
-    } finally {
-      setBusy(null)
-    }
-  }
 
   return (
     <article className="flex flex-col overflow-hidden rounded-lg border border-line bg-surface shadow-sm">

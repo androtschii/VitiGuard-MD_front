@@ -162,7 +162,7 @@ export function DiagnosisPage() {
                     {t('outbox.queueFailed')}
                   </p>
                 )}
-                <DiagnosisResult diagnosis={diagnose.data} />
+                <DiagnosisResult diagnosis={diagnose.data} photo={file} />
               </>
             )}
             {diagnose.isIdle && (

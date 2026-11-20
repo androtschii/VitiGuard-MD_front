@@ -80,12 +80,17 @@ export async function fetchReviewQueue(reviewed: boolean, page: number) {
   return data
 }
 
-export function useReviewQueue(reviewed: boolean, page: number) {
+export function useReviewQueue(
+  reviewed: boolean,
+  page: number,
+  options?: { enabled?: boolean },
+) {
   return useQuery({
     // Внутри ключа истории: заключение агронома обновляет и очередь
     queryKey: [...diagnosesKey, 'queue', reviewed, page],
     queryFn: () => fetchReviewQueue(reviewed, page),
     placeholderData: keepPreviousData,
+    enabled: options?.enabled,
   })
 }
 

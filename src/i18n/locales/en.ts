@@ -28,6 +28,7 @@ export const en: Messages = {
     diagnosis: 'Diagnosis',
     admin: 'Admin',
     review: 'Reviews',
+    more: 'More',
   },
   account: {
     menu: 'Profile menu',
@@ -200,6 +201,7 @@ export const en: Messages = {
     active: 'Active',
     blocked: 'Blocked',
     block: 'Block',
+    confirmBlock: 'Block?',
     unblock: 'Unblock',
     blockUser: 'Block {{email}}',
     unblockUser: 'Unblock {{email}}',
@@ -335,6 +337,7 @@ export const en: Messages = {
       area: 'Area, ha',
     },
     noEstimate: 'no estimate today',
+    waitingReviews: 'Awaiting conclusion: {{count}}',
     noVineyards: 'No vineyards yet — draw the first one on the map.',
     loadError: 'Could not load the vineyards. Reload the page.',
     description:
@@ -518,6 +521,7 @@ export const en: Messages = {
     mostLikely: 'Most likely: {{disease}}',
     probabilities: 'Probabilities',
     model: 'Model: {{name}}',
+    openHistory: 'Open in history',
     disclaimer:
       'The result is a hint, not an agronomist’s conclusion: the model makes more mistakes on field photos than on laboratory ones.',
   },

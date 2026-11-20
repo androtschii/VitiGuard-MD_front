@@ -26,6 +26,7 @@ export const ru = {
     diagnosis: 'Диагностика',
     admin: 'Администрирование',
     review: 'Проверки',
+    more: 'Ещё',
   },
   account: {
     menu: 'Меню профиля',
@@ -195,6 +196,7 @@ export const ru = {
     active: 'Активен',
     blocked: 'Заблокирован',
     block: 'Заблокировать',
+    confirmBlock: 'Заблокировать?',
     unblock: 'Разблокировать',
     blockUser: 'Заблокировать {{email}}',
     unblockUser: 'Разблокировать {{email}}',
@@ -327,6 +329,7 @@ export const ru = {
       area: 'Площадь, га',
     },
     noEstimate: 'нет оценки на сегодня',
+    waitingReviews: 'Ждут заключения: {{count}}',
     noVineyards: 'Участков пока нет — нарисуйте первый на карте.',
     loadError: 'Не удалось загрузить участки. Обновите страницу.',
     description:
@@ -510,6 +513,7 @@ export const ru = {
     mostLikely: 'Вероятнее всего: {{disease}}',
     probabilities: 'Вероятности',
     model: 'Модель: {{name}}',
+    openHistory: 'Открыть в истории',
     disclaimer:
       'Результат — подсказка, а не заключение агронома: на снимках с поля модель ошибается чаще, чем на лабораторных.',
   },

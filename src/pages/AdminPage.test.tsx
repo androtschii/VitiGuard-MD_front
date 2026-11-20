@@ -99,15 +99,36 @@ describe('AdminPage', () => {
       account('user-1', 'ion@example.md'),
     ])
 
-    await user.click(
+    const row = (
       await screen.findByRole('button', {
+        name: 'Заблокировать ion@example.md',
+      })
+    ).closest('tr')!
+
+    // Шаг подтверждения: отмена не блокирует
+    await user.click(
+      within(row).getByRole('button', {
         name: 'Заблокировать ion@example.md',
       }),
     )
-    const row = (await screen.findByText('Заблокирован')).closest('tr')
-    expect(row).not.toBeNull()
+    await user.click(within(row).getByRole('button', { name: 'Отмена' }))
+    expect(changes).toEqual([])
+
+    // Повторный клик и подтверждение
     await user.click(
-      within(row as HTMLElement).getByRole('button', {
+      within(row).getByRole('button', {
+        name: 'Заблокировать ion@example.md',
+      }),
+    )
+    await user.click(
+      within(row).getByRole('button', { name: 'Заблокировать?' }),
+    )
+
+    await waitFor(() =>
+      expect(within(row).getByText('Заблокирован')).toBeInTheDocument(),
+    )
+    await user.click(
+      within(row).getByRole('button', {
         name: 'Разблокировать ion@example.md',
       }),
     )
@@ -119,6 +140,32 @@ describe('AdminPage', () => {
     expect(
       screen.queryByRole('button', { name: /admin@vitiguard\.md/ }),
     ).toBeNull()
+  })
+
+  it('на узких экранах показывает пользователей карточками с подтверждением блокировки', async () => {
+    const { changes, user } = setup([
+      ADMIN,
+      account('user-1', 'ion@example.md', { full_name: 'Ион' }),
+    ])
+
+    const names = await screen.findAllByText('Ион')
+    const card = names.map((el) => el.closest('article')).find(Boolean)!
+    expect(card).not.toBeNull()
+    expect(within(card).getByText('ion@example.md')).toBeInTheDocument()
+
+    const role = within(card).getByRole('combobox', { name: 'Роль' })
+    await user.selectOptions(role, 'agronomist')
+    expect(changes).toEqual([{ id: 'user-1', role: 'agronomist' }])
+
+    // Блокировка в карточке с подтверждением
+    await user.click(
+      within(card).getByRole('button', { name: 'Заблокировать' }),
+    )
+    await user.click(
+      within(card).getByRole('button', { name: 'Заблокировать?' }),
+    )
+
+    expect(changes).toContainEqual({ id: 'user-1', is_active: false })
   })
 
   it('ищет по email и листает страницы', async () => {
@@ -196,10 +243,13 @@ describe('AdminPage', () => {
       ),
     )
 
+    const blockBtn = await screen.findByRole('button', {
+      name: 'Заблокировать ion@example.md',
+    })
+    const row = blockBtn.closest('tr')!
+    await user.click(blockBtn)
     await user.click(
-      await screen.findByRole('button', {
-        name: 'Заблокировать ion@example.md',
-      }),
+      within(row).getByRole('button', { name: 'Заблокировать?' }),
     )
 
     expect(await screen.findByRole('alert')).toHaveTextContent(
@@ -229,7 +279,7 @@ describe('AdminPage', () => {
     ).toBeNull()
     await user.click(reset)
 
-    expect(await screen.findByText('Ссылка отправлена')).toBeVisible()
+    expect((await screen.findAllByText('Ссылка отправлена'))[0]).toBeVisible()
     expect(sent).toEqual(['user-1'])
   })
 
