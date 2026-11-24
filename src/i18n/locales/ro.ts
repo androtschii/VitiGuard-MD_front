@@ -381,6 +381,26 @@ export const ro: Messages = {
       offline: 'Bot de Telegram și funcționare fără rețea',
     },
   },
+  accountData: {
+    title: 'Datele mele',
+    hint: 'Descărcați o copie a datelor sau ștergeți contul împreună cu parcelele, verificările, fotografiile și jurnalele.',
+    tooOften: 'Prea des. Încercați peste un minut.',
+    export: {
+      button: 'Descarcă datele mele',
+      error: 'Datele nu au putut fi descărcate. Încercați din nou.',
+    },
+    delete: {
+      button: 'Șterge contul',
+      title: 'Ștergeți contul?',
+      warning:
+        'Vor fi șterse parcelele, verificările frunzelor și ale viței, fotografiile, jurnalele și setările. Ele nu vor putea fi restaurate.',
+      password: 'Parola curentă',
+      confirm: 'Șterge definitiv',
+      wrongPassword: 'Parolă greșită.',
+      lastAdmin: 'Nu se poate șterge ultimul administrator.',
+      error: 'Contul nu a putut fi șters. Încercați din nou.',
+    },
+  },
   privacy: {
     title: 'Politica de confidențialitate',
     lawNotice:
@@ -407,7 +427,7 @@ export const ro: Messages = {
     },
     rights: {
       title: '6. Drepturile utilizatorului conform Legii nr. 195/2024',
-      text: 'Utilizatorul are dreptul de acces, rectificare, ștergere, portabilitate și opoziție conform Legii Republicii Moldova nr. 195/2024 privind protecția datelor cu caracter personal. Pentru ștergerea contului sau descărcarea datelor adresați o solicitare administratorului (ulterior vor apărea butoane în profil).',
+      text: 'Utilizatorul are dreptul de acces, rectificare, ștergere, portabilitate și opoziție conform Legii Republicii Moldova nr. 195/2024 privind protecția datelor cu caracter personal. Puteți șterge contul și descărca datele în profil, în secțiunea „Datele mele”.',
     },
     updatedAt: {
       title: '7. Data actualizării',

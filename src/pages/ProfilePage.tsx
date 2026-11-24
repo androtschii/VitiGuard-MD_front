@@ -9,6 +9,7 @@ import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { NotificationSettings } from '@/components/organisms/NotificationSettings'
 import { ProfileForm } from '@/components/organisms/ProfileForm'
 import { PushSettings } from '@/components/organisms/PushSettings'
+import { AccountDataSection } from '@/components/organisms/AccountDataSection'
 import { TelegramConnect } from '@/components/organisms/TelegramConnect'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
 import { useDocumentTitle } from '@/lib/useDocumentTitle'
@@ -85,6 +86,15 @@ export function ProfilePage() {
               {t('privacy.title')}
             </Link>
           </div>
+        </section>
+        <section aria-labelledby="profile-data" className={card}>
+          <h2
+            id="profile-data"
+            className="mb-1 text-base font-semibold text-ink"
+          >
+            {t('accountData.title')}
+          </h2>
+          <AccountDataSection />
         </section>
       </div>
     </DashboardTemplate>

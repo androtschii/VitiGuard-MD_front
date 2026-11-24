@@ -374,6 +374,26 @@ export const en: Messages = {
       offline: 'Telegram bot and offline capability',
     },
   },
+  accountData: {
+    title: 'My data',
+    hint: 'Download a copy of your data or delete your account together with vineyards, checks, photos and logs.',
+    tooOften: 'Too often. Try again in a minute.',
+    export: {
+      button: 'Download my data',
+      error: 'Could not download your data. Please try again.',
+    },
+    delete: {
+      button: 'Delete account',
+      title: 'Delete your account?',
+      warning:
+        'Your vineyards, leaf and vine checks, photos, logs and settings will be deleted. They cannot be restored.',
+      password: 'Current password',
+      confirm: 'Delete forever',
+      wrongPassword: 'Wrong password.',
+      lastAdmin: 'The last administrator cannot be deleted.',
+      error: 'Could not delete the account. Please try again.',
+    },
+  },
   privacy: {
     title: 'Privacy Policy',
     lawNotice:
@@ -400,7 +420,7 @@ export const en: Messages = {
     },
     rights: {
       title: '6. User rights under Law No. 195/2024',
-      text: 'The user has the right to access, rectification, erasure, portability, and objection under Law of the Republic of Moldova No. 195/2024 on the Protection of Personal Data. To delete the account or export data, please contact the administrator (self-service buttons will be added to the profile later).',
+      text: 'The user has the right to access, rectification, erasure, portability, and objection under Law of the Republic of Moldova No. 195/2024 on the Protection of Personal Data. You can delete your account and download your data yourself in your profile, under “My data”.',
     },
     updatedAt: {
       title: '7. Last updated',
