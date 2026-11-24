@@ -66,9 +66,11 @@ describe('routes', () => {
       '/profile',
       '/review',
       '/admin',
+      '/welcome',
       '/login',
       '/register',
       '/forgot-password',
+      '/privacy',
       '/reset-password',
     ])
 

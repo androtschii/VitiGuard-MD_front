@@ -9,6 +9,7 @@ import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { NdviSeason } from '@/components/organisms/NdviSeason'
 import { WeatherToday } from '@/components/organisms/WeatherToday'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
+import { useDocumentTitle } from '@/lib/useDocumentTitle'
 
 const primary =
   'fill-hover inline-flex h-9 items-center rounded-md bg-white px-3 text-sm font-semibold text-brand-900 transition [--fill-ink:var(--color-white)] [--fill:var(--color-brand-500)] active:translate-y-px'
@@ -35,6 +36,8 @@ const BERRIES = [
 export function HomePage() {
   const { t } = useTranslation()
   const navItems = useNavItems()
+
+  useDocumentTitle()
 
   return (
     <DashboardTemplate navItems={navItems} headerActions={<LogoutButton />}>

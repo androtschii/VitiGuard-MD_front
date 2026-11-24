@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router'
 import { useMe } from '@/api/users'
 import { useNavItems } from '@/app/navigation'
 import { CardSkeleton } from '@/components/molecules/CardSkeleton'
@@ -10,6 +11,7 @@ import { ProfileForm } from '@/components/organisms/ProfileForm'
 import { PushSettings } from '@/components/organisms/PushSettings'
 import { TelegramConnect } from '@/components/organisms/TelegramConnect'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
+import { useDocumentTitle } from '@/lib/useDocumentTitle'
 
 const card = 'rounded-lg border border-line bg-surface p-4 shadow-sm'
 
@@ -17,6 +19,8 @@ export function ProfilePage() {
   const { t } = useTranslation()
   const navItems = useNavItems()
   const me = useMe()
+
+  useDocumentTitle(t('profile.title'))
 
   return (
     <DashboardTemplate navItems={navItems} headerActions={<LogoutButton />}>
@@ -72,6 +76,14 @@ export function ProfilePage() {
           <div className="flex flex-wrap gap-2">
             <LanguageSwitcher />
             <ThemeSwitcher />
+          </div>
+          <div className="mt-4 border-t border-line pt-3">
+            <Link
+              to="/privacy"
+              className="text-sm font-medium text-accent underline"
+            >
+              {t('privacy.title')}
+            </Link>
           </div>
         </section>
       </div>

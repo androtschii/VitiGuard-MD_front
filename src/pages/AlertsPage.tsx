@@ -10,11 +10,14 @@ import { Pagination } from '@/components/molecules/Pagination'
 import { SegmentedControl } from '@/components/molecules/SegmentedControl'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
+import { useDocumentTitle } from '@/lib/useDocumentTitle'
 
 // Предупреждения о риске и их история (pr-064)
 export function AlertsPage() {
   const { t } = useTranslation()
   const navItems = useNavItems()
+
+  useDocumentTitle(t('alerts.title'))
   const [unread, setUnread] = useState(true)
   const [page, setPage] = useState(1)
   const alerts = useAlerts(unread, page)

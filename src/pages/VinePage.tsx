@@ -14,6 +14,7 @@ import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
 import { cn } from '@/lib/cn'
 import { useObjectUrl } from '@/lib/useObjectUrl'
 import { VINE_COLORS } from '@/lib/vineColors'
+import { useDocumentTitle } from '@/lib/useDocumentTitle'
 
 const LABELS: VineLabel[] = ['trunk', 'bunch']
 // Сервер отдаёт рамки от 25 %: ползунок только поднимает порог
@@ -23,6 +24,8 @@ const MIN_CONFIDENCE = 25
 export function VinePage() {
   const { t } = useTranslation()
   const navItems = useNavItems()
+
+  useDocumentTitle(t('vine.title'))
   const [file, setFile] = useState<File | null>(null)
   const photoUrl = useObjectUrl(file)
   const detect = useDetectVine()

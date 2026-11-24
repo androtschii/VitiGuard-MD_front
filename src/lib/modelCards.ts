@@ -33,17 +33,17 @@ export const MODEL_CARDS: readonly ModelCardData[] = [
     metrics: [
       {
         labelKey: 'models.metrics.macroF1',
-        value: '0,995',
+        value: '0,971',
         hintKey: 'models.metrics.macroF1Hint',
       },
       {
         labelKey: 'models.metrics.labAccuracy',
-        value: '99,67 %',
+        value: '97,3 %',
         hintKey: 'models.metrics.labAccuracyHint',
       },
       {
         labelKey: 'models.metrics.fieldAccuracy',
-        value: '≈ 40 %',
+        value: '90,4 %',
         hintKey: 'models.metrics.fieldAccuracyHint',
       },
       {
@@ -70,12 +70,12 @@ export const MODEL_CARDS: readonly ModelCardData[] = [
     metrics: [
       {
         labelKey: 'models.metrics.rejectedNonLeaf',
-        value: '99,7 %',
+        value: '99,8 %',
         hintKey: 'models.metrics.rejectedNonLeafHint',
       },
       {
         labelKey: 'models.metrics.passedLeaf',
-        value: '95–99 %',
+        value: '96–99,7 %',
         hintKey: 'models.metrics.passedLeafHint',
       },
     ],

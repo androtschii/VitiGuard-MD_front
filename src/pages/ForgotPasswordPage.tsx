@@ -4,11 +4,14 @@ import { Link } from 'react-router'
 import { useRequestPasswordReset } from '@/api/auth'
 import { ForgotPasswordForm } from '@/components/organisms/ForgotPasswordForm'
 import { AuthTemplate } from '@/components/templates/AuthTemplate'
+import { useDocumentTitle } from '@/lib/useDocumentTitle'
 
 export function ForgotPasswordPage() {
   const { mutateAsync } = useRequestPasswordReset()
   const [sentTo, setSentTo] = useState<string | null>(null)
   const { t } = useTranslation()
+
+  useDocumentTitle(t('auth.forgot.title'))
 
   const backToLogin = (
     <Link to="/login" className="font-medium text-accent underline">

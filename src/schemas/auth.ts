@@ -44,6 +44,7 @@ export const registerSchema = z
     confirmPassword: z
       .string()
       .check(z.minLength(1, 'validation.confirmRequired')),
+    agreePrivacy: z.literal(true, 'validation.privacyRequired'),
   })
   .check(passwordsMatch)
 

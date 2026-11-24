@@ -4,6 +4,7 @@ import { useLogin } from '@/api/auth'
 import { DemoLogin } from '@/components/organisms/DemoLogin'
 import { LoginForm } from '@/components/organisms/LoginForm'
 import { AuthTemplate } from '@/components/templates/AuthTemplate'
+import { useDocumentTitle } from '@/lib/useDocumentTitle'
 
 type LoginLocationState = {
   registered?: boolean
@@ -30,16 +31,23 @@ export function LoginPage() {
   const { mutateAsync } = useLogin()
   const notice = getNotice(location.state as LoginLocationState)
 
+  useDocumentTitle(t('auth.login.title'))
+
   return (
     <AuthTemplate
       title={t('auth.login.title')}
       footer={
-        <>
-          {t('auth.login.noAccount')}{' '}
-          <Link to="/register" className={linkClass}>
-            {t('auth.login.register')}
+        <span className="flex flex-col items-center gap-2">
+          <span>
+            {t('auth.login.noAccount')}{' '}
+            <Link to="/register" className={linkClass}>
+              {t('auth.login.register')}
+            </Link>
+          </span>
+          <Link to="/privacy" className="text-xs text-ink-muted underline">
+            {t('privacy.title')}
           </Link>
-        </>
+        </span>
       }
     >
       {notice && (

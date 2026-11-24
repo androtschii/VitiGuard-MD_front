@@ -8,12 +8,15 @@ import { DiagnosisResult } from '@/components/organisms/DiagnosisResult'
 import { LeafUpload } from '@/components/organisms/LeafUpload'
 import { useTelegramStore } from '@/lib/telegram'
 import { useTelegramMainButton } from '@/lib/useTelegramMainButton'
+import { useDocumentTitle } from '@/lib/useDocumentTitle'
 
 // Быстрая диагностика (pr-088): экран для мини-приложения Telegram — одно
 // фото, один ответ, без навигации кабинета. Проверка сохраняется в историю,
 // подробности (тепловая карта, участок) — в полной версии
 export function QuickDiagnosisPage() {
   const { t } = useTranslation()
+
+  useDocumentTitle(t('quick.title'))
   const telegram = useTelegramStore((state) => state.webApp)
   const [file, setFile] = useState<File | null>(null)
   const diagnose = useDiagnose()

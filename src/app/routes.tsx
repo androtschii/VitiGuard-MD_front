@@ -98,6 +98,10 @@ export const routes: RouteObject[] = [
         element: <GuestRoute />,
         children: [
           {
+            path: '/welcome',
+            lazy: page(() => import('@/pages/WelcomePage'), 'WelcomePage'),
+          },
+          {
             path: '/login',
             lazy: page(() => import('@/pages/LoginPage'), 'LoginPage'),
           },
@@ -114,7 +118,11 @@ export const routes: RouteObject[] = [
           },
         ],
       },
-      // Ссылка из письма открывается независимо от того, вошёл ли пользователь
+      // Доступно всем независимо от того, вошёл ли пользователь
+      {
+        path: '/privacy',
+        lazy: page(() => import('@/pages/PrivacyPage'), 'PrivacyPage'),
+      },
       {
         path: '/reset-password',
         lazy: page(

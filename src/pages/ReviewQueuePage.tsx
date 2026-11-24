@@ -9,6 +9,7 @@ import { Pagination } from '@/components/molecules/Pagination'
 import { DiagnosisCard } from '@/components/organisms/DiagnosisCard'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
+import { useDocumentTitle } from '@/lib/useDocumentTitle'
 import { cn } from '@/lib/cn'
 
 const TABS = [
@@ -21,6 +22,8 @@ const TABS = [
 export function ReviewQueuePage() {
   const { t } = useTranslation()
   const navItems = useNavItems()
+
+  useDocumentTitle(t('reviewQueue.title'))
   const [reviewed, setReviewed] = useState(false)
   const [page, setPage] = useState(1)
   const queue = useReviewQueue(reviewed, page)

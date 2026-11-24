@@ -22,7 +22,10 @@ const testRoutes: RouteObject[] = [
   },
   {
     element: <GuestRoute />,
-    children: [{ path: '/login', element: <LoginPage /> }],
+    children: [
+      { path: '/welcome', element: <h1>Приветствие</h1> },
+      { path: '/login', element: <LoginPage /> },
+    ],
   },
 ]
 
@@ -36,7 +39,14 @@ function renderAt(
 }
 
 describe('ProtectedRoute', () => {
-  it('гостя отправляет на вход и запоминает, куда он шёл', () => {
+  it('гостя на главном адресе отправляет на /welcome', () => {
+    const { router } = renderAt('/')
+
+    expect(router.state.location.pathname).toBe('/welcome')
+    expect(screen.queryByText('Главная')).not.toBeInTheDocument()
+  })
+
+  it('гостя на других защищённых адресах отправляет на вход и запоминает, куда он шёл', () => {
     const { router } = renderAt('/vineyards?sort=area')
 
     expect(router.state.location.pathname).toBe('/login')
@@ -156,10 +166,10 @@ describe('вход через защищённую страницу', () => {
 })
 
 describe('маршруты приложения', () => {
-  it('главная страница закрыта для гостей', () => {
+  it('главная страница перенаправляет гостя на /welcome', () => {
     const { router } = renderAt('/', routes)
 
-    expect(router.state.location.pathname).toBe('/login')
+    expect(router.state.location.pathname).toBe('/welcome')
   })
 
   it.each(['/login', '/register', '/forgot-password'])(
@@ -192,7 +202,7 @@ describe('маршруты приложения', () => {
     ).toBeInTheDocument()
   })
 
-  it('«Выйти» в меню профиля возвращает на вход', async () => {
+  it('«Выйти» в меню профиля на главной перенаправляет на /welcome', async () => {
     useSessionStore.getState().setAccessToken('token')
     const { router, user } = renderAt('/', routes)
 
@@ -200,9 +210,11 @@ describe('маршруты приложения', () => {
     await user.click(screen.getByRole('menuitem', { name: 'Выйти' }))
 
     expect(
-      await screen.findByRole('heading', { name: 'Вход' }),
+      await screen.findByRole('heading', {
+        name: 'Мониторинг здоровья виноградников Молдовы',
+      }),
     ).toBeInTheDocument()
-    expect(router.state.location.pathname).toBe('/login')
+    expect(router.state.location.pathname).toBe('/welcome')
     expect(useSessionStore.getState().accessToken).toBeNull()
   })
 })

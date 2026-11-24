@@ -24,10 +24,13 @@ import { VineyardForm } from '@/components/organisms/VineyardForm'
 import { VineyardPopups } from '@/components/organisms/VineyardPopups'
 import { VineyardsLayer } from '@/components/organisms/VineyardsLayer'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
+import { useDocumentTitle } from '@/lib/useDocumentTitle'
 
 export function MapPage() {
   const { t } = useTranslation()
   const navItems = useNavItems()
+
+  useDocumentTitle(t('map.title'))
   const { mutateAsync: createVineyard } = useCreateVineyard()
   const [savedName, setSavedName] = useState<string | null>(null)
 

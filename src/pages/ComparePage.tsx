@@ -9,10 +9,13 @@ import { Field } from '@/components/molecules/Field'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { VineyardComparison } from '@/components/organisms/VineyardComparison'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
+import { useDocumentTitle } from '@/lib/useDocumentTitle'
 
 export function ComparePage() {
   const { t } = useTranslation()
   const navItems = useNavItems()
+
+  useDocumentTitle(t('compare.title'))
   const { data: vineyards, isPending } = useVineyards()
   // Пока пользователь не выбрал сам — два первых участка по названию
   const [chosen, setChosen] = useState<[string | null, string | null]>([

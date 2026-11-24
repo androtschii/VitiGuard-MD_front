@@ -5,6 +5,7 @@ export const en: Messages = {
     loading: 'Loading…',
     close: 'Close',
     cancel: 'Cancel',
+    back: 'Back',
     mainNavigation: 'Main navigation',
     skipToContent: 'Skip to content',
     noData: 'No data',
@@ -359,6 +360,53 @@ export const en: Messages = {
     text: 'The address may be mistyped, or the page may have moved.',
     home: 'Go to home page',
   },
+  welcome: {
+    title: 'Vineyard health monitoring in Moldova',
+    description:
+      'VitiGuard MD — digital vineyard health monitoring system in Moldova for grape growers and agronomists.',
+    login: 'Sign in',
+    register: 'Sign up',
+    features: {
+      diagnosis:
+        'Disease diagnosis from leaf photos (guidance, not a final verdict — given by an agronomist)',
+      alerts: 'Weather-based risk alerts for downy and powdery mildew',
+      map: 'Plots on the map and satellite NDVI index',
+      offline: 'Telegram bot and offline capability',
+    },
+  },
+  privacy: {
+    title: 'Privacy Policy',
+    lawNotice:
+      'In accordance with Law of the Republic of Moldova No. 195/2024 on the Protection of Personal Data',
+    operator: {
+      title: '1. Who processes the data',
+      text: 'Data processing is carried out by the educational VitiGuard MD graduation project (educational, non-commercial).',
+    },
+    dataTypes: {
+      title: '2. What data is processed',
+      text: 'To provide the service, the following data is processed: email, user name, password (stored solely as a cryptographic hash), photos of leaves and vine rows (with geographic coordinates from EXIF if present in the photo), vineyard plot boundaries, treatment and harvest logs, Telegram link (chat ID), notification settings.',
+    },
+    purposes: {
+      title: '3. Purpose of data processing',
+      text: 'Data is used for diagnosis and warnings, verification by an agronomist, history and reports. Photos may be used for model improvement only with separate user consent (currently not used).',
+    },
+    access: {
+      title: '4. Who has access to the data',
+      text: 'Data is accessible to the account owner. The agronomist and administrator have access to photos and diagnoses for verification. Personal data is not transferred to third parties. External services receive only plot coordinates (Open-Meteo weather, Sentinel-2 imagery) without personal data.',
+    },
+    retention: {
+      title: '5. Data retention period',
+      text: 'Personal data is stored for as long as the user account exists.',
+    },
+    rights: {
+      title: '6. User rights under Law No. 195/2024',
+      text: 'The user has the right to access, rectification, erasure, portability, and objection under Law of the Republic of Moldova No. 195/2024 on the Protection of Personal Data. To delete the account or export data, please contact the administrator (self-service buttons will be added to the profile later).',
+    },
+    updatedAt: {
+      title: '7. Last updated',
+      text: '23.11.2026',
+    },
+  },
   auth: {
     email: 'Email',
     password: 'Password',
@@ -393,6 +441,8 @@ export const en: Messages = {
       emailTaken: 'A user with this email is already registered',
       haveAccount: 'Already have an account?',
       login: 'Sign in',
+      agreePrivacy: 'I agree to the',
+      privacyPolicy: 'Privacy Policy',
     },
     forgot: {
       title: 'Password recovery',
@@ -1329,7 +1379,7 @@ export const en: Messages = {
         purpose:
           'Input gate to screen out irrelevant photos before running the disease classifier.',
         explanation:
-          'Effectively filters non-leaf and random images: rejection rate of irrelevant photos (Imagenette test) is 99.7%, pass rate for actual field grape leaf photos is 95–99%.',
+          'Effectively filters non-leaf and random images: rejection rate of irrelevant photos (Imagenette test) is 99.8%, pass rate for grape leaves ranges from 96% (lab photos and field close-ups) to 99.7% (whole-vine shots). The filter uses the classifier features and was retrained together with it.',
       },
       vineDetector: {
         title: 'Row detector (trunks and grape clusters)',
@@ -1348,18 +1398,18 @@ export const en: Messages = {
     },
     metrics: {
       macroF1: 'Macro-F1',
-      macroF1Hint: 'Test set (laboratory)',
-      labAccuracy: 'Accuracy (laboratory)',
-      labAccuracyHint: '906 of 909 correct (99.67%)',
+      macroF1Hint: 'Test: lab photos and GVLiD',
+      labAccuracy: 'Test accuracy',
+      labAccuracyHint: 'Lab photos and GVLiD field photos',
       fieldAccuracy: 'Field accuracy',
-      fieldAccuracyHint: 'HERMOS (Turkey, unseen in training)',
+      fieldAccuracyHint: 'HERMOS, held-out frames (was 39.9%)',
       speed: 'Inference latency',
       speedHint: 'Server and offline in browser',
       speedVal: '≈ 50 ms',
       rejectedNonLeaf: 'Non-leaf rejection',
-      rejectedNonLeafHint: 'Imagenette benchmark (99.7%)',
+      rejectedNonLeafHint: 'Imagenette benchmark',
       passedLeaf: 'Leaf pass rate',
-      passedLeafHint: 'Field photos (95–99%)',
+      passedLeafHint: 'Leaves and whole-vine shots',
       mAP50: 'mAP50',
       mAP50Hint: 'Test v002 (was 0.774 in v001)',
       mAP50_95: 'mAP50-95',
@@ -1379,7 +1429,7 @@ export const en: Messages = {
     limitations: {
       title: 'Model limitations',
       fieldError:
-        'The leaf classifier model was trained primarily on laboratory photos and makes more errors in real field conditions (accuracy around 40% on the HERMOS dataset). A confidence threshold of 0.6 and agronomist review are therefore established.',
+        'The leaf classifier was fine-tuned on field photos from HERMOS (Turkey) and GVLiD (India): on held-out HERMOS frames accuracy is 90.4% (was 39.9%). It has not yet been tested on photos from Moldovan vineyards, so the 0.6 confidence threshold and agronomist review remain.',
       smallBunches:
         'The trellis detector may miss grape clusters in distant backgrounds, small scale, or heavy leaf occlusion.',
       decisionSupport:
@@ -1459,6 +1509,7 @@ export const en: Messages = {
     passwordDigit: 'Add at least one digit',
     passwordsMismatch: 'Passwords do not match',
     confirmRequired: 'Repeat your password',
+    privacyRequired: 'Please agree to the privacy policy',
     nameRequired: 'Enter your name',
     vineyardNameRequired: 'Enter the vineyard name',
     vineyardNameMax: 'At most 255 characters',

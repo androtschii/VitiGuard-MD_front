@@ -13,16 +13,22 @@ function renderAt(path: string) {
   return { router, user: userEvent.setup() }
 }
 
-async function fillAndSubmit(user: ReturnType<typeof userEvent.setup>) {
+async function fillAndSubmit(
+  user: ReturnType<typeof userEvent.setup>,
+  agree = true,
+) {
   await user.type(screen.getByLabelText(/Имя/), 'Андрей Бахов')
   await user.type(screen.getByLabelText(/Email/), 'grower@example.md')
   await user.type(screen.getByLabelText(/^Пароль/), 'secret123')
   await user.type(screen.getByLabelText(/Повторите пароль/), 'secret123')
+  if (agree) {
+    await user.click(screen.getByRole('checkbox', { name: /соглашаюсь/i }))
+  }
   await user.click(screen.getByRole('button', { name: 'Зарегистрироваться' }))
 }
 
 describe('RegisterPage', () => {
-  it('отправляет серверу данные без подтверждения пароля', async () => {
+  it('отправляет серверу данные без подтверждения пароля и без согласия', async () => {
     let body: unknown
     server.use(
       http.post('/api/v1/auth/register', async ({ request }) => {
@@ -40,6 +46,27 @@ describe('RegisterPage', () => {
       password: 'secret123',
       full_name: 'Андрей Бахов',
     })
+  })
+
+  it('без согласия с политикой конфиденциальности запрос не отправляется', async () => {
+    let called = false
+    server.use(
+      http.post('/api/v1/auth/register', () => {
+        called = true
+        return HttpResponse.json({}, { status: 201 })
+      }),
+    )
+    const { router, user } = renderAt('/register')
+
+    await fillAndSubmit(user, false)
+
+    expect(
+      await screen.findByText(
+        'Подтвердите согласие с политикой конфиденциальности',
+      ),
+    ).toBeInTheDocument()
+    expect(called).toBe(false)
+    expect(router.state.location.pathname).toBe('/register')
   })
 
   it('после регистрации ведёт на вход с сообщением', async () => {
@@ -77,6 +104,17 @@ describe('RegisterPage', () => {
 
     await user.click(screen.getByRole('link', { name: 'Войти' }))
     expect(router.state.location.pathname).toBe('/login')
+  })
+
+  it('в подвале есть ссылка на политику конфиденциальности', async () => {
+    const { router, user } = renderAt('/register')
+
+    const link = screen.getByRole('link', {
+      name: 'Политика конфиденциальности',
+    })
+    expect(link).toHaveAttribute('href', '/privacy')
+    await user.click(link)
+    expect(router.state.location.pathname).toBe('/privacy')
   })
 
   it('без регистрации сообщение «Аккаунт создан» не показывается', () => {

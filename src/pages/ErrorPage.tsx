@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/atoms/Button'
 import { CenteredTemplate } from '@/components/templates/CenteredTemplate'
+import { useDocumentTitle } from '@/lib/useDocumentTitle'
 
 type ErrorPageProps = {
   onRetry: () => void
@@ -8,6 +9,8 @@ type ErrorPageProps = {
 
 export function ErrorPage({ onRetry }: ErrorPageProps) {
   const { t } = useTranslation()
+
+  useDocumentTitle(t('errorPage.title'))
   return (
     <CenteredTemplate>
       <h1 className="text-2xl font-semibold text-ink">

@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router'
 import { useConfirmPasswordReset } from '@/api/auth'
 import { ResetPasswordForm } from '@/components/organisms/ResetPasswordForm'
 import { AuthTemplate } from '@/components/templates/AuthTemplate'
+import { useDocumentTitle } from '@/lib/useDocumentTitle'
 
 export function ResetPasswordPage() {
   const [searchParams] = useSearchParams()
@@ -10,6 +11,8 @@ export function ResetPasswordPage() {
   const { mutateAsync } = useConfirmPasswordReset()
   const token = searchParams.get('token')
   const { t } = useTranslation()
+
+  useDocumentTitle(token ? t('auth.reset.title') : t('auth.reset.invalidTitle'))
 
   if (!token) {
     return (

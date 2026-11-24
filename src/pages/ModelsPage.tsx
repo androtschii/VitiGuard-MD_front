@@ -4,11 +4,14 @@ import { StatTile } from '@/components/molecules/StatTile'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
 import { MODEL_CARDS, MODEL_LIMITATIONS } from '@/lib/modelCards'
+import { useDocumentTitle } from '@/lib/useDocumentTitle'
 
 // Страница «О моделях»: честная информация о качестве, архитектуре и ограничениях моделей
 export function ModelsPage() {
   const { t, i18n } = useTranslation()
   const navItems = useNavItems()
+
+  useDocumentTitle(t('models.title'))
   // Числа в модуле карточек записаны с запятой (ru, ro); для английского — точка
   const localize = (value: string) =>
     i18n.resolvedLanguage === 'en' ? value.replace(',', '.') : value

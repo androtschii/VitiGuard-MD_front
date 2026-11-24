@@ -6,9 +6,8 @@ import { mockApi } from './api.ts'
 test('от регистрации до нарисованного участка', async ({ page }) => {
   const api = await mockApi(page, { guest: true, empty: true })
 
-  // Гостя с главной уводит на вход, оттуда — на регистрацию
+  // Гостя с главной уводит на страницу приветствия, оттуда — на регистрацию
   await page.goto('/')
-  await expect(page.getByRole('heading', { name: 'Вход' })).toBeVisible()
   await page.getByRole('link', { name: 'Зарегистрироваться' }).click()
 
   await page.getByLabel('Имя').fill('Ион Попеску')
@@ -17,6 +16,7 @@ test('от регистрации до нарисованного участка
     .getByRole('textbox', { name: 'Пароль', exact: true })
     .fill('vinograd2026')
   await page.getByLabel('Повторите пароль').fill('vinograd2026')
+  await page.getByRole('checkbox', { name: /соглашаюсь/i }).check()
   await page.getByRole('button', { name: 'Зарегистрироваться' }).click()
 
   await expect(page.getByText(/Аккаунт создан/)).toBeVisible()

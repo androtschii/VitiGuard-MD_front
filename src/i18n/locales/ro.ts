@@ -5,6 +5,7 @@ export const ro: Messages = {
     loading: 'Se încarcă…',
     close: 'Închide',
     cancel: 'Anulare',
+    back: 'Înapoi',
     mainNavigation: 'Navigare principală',
     skipToContent: 'Salt la conținut',
     noData: 'Nu există date',
@@ -366,6 +367,53 @@ export const ro: Messages = {
     text: 'Este posibil ca adresa să fie greșită sau pagina să fi fost mutată.',
     home: 'Pagina principală',
   },
+  welcome: {
+    title: 'Monitorizarea sănătății podgoriilor din Moldova',
+    description:
+      'VitiGuard MD — sistem digital de monitorizare a sănătății podgoriilor din Moldova pentru viticultori și agronomi.',
+    login: 'Autentificare',
+    register: 'Înregistrare',
+    features: {
+      diagnosis:
+        'Diagnosticarea bolilor după fotografia frunzei (sugestie, nu concluzie — concluzia o oferă agronomul)',
+      alerts: 'Alerte de risc de mană și făinare pe baza vremii',
+      map: 'Parcele pe hartă și indicele de vegetație satelitar NDVI',
+      offline: 'Bot de Telegram și funcționare fără rețea',
+    },
+  },
+  privacy: {
+    title: 'Politica de confidențialitate',
+    lawNotice:
+      'În conformitate cu Legea Republicii Moldova nr. 195/2024 privind protecția datelor cu caracter personal',
+    operator: {
+      title: '1. Cine prelucrează datele',
+      text: 'Prelucrarea datelor este efectuată de proiectul de diplomă VitiGuard MD (proiect educațional, non-comercial).',
+    },
+    dataTypes: {
+      title: '2. Ce date sunt prelucrate',
+      text: 'Pentru funcționarea serviciului sunt prelucrate: emailul, numele utilizatorului, parola (stocată exclusiv sub formă de hash criptografic), fotografiile frunzelor și ale rândurilor de viță de vie (cu coordonate geografice din EXIF, dacă sunt prezente în fotografie), contururile parcelelor, registrul tratamentelor și al recoltei, conectarea Telegram (identificatorul chatului), setările notificărilor.',
+    },
+    purposes: {
+      title: '3. Scopurile prelucrării datelor',
+      text: 'Datele sunt utilizate pentru diagnosticare și alerte, verificarea concluziilor de către agronom, istoric și rapoarte. Fotografiile pot fi utilizate pentru îmbunătățirea modelului doar cu acordul separat al utilizatorului (deocamdată nu sunt utilizate).',
+    },
+    access: {
+      title: '4. Cine are acces la date',
+      text: 'Acces la date are titularul contului. Agronomul și administratorul au acces la fotografii și diagnostice pentru verificare. Datele nu sunt transmise terților. Serviciile externe primesc doar coordonatele parcelei (vremea Open-Meteo, imagini Sentinel-2) fără date cu caracter personal.',
+    },
+    retention: {
+      title: '5. Perioada de stocare a datelor',
+      text: 'Datele cu caracter personal sunt păstrate atâta timp cât există contul de utilizator.',
+    },
+    rights: {
+      title: '6. Drepturile utilizatorului conform Legii nr. 195/2024',
+      text: 'Utilizatorul are dreptul de acces, rectificare, ștergere, portabilitate și opoziție conform Legii Republicii Moldova nr. 195/2024 privind protecția datelor cu caracter personal. Pentru ștergerea contului sau descărcarea datelor adresați o solicitare administratorului (ulterior vor apărea butoane în profil).',
+    },
+    updatedAt: {
+      title: '7. Data actualizării',
+      text: '23.11.2026',
+    },
+  },
   auth: {
     email: 'Email',
     password: 'Parola',
@@ -402,6 +450,8 @@ export const ro: Messages = {
       emailTaken: 'Un utilizator cu acest email este deja înregistrat',
       haveAccount: 'Aveți deja cont?',
       login: 'Intră',
+      agreePrivacy: 'Sunt de acord cu',
+      privacyPolicy: 'politica de confidențialitate',
     },
     forgot: {
       title: 'Recuperarea parolei',
@@ -1347,7 +1397,7 @@ export const ro: Messages = {
         purpose:
           'Filtru de intrare pentru eliminarea fotografiilor străine înainte de transmiterea către clasificatorul de boli.',
         explanation:
-          'Filtrează eficient obiectele străine și cadrele accidentale: rata de respingere a fotografiilor irelevante (test Imagenette) este de 99,7 %, iar rata de trecere a fotografiilor reale de frunze din câmp este de 95–99 %.',
+          'Filtrează eficient obiectele străine și cadrele accidentale: rata de respingere a fotografiilor irelevante (test Imagenette) este de 99,8 %, iar rata de trecere a frunzelor de viță este de la 96 % (fotografii de laborator și prim-planuri din câmp) până la 99,7 % (planuri generale ale butucului). Filtrul folosește caracteristicile clasificatorului și a fost reantrenat împreună cu acesta.',
       },
       vineDetector: {
         title: 'Detector rând (butuci și struguri)',
@@ -1366,18 +1416,18 @@ export const ro: Messages = {
     },
     metrics: {
       macroF1: 'Macro-F1',
-      macroF1Hint: 'Set de test (laborator)',
-      labAccuracy: 'Acuratețe (laborator)',
-      labAccuracyHint: '906 din 909 corecte (99,67 %)',
+      macroF1Hint: 'Test: laborator și GVLiD',
+      labAccuracy: 'Acuratețe pe test',
+      labAccuracyHint: 'Fotografii de laborator și GVLiD din câmp',
       fieldAccuracy: 'Acuratețe în câmp',
-      fieldAccuracyHint: 'HERMOS (Turcia, neantrenat)',
+      fieldAccuracyHint: 'HERMOS, cadre reținute (era 39,9 %)',
       speed: 'Timp de inferență',
       speedHint: 'Server și offline în browser',
       speedVal: '≈ 50 ms',
       rejectedNonLeaf: 'Respingere non-frunze',
-      rejectedNonLeafHint: 'Test Imagenette (99,7 %)',
+      rejectedNonLeafHint: 'Test Imagenette',
       passedLeaf: 'Permitere frunze',
-      passedLeafHint: 'Fotografii de câmp (95–99 %)',
+      passedLeafHint: 'Frunze și cadre ale butucului',
       mAP50: 'mAP50',
       mAP50Hint: 'Test v002 (era 0,774 în v001)',
       mAP50_95: 'mAP50-95',
@@ -1397,7 +1447,7 @@ export const ro: Messages = {
     limitations: {
       title: 'Limitările modelelor',
       fieldError:
-        'Clasificatorul de frunze este antrenat în principal pe fotografii de laborator și greșește mai des în condiții reale de câmp (acuratețe în jur de 40 % pe setul HERMOS). De aceea este stabilit un prag de încredere de 0,6 și este prevăzută verificarea de către agronom.',
+        'Clasificatorul de frunze a fost reantrenat pe fotografii din câmp HERMOS (Turcia) și GVLiD (India): pe cadrele HERMOS reținute acuratețea este de 90,4 % (era 39,9 %). Pe fotografii din podgoriile Moldovei nu a fost încă verificat, de aceea se păstrează pragul de încredere de 0,6 și verificarea de către agronom.',
       smallBunches:
         'Detectorul de spalier poate omite ciorchinii aflați pe plan îndepărtat, la scară mică sau puternic umbriți de frunziș.',
       decisionSupport:
@@ -1478,6 +1528,7 @@ export const ro: Messages = {
     passwordDigit: 'Adăugați cel puțin o cifră',
     passwordsMismatch: 'Parolele nu coincid',
     confirmRequired: 'Repetați parola',
+    privacyRequired: 'Confirmați acordul cu politica de confidențialitate',
     nameRequired: 'Introduceți numele',
     vineyardNameRequired: 'Introduceți denumirea parcelei',
     vineyardNameMax: 'Cel mult 255 de caractere',

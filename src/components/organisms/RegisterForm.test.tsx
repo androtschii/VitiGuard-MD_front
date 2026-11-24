@@ -1,16 +1,31 @@
+import type { ReactElement } from 'react'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { MemoryRouter } from 'react-router'
 import { describe, expect, it, vi } from 'vitest'
 import { ApiError } from '@/api/client'
 import { RegisterForm } from './RegisterForm'
 
-async function fill(overrides: Partial<Record<string, string>> = {}) {
+function renderForm(ui: ReactElement) {
+  return render(<MemoryRouter>{ui}</MemoryRouter>)
+}
+
+type FillOverrides = {
+  name?: string
+  email?: string
+  password?: string
+  confirm?: string
+  agree?: boolean
+}
+
+async function fill(overrides: FillOverrides = {}) {
   const user = userEvent.setup()
   const values = {
     name: 'Андрей Бахов',
     email: 'grower@example.md',
     password: 'secret123',
     confirm: 'secret123',
+    agree: true,
     ...overrides,
   }
   if (values.name) await user.type(screen.getByLabelText(/Имя/), values.name)
@@ -20,6 +35,8 @@ async function fill(overrides: Partial<Record<string, string>> = {}) {
     await user.type(screen.getByLabelText(/^Пароль/), values.password)
   if (values.confirm)
     await user.type(screen.getByLabelText(/Повторите пароль/), values.confirm)
+  if (values.agree)
+    await user.click(screen.getByRole('checkbox', { name: /соглашаюсь/i }))
   return user
 }
 
@@ -29,14 +46,14 @@ async function submit(user: ReturnType<typeof userEvent.setup>) {
 
 describe('RegisterForm', () => {
   it('роль не выбирается: её назначает администратор', () => {
-    render(<RegisterForm onSubmit={vi.fn()} />)
+    renderForm(<RegisterForm onSubmit={vi.fn()} />)
 
     expect(screen.queryByRole('combobox')).toBeNull()
     expect(screen.queryByText(/Роль/)).toBeNull()
   })
 
   it('поля подсказывают браузеру, что вводится новый пароль', () => {
-    render(<RegisterForm onSubmit={vi.fn()} />)
+    renderForm(<RegisterForm onSubmit={vi.fn()} />)
 
     expect(screen.getByLabelText(/^Пароль/)).toHaveAttribute(
       'autocomplete',
@@ -51,9 +68,20 @@ describe('RegisterForm', () => {
     )
   })
 
+  it('ссылка на политику конфиденциальности открывается в новой вкладке с noopener', () => {
+    renderForm(<RegisterForm onSubmit={vi.fn()} />)
+
+    const link = screen.getByRole('link', {
+      name: 'политикой конфиденциальности',
+    })
+    expect(link).toHaveAttribute('href', '/privacy')
+    expect(link).toHaveAttribute('target', '_blank')
+    expect(link).toHaveAttribute('rel', 'noopener')
+  })
+
   it('пустая форма не отправляется', async () => {
     const onSubmit = vi.fn()
-    render(<RegisterForm onSubmit={onSubmit} />)
+    renderForm(<RegisterForm onSubmit={onSubmit} />)
 
     await submit(userEvent.setup())
 
@@ -64,7 +92,7 @@ describe('RegisterForm', () => {
 
   it('несовпадающие пароли показывают ошибку у второго поля', async () => {
     const onSubmit = vi.fn()
-    render(<RegisterForm onSubmit={onSubmit} />)
+    renderForm(<RegisterForm onSubmit={onSubmit} />)
 
     await submit(await fill({ confirm: 'secret124' }))
 
@@ -76,9 +104,26 @@ describe('RegisterForm', () => {
     expect(onSubmit).not.toHaveBeenCalled()
   })
 
+  it('без согласия с политикой конфиденциальности форма не отправляется', async () => {
+    const onSubmit = vi.fn()
+    renderForm(<RegisterForm onSubmit={onSubmit} />)
+
+    await submit(await fill({ agree: false }))
+
+    expect(
+      await screen.findByText(
+        'Подтвердите согласие с политикой конфиденциальности',
+      ),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('checkbox', { name: /соглашаюсь/i }),
+    ).toHaveAttribute('aria-invalid', 'true')
+    expect(onSubmit).not.toHaveBeenCalled()
+  })
+
   it('отправляет введённые значения', async () => {
     const onSubmit = vi.fn().mockResolvedValue(undefined)
-    render(<RegisterForm onSubmit={onSubmit} />)
+    renderForm(<RegisterForm onSubmit={onSubmit} />)
 
     await submit(await fill())
 
@@ -86,13 +131,14 @@ describe('RegisterForm', () => {
     expect(onSubmit.mock.calls[0]?.[0]).toMatchObject({
       fullName: 'Андрей Бахов',
       email: 'grower@example.md',
+      agreePrivacy: true,
     })
     expect(onSubmit.mock.calls[0]?.[0]).not.toHaveProperty('role')
   })
 
   it('занятый email показывается у поля email', async () => {
     const onSubmit = vi.fn().mockRejectedValue(new ApiError('Конфликт', 409))
-    render(<RegisterForm onSubmit={onSubmit} />)
+    renderForm(<RegisterForm onSubmit={onSubmit} />)
 
     await submit(await fill())
 
@@ -109,7 +155,7 @@ describe('RegisterForm', () => {
     const onSubmit = vi
       .fn()
       .mockRejectedValue(new ApiError('Ошибка сервера (500)', 500))
-    render(<RegisterForm onSubmit={onSubmit} />)
+    renderForm(<RegisterForm onSubmit={onSubmit} />)
 
     await submit(await fill())
 
@@ -120,7 +166,7 @@ describe('RegisterForm', () => {
 
   it('неизвестная ошибка даёт общий текст', async () => {
     const onSubmit = vi.fn().mockRejectedValue(new Error('boom'))
-    render(<RegisterForm onSubmit={onSubmit} />)
+    renderForm(<RegisterForm onSubmit={onSubmit} />)
 
     await submit(await fill())
 

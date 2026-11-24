@@ -11,6 +11,7 @@ import { Pagination } from '@/components/molecules/Pagination'
 import { DataTable, type Column } from '@/components/organisms/DataTable'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
+import { useDocumentTitle } from '@/lib/useDocumentTitle'
 
 const ROLES: UserRole[] = ['user', 'agronomist', 'admin']
 
@@ -19,6 +20,8 @@ const ROLES: UserRole[] = ['user', 'agronomist', 'admin']
 export function AdminPage() {
   const { t, i18n } = useTranslation()
   const navItems = useNavItems()
+
+  useDocumentTitle(t('admin.title'))
   const searchId = useId()
   const me = useMe()
   const [search, setSearch] = useState('')
