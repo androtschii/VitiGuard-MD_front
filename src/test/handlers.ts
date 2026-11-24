@@ -112,6 +112,22 @@ export const handlers = [
       district: { iso: 'MD-CU', name: 'Chișinău' },
     }),
   ),
+  // Свои данные и удаление аккаунта (закон 195/2024)
+  http.get(
+    '/api/v1/users/me/export',
+    () =>
+      new HttpResponse(new Uint8Array([0x7b, 0x7d]), {
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Disposition':
+            'attachment; filename="vitiguard-data-2026-06-10.json"',
+        },
+      }),
+  ),
+  http.delete(
+    '/api/v1/users/me',
+    () => new HttpResponse(null, { status: 204 }),
+  ),
   http.get('/api/v1/vineyards/:id/risks', () => HttpResponse.json([])),
   http.get('/api/v1/vineyards/:id/risks/outlook', () =>
     HttpResponse.json({
