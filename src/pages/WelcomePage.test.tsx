@@ -1,9 +1,13 @@
 import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { createMemoryRouter, RouterProvider } from 'react-router'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { renderWithQueryClient } from '@/test/render'
 import { routes } from '@/test/routes'
+
+afterEach(() => {
+  vi.unstubAllEnvs()
+})
 
 function renderWelcome() {
   const router = createMemoryRouter(routes, { initialEntries: ['/welcome'] })
@@ -59,7 +63,8 @@ describe('WelcomePage', () => {
   })
 
   it('показывает блок демо-входа, когда он включён', () => {
-    // В тестовом окружении VITE_DEMO_LOGIN === 'true'
+    // Флаг задаётся при сборке стенда; в CI его нет, поэтому задаётся здесь
+    vi.stubEnv('VITE_DEMO_LOGIN', 'true')
     renderWelcome()
 
     expect(
@@ -68,5 +73,14 @@ describe('WelcomePage', () => {
     expect(
       screen.getByRole('button', { name: 'Виноградарь' }),
     ).toBeInTheDocument()
+  })
+
+  it('без демо-входа блока нет', () => {
+    vi.stubEnv('VITE_DEMO_LOGIN', 'false')
+    renderWelcome()
+
+    expect(
+      screen.queryByRole('heading', { name: 'Демо-аккаунты' }),
+    ).not.toBeInTheDocument()
   })
 })
