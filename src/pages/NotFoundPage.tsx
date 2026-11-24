@@ -1,9 +1,12 @@
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { CenteredTemplate } from '@/components/templates/CenteredTemplate'
+import { useDocumentTitle } from '@/lib/useDocumentTitle'
 
 export function NotFoundPage() {
   const { t } = useTranslation()
+
+  useDocumentTitle(t('notFound.title'))
   return (
     <CenteredTemplate>
       <p className="text-6xl font-semibold text-accent">404</p>

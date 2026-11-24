@@ -54,4 +54,15 @@ describe('LoginPage', () => {
     )
     expect(router.state.location.pathname).toBe('/login')
   })
+
+  it('в подвале есть ссылка на политику конфиденциальности', async () => {
+    const { router, user } = renderLogin()
+
+    const link = screen.getByRole('link', {
+      name: 'Политика конфиденциальности',
+    })
+    expect(link).toHaveAttribute('href', '/privacy')
+    await user.click(link)
+    expect(router.state.location.pathname).toBe('/privacy')
+  })
 })

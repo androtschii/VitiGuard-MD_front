@@ -19,10 +19,13 @@ import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
 import { useObjectUrl } from '@/lib/useObjectUrl'
 import { useOnlineStatus } from '@/lib/useOnlineStatus'
 import { usePhotoLocation } from '@/lib/usePhotoLocation'
+import { useDocumentTitle } from '@/lib/useDocumentTitle'
 
 export function DiagnosisPage() {
   const { t } = useTranslation()
   const navItems = useNavItems()
+
+  useDocumentTitle(t('diagnosis.title'))
   const [file, setFile] = useState<File | null>(null)
   // Выбранный файл до кадрирования: в кадрированной копии нет EXIF с GPS
   const [original, setOriginal] = useState<File | null>(null)

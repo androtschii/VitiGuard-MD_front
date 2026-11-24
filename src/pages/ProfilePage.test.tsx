@@ -37,6 +37,9 @@ describe('ProfilePage', () => {
     expect(
       screen.getByRole('heading', { name: 'Интерфейс' }),
     ).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: 'Политика конфиденциальности' }),
+    ).toHaveAttribute('href', '/privacy')
     expect(sidebarLink('Профиль')).toHaveAttribute('aria-current', 'page')
   })
 

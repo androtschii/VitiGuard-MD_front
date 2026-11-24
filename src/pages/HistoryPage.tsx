@@ -15,6 +15,7 @@ import { DiagnosisCard } from '@/components/organisms/DiagnosisCard'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { VineHistory } from '@/components/organisms/VineHistory'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
+import { useDocumentTitle } from '@/lib/useDocumentTitle'
 import { cn } from '@/lib/cn'
 
 // История проверок по фото (pr-045) с фильтрами по болезни, участку и
@@ -22,6 +23,8 @@ import { cn } from '@/lib/cn'
 export function HistoryPage() {
   const { t } = useTranslation()
   const navItems = useNavItems()
+
+  useDocumentTitle(t('history.title'))
   const ids = { disease: useId(), plot: useId(), from: useId(), to: useId() }
   const [filters, setFilters] = useState<DiagnosisFilters>({})
   const [page, setPage] = useState(1)

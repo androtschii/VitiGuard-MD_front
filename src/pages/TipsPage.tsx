@@ -4,6 +4,7 @@ import { DISEASES } from '@/api/diagnosis'
 import { useNavItems } from '@/app/navigation'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
+import { useDocumentTitle } from '@/lib/useDocumentTitle'
 
 const card = 'rounded-lg border border-line bg-surface p-4 shadow-sm'
 
@@ -20,6 +21,8 @@ const SECTIONS = {
 export function TipsPage() {
   const { t } = useTranslation()
   const navItems = useNavItems()
+
+  useDocumentTitle(t('tips.title'))
 
   return (
     <DashboardTemplate navItems={navItems} headerActions={<LogoutButton />}>

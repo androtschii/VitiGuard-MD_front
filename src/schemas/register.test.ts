@@ -6,6 +6,7 @@ const valid = {
   email: 'grower@example.md',
   password: 'secret123',
   confirmPassword: 'secret123',
+  agreePrivacy: true,
 }
 
 function firstMessage(overrides: Record<string, unknown>) {
@@ -43,6 +44,8 @@ describe('registerSchema', () => {
     ],
     [{ confirmPassword: 'secret124' }, 'validation.passwordsMismatch'],
     [{ confirmPassword: '' }, 'validation.confirmRequired'],
+    [{ agreePrivacy: false }, 'validation.privacyRequired'],
+    [{ agreePrivacy: undefined }, 'validation.privacyRequired'],
   ])('отклоняет %j', (overrides, message) => {
     expect(firstMessage(overrides)).toBe(message)
   })

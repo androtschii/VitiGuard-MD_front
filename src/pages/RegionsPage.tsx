@@ -6,6 +6,7 @@ import { PrintButton } from '@/components/molecules/PrintButton'
 import { DataTable, type Column } from '@/components/organisms/DataTable'
 import { LogoutButton } from '@/components/organisms/LogoutButton'
 import { DashboardTemplate } from '@/components/templates/DashboardTemplate'
+import { useDocumentTitle } from '@/lib/useDocumentTitle'
 
 // Сколько районов показывать на графике: остальные видны в таблице
 const CHART_SIZE = 10
@@ -13,6 +14,8 @@ const CHART_SIZE = 10
 export function RegionsPage() {
   const { t, i18n } = useTranslation()
   const navItems = useNavItems()
+
+  useDocumentTitle(t('regions.title'))
   const { data: districts = [], isPending, isError, error } = useDistrictStats()
 
   const number = new Intl.NumberFormat(i18n.language, {

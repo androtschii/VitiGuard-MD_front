@@ -17,7 +17,7 @@ describe('ModelsPage', () => {
       screen.getByRole('heading', { name: /Ограничения моделей/ }),
     ).toBeInTheDocument()
     expect(
-      screen.getByText(/преимущественно на лабораторных фото/),
+      screen.getByText(/дообучен на полевых снимках HERMOS/),
     ).toBeInTheDocument()
     expect(
       screen.getByText(/Детектор шпалеры может пропускать грозди/),
@@ -32,9 +32,9 @@ describe('ModelsPage', () => {
     expect(
       screen.getByRole('heading', { name: 'Классификатор болезней листа' }),
     ).toBeInTheDocument()
-    expect(screen.getByText('0,995')).toBeInTheDocument()
-    expect(screen.getByText('99,67 %')).toBeInTheDocument()
-    expect(screen.getByText('≈ 40 %')).toBeInTheDocument()
+    expect(screen.getByText('0,971')).toBeInTheDocument()
+    expect(screen.getByText('97,3 %')).toBeInTheDocument()
+    expect(screen.getByText('90,4 %')).toBeInTheDocument()
     expect(screen.getByText('≈ 50 мс')).toBeInTheDocument()
     // 6 классов
     for (const name of [
@@ -52,8 +52,8 @@ describe('ModelsPage', () => {
     expect(
       screen.getByRole('heading', { name: 'Проверка «это лист винограда»' }),
     ).toBeInTheDocument()
-    expect(screen.getByText('99,7 %')).toBeInTheDocument()
-    expect(screen.getByText('95–99 %')).toBeInTheDocument()
+    expect(screen.getByText('99,8 %')).toBeInTheDocument()
+    expect(screen.getByText('96–99,7 %')).toBeInTheDocument()
 
     // 3. Детектор ряда
     expect(
@@ -108,9 +108,9 @@ describe('ModelsPage', () => {
     await act(() => i18n.changeLanguage('en'))
     renderWithRouter(<ModelsPage />)
 
-    expect(screen.getByText('0.995')).toBeInTheDocument()
-    expect(screen.getByText('99.67 %')).toBeInTheDocument()
-    expect(screen.queryByText('0,995')).not.toBeInTheDocument()
+    expect(screen.getByText('0.971')).toBeInTheDocument()
+    expect(screen.getByText('97.3 %')).toBeInTheDocument()
+    expect(screen.queryByText('0,971')).not.toBeInTheDocument()
 
     await act(() => i18n.changeLanguage('ru'))
   })

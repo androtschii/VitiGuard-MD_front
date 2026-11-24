@@ -24,6 +24,9 @@ export function ProtectedRoute() {
 
   if (status === 'unknown') return <LoadingScreen />
   if (status === 'anonymous') {
+    if (location.pathname === '/') {
+      return <Navigate to="/welcome" replace />
+    }
     // После входа пользователь вернётся на страницу, которую открывал
     const from = location.pathname + location.search
     return <Navigate to="/login" replace state={{ from }} />
