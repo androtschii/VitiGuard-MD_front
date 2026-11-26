@@ -77,4 +77,16 @@ describe('DemoLogin', () => {
     )
     expect(screen.getByRole('button', { name: 'Виноградарь' })).toBeDisabled()
   })
+
+  it('на публичном адресе показывает только виноградаря', () => {
+    renderWithQueryClient(<DemoLogin enabled local={false} />)
+
+    expect(screen.getByRole('button', { name: 'Виноградарь' })).toBeVisible()
+    expect(
+      screen.queryByRole('button', { name: 'Агроном' }),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: 'Администратор' }),
+    ).not.toBeInTheDocument()
+  })
 })

@@ -3,16 +3,21 @@ import { useDemoLogin, type DemoRole } from '@/api/auth'
 import { Button } from '@/components/atoms/Button'
 
 const ROLES: DemoRole[] = ['user', 'agronomist', 'admin']
+const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1', '[::1]'])
 
 type DemoLoginProps = {
   // Включается при сборке стенда (.env.local): страница входа гостя не ходит
   // на сервер заранее. Разрешён ли демо-вход, всё равно решает сервер
   enabled?: boolean
+  // На публичном адресе (туннель) — только виноградарь: агроном и
+  // администратор видят чужие данные. Сервер проверяет это сам
+  local?: boolean
 }
 
 // Кнопки входа в роль одним нажатием — для показа проекта
 export function DemoLogin({
   enabled = import.meta.env.VITE_DEMO_LOGIN === 'true',
+  local = LOCAL_HOSTS.has(window.location.hostname),
 }: DemoLoginProps) {
   const { t } = useTranslation()
   const demo = useDemoLogin()
@@ -29,7 +34,7 @@ export function DemoLogin({
       </h2>
       <p className="mt-1 text-xs text-ink-muted">{t('auth.demo.hint')}</p>
       <div className="mt-3 flex flex-wrap gap-2">
-        {ROLES.map((role) => (
+        {(local ? ROLES : ROLES.slice(0, 1)).map((role) => (
           <Button
             key={role}
             size="sm"
