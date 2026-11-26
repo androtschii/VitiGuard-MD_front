@@ -12,8 +12,12 @@ type HeaderProps = {
 export function Header({ actions }: HeaderProps) {
   return (
     <header className="relative flex h-14 items-center gap-3 border-b border-line bg-surface px-4">
-      <Link to="/" aria-label="VitiGuard MD" className="flex items-center">
-        <Wordmark />
+      <Link
+        to="/"
+        aria-label="VitiGuard MD"
+        className="flex shrink-0 items-center"
+      >
+        <Wordmark compactOnNarrow />
       </Link>
       <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
         {/* На телефоне язык и тема — в меню за кнопкой (HeaderMenu) */}

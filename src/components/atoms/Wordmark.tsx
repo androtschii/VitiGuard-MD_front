@@ -4,6 +4,9 @@ import { cn } from '@/lib/cn'
 type WordmarkProps = {
   size?: 'sm' | 'lg'
   withTagline?: boolean
+  // На очень узком экране остаётся только значок: иначе текст наезжает на
+  // кнопки шапки
+  compactOnNarrow?: boolean
   className?: string
 }
 
@@ -13,6 +16,7 @@ type WordmarkProps = {
 export function Wordmark({
   size = 'sm',
   withTagline = false,
+  compactOnNarrow = false,
   className,
 }: WordmarkProps) {
   const large = size === 'lg'
@@ -23,7 +27,12 @@ export function Wordmark({
           large ? 'size-14 motion-safe:animate-grow-in sm:size-20' : 'size-8',
         )}
       />
-      <span className="flex flex-col items-start leading-none">
+      <span
+        className={cn(
+          'flex flex-col items-start leading-none',
+          compactOnNarrow && 'max-[380px]:sr-only',
+        )}
+      >
         <span
           className={cn(
             'font-brand tracking-tight text-brand-ink',
