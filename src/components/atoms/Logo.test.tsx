@@ -23,6 +23,14 @@ describe('Wordmark', () => {
     expect(screen.queryByText(/Vineyard health/)).not.toBeInTheDocument()
   })
 
+  it('на узком экране оставляет только значок, текст — для чтения с экрана', () => {
+    render(<Wordmark compactOnNarrow />)
+
+    expect(screen.getByText('Viti').parentElement?.parentElement).toHaveClass(
+      'max-[380px]:sr-only',
+    )
+  })
+
   it('в крупном варианте добавляет подпись', () => {
     render(<Wordmark size="lg" withTagline />)
 
